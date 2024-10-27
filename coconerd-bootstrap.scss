@@ -1,0 +1,12 @@
+// custom bootstrap theme/color pallete, for coconerds website
+
+// Set your custom Bootstrap variables here
+$primary: #234234;      // Change primary color
+$secondary: #4C8617;    // Change secondary color
+$light: #DFE3DA;
+$dark: #212529;
+$info: #A2C26E;
+// $body-bg: #f5f5f5;      // Change background color
+
+// Import Bootstrap's SCSS
+@import "node_modules/bootstrap/scss/bootstrap";
