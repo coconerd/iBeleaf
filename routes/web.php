@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,25 +16,20 @@ use Illuminate\Support\Facades\Route;
 /**
  * @notice Landing page
  */
-Route::get('/', function() {
+Route::get('/', function () {
 	return view('products/index');
 });
 
-Route::get('/products', function() {
+Route::get('/products', function () {
 	return view('products/index');
 });
 
 /**
  * @notice Authentication routes
  */
-Route::get('auth/', function() {
-	return view('authentication.login');
-});
+Route::get('/auth', [AuthController::class, 'showLoginForm']);
+Route::get('/auth/login', [AuthController::class, 'showLoginForm']);
+Route::post('/auth/login', [AuthController::class, 'handleLogin']);
 
-Route::get('auth/login', function() {
-	return view('authentication.login');
-});
-
-Route::get('auth/register', function() {
-	return view('authentication.register');
-});
+Route::get('/auth/register', [AuthController::class, 'showRegistrationForm']);
+Route::post('/auth/register', [AuthController::class, 'handleRegister']);

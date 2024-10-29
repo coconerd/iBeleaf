@@ -8,7 +8,13 @@
 		</div>
 		<div>
 			<i class="bi bi-heart me-3"></i>
-			<span class="me-2">minhduc468</span>
+			<span class="me-2">
+				@if (auth()->check())
+					{{auth()->user()->name}}
+				@else
+					<a class="text-white" href="auth/login">Đăng nhập</a>
+				@endif
+			</span>
 			<i class="bi bi-person"></i>
 		</div>
 	</div>

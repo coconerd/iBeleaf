@@ -131,53 +131,37 @@
 		<!-- Left side with welcome text -->
 		<div class="col-md-6 login-left d-flex flex-column justify-content-center align-items-center">
 			<h2>Welcome Back!</h2>
-			<p>We source the healthiest and most beautiful plants to bring natures finest to your home. We provide
+			<p>We source the healthiest and most beautiful plants to bring nature’s finest to your home. We provide
 				expert care advice to ensure your plants thrive.</p>
 			<button class="btn btn-google d-flex align-items-center justify-content-center">
-				<i class="bi bi-google"></i> Đăng nhập với Google
+				<i class="bi bi-google"></i> Login with Google
 			</button>
 			<span>or</span>
 			<button class="btn btn-email d-flex align-items-center justify-content-center">
-				<i class="bi bi-envelope"></i> Đăng nhập với Facebook
+				<i class="bi bi-envelope"></i> Login with Email Address
 			</button>
-			<img src="{{asset(path: 'images/transparent-plant-pot.png')}}" alt="Plant" height="300" class="plant-image">
+			<img src="{{asset('images/transparent-plant-pot.png')}}" alt="Plant" height="300" class="plant-image">
 		</div>
 
 		<!-- Right side with login form -->
 		<div class="col-md-6 login-right">
 			<!-- <img src="https://wallpaper.dog/large/20474544.jpg" alt="Leaf decorations" class="leaf-decorations"> -->
 			<div class="login-box">
-				<h4>Vui lòng nhập thông tin đăng nhập</h4>
-				<form method="POST" action="/auth/login">
+				<h4>Vui lòng nhập thông tin đăng ký</h4>
+				<form method="POST" action="/auth/register">
+					<div class="mb-3">
+						<input type="text" class="form-control" placeholder="Họ và tên" name="name">
+					</div>
 					<div class="mb-3">
 						<input type="email" class="form-control" placeholder="Địa chỉ email" name="email">
 					</div>
 					<div class="mb-3">
 						<input type="password" class="form-control" placeholder="Mật khẩu" name="password">
 					</div>
-					<div class="d-flex justify-content-between">
-						<span class="forgot-password">Quên mật khẩu?</span>
-					</div>
-					<button type="submit" class="btn btn-login">Đăng nhập</button>
+					<button type="submit" class="btn btn-login">Đăng ký</button>
 					<div class="text-center mt-3">
-						<span class="register-link">Bạn chưa có tài khoản? <a class="text-teal-500"
-								href="/auth/register">Đăng ký</a>
-						</span>
+						<span class="register-link">Đã có tài khoản? <a class="text-teal-500" href="/auth/login">Đăng nhập</a></span>
 					</div>
-					@if (session('registerSuccess'))
-						<div class="mt-2 alert alert-success">
-							{{ session(key: 'registerSuccess') }}
-						</div>
-					@endif
-					@if ($errors->any())
-						<div class="mt-2 alert alert-danger">
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
-					@endif
 				</form>
 			</div>
 		</div>
