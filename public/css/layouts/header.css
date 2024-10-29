@@ -1,0 +1,40 @@
+/* Custom styling for header and navbar */
+.header-top {
+	background-color: #234234;
+	/* Dark green color */
+	color: white;
+	font-size: 0.9rem;
+}
+
+.navbar-main {
+	background-color: #F7F4F0;
+	/* Light cream background */
+}
+
+.navbar-main .navbar-brand img {
+	height: 60px;
+}
+
+.navbar-main .nav-link {
+	color: #234234;
+	/* font-weight: 500; */
+}
+
+.navbar-main .cart,
+.navbar-main .search {
+	font-size: 1.2rem;
+	color: #234234;
+}
+
+.nav-item .form-control {
+	border-radius: 5px;
+	margin-left: 15px;
+	outline: none;
+}
+
+.nav-item .form-control:focus {
+	border-radius: 5px;
+	border: solid 2px #AAC87C;
+	/* Overrides bootstrap thick border */
+	box-shadow: none !important;
+}

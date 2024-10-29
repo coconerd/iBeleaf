@@ -1,5 +1,31 @@
-@include("layouts.header")
+<!DOCTYPE HTML>
+<html>
 
-@yield(section: "content")
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@yield('title')</title>
 
-@include("layouts.footer")
+	<!-- Import bootstrap lib, with customized color pallete-->
+	<link rel="stylesheet" href="{{asset('css/coconerd-bootstrap.css')}}">
+
+	<!-- Use FA-icons, bootstrap-icons-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+	<!-- Header/Footer stylings -->
+	<link rel="stylesheet" href="{{asset('css/layouts/header.css')}}">
+	<link rel="stylesheet" href="{{asset('css/layouts/footer.css')}}">
+
+	<!-- View-specific stylings -->
+	@yield(section: "style")
+</head>
+
+<body>
+	@include("layouts.header")
+
+	@yield(section: "content")
+
+	@include("layouts.footer")
+</body>
+</html>
