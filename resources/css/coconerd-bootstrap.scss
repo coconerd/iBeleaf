@@ -1,12 +1,32 @@
 // custom bootstrap theme/color pallete, for coconerds website
 
 // Set your custom Bootstrap variables here
-$primary: #234234;      // Change primary color
-$secondary: #4C8617;    // Change secondary color
+$primary: #234234; // Change primary color
+$secondary: #4C8617; // Change secondary color
 $light: #DFE3DA;
 $dark: #212529;
 $info: #A2C26E;
 // $body-bg: #f5f5f5;      // Change background color
 
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/variables-dark";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/utilities";
+
+$all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans);
+
+$utilities: map-merge($utilities,
+		("color": map-merge(map-get($utilities, "color"),
+				(values: map-merge(map-get(map-get($utilities, "color"), "values"),
+						($all-colors ),
+					),
+				),
+			),
+		));
+
+@import "../../node_modules/bootstrap/scss/utilities/api";
+
 // Import Bootstrap's SCSS
-@import "node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap/scss/bootstrap";
