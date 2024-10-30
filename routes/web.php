@@ -27,9 +27,15 @@ Route::get('/products', function () {
 /**
  * @notice Authentication routes
  */
+// Login
 Route::get('/auth', [AuthController::class, 'showLoginForm']);
 Route::get('/auth/login', [AuthController::class, 'showLoginForm']);
 Route::post('/auth/login', [AuthController::class, 'handleLogin']);
 
+// Register
 Route::get('/auth/register', [AuthController::class, 'showRegistrationForm']);
 Route::post('/auth/register', [AuthController::class, 'handleRegister']);
+
+// OAuth2 social login
+Route::get('/auth/login/{social}', action: [AuthController::class, 'showConsentScreen']);
+Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocialCallback']);

@@ -133,12 +133,14 @@
 			<h2>Welcome Back!</h2>
 			<p>We source the healthiest and most beautiful plants to bring nature’s finest to your home. We provide
 				expert care advice to ensure your plants thrive.</p>
-			<button class="btn btn-google d-flex align-items-center justify-content-center">
-				<i class="bi bi-google"></i> Login with Google
+			<button onclick="window.location.href='/auth/login/google'" type="submit"
+				class="btn btn-google d-flex align-items-center justify-content-center">
+				<i class="bi bi-google"></i> Đăng nhập với Google
 			</button>
 			<span>or</span>
-			<button class="btn btn-email d-flex align-items-center justify-content-center">
-				<i class="bi bi-envelope"></i> Login with Email Address
+			<button onclick="window.location.href='/auth/login/facebook'"
+				class="btn btn-email d-flex align-items-center justify-content-center">
+				<i class="bi bi-facebook"></i> Đăng nhập với Facebook
 			</button>
 			<img src="{{asset('images/transparent-plant-pot.png')}}" alt="Plant" height="300" class="plant-image">
 		</div>
@@ -160,7 +162,8 @@
 					</div>
 					<button type="submit" class="btn btn-login">Đăng ký</button>
 					<div class="text-center mt-3">
-						<span class="register-link">Đã có tài khoản? <a class="text-teal-500" href="/auth/login">Đăng nhập</a></span>
+						<span class="register-link">Đã có tài khoản? <a class="text-teal-500" href="/auth/login">Đăng
+								nhập</a></span>
 					</div>
 				</form>
 			</div>

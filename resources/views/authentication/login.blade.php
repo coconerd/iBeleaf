@@ -133,12 +133,14 @@
 			<h2>Welcome Back!</h2>
 			<p>We source the healthiest and most beautiful plants to bring natures finest to your home. We provide
 				expert care advice to ensure your plants thrive.</p>
-			<button class="btn btn-google d-flex align-items-center justify-content-center">
+			<button onclick="window.location.href='/auth/login/google'" type="submit"
+				class="btn btn-google d-flex align-items-center justify-content-center">
 				<i class="bi bi-google"></i> Đăng nhập với Google
 			</button>
 			<span>or</span>
-			<button class="btn btn-email d-flex align-items-center justify-content-center">
-				<i class="bi bi-envelope"></i> Đăng nhập với Facebook
+			<button onclick="window.location.href='/auth/login/facebook'"
+				class="btn btn-email d-flex align-items-center justify-content-center">
+				<i class="bi bi-facebook"></i> Đăng nhập với Facebook
 			</button>
 			<img src="{{asset(path: 'images/transparent-plant-pot.png')}}" alt="Plant" height="300" class="plant-image">
 		</div>
