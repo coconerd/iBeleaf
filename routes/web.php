@@ -39,3 +39,6 @@ Route::post('/auth/register', [AuthController::class, 'handleRegister']);
 // OAuth2 social login
 Route::get('/auth/login/{social}', action: [AuthController::class, 'showConsentScreen']);
 Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocialCallback']);
+
+// Profile
+Route::get('/profile', [ProfileController::class, 'showProfilePage']);
