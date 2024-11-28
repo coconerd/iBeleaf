@@ -10,7 +10,7 @@
 			<i class="bi bi-heart me-3"></i>
 			<span class="me-2">
 				@if (auth()->check())
-					{{auth()->user()->name}}
+					{{auth()->user()->full_name}}
 				@else
 					<a class="text-white" href="auth/login">Đăng nhập</a>
 				@endif
