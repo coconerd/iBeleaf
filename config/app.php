@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 		App\Providers\DBConnServiceProvider::class,
+		Reliese\Coders\CodersServiceProvider::class
     ])->toArray(),
 
     /*
