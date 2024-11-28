@@ -1,5 +1,5 @@
 @extends("layouts.layout")
-@section("title", "profile")
+@section("title", "Profile")
 @section("style")
 <style>
     .profile-page-container-outer{
@@ -63,7 +63,7 @@
         unicode-bidi: isolate;
         width: 180px;
     }
-    .top-cluster {
+    .left-container__top-cluster {
         font-size: 14px;
         width: 180px;
         height: 50px;
@@ -240,9 +240,9 @@
         text-size-adjust: 100%;
     }
 
-    .bottom-cluster{
+    .left-container__bottom-cluster{
         color: rgba(0,0,0,0.8);
-        cursor: pointer;
+        /* cursor: pointer; */
         display: block;
         font-size: 14px;
         height: 225px;
@@ -428,6 +428,12 @@
         text-transform: capitalize;
         text-size-adjust: 100%;
         margin-right: 5px;
+    }
+
+    .stardust-dropdown__item-text-span:hover {
+        color: #3B54DF; /* Thay đổi màu chữ */
+        font-weight: bold; /* Làm chữ đậm */
+        background-color: transparent; /* Giữ nguyên nền */
     }
 
     .stardust-dropdown__item-body-padding{
@@ -1247,6 +1253,10 @@
         outline: none;
     }
 
+    .profile-avatar-choose-image-button:hover {
+        background-color: #f9f9f9;
+    }
+
     .right-container-bottom-right-cluster-note{
         color: rgba(0, 0, 0, 0.8);
         display: block;
@@ -1277,7 +1287,7 @@
     <div class="profile-page-container">
         <div class="profile-page-main">
             <div class="left-container">
-                <div class="top-cluster">
+                <div class="left-container__top-cluster">
                     <a class="top-left-cluster" href="/profile">
                         <div class="avatar">
                             <div class="avatar__placeholder">
@@ -1292,7 +1302,11 @@
                     </a>
 
                     <div class="top-right-cluster">
-                        <div class="top-right-cluster__username">USERNAME</div>
+                        <div class="top-right-cluster__username">
+                            @if (auth()->check())
+                            {{auth()->user()->user_name}}
+                            @endif
+                        </div>
                         <div style="color: rgba(0,0,0,0.8); display: block; font-size: 14px; height: 16.8px; width: 115px; unicode-bidi: isolate; line-height: 16.8px; text-size-adjust: 100%">
                             <a class="pen-icon-modifiy-profile" href="/profile">
                                 <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
@@ -1304,10 +1318,10 @@
                     </div>
                 </div>
 
-                <div class="bottom-cluster">
+                <div class="left-container__bottom-cluster">
                     <div class="stardust-dropdown">
                         <div class="stardust-dropdown__item-header">
-                            <a class="stardust-dropdown__item" href="/user/purchase">
+                            <a class="stardust-dropdown__item" href="/profile">
                                 <div class="stardust-dropdown__item-icon">
                                     <img src="{{asset('images/icons8-registration-50.png')}}" class="stardust-dropdown__item-icon-img">
                                 </div>
@@ -1323,7 +1337,7 @@
 
                     <div class="stardust-dropdown">
                         <div class="stardust-dropdown__item-header">
-                            <a class="stardust-dropdown__item" href="/user/purchase">
+                            <a class="stardust-dropdown__item" href="/profile/changepassword">
                                 <div class="stardust-dropdown__item-icon">
                                     <img src="{{asset('images/icons8-access-50.png')}}" class="stardust-dropdown__item-icon-img">
                                 </div>
@@ -1339,7 +1353,7 @@
 
                     <div class="stardust-dropdown">
                         <div class="stardust-dropdown__item-header">
-                            <a class="stardust-dropdown__item" href="/user/purchase">
+                            <a class="stardust-dropdown__item" href="/profile/orderpurchase">
                                 <div class="stardust-dropdown__item-icon">
                                     <img src="{{asset('images/icons8-order-50.png')}}" class="stardust-dropdown__item-icon-img">
                                 </div>
@@ -1355,7 +1369,7 @@
     
                     <div class="stardust-dropdown">
                         <div class="stardust-dropdown__item-header">
-                            <a class="stardust-dropdown__item" href="/user/purchase">
+                            <a class="stardust-dropdown__item" href="/profile/orderreturn">
                                 <div class="stardust-dropdown__item-icon">
                                     <img src="{{asset('images/icons8-return-purchase-50.png')}}" class="stardust-dropdown__item-icon-img">
                                 </div>
@@ -1392,9 +1406,9 @@
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row1td2">
                                                         <div class="myprofile-table-row-td2__div" style="height: 64px;">
                                                             <div class="myprofile-table-row-td2__div-content">
-                                                                <input type="text" placeholder="" class="profile-username-input" value="wvp00anf7n" data-listener-added_f77ca63a="true">
+                                                                <input type="text" placeholder="" class="profile-username-input" value="{{ auth()->check() ? auth()->user()->user_name : '' }}" >
                                                             </div>
-                                                            <div class="myprofile-table-row-td2__div-note">Tên Đăng nhập chỉ có thể thay đổi một lần.</div>
+                                                            <div class="myprofile-table-row-td2__div-note">Tên đăng nhập chỉ có thể thay đổi một lần</div>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1405,7 +1419,7 @@
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row2td2">
                                                         <div class="myprofile-table-row-td2__div" style="height: 40px;">
                                                             <div class="myprofile-table-row-td2__div-content">
-                                                                <input type="text" placeholder="" class="profile-name-input" value="Công Phan">
+                                                                <input type="text" placeholder="" class="profile-name-input" value="{{ auth()->check() ? auth()->user()->full_name : '' }}">
                                                             </div>
                                                         </div>
                                                     </td>
@@ -1416,7 +1430,11 @@
                                                     </td>
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row3td2">
                                                         <div class="myprofile-table-row-td2__div-modificable">
-                                                            <div class="profile-email-show" style="width: 300px;">ph*************@gmail.com</div>
+                                                            <div class="profile-email-show" style="width: 300px;">
+                                                                @if (auth()->check())
+                                                                    {{auth()->user()->email}}
+                                                                @endif
+                                                            </div>
                                                             <button class="profile-attribute-modify-button">Thay đổi</button>
                                                         </div>
                                                     </td>
@@ -1427,7 +1445,11 @@
                                                     </td>
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row4td2">
                                                         <div class="myprofile-table-row-td2__div-modificable">
-                                                            <div class="profile-phonenumber-show" style="width: 300px;">*********75</div>
+                                                            <div class="profile-phonenumber-show" style="width: 300px;">
+                                                                @if (auth()->check())
+                                                                    {{auth()->user()->phone_number}}
+                                                                @endif
+                                                            </div>
                                                             <button class="profile-attribute-modify-button">Thay đổi</button>
                                                         </div>
                                                     </td>
@@ -1436,53 +1458,19 @@
                                                     <td class="myprofile-table-row-td1" id="myprofile-table-row5td1">
                                                         <label class="myprofile-table-row-td1__label">Giới tính</label>
                                                     </td>
-                                                    <!-- <td class="myprofile-table-row-td2" id="myprofile-table-row5td2">
-                                                        <div class="myprofile-table-row-td2__div-gender" style="height: 18 px;">
-                                                            <div class="stardust-radio-group" role="radiogroup" style="display: flex;">
-                                                                <div class="stardust-radio stardust-radio--checked" tabindex="0" role="radio" aria-checked="true" style="width: 55.5625px; margin-right: 12px; pointer: cursor; font-weight: 400; display: flex; color: rgba(0, 0, 0, 0.87);">
-                                                                    <div class="stardust-radio-button stardust-radio-button--checked" style="color: rgba(0, 0, 0, 0.87); pointer: cursor; flex-shrink: 0;
-                                                                    font-weight: 400; margin-right: 8px; position: relative; width: 18px;">
-                                                                        <div class="stardust-radio-button__outer-circle">
-                                                                            <div class="stardust-radio-button__inner-circle"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="stardust-radio__content" style="height: 18px; width: 29.5625px;">
-                                                                        <div class="stardust-radio__label" style="height: 16.8px; width: 29.5625px;">Nam</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="stardust-radio" tabindex="0" role="radio" aria-checked="false">
-                                                                    <div class="stardust-radio-button">
-                                                                        <div class="stardust-radio-button__outer-circle">
-                                                                            <div class="stardust-radio-button__inner-circle"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="stardust-radio__content" style="height: 18px; width: 19.4875px;">
-                                                                        <div class="stardust-radio__label" style="height: 16.8px; width: 19.4875px;">Nữ</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="stardust-radio" tabindex="0" role="radio" aria-checked="false">
-                                                                    <div class="stardust-radio-button">
-                                                                        <div class="stardust-radio-button__outer-circle">
-                                                                            <div class="stardust-radio-button__inner-circle"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="stardust-radio__content" style="height: 18px; width: 31.9125px;">
-                                                                        <div class="stardust-radio__label" style="height: 16.8px; width: 31.9125px;">Khác</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </td> -->
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row5td2">
                                                         <div class="myprofile-table-row-td2__div__gender-ratio" style="height: 18 px;">
                                                             <label class="profile-gender-radio__label">
-                                                                <input type="radio" name="gender" value="Nam" class="profile-gender-radio__input"> Nam
+                                                                <input type="radio" name="gender" value="Nam" class="profile-gender-radio__input"
+                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Nam' ? 'checked' : '' }}> Nam
                                                             </label>
                                                             <label class="profile-gender-radio__label">
-                                                                <input type="radio" name="gender" value="Nữ" class="profile-gender-radio__input"> Nữ
+                                                                <input type="radio" name="gender" value="Nữ" class="profile-gender-radio__input"
+                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Nữ' ? 'checked' : '' }}> Nữ
                                                             </label>
                                                             <label class="profile-gender-radio__label">
-                                                                <input type="radio" name="gender" value="Khác" class="profile-gender-radio__input"> Khác
+                                                                <input type="radio" name="gender" value="Khác" class="profile-gender-radio__input"
+                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Khác' ? 'checked' : '' }}> Khác
                                                             </label>
                                                         </div>
                                                     </td>
@@ -1493,19 +1481,15 @@
                                                     </td>
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row6td2">
                                                         <div class="myprofile-table-row-td2__div-modificable" style="display: flex; height: 17.6px; align-items: center;">
-                                                            <div class="profile-birthday-show" style="width: 300px;">**/08/20**</div>
+                                                            <div class="profile-birthday-show" style="width: 300px;">
+                                                                @if(auth()->check())
+                                                                    {{auth()->user()->date_of_birth}}
+                                                                @endif
+                                                            </div>
                                                             <button class="profile-attribute-modify-button">Thay đổi</button>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <!-- <tr class="myprofile-table-row" id="myprofile-table-row7">
-                                                    <td class="myprofile-table-row-td1" id="myprofile-table-row7td1">
-                                                        <label class="myprofile-table-row-td1__label"></label>
-                                                    </td>
-                                                    <td class="myprofile-table-row-td2" id="myprofile-table-row7td2">
-                                                        <button type="button" class="profile-save-button" aria-disabled="false">Lưu</button>
-                                                    </td>
-                                                </tr> -->
                                                 <tr class="myprofile-table-row__row7">
                                                     <td>
                                                         <label></label>
@@ -1530,8 +1514,6 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <!-- <input class="profile-avatar-upload-file-input" type="file" accept=".jpg,.jpeg,.png">
-                                        <button type="button" class="profile-avatar-choose-image-button">Chọn ảnh</button> -->
                                         <input type="file" class="profile-avatar-upload-file-input" id="avatarUpload"/>
                                         <label for="avatarUpload" class="profile-avatar-choose-image-button">Chọn ảnh</label>
                                         <div class="right-container-bottom-right-cluster-note">
@@ -1549,566 +1531,3 @@
     </div>
 </div>
 @endsection
-<!-- <div class="container">
-    <div class="profile-container">
-        <h2>Quản lý hồ sơ cá nhân</h2>
-
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-            <div class="form-group">
-                <label for="name">Họ và tên</label>
-                <input type="text" id="name" name="name" class="form-control" 
-                       value="{{ $profile->name ?? '' }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control" 
-                       value="{{ $profile->email ?? '' }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Số điện thoại</label>
-                <input type="text" id="phone" name="phone" class="form-control" 
-                       value="{{ $profile->phone ?? '' }}">
-            </div>
-
-            <div class="form-group">
-                <label for="address">Địa chỉ</label>
-                <textarea id="address" name="address" class="form-control">{{ $profile->address ?? '' }}</textarea>
-            </div>
-
-            <button type="submit" class="btn-submit">Cập nhật hồ sơ</button>
-    </div>
-</div> -->
-
-<!-- <div class="utB99K">
-    <div class="SFztPl">
-        <h1 class="BVrKV_">Hồ sơ của tôi</h1>
-        <div class="QcW5xy">Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
-    </div>
-    <div class="RCnc9v">
-        <div class="HrBg9Q">
-            <form>
-                <table class="bQkdAY">
-                    <tr>
-                        <td class="f1ZOv_ F4ruY9"><label>Tên đăng nhập</label></td>
-                        <td class="o6L4e0">
-                            <div>
-                                <div class="NGoa5Z">
-                                    <input type="text" placeholder="" class="kKnR04" value="wvp00anf7n" data-listener-added_f77ca63a="true">
-                                </div>
-                                <div class="JQaxZl">Tên Đăng nhập chỉ có thể thay đổi một lần.</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="f1ZOv_"><label>Tên</label></td>
-                        <td class="o6L4e0">
-                            <div>
-                                <div class="NGoa5Z">
-                                    <input type="text" placeholder="" class="kKnR04" value="Công Phan">
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="f1ZOv_"><label>Email</label></td>
-                        <td class="o6L4e0">
-                            <div class="e_Vt__">
-                                <div class="PBfYlq">ph*************@gmail.com</div>
-                                <button class="clo49Q">Thay đổi</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="f1ZOv_"><label>Số điện thoại</label></td>
-                        <td class="o6L4e0">
-                            <div class="e_Vt__">
-                                <div class="PBfYlq">*********75</div>
-                                <button class="clo49Q">Thay đổi</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="f1ZOv_"><label>Giới tính</label></td>
-                        <td class="o6L4e0">
-                            <div class="prDHtK">
-                                <div class="stardust-radio-group" role="radiogroup">
-                                    <div class="stardust-radio stardust-radio--checked" tabindex="0" role="radio" aria-checked="true">
-                                        <div class="stardust-radio-button stardust-radio-button--checked">
-                                            <div class="stardust-radio-button__outer-circle">
-                                                <div class="stardust-radio-button__inner-circle"></div>
-                                            </div>
-                                        </div>
-                                        <div class="stardust-radio__content">
-                                            <div class="stardust-radio__label">Nam</div>
-                                        </div>
-                                    </div>
-                                    <div class="stardust-radio" tabindex="0" role="radio" aria-checked="false">
-                                        <div class="stardust-radio-button">
-                                            <div class="stardust-radio-button__outer-circle">
-                                                <div class="stardust-radio-button__inner-circle"></div>
-                                            </div>
-                                        </div>
-                                        <div class="stardust-radio__content">
-                                            <div class="stardust-radio__label">Nữ</div>
-                                        </div>
-                                    </div>
-                                    <div class="stardust-radio" tabindex="0" role="radio" aria-checked="false">
-                                        <div class="stardust-radio-button">
-                                            <div class="stardust-radio-button__outer-circle">
-                                                <div class="stardust-radio-button__inner-circle"></div>
-                                            </div>
-                                        </div>
-                                        <div class="stardust-radio__content">
-                                            <div class="stardust-radio__label">Khác</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="f1ZOv_"><label>Ngày sinh</label></td>
-                        <td class="o6L4e0">
-                            <div class="e_Vt__">
-                                <div class="PBfYlq">**/08/20**</div>
-                                <button class="clo49Q">Thay đổi</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="f1ZOv_"><label></label></td>
-                        <td class="o6L4e0">
-                            <button type="button" class="btn btn-solid-primary btn--m btn--inline" aria-disabled="false">Lưu</button>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-        <div class="nv7bOz">
-            <div class="TJWfNh">
-                <div class="nMPYiw" role="header">
-                    <div class="gQ6nuc">
-                        <svg enable-background="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" class="shopee-svg-icon BJDAci icon-headshot">
-                            <g>
-                                <circle cx="7.5" cy="4.5" fill="none" r="3.8" stroke-miterlimit="10"></circle>
-                                <path d="m1.5 14.2c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke-linecap="round" stroke-miterlimit="10"></path>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-                <input class="XbWdh7" type="file" accept=".jpg,.jpeg,.png">
-                <button type="button" class="btn btn-light btn--m btn--inline">Chọn ảnh</button>
-                <div class="T_8sqN">
-                    <div class="JIExfq">Dung lượng file tối đa 1 MB</div>
-                    <div class="JIExfq">Định dạng: .JPEG, .PNG</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-<!-- <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Hồ Sơ Shopee</title>
-</head>
-<body>
-    <div class="kr8eST">
-        <div class="_9auf1">
-            <div class="container BtZOqO">
-                <div class="epUsgf">
-                    <div class="u6SDuY">
-                        <a class="w37kB7" href="/user/account/profile">
-                            <div class="shopee-avatar">
-                                <div class="shopee-avatar__placeholder">
-                                    <svg enable-background="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" class="shopee-svg-icon icon-headshot">
-                                        <g>
-                                            <circle cx="7.5" cy="4.5" fill="none" r="3.8" stroke-miterlimit="10"></circle>
-                                            <path d="m1.5 14.2c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke-linecap="round" stroke-miterlimit="10"></path>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
-                        
-                        <div class="vDMlrj">
-                            <div class="HtUK6o">wvp00anf7n</div>
-                            <div>
-                                <a class="Kytn1s" href="/user/account/profile">
-                                    <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
-                                        <path d="M8.54 0L6.987 1.56l3.46 3.48L12 3.48M0 8.52l.073 3.428L3.46 12l6.21-6.18-3.46-3.48" fill="#9B9B9B" fill-rule="evenodd"></path>
-                                    </svg>
-                                    Sửa hồ sơ
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="RCnc9v">
-                        <div class="HrBg9Q">
-                            <form>
-                                <table class="bQkdAY">
-                                    <tr>
-                                        <td class="f1ZOv_ F4ruY9">
-                                            <label>Tên đăng nhập</label>
-                                        </td>
-                                        <td class="o6L4e0">
-                                            <div>
-                                                <div class="NGoa5Z">
-                                                    <input type="text" placeholder="" class="kKnR04" value="wvp00anf7n">
-                                                </div>
-                                                <div class="JQaxZl">
-                                                    Tên Đăng nhập chỉ có thể thay đổi một lần.
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="f1ZOv_">
-                                            <label>Tên</label>
-                                        </td>
-                                        <td class="o6L4e0">
-                                            <div>
-                                                <div class="NGoa5Z">
-                                                    <input type="text" placeholder="" class="kKnR04" value="Công Phan">
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="f1ZOv_">
-                                            <label>Email</label>
-                                        </td>
-                                        <td class="o6L4e0">
-                                            <div class="e_Vt__">
-                                                <div class="PBfYlq">ph*************@gmail.com</div>
-                                                <button class="clo49Q">Thay đổi</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="f1ZOv_">
-                                            <label>Số điện thoại</label>
-                                        </td>
-                                        <td class="o6L4e0">
-                                            <div class="e_Vt__">
-                                                <div class="PBfYlq">*********75</div>
-                                                <button class="clo49Q">Thay đổi</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="f1ZOv_">
-                                            <label>Giới tính</label>
-                                        </td>
-                                        <td class="o6L4e0">
-                                            <div class="prDHtK">
-                                                <div class="stardust-radio-group" role="radiogroup">
-                                                    <div class="stardust-radio stardust-radio--checked" tabindex="0" role="radio" aria-checked="true">
-                                                        <div class="stardust-radio-button stardust-radio-button--checked">
-                                                            <div class="stardust-radio-button__outer-circle">
-                                                                <div class="stardust-radio-button__inner-circle"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="stardust-radio__content">
-                                                            <div class="stardust-radio__label">Nam</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="stardust-radio" tabindex="0" role="radio" aria-checked="false">
-                                                        <div class="stardust-radio-button">
-                                                            <div class="stardust-radio-button__outer-circle">
-                                                                <div class="stardust-radio-button__inner-circle"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="stardust-radio__content">
-                                                            <div class="stardust-radio__label">Nữ</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="stardust-radio" tabindex="0" role="radio" aria-checked="false">
-                                                        <div class="stardust-radio-button">
-                                                            <div class="stardust-radio-button__outer-circle">
-                                                                <div class="stardust-radio-button__inner-circle"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="stardust-radio__content">
-                                                            <div class="stardust-radio__label">Khác</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="f1ZOv_">
-                                            <label>Ngày sinh</label>
-                                        </td>
-                                        <td class="o6L4e0">
-                                            <div class="e_Vt__">
-                                                <div class="PBfYlq">**/08/20**</div>
-                                                <button class="clo49Q">Thay đổi</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="f1ZOv_">
-                                            <label></label>
-                                        </td>
-                                        <td class="o6L4e0">
-                                            <button type="button" class="btn btn-solid-primary btn--m btn--inline" aria-disabled="false">Lưu</button>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html> -->
-
-<!-- .profile-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-.profile-container h2 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #343a40;
-}
-.form-group label {
-    font-weight: bold;
-}
-.form-group input, .form-group textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-}
-.btn-submit {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
-.btn-submit:hover {
-    background-color: #0056b3;
-}
-.alert-success {
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-} -->
-
-<!-- <div class="stardust-dropdown">
-                    <div class="stardust-dropdown__item-header">
-                        <a class="jHbobZ" href="/user/account/profile">
-                            <div class="U7dHrp">
-                                <img src="https://down-vn.img.susercontent.com/file/ba61750a46794d8847c3f463c5e71cc4">
-                            </div>
-                            <div class="mY8KSl">
-                                <span class="fnmbfn">Tài khoản của tôi</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="stardust-dropdown">
-                    <div class="stardust-dropdown__item-header">
-                        <a class="jHbobZ" href="/user/purchase">
-                            <div class="U7dHrp">
-                                <img src="https://down-vn.img.susercontent.com/file/f0049e9df4e536bc3e7f140d071e9078">
-                            </div>
-                            <div class="mY8KSl">
-                                <span class="fnmbfn">Đổi mật khẩu</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="stardust-dropdown__item-body" style="opacity: 0;">
-                        <div class="hGOWVP"></div>
-                        </div>
-                    </div>
-                    <div class="stardust-dropdown">
-                        <div class="stardust-dropdown__item-header">
-                            <a class="jHbobZ" href="/user/notifications/order">
-                                <div class="U7dHrp">
-                                    <img src="https://down-vn.img.susercontent.com/file/e10a43b53ec8605f4829da5618e0717c">
-                                </div>
-                                <div class="mY8KSl">
-                                    <span class="fnmbfn">Đơn Mua</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="stardust-dropdown">
-                        <div class="stardust-dropdown__item-header">
-                            <a class="jHbobZ" href="/user/voucher-wallet">
-                                <div class="U7dHrp">
-                                    <img src="https://down-vn.img.susercontent.com/file/84feaa363ce325071c0a66d3c9a88748">
-                                </div>
-                                <div class="mY8KSl">
-                                    <span class="fnmbfn">Đổi trả hàng</span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="stardust-dropdown__item-body">
-                            <div class="hGOWVP"></div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-<!--
-    .stardust-radio-button__outer-circle{
-        /* Căn chỉnh và bố cục */
-        display: flex;                    /* Sử dụng Flexbox để căn chỉnh */
-        align-items: center;              /* Căn chỉnh phần tử con theo chiều dọc */
-        justify-content: center;          /* Căn chỉnh phần tử con theo chiều ngang */
-
-        /* Viền (Border) */
-        border-collapse: collapse;        /* Xóa khoảng cách giữa các đường viền trong bảng */
-        border-top-color: rgb(238, 77, 45);
-        border-top-style: solid;          /* Kiểu đường viền trên */
-        border-top-width: 1.6px;          /* Độ rộng đường viền trên */
-        border-top-left-radius: 100%;     /* Bo tròn góc trên trái */
-        border-top-right-radius: 100%;    /* Bo tròn góc trên phải */
-
-        border-right-color: rgb(238, 77, 45);
-        border-right-style: solid;        /* Kiểu đường viền bên phải */
-        border-right-width: 1.6px;        /* Độ rộng đường viền bên phải */
-
-        border-bottom-color: rgb(238, 77, 45);
-        border-bottom-style: solid;       /* Kiểu đường viền dưới */
-        border-bottom-width: 1.6px;       /* Độ rộng đường viền dưới */
-        border-bottom-left-radius: 100%;  /* Bo tròn góc dưới trái */
-        border-bottom-right-radius: 100%; /* Bo tròn góc dưới phải */
-
-        border-left-color: rgb(238, 77, 45);
-        border-left-style: solid;         /* Kiểu đường viền bên trái */
-        border-left-width: 1.6px;         /* Độ rộng đường viền bên trái */
-
-        /* Các thuộc tính khác về viền */
-        border-image-outset: 0;           /* Không có khoảng cách ngoài đường viền */
-        border-image-repeat: stretch;     /* Kéo dài đường viền nếu có hình ảnh */
-        border-image-slice: 100%;         /* Cắt toàn bộ hình ảnh đường viền */
-        border-image-source: none;        /* Không có hình ảnh đường viền */
-        border-image-width: 1;            /* Độ rộng của hình ảnh đường viền */
-
-        /* Các thuộc tính về kích thước và vị trí */
-        width: 18px;                      /* Chiều rộng của phần tử */
-        height: 18px;                     /* Chiều cao của phần tử */
-        box-sizing: border-box;           /* Bao gồm cả padding và border vào trong kích thước tổng */
-
-        /* Màu sắc */
-        color: rgba(0, 0, 0, 0.87);       /* Màu sắc văn bản */
-        cursor: pointer;                  /* Con trỏ chuột chuyển thành tay khi di chuột qua */
-
-        /* Font chữ */
-        font-family: -apple-system, "Helvetica Neue", Helvetica, Roboto, "Droid Sans", Arial, sans-serif;
-        font-size: 14px;                   /* Kích thước font */
-        font-weight: 400;                  /* Độ dày font bình thường */
-        line-height: 16.8px;               /* Chiều cao dòng */
-
-        /* Các thuộc tính về văn bản */
-        text-indent: 0px;                  /* Không thụt lề văn bản */
-        text-size-adjust: 100%;            /* Điều chỉnh kích thước văn bản cho các thiết bị */
-        unicode-bidi: isolate;            /* Chế độ xử lý văn bản từ trái sang phải */
-
-        /* Khoảng cách */
-        -webkit-border-horizontal-spacing: 0px;  /* Khoảng cách đường viền ngang cho trình duyệt WebKit */
-        -webkit-border-vertical-spacing: 0px;    /* Khoảng cách đường viền dọc cho trình duyệt WebKit */
-    }
-
-    .stardust-radio-button__inner-circle{
-        /* Cấu hình nền (Background) */
-        background-attachment: scroll;              /* Nền di chuyển khi cuộn trang */
-        background-clip: border-box;                /* Nền nằm trong phạm vi của border-box */
-        background-color: rgb(238, 77, 45);         /* Màu nền */
-        background-image: none;                     /* Không có hình nền */
-        background-origin: padding-box;             /* Nền bắt đầu từ vùng padding */
-        background-position-x: 0%;                  /* Vị trí của nền theo chiều ngang */
-        background-position-y: 0%;                  /* Vị trí của nền theo chiều dọc */
-        background-repeat: repeat;                  /* Lặp lại nền */
-        background-size: auto;                      /* Kích thước nền tự động */
-
-        /* Viền (Border) */
-        border-bottom-left-radius: 100%;            /* Bo tròn góc dưới trái */
-        border-bottom-right-radius: 100%;           /* Bo tròn góc dưới phải */
-        border-top-left-radius: 100%;               /* Bo tròn góc trên trái */
-        border-top-right-radius: 100%;              /* Bo tròn góc trên phải */
-        border-collapse: collapse;                  /* Xóa khoảng cách giữa các đường viền trong bảng */
-
-        /* Màu sắc và con trỏ */
-        color: rgba(0, 0, 0, 0.87);                 /* Màu sắc văn bản */
-        cursor: pointer;                            /* Con trỏ chuột chuyển thành tay khi di chuột qua */
-
-        /* Bố cục và hiển thị */
-        display: block;                             /* Hiển thị phần tử dưới dạng block */
-        height: 6px;                                /* Chiều cao của phần tử */
-        width: 6px;                                 /* Chiều rộng của phần tử */
-        opacity: 1;                                 /* Độ mờ của phần tử */
-        line-height: 16.8px;                        /* Chiều cao dòng */
-        text-indent: 0px;                           /* Không thụt lề văn bản */
-
-        /* Font chữ */
-        font-family: -apple-system, "Helvetica Neue", Helvetica, Roboto, "Droid Sans", Arial, sans-serif;
-        font-size: 14px;                            /* Kích thước font */
-        font-weight: 400;                           /* Độ dày font bình thường */
-
-        /* Văn bản và điều chỉnh */
-        text-size-adjust: 100%;                      /* Điều chỉnh kích thước văn bản cho các thiết bị */
-        unicode-bidi: isolate;                      /* Chế độ xử lý văn bản từ trái sang phải */
-
-        /* Khoảng cách (Chỉ cho trình duyệt WebKit) */
-        -webkit-border-horizontal-spacing: 0px;     /* Khoảng cách viền ngang */
-        -webkit-border-vertical-spacing: 0px;       /* Khoảng cách viền dọc */
-    }
-
-    .stardust-radio__content, .stardust-radio__label{
-        /* Cấu hình bảng */
-        border-collapse: collapse;                  /* Xóa khoảng cách giữa các đường viền trong bảng */
-
-        /* Màu sắc và con trỏ */
-        color: rgba(0, 0, 0, 0.87);                 /* Màu văn bản */
-        cursor: pointer;                            /* Con trỏ chuột khi di chuột qua */
-
-        /* Bố cục và hiển thị */
-        display: block;                             /* Hiển thị phần tử dưới dạng block */
-
-        /* Font chữ */
-        font-family: -apple-system, "Helvetica Neue", Helvetica, Roboto, "Droid Sans", Arial, sans-serif; /* Cài đặt font chữ */
-        font-size: 14px;                            /* Kích thước font */
-        font-weight: 400;                           /* Độ dày font (bình thường) */
-        line-height: 16.8px;                        /* Chiều cao dòng */
-
-        /* Văn bản và điều chỉnh */
-        text-indent: 0px;                           /* Không thụt lề văn bản */
-        text-size-adjust: 100%;                      /* Điều chỉnh kích thước văn bản cho các thiết bị */
-
-        /* Xử lý văn bản */
-        unicode-bidi: isolate;                      /* Chế độ xử lý văn bản từ trái sang phải */
-
-        /* Khoảng cách (Chỉ cho trình duyệt WebKit) */
-        -webkit-border-horizontal-spacing: 0px;     /* Khoảng cách viền ngang */
-        -webkit-border-vertical-spacing: 0px;       /* Khoảng cách viền dọc */
-    }  -->

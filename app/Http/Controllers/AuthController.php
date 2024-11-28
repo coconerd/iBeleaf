@@ -92,7 +92,7 @@ class CredentialsValidator
 
 		// password length check
 		if (strlen($password) < 8) {
-			throw new Exception(message: "password must be");
+			throw new Exception(message: "password must be at least 8 characters");
 		}
 
 		// not throwing any exception, all good
