@@ -123,8 +123,11 @@ class AuthUtils
 	}
 }
 
+
+
 class AuthController extends Controller
 {
+	
 	protected CredentialsValidator $credentialsValidator;
 	protected DBConnService $dbConnService;
 
@@ -150,6 +153,7 @@ class AuthController extends Controller
 			$email = $this->credentialsValidator->validateAndReturnEmail($request_data, true);
 			$password = $this->credentialsValidator->valdiateAndReturnPassword($request_data);
 		} catch (Exception $e) {
+			dd($e);
 			back()->withErrors($e->getMessage());
 		}
 
@@ -185,11 +189,12 @@ class AuthController extends Controller
 
 				// fill user object
 				$user = new User();
-				$user->id = $row['id'];
-				$user->name = $row['name'];
+				$user->user_id = $row['user_id'];
+				$user->full_name = $row['full_name'];
 				$user->email = $row['email'];
 				$user->password = $row['password'];
 			} catch (Exception $e) {
+				dd($e);
 				Log::error("An error occurred in func. handleLogin()", [
 					'error' => $e->getMessage(),
 					'request_data' => $request->all(), // Optional: log request data
@@ -217,7 +222,7 @@ class AuthController extends Controller
 		$request_data = $_POST;
 
 		if (!is_array($request_data)) {
-			$request_data = json_decode($request_data);
+			$request_data = json_decode(json: $request_data);
 		}
 
 		$email = "";
@@ -230,18 +235,26 @@ class AuthController extends Controller
 		} catch (Exception $e) {
 			back()->withErrors(provider: $e->getMessage());
 		}
+
+
 		// Create user
 		$user = null;
 		try {
 			$user = User::create([
-				'name' => $name,
+				'full_name' => $name,
 				'email' => $email,
 				'password' => $password,
+				'role_type' => 0,
+				'province_city' => "",
+				'district' => "",
+				'phone_number' => "0000000000",
+				'address' => ""
 			]);
+
 		} catch (Exception $e) {
+			dd($e);
 			return back()->withError("failed to create account");
 		}
-
 		// Auth::login($user);
 
 		// store new user in cache for 30 minutes
@@ -250,6 +263,7 @@ class AuthController extends Controller
 			$user,
 			config('auth.register.userCache.TTLSecs', 60 * 30),
 		);
+
 		return redirect('/auth/login')->with('registerSuccess', "Đăng ký tài khoản thành công, vui lòng đăng nhập");
 	}
 
@@ -278,11 +292,11 @@ class AuthController extends Controller
 
 	public function handleSocialCallback(Request $request, $social)
 	{
+		$conn = $this->dbConnService->getDbConn();
+		$pstm = $conn->prepare("select user_id, full_name, email, password from users where email = ?");
 		try {
 			$googleUser = Socialite::driver($social)->user();
-			$conn = $this->dbConnService->getDbConn();
 
-			$pstm = $conn->prepare("select id, name, email, password from users where email = ?");
 			$email = $googleUser->getEmail();
 			$pstm->bind_param("s", $email);
 			$pstm->execute();
@@ -292,9 +306,9 @@ class AuthController extends Controller
 			if ($result->num_rows > 0) {
 				$record = $result->fetch_assoc();
 				$user = new User();
-				$user->id = $record['id'];
+				$user->user_id= $record['user_id'];
 				$user->email = $record['email'];
-				$user->name = $record['name'];
+				$user->full_name = $record['full_name'];
 				$user->password = $record['password'];
 				Auth::login(user: $user);
 				$request->session()->regenerate();
@@ -335,6 +349,7 @@ class AuthController extends Controller
 				'error' => $e->getMessage(),
 				'request_data' => $request->all(), // Optional: log request data
 			]);
+			
 			return redirect('/auth/login')->withErrors("Có lỗi xảy ra khi đăng nhập");
 		} finally {
 			$pstm->close();
