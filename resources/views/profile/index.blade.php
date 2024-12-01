@@ -1,6 +1,10 @@
 @extends("layouts.layout")
 @section("title", "Profile")
 @section("style")
+
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
     .profile-page-container-outer{
         display: flex;
@@ -943,13 +947,6 @@
         -webkit-border-vertical-spacing: 0px;
     }
 
-    /* .myprofile-table-row-td2__div-modificable, 
-    .myprofile-table-row-td2__div-gender, 
-    .stardust-radio-group, 
-    .stardust-radio 
-    .stardust-radio--checked,
-    .stardust-radio-button ,
-    .stardust-radio-button--checked */
     .myprofile-table-row-td2__div-modificable{
         border-collapse: collapse;
         color: rgba(0, 0, 0, 0.8);
@@ -1082,6 +1079,11 @@
         -webkit-border-vertical-spacing: 0px;
         -webkit-border-image: none;
     }
+
+    .profile-attribute-modify-button:hover{
+        color: #3B54DF;
+        /* font-weight: bold; */
+    }
     
     .profile-save-button{
         flex-direction: column;
@@ -1115,6 +1117,10 @@
         letter-spacing: normal;
         word-spacing: 0px;
         cursor: pointer;
+    }
+
+    .profile-save-button:hover{
+        background-color: #50845F;
     }
 
     .right-container-main-inner__bottom__right-cluster{
@@ -1280,15 +1286,77 @@
         unicode-bidi: isolate;
         width: 175px;
     }
+
+    /* CSS cho phần hiển thị thông báo */
+    .custom-alert-container {
+        position: absolute;
+        top: 97px; /* nằm ngay phía dưới navbar */
+        right: 10px;
+        z-index: 1000;
+        max-width: 400px;
+        margin-top: 20px;
+    }
+
+    .alert {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    }
+
+    .alert-success {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .alert-info {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+    }
+
+    .alert-danger {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
 </style>
 @endsection
+
 @section("content")
+<!-- Phần hiển thị thông báo -->
+<div class="custom-alert-container">
+    <!-- Phần hiển thị lỗi khi validate form (nếu có) -->
+    @if ($errors->any())
+        <div class="alert alert-danger" id="validationAlert">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <!-- Phần hiển thị thông báo từ session (nếu có) -->
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if (session('info'))
+        <div class="alert alert-info">{{ session('info') }}</div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+</div>
+
+<!-- Giao diện chính của trang profile -->
 <div class="profile-page-container-outer">
     <div class="profile-page-container">
         <div class="profile-page-main">
             <div class="left-container">
                 <div class="left-container__top-cluster">
-                    <a class="top-left-cluster" href="/profile">
+                    <a class="top-left-cluster" href="{{route('profile.homepage')}}">
                         <div class="avatar">
                             <div class="avatar__placeholder">
                                 <svg enable-background="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" class="svg-icon-headshot">
@@ -1303,12 +1371,15 @@
 
                     <div class="top-right-cluster">
                         <div class="top-right-cluster__username">
-                            @if (auth()->check())
+                            <!-- @if (auth()->check())
                             {{auth()->user()->user_name}}
+                            @endif -->
+                            @if (auth()->check())
+                                {{$user->user_name}}
                             @endif
                         </div>
                         <div style="color: rgba(0,0,0,0.8); display: block; font-size: 14px; height: 16.8px; width: 115px; unicode-bidi: isolate; line-height: 16.8px; text-size-adjust: 100%">
-                            <a class="pen-icon-modifiy-profile" href="/profile">
+                            <a class="pen-icon-modifiy-profile" href="{{route('profile.homepage')}}">
                                 <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
                                     <path d="M8.54 0L6.987 1.56l3.46 3.48L12 3.48M0 8.52l.073 3.428L3.46 12l6.21-6.18-3.46-3.48" fill="#9B9B9B" fill-rule="evenodd"></path>                              
                                 </svg>
@@ -1321,7 +1392,7 @@
                 <div class="left-container__bottom-cluster">
                     <div class="stardust-dropdown">
                         <div class="stardust-dropdown__item-header">
-                            <a class="stardust-dropdown__item" href="/profile">
+                            <a class="stardust-dropdown__item" href="{{route('profile.homepage')}}">
                                 <div class="stardust-dropdown__item-icon">
                                     <img src="{{asset('images/icons8-registration-50.png')}}" class="stardust-dropdown__item-icon-img">
                                 </div>
@@ -1337,7 +1408,7 @@
 
                     <div class="stardust-dropdown">
                         <div class="stardust-dropdown__item-header">
-                            <a class="stardust-dropdown__item" href="/profile/changepassword">
+                            <a class="stardust-dropdown__item" href="{{route('profile.changePassword')}}">
                                 <div class="stardust-dropdown__item-icon">
                                     <img src="{{asset('images/icons8-access-50.png')}}" class="stardust-dropdown__item-icon-img">
                                 </div>
@@ -1353,7 +1424,7 @@
 
                     <div class="stardust-dropdown">
                         <div class="stardust-dropdown__item-header">
-                            <a class="stardust-dropdown__item" href="/profile/orderpurchase">
+                            <a class="stardust-dropdown__item" href="{{route('profile.orders')}}">
                                 <div class="stardust-dropdown__item-icon">
                                     <img src="{{asset('images/icons8-order-50.png')}}" class="stardust-dropdown__item-icon-img">
                                 </div>
@@ -1369,7 +1440,7 @@
     
                     <div class="stardust-dropdown">
                         <div class="stardust-dropdown__item-header">
-                            <a class="stardust-dropdown__item" href="/profile/orderreturn">
+                            <a class="stardust-dropdown__item" href="{{route('profile.returns')}}">
                                 <div class="stardust-dropdown__item-icon">
                                     <img src="{{asset('images/icons8-return-purchase-50.png')}}" class="stardust-dropdown__item-icon-img">
                                 </div>
@@ -1396,7 +1467,8 @@
                             </div>
                             <div class="right-container-main-inner__bottom">
                                 <div class="right-container-main-inner__bottom__left-cluster">
-                                    <form style="color: rgba(0, 0, 0, 0.8); display: block; font-size: 14px; line-height: 16.8px; margin-top: 0px; text-size-adjust: 100%; unicode-bidi: isolate; width: 502px; height: 457px;">
+                                    <form method="POST" action="{{ route('profile.update') }}" style="color: rgba(0, 0, 0, 0.8); display: block; font-size: 14px; line-height: 16.8px; margin-top: 0px; text-size-adjust: 100%; unicode-bidi: isolate; width: 502px; height: 457px;">
+                                        @csrf
                                         <table class="myprofile-table">
                                             <tbody>
                                                 <tr class="myprofile-table-row" id="myprofile-table-row1">
@@ -1406,7 +1478,8 @@
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row1td2">
                                                         <div class="myprofile-table-row-td2__div" style="height: 64px;">
                                                             <div class="myprofile-table-row-td2__div-content">
-                                                                <input type="text" placeholder="" class="profile-username-input" value="{{ auth()->check() ? auth()->user()->user_name : '' }}" >
+                                                                <!-- <input type="text" placeholder="" class="profile-username-input" value="{{ auth()->check() ? auth()->user()->user_name : '' }}" > -->
+                                                                <input type="text" name="username" placeholder="" class="profile-username-input" value="{{ auth()->check() ? $user->user_name : '' }}" >
                                                             </div>
                                                             <div class="myprofile-table-row-td2__div-note">Tên đăng nhập chỉ có thể thay đổi một lần</div>
                                                         </div>
@@ -1419,7 +1492,7 @@
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row2td2">
                                                         <div class="myprofile-table-row-td2__div" style="height: 40px;">
                                                             <div class="myprofile-table-row-td2__div-content">
-                                                                <input type="text" placeholder="" class="profile-name-input" value="{{ auth()->check() ? auth()->user()->full_name : '' }}">
+                                                                <input type="text" name="fullname" placeholder="" class="profile-name-input" value="{{ auth()->check() ? $user->full_name : '' }}">
                                                             </div>
                                                         </div>
                                                     </td>
@@ -1430,12 +1503,17 @@
                                                     </td>
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row3td2">
                                                         <div class="myprofile-table-row-td2__div-modificable">
-                                                            <div class="profile-email-show" style="width: 300px;">
-                                                                @if (auth()->check())
+                                                            <div class="profile-email-show" id="profile-show-email" style="width: 300px;">
+                                                                <!-- @if (auth()->check())
                                                                     {{auth()->user()->email}}
+                                                                @endif -->
+                                                                @if (auth()->check())
+                                                                    {{$user->email}}
                                                                 @endif
                                                             </div>
-                                                            <button class="profile-attribute-modify-button">Thay đổi</button>
+                                                            <input type="hidden" name="email" id="hidden-email">
+                                                            <!-- data-bs-toggle và data-bs-target dành cho bootstrap 5 -->
+                                                            <button type="button" class="profile-attribute-modify-button" data-bs-toggle="modal" data-bs-target="#emailModal">Thay đổi</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1445,12 +1523,17 @@
                                                     </td>
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row4td2">
                                                         <div class="myprofile-table-row-td2__div-modificable">
-                                                            <div class="profile-phonenumber-show" style="width: 300px;">
-                                                                @if (auth()->check())
+                                                            <div class="profile-phonenumber-show" id="profile-show-phone" style="width: 300px;">
+                                                                <!-- @if (auth()->check())
                                                                     {{auth()->user()->phone_number}}
+                                                                @endif -->
+                                                                @if (auth()->check())
+                                                                    {{$user->phone_number}}
                                                                 @endif
                                                             </div>
-                                                            <button class="profile-attribute-modify-button">Thay đổi</button>
+                                                            <input type="hidden" name="phone" id="hidden-phone">
+                                                            <!-- data-bs-toggle và data-bs-target dành cho bootstrap 5 -->
+                                                            <button type="button" class="profile-attribute-modify-button" data-bs-toggle="modal" data-bs-target="#phoneModal">Thay đổi</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1462,15 +1545,15 @@
                                                         <div class="myprofile-table-row-td2__div__gender-ratio" style="height: 18 px;">
                                                             <label class="profile-gender-radio__label">
                                                                 <input type="radio" name="gender" value="Nam" class="profile-gender-radio__input"
-                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Nam' ? 'checked' : '' }}> Nam
+                                                                    {{ old('gender', auth()->check() ? $user->gender : '') == 'Nam' ? 'checked' : '' }}> Nam
                                                             </label>
                                                             <label class="profile-gender-radio__label">
                                                                 <input type="radio" name="gender" value="Nữ" class="profile-gender-radio__input"
-                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Nữ' ? 'checked' : '' }}> Nữ
+                                                                    {{ old('gender', auth()->check() ? $user->gender : '') == 'Nữ' ? 'checked' : '' }}> Nữ
                                                             </label>
                                                             <label class="profile-gender-radio__label">
                                                                 <input type="radio" name="gender" value="Khác" class="profile-gender-radio__input"
-                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Khác' ? 'checked' : '' }}> Khác
+                                                                    {{ old('gender', auth()->check() ? $user->gender : '') == 'Khác' ? 'checked' : '' }}> Khác
                                                             </label>
                                                         </div>
                                                     </td>
@@ -1481,12 +1564,17 @@
                                                     </td>
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row6td2">
                                                         <div class="myprofile-table-row-td2__div-modificable" style="display: flex; height: 17.6px; align-items: center;">
-                                                            <div class="profile-birthday-show" style="width: 300px;">
-                                                                @if(auth()->check())
+                                                            <div class="profile-birthday-show" id="profile-show-dob" style="width: 300px;">
+                                                                <!-- @if(auth()->check())
                                                                     {{auth()->user()->date_of_birth}}
+                                                                @endif -->
+                                                                @if (auth()->check())
+                                                                    {{ date('Y-m-d', strtotime($user->date_of_birth)) }}
                                                                 @endif
                                                             </div>
-                                                            <button class="profile-attribute-modify-button">Thay đổi</button>
+                                                            <input type="hidden" name="dob" id="hidden-dob">
+                                                            <!-- data-bs-toggle và data-bs-target dành cho bootstrap 5 -->
+                                                            <button type="button" class="profile-attribute-modify-button" data-bs-toggle="modal" data-bs-target="#dobModal">Thay đổi</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1495,7 +1583,7 @@
                                                         <label></label>
                                                     </td>
                                                     <td>
-                                                        <button type="button" class="profile-save-button">Lưu</button>
+                                                        <button type="submit" class="profile-save-button">Lưu</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -1530,4 +1618,91 @@
         </div>
     </div>
 </div>
+
+<!-- Phần modal đối với Bootstrap 5 -->
+<!-- Modal cho Email -->
+<div class="modal fade" id="emailModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailModalLabel">Thay đổi Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="emailChangeForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="emailInput" name="email" value="{{ $user->email }}">
+                        <small class="text-danger" id="emailError" style="display:none;"></small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="emailSaveBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cho Số điện thoại -->
+<div class="modal fade" id="phoneModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="phoneModalLabel">Thay đổi Số điện thoại</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="phoneChangeForm">
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại</label>
+                        <input type="text" class="form-control" id="phoneInput" name="phone" value="{{ $user->phone_number }}">
+                        <small class="text-danger" id="phoneError" style="display:none;"></small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="phoneSaveBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cho Ngày sinh -->
+<div class="modal fade" id="dobModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dobModalLabel">Thay đổi Ngày sinh</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="dobChangeForm">
+                    <div class="form-group">
+                        <label for="date_of_birth">Ngày sinh</label>
+                        <input type="date" class="form-control" id="dobInput" name="date_of_birth" value="{{ date('Y-m-d', strtotime($user->date_of_birth)) }}">
+                        <small class="text-danger" id="dobError" style="display:none;"></small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="dobSaveBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+
+<!-- Bootstrap 5 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!--Import file profile.js từ thư mục public/js -->
+<script src="{{ asset('js/profile.js') }}"></script>
+
+@endpush

@@ -151,6 +151,7 @@
 			<div class="login-box">
 				<h4>Vui lòng nhập thông tin đăng nhập</h4>
 				<form method="POST" action="/auth/login">
+					@csrf
 					<div class="mb-3">
 						<input type="email" class="form-control" placeholder="Địa chỉ email" name="email">
 					</div>

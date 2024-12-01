@@ -1,4 +1,5 @@
-<!-- @section("content")
+<!-- File này chỉ lưu trữ code tạm trong quá trình code -->
+@section("content")
 <div class="profile-page-container-outer">
     <div class="profile-page-container">
         <div class="profile-page-main">
@@ -173,6 +174,18 @@
                                                             <label class="profile-gender-radio__label">
                                                                 <input type="radio" name="gender" value="Khác" class="profile-gender-radio__input"> Khác
                                                             </label>
+                                                            <!-- <label class="profile-gender-radio__label">
+                                                                <input type="radio" name="gender" value="Nam" class="profile-gender-radio__input"
+                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Nam' ? 'checked' : '' }}> Nam
+                                                            </label>
+                                                            <label class="profile-gender-radio__label">
+                                                                <input type="radio" name="gender" value="Nữ" class="profile-gender-radio__input"
+                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Nữ' ? 'checked' : '' }}> Nữ
+                                                            </label>
+                                                            <label class="profile-gender-radio__label">
+                                                                <input type="radio" name="gender" value="Khác" class="profile-gender-radio__input"
+                                                                    {{ old('gender', auth()->check() ? auth()->user()->gender : '') == 'Khác' ? 'checked' : '' }}> Khác
+                                                            </label> -->
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -187,14 +200,14 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <!-- <tr class="myprofile-table-row" id="myprofile-table-row7">
+                                                <tr class="myprofile-table-row" id="myprofile-table-row7">
                                                     <td class="myprofile-table-row-td1" id="myprofile-table-row7td1">
                                                         <label class="myprofile-table-row-td1__label"></label>
                                                     </td>
                                                     <td class="myprofile-table-row-td2" id="myprofile-table-row7td2">
                                                         <button type="button" class="profile-save-button" aria-disabled="false">Lưu</button>
                                                     </td>
-                                                </tr> -->
+                                                </tr>
                                                 <tr class="myprofile-table-row__row7">
                                                     <td>
                                                         <label></label>
@@ -235,4 +248,180 @@
         </div>
     </div>
 </div>
-@endsection -->
+@endsection
+
+
+<!-- Bootstrap 4 CSS -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"> -->
+ <!-- Bootstrap 4 -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> -->
+@section("content")
+<!-- Phần modal đối với Bootstrap 4 -->
+ <!-- Modal cho Email -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thay đổi Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="emailChangeForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="emailInput" name="email" value="{{ $user->email }}">
+                        <small class="text-danger" id="emailError" style="display:none;"></small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="emailSaveBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal cho Số điện thoại -->
+<div class="modal fade" id="phoneModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thay đổi Số điện thoại</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="phoneChangeForm">
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại</label>
+                        <input type="text" class="form-control" id="phoneInput" name="phone" value="{{ $user->phone_number }}">
+                        <small class="text-danger" id="phoneError" style="display:none;"></small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="phoneSaveBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal cho Ngày sinh -->
+<div class="modal fade" id="dobModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thay đổi Ngày sinh</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="dobChangeForm">
+                    <div class="form-group">
+                        <label for="date_of_birth">Ngày sinh</label>
+                        <input type="date" class="form-control" id="dobInput" name="date_of_birth" value="{{ date('Y-m-d', strtotime($user->date_of_birth)) }}">
+                        <small class="text-danger" id="dobError" style="display:none;"></small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="dobSaveBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- data-toggle và data-target dành cho bootstrap 4 -->
+<!-- <button type="button" class="profile-attribute-modify-button" data-toggle="modal" data-target="#emailModal">Thay đổi</button> -->
+<!-- data-toggle và data-target dành cho bootstrap 4 -->
+<!-- <button type="button" class="profile-attribute-modify-button" data-toggle="modal" data-target="#phoneModal">Thay đổi</button> -->
+<!-- data-toggle và data-target dành cho bootstrap 4 -->
+<!-- <button type="button" class="profile-attribute-modify-button" data-toggle="modal" data-target="#dobModal">Thay đổi</button> -->
+@endsection
+
+<!-- Đoạn script xử lí trong trang hồ sơ -->
+ <script>
+$(document).ready(function() {
+    // Cấu hình global cho các yêu cầu AJAX để gửi CSRF token
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Thực hiện yêu cầu AJAX khi người dùng nhấn OK ở modal
+    function handleFieldChange(field) {
+        $(`#${field}SaveBtn`).off('click').on('click', function() {
+            const value = $(`#${field}Input`).val();
+
+            // Disable button và hiển thị trạng thái đang xử lý
+            $(`#${field}SaveBtn`).prop('disabled', true).text('Đang xử lý...');
+
+            $.ajax({
+                url: `/profile/validate/${field}`,
+                method: 'POST',
+                data: { [field]: value         
+                        // _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')  // Do đã thêm CSRF vào Thêm CSRF token vào data 
+                    },
+                success: function(response) {
+                    console.log('Response:', response);
+                    if (response.valid) {
+                        $(`#${field}Modal`).modal('hide');
+                        $(`#profile-show-${field}`).text(value);
+                        $(`#${field}Error`).hide();
+                    } else {
+                        // Hiển thị lỗi
+                        $(`#${field}Error`).text(response.errors).show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', xhr.responseText);
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                },
+                complete: function() {
+                    $(`#${field}SaveBtn`).prop('disabled', false).text('OK');
+                }
+            });
+        });
+    }
+
+    // Chỉ kích hoạt handleFieldChange khi modal được mở (Modal được mở khi nhấn "Thay đổi" ở các truong thông tin: email, số điện thoại, ngày sinh)
+    $('#emailModal').on('show.bs.modal', function () {
+        handleFieldChange('email');
+    });
+
+    $('#phoneModal').on('show.bs.modal', function () {
+        handleFieldChange('phone');
+    });
+
+    $('#dobModal').on('show.bs.modal', function () {
+        handleFieldChange('dob');
+    });
+});
+
+$(document).on('hidden.bs.modal', '.modal', function () {
+    // Xóa trạng thái trên body
+    $('body').removeClass('modal-open');
+    $('body').css({
+        overflow: '', // Khôi phục overflow. Nếu không sẽ bị mất thanh cuộn trang của trang web
+        'padding-right': '' // padding-right được bootstrap tự động thêm vào giao diện toàn trang web khi thoát modal để hiển thị thanh cuộn trang. Vì vậy cần xoá padding-right này đi để không bị lệch toàn bộ trang web
+    });
+    // Loại bỏ backdrop
+    $('.modal-backdrop').remove();
+});
+
+//Script tự động ẩn thông báo sau 4 giây
+setTimeout(() => {
+    const alert = document.querySelector('.alert');
+    if (alert) {
+        alert.style.display = 'none';
+    }
+}, 4000);
+</script>

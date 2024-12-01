@@ -6,6 +6,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>@yield('title')</title>
 
+	<!-- CSRF Token khi gửi yêu cầu AJAX-->
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+
 	<!-- Import bootstrap lib, with customized color pallete-->
 	<link rel="stylesheet" href="{{asset('css/coconerd-bootstrap.css')}}">
 
@@ -18,14 +21,17 @@
 	<link rel="stylesheet" href="{{asset('css/layouts/footer.css')}}">
 
 	<!-- View-specific stylings -->
-	@yield(section: "style")
+	@yield('style')
 </head>
 
 <body>
 	@include("layouts.header")
 
-	@yield(section: "content")
+	@yield('content')
 
 	@include("layouts.footer")
+
+	<!-- Định nghĩa stack scripts này để có thể nhúng file JS xử lý vào các file blade (đối với file blade nào có @push('scripts') -->
+	@stack('scripts')
 </body>
 </html>
