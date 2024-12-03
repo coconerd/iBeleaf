@@ -9,7 +9,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
 /**
@@ -40,13 +41,14 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
  *
  * @package App\Models
  */
-class User extends Model implements Authenticatable
+class User extends Authenticatable
 {
     use AuthenticatableTrait;
+	use Notifiable;
 
 	protected $table = 'users';
 	protected $primaryKey = 'user_id';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'user_id' => 'int',
