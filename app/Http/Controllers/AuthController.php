@@ -81,7 +81,7 @@ class CredentialsValidator
 		return $name;
 	}
 
-	public function valdiateAndReturnPassword(array $request_data)
+	public function validateAndReturnPassword(array $request_data)
 	{
 		// check empty password
 		if (empty($request_data["password"])) {
@@ -231,7 +231,7 @@ class AuthController extends Controller
 
 		try {
 			$email = $this->credentialsValidator->validateAndReturnEmail($request_data, true);
-			$password = $this->credentialsValidator->valdiateAndReturnPassword($request_data);
+			$password = $this->credentialsValidator->validateAndReturnPassword($request_data);
 		} catch (Exception $e) {
 			back()->withErrors(provider: $e->getMessage());
 		}
