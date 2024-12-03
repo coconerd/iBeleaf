@@ -92,7 +92,7 @@ class CredentialsValidator
 
 		// password length check
 		if (strlen($password) < 8) {
-			throw new Exception(message: "password must be at least 8 characters");
+			throw new Exception(message: "Mật khẩu phải chứa ít nhất 8 ký tự");
 		}
 
 		// not throwing any exception, all good
@@ -138,7 +138,7 @@ class AuthUtils
 
 class AuthController extends Controller
 {
-	
+
 	protected CredentialsValidator $credentialsValidator;
 	protected DBConnService $dbConnService;
 
@@ -162,10 +162,13 @@ class AuthController extends Controller
 
 		try {
 			$email = $this->credentialsValidator->validateAndReturnEmail($request_data, true);
-			$password = $this->credentialsValidator->valdiateAndReturnPassword($request_data);
+			$password = $this->credentialsValidator->validateAndReturnPassword($request_data);
 		} catch (Exception $e) {
-			dd($e);
-			back()->withErrors($e->getMessage());
+			Log::error("An error occurred in func. handleLogin()", [
+				'error' => $e->getMessage(),
+				'request_data' => $request->all(), // Optional: log request data
+			]);
+			return redirect()->back()->withErrors($e->getMessage());
 		}
 
 		// check if user exists
@@ -174,14 +177,16 @@ class AuthController extends Controller
 		if ($user) {
 			// check password
 			$is_correct_password = password_verify($password, $user->password);
+			Log::info("User found in cache", [
+				'user' => $user,
+			]);
 			if (!$is_correct_password) {
 				// $this->sendErrorJSON("invalid credentials", 400);
-				return redirect()->back()->withErrors("invalid credentials");
+				return redirect()->back()->withErrors("Thông tin đăng nhập sai");
 			}
 		} else {
 			// retrieve from db
 			try {
-
 				$conn = $this->dbConnService->getDBConn();
 				$sql = "select * from users where email = ?";
 				$pstm = $conn->prepare($sql);
@@ -189,13 +194,16 @@ class AuthController extends Controller
 				$pstm->execute();
 				$result = $pstm->get_result();
 				if ($result->num_rows == 0) {
-					return redirect()->back()->withErrors(provider: "account not found");
+					Log::error("User not found in database", [
+						'email' => $email,
+					]);
+					return redirect()->back()->withErrors(provider: "Thông tin đăng nhập sai");
 				}
 				$row = $result->fetch_assoc();
 				$hashed_password = $row['password'];
 				$is_correct_password = password_verify($password, $hashed_password);
 				if (!$is_correct_password) {
-					return redirect()->back()->withErrors("invalid credentials");
+					return redirect()->back()->withErrors("Thông tin đăng nhập sai");
 				}
 
 				// fill user object
@@ -210,7 +218,7 @@ class AuthController extends Controller
 					'error' => $e->getMessage(),
 					'request_data' => $request->all(), // Optional: log request data
 				]);
-				return redirect()->back()->withErrors("Có lỗi xảy ra khi đăng nhập");
+				return redirect()->back()->withErrors(provider: "Có lỗi xảy ra khi đăng nhập");
 			} finally {
 				$pstm->close();
 			}
@@ -228,7 +236,7 @@ class AuthController extends Controller
 	}
 
 	// Handle registration
-	public function handleRegister(Request $request)
+	public function handleRegister(Request $request): mixed
 	{
 		$request_data = $_POST;
 
@@ -244,27 +252,39 @@ class AuthController extends Controller
 			$email = $this->credentialsValidator->validateAndReturnEmail($request_data, true);
 			$password = $this->credentialsValidator->validateAndReturnPassword($request_data);
 		} catch (Exception $e) {
-			back()->withErrors(provider: $e->getMessage());
+			Log::error("An error occurred in func. handleRegister()", [
+				'error' => $e->getMessage(),
+				'request_data' => $request->all(), // Optional: log request data
+			]);
+			return redirect()->back()->withErrors($e->getMessage());
 		}
-
 
 		// Create user
 		$user = null;
+		$emailPrefix = explode($email, string: '@')[0];
+		$randomUsername = null;
+		if (strlen($emailPrefix) > 50) {
+			$randomUsername = AuthUtils::random_string(6);
+		} else {
+			$randomUsername = AuthUtils::random_username($emailPrefix);
+		}
 		try {
-			$user = User::create([
+			$user = User::create(attributes: [
 				'full_name' => $name,
+				'user_name' => $randomUsername,
 				'email' => $email,
 				'password' => $password,
 				'role_type' => 0,
-				'province_city' => "",
-				'district' => "",
-				'phone_number' => "0000000000",
-				'address' => ""
 			]);
-
 		} catch (Exception $e) {
-			dd($e);
-			return back()->withError("failed to create account");
+			if (strpos($e->getMessage(), "1062 Duplicate") !== false) {
+				return redirect()->back()->withErrors("Email đã được đăng ký");
+			}
+			Log::error("An error occurred in func. handleRegister()", [
+				'error' => $e->getMessage(),
+				'request_data' => $request->all(), // Optional: log request data
+			]);
+			return redirect()->back()->withErrors("Có lỗi xảy ra khi đăng ký");
 		}
 		// Auth::login($user);
 
@@ -317,7 +337,7 @@ class AuthController extends Controller
 			if ($result->num_rows > 0) {
 				$record = $result->fetch_assoc();
 				$user = new User();
-				$user->user_id= $record['user_id'];
+				$user->user_id = $record['user_id'];
 				$user->email = $record['email'];
 				$user->full_name = $record['full_name'];
 				$user->password = $record['password'];
@@ -330,8 +350,9 @@ class AuthController extends Controller
 				$password = AuthUtils::random_password();
 				$user = User::create([
 					'email' => $email,
-					'name' => $name,
+					'full_name' => $name,
 					'password' => $password,
+					'role_type' => 0,
 				]);
 				Auth::login($user);
 				$request->session()->regenerate();
@@ -360,7 +381,7 @@ class AuthController extends Controller
 				'error' => $e->getMessage(),
 				'request_data' => $request->all(), // Optional: log request data
 			]);
-			
+
 			return redirect('/auth/login')->withErrors("Có lỗi xảy ra khi đăng nhập");
 		} finally {
 			$pstm->close();
