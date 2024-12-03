@@ -117,13 +117,24 @@ class AuthUtils
 		return implode('', $pieces);
 	}
 
-	public static function random_password()
+	public static function random_password(): string
 	{
 		return bcrypt(self::random_string());
 	}
+
+	public static function random_username(string $prefix): string
+	{
+		$prefixLen = strlen($prefix);
+
+		if ($prefixLen > 50) {
+			throw new \RangeException("Prefix length must be less than or equal to 50");
+		}
+
+		$usernameLen = min($prefixLen + 4, 50);
+		$randomUsername = $prefix . self::random_string($usernameLen - strlen($prefix));
+		return $randomUsername;
+	}
 }
-
-
 
 class AuthController extends Controller
 {
