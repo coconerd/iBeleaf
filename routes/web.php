@@ -34,11 +34,11 @@ Route::get('/auth/login', [AuthController::class, 'showLoginForm']);
 Route::post('/auth/login', [AuthController::class, 'handleLogin']);
 
 // Register
-Route::get('/auth/register', [AuthController::class, 'showRegistrationForm']);
+Route::get('/auth/register', action: [AuthController::class, 'showRegistrationForm']);
 Route::post('/auth/register', [AuthController::class, 'handleRegister']);
 
 // OAuth2 social login
-Route::get('/auth/login/{social}', action: [AuthController::class, 'showConsentScreen']);
+Route::post('/auth/login/{social}', action: [AuthController::class, 'showConsentScreen']);
 Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocialCallback']);
 
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này

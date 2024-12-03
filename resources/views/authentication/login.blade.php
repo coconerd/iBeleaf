@@ -133,15 +133,21 @@
 			<h2>Welcome Back!</h2>
 			<p>We source the healthiest and most beautiful plants to bring natures finest to your home. We provide
 				expert care advice to ensure your plants thrive.</p>
-			<button onclick="window.location.href='/auth/login/google'" type="submit"
+			<button onclick="event.preventDefault(); document.getElementById('google-login-form').submit();" type="submit"
 				class="btn btn-google d-flex align-items-center justify-content-center">
 				<i class="bi bi-google"></i> Đăng nhập với Google
 			</button>
 			<span>or</span>
-			<button onclick="window.location.href='/auth/login/facebook'"
-				class="btn btn-email d-flex align-items-center justify-content-center">
-				<i class="bi bi-facebook"></i> Đăng nhập với Facebook
+			<button onclick="event.preventDefault(); document.getElementById('facebook-login-form').submit();" type="submit"
+				class="btn btn-google d-flex align-items-center justify-content-center">
+				<i class="bi bi-google"></i> Đăng nhập với Facebook
 			</button>
+			<form id="google-login-form" action="/auth/login/google" method="POST" style="display: none;">
+				@csrf
+			</form>
+			<form id="facebook-login-form" action="/auth/login/facebook" method="POST" style="display: none;">
+				@csrf
+			</form>
 			<img src="{{asset(path: 'images/transparent-plant-pot.png')}}" alt="Plant" height="300" class="plant-image">
 		</div>
 
