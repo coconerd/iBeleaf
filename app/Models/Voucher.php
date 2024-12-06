@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Voucher
  * 
- * @property int $voucher_id
+ * @property string $voucher_id
  * @property string|null $voucher_name
  * @property string|null $voucher_type
  * @property string|null $description
@@ -31,6 +31,7 @@ class Voucher extends Model
 {
 	protected $table = 'vouchers';
 	protected $primaryKey = 'voucher_id';
+	public $incrementing = false;
 
 	protected $casts = [
 		'voucher_start_date' => 'datetime',

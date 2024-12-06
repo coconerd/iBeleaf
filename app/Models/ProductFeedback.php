@@ -31,8 +31,10 @@ class ProductFeedback extends Model
 {
 	protected $table = 'product_feedbacks';
 	protected $primaryKey = 'product_feedback_id';
+	public $incrementing = false;
 
 	protected $casts = [
+		'product_feedback_id' => 'int',
 		'user_id' => 'int',
 		'num_star' => 'int'
 	];

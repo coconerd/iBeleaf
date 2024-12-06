@@ -34,8 +34,10 @@ class ReturnRefundItem extends Model
 {
 	protected $table = 'return_refund_items';
 	protected $primaryKey = 'return_refund_id';
+	public $incrementing = false;
 
 	protected $casts = [
+		'return_refund_id' => 'int',
 		'order_items_id' => 'int',
 		'user_id' => 'int',
 		'quantity' => 'int'

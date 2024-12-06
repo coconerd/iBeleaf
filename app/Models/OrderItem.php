@@ -31,8 +31,10 @@ class OrderItem extends Model
 {
 	protected $table = 'order_items';
 	protected $primaryKey = 'order_items_id';
+	public $incrementing = false;
 
 	protected $casts = [
+		'order_items_id' => 'int',
 		'order_id' => 'int',
 		'quantity' => 'int',
 		'total_price' => 'int'

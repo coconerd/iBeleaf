@@ -26,8 +26,10 @@ class FeedbackImage extends Model
 {
 	protected $table = 'feedback_images';
 	protected $primaryKey = 'feedback_image_id';
+	public $incrementing = false;
 
 	protected $casts = [
+		'feedback_image_id' => 'int',
 		'product_feedback_id' => 'int'
 	];
 
