@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductConroller;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,12 +20,9 @@ use App\Http\Controllers\ProfileController;
  * @notice Landing page
  */
 Route::get('/', function () {
-	return view('products/index');
+	return view('product/index');
 });
 
-Route::get('/products', function () {
-	return view('products/index');
-});
 
 /**
  * @notice Authentication routes
@@ -42,11 +41,27 @@ Route::post('/auth/login/{social}', action: [AuthController::class, 'showConsent
 Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocialCallback']);
 
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'showProfilePage'])->name('profile.homepage');
-    Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/profile/validate/{field}', [ProfileController::class, 'validateField'])->name('profile.validate');
+Route::middleware(['auth'])->group(function (): void {
+	Route::get('/profile', [ProfileController::class, 'showProfilePage'])->name('profile.homepage');
+	Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+	Route::post('/profile/validate/{field}', [ProfileController::class, 'validateField'])->name('profile.validate');
 	Route::get('/profile/change-password', [ProfileController::class, 'showChangePassword'])->name('profile.changePassword');
 	Route::get('/profile/orders', [ProfileController::class, 'showOrders'])->name('profile.orders');
 	Route::get('/profile/returns', [ProfileController::class, 'showReturns'])->name('profile.returns');
 });
+
+
+Route::get(
+	'/product/{product_id}',
+	[ProductController::class, 'show']
+)->name('product.show');
+
+Route::get('/cart/add/{id}', function ($id) {
+    return "Product $id added to cart.";
+})->name('cart.add');
+
+Route::post('/wishlist/add', [App\Http\Controllers\WishlistController::class, 'add'])->name('wishlist.add');
+
+Route::post('/reviews/store}', function ($id) {
+    return "Review for product $id has been saved.";
+})->name('reviews.store');
