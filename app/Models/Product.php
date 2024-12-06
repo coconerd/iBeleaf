@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Collection|Attribute[] $attributes
  * @property Collection|ProductCategory[] $product_categories
  * @property Collection|ProductFeedback[] $product_feedbacks
+ * @property Wishlist $wishlist
  *
  * @package App\Models
  */
@@ -82,5 +83,10 @@ class Product extends Model
 	public function product_feedbacks()
 	{
 		return $this->hasMany(ProductFeedback::class);
+	}
+
+	public function wishlist()
+	{
+		return $this->hasOne(Wishlist::class);
 	}
 }

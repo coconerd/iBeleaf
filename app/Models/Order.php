@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $order_id
  * @property int|null $user_id
- * @property string|null $voucher_id
+ * @property int|null $voucher_id
  * @property int|null $provisional_price
  * @property int|null $deliver_cost
  * @property int|null $total_price
@@ -37,11 +37,10 @@ class Order extends Model
 {
 	protected $table = 'orders';
 	protected $primaryKey = 'order_id';
-	public $incrementing = false;
 
 	protected $casts = [
-		'order_id' => 'int',
 		'user_id' => 'int',
+		'voucher_id' => 'int',
 		'provisional_price' => 'int',
 		'deliver_cost' => 'int',
 		'total_price' => 'int',
