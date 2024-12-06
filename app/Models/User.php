@@ -9,9 +9,6 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
 /**
  * Class User
@@ -19,14 +16,14 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
  * @property int $user_id
  * @property int $role_type
  * @property string|null $email
- * @property string $full_name
+ * @property string|null $full_name
  * @property string|null $user_name
- * @property string|null $password
- * @property string $phone_number
- * @property string $province_city
- * @property string $district
+ * @property string $password
+ * @property string|null $phone_number
+ * @property string|null $province_city
+ * @property string|null $district
  * @property string|null $commune_ward
- * @property string $address
+ * @property string|null $address
  * @property string|null $gender
  * @property Carbon|null $date_of_birth
  * @property string|null $avatar
@@ -38,24 +35,19 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
  * @property Collection|Order[] $orders
  * @property Collection|ProductFeedback[] $product_feedbacks
  * @property Collection|ReturnRefundItem[] $return_refund_items
+ * @property Wishlist $wishlist
  *
  * @package App\Models
  */
-class User extends Authenticatable
+class User extends Model
 {
-    use AuthenticatableTrait;
-	use Notifiable;
-
 	protected $table = 'users';
 	protected $primaryKey = 'user_id';
-	public $incrementing = true;
 
 	protected $casts = [
-		'user_id' => 'int',
 		'role_type' => 'int',
 		'date_of_birth' => 'datetime',
-		'card_id' => 'int',
-		'password' => 'hashed'
+		'card_id' => 'int'
 	];
 
 	protected $hidden = [
@@ -97,5 +89,10 @@ class User extends Authenticatable
 	public function return_refund_items()
 	{
 		return $this->hasMany(ReturnRefundItem::class);
+	}
+
+	public function wishlist()
+	{
+		return $this->hasOne(Wishlist::class);
 	}
 }
