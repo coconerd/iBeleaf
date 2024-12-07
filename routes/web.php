@@ -43,10 +43,21 @@ Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocia
 
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'showProfilePage'])->name('profile.homepage');
+    Route::get('/profile', [ProfileController::class, 'showProfilePage'])->name('profile.homePage');
     Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/validate/{field}', [ProfileController::class, 'validateField'])->name('profile.validate');
-	Route::get('/profile/change-password', [ProfileController::class, 'showChangePassword'])->name('profile.changePassword');
+
+	Route::get('/profile/current-password', [ProfileController::class, 'showCurrentPasswordForm'])->name('profile.currentPassword');
+	Route::post('/profile/currentPassword-verify', [ProfileController::class, 'handleCurrentPasswordVerification'])->name('profile.verifyCurrentPassword');
+	// Route::get('/profile/form-newpassword', [ProfileController::class, 'showVerifyNewPasswordForm'])->name('profile.showVerifyNewPasswordForm');
+	// Route::get('/get-showVerifyNewPasswordForm-url', function() {
+	// 	return response()->json([
+	// 		'url' => route('profile.showVerifyNewPasswordForm')
+	// 	]);
+	// });
+
+	Route::post('/profile/verify-newpassword', [ProfileController::class, 'handleVerifyNewPassword'])->name('profile.verifyNewPassword');
+
 	Route::get('/profile/orders', [ProfileController::class, 'showOrders'])->name('profile.orders');
 	Route::get('/profile/returns', [ProfileController::class, 'showReturns'])->name('profile.returns');
 });

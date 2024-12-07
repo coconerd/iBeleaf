@@ -13,15 +13,110 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Providers\DBConnService; // Import DBConnService của ducminh đã viết sẵn để khởi tạo đối tượng connection đến csdl
 
+/* Import class CredentialsValidator của ducminh đã viết sẵn ở AuthController để sau này có thể sử dụng */
+class CredentialsValidator
+{
+	protected DBConnService $dbConnService;
+
+	public function __construct(DBConnService $dBConnService)
+	{
+		$this->dbConnService = $dBConnService;
+	}
+
+	public function validateAndReturnEmail(array $request_data, bool $is_login = false): mixed
+	{
+		// check empty email
+		if (empty($request_data["email"])) {
+			throw new Exception("email is required");
+		}
+
+		$email = $request_data["email"];
+
+		// email length check
+		if (strlen($email) > 255) {
+			throw new Exception("email is too long");
+		}
+
+		// email format check
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			throw new Exception("email format is invalid");
+		}
+
+		// check email availability
+		if (!$is_login) {
+			try {
+				$conn = $this->dbConnService->getDBConn();
+				$sql = "select email from users where email = ?";
+				$pstm = $conn->prepare($sql);
+				$pstm->bind_param("s", $email);
+				$pstm->execute();
+				$result = $pstm->get_result();
+				if ($result->num_rows > 0) {
+					throw new Exception(message: "email has been taken");
+				}
+			} catch (Exception $e) {
+				Log::error("Error occurred when validating email", [
+					'error' => $e->getMessage(),
+				]);
+			} finally {
+				$pstm->close();
+			}
+		}
+
+		// not throwing any exception, all good
+		return $email;
+	}
+
+	public function validateAndReturnName(array $request_data)
+	{
+		// check empty name
+		if (empty($request_data["name"])) {
+			throw new Exception("user's name is required");
+		}
+
+		$name = $request_data["name"];
+
+		if (strlen($name) > 255) {
+			throw new Exception("name is too long");
+		}
+
+		// not throwing any exception, all good
+		return $name;
+	}
+
+	public function valdiateAndReturnPassword(array $request_data)
+	{
+		// check empty password
+		if (empty($request_data["password"])) {
+			throw new Exception("password is required");
+		}
+
+		$password = $request_data["password"];
+
+		// password length check
+		if (strlen($password) < 8) {
+			throw new Exception(message: "password must be at least 8 characters");
+		}
+
+		// not throwing any exception, all good
+		return $password;
+	}
+}
+
 class ProfileController extends Controller
 {
-    protected DBConnService $dbConnService;
+	protected CredentialsValidator $credentialsValidator;
+	protected DBConnService $dbConnService;
 
 	public function __construct(DBConnService $dbConnService)
 	{
 		$this->dbConnService = $dbConnService;
+		$this->credentialsValidator = new CredentialsValidator($dbConnService);
 	}
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
+
+    /* Hiển thị trang Hồ sơ của người dùng */
     public function showProfilePage()
     {
         // return view('profile.index'); /* Dùng này thì trong file index dùng trực tiếp auth()->user() thay cho biến $user */  ==> cách này không khuyến khích vì vi phạm nguyên tắc MVC
@@ -31,7 +126,10 @@ class ProfileController extends Controller
         $user = auth()->user();
         return view('profile.index', compact('user'));
     }
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
+
+    /* Xử lý validate cho các modal Email, Số điện thoại, Ngày sinh (Khi nhấn vào "Thay đổi" ở các trường email, số điện thoại, ngày sinh của giao diện trang Hồ sơ) */
     public function validateField(Request $request, $field)
     {
         try {
@@ -107,7 +205,10 @@ class ProfileController extends Controller
             ], 500);
         }
     }
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
+
+    /* Xử lí sự kiện khi nhấn nút Lưu ở form cập nhật thông tin cá nhân ở giao diện Hồ sơ */
     public function updateProfile(Request $request)
     {
         // dd($request->all()); // in ra dữ liệu gửi đến server khi nhấn nút Lưu từ form
@@ -177,7 +278,7 @@ class ProfileController extends Controller
         }
 
         if (!$hasChanged) {
-            return redirect()->route('profile.homepage')->with('info', 'Không có thay đổi nào để cập nhật');
+            return redirect()->route('profile.homePage')->with('info', 'Không có thay đổi nào để cập nhật');
         }
 
         $updateData = [];
@@ -208,11 +309,181 @@ class ProfileController extends Controller
         if ($stmt->execute()) {
             $stmt->close();
             $mysqli->close();
-            return redirect()->route('profile.homepage')->with('success', 'Cập nhật thông tin thành công');
+            return redirect()->route('profile.homePage')->with('success', 'Cập nhật thông tin thành công');
         } else {
             $stmt->close();
             $mysqli->close();
-            return redirect()->route('profile.homepage')->with('error', 'Có lỗi xảy ra. Vui lòng thử lại');
+            return redirect()->route('profile.homePage')->with('error', 'Có lỗi xảy ra. Vui lòng thử lại');
         }
     }
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+    /* Xử lí yêu cầu AJAX từ sự kiện javascript (code ở file homePage.js) 
+    Xử lý sự kiện khi nhấn vào dropdown "Đổi mật khẩu" ở giao diện trang hồ sơ
+    */
+    public function showCurrentPasswordForm(Request $request)
+    {
+        // Kiểm tra nếu là yêu cầu AJAX
+        if ($request->ajax()) {
+            // Render phần form xác nhận mật khẩu hiện tại, form này sẽ thay thế cho thẻ div class="right-container-main-inner__bottom" của giao diện trang hồ sơ
+            return response()->json([
+                'html' => view('profile.currentPasswordInput')->render() // Đây là phần nội dung sẽ thay thế
+            ]);
+        }
+        // Trường hợp không phải AJAX, trả về lỗi 404
+        abort(404);
+    }
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+    /* Xử lí sự kiện khi nhấn nút XÁC NHẬN mật khẩu hiện tại ở form currentPasswordInput.blade.php */
+    public function handleCurrentPasswordVerification(Request $request)
+    {
+        $currentUser = auth()->user();
+        // dd($request->all()); // in ra dữ liệu gửi đến server khi nhấn nút Lưu từ form
+
+        /* Sử dụng hàm $request->validate thì khi validate phát hiện có lỗi sẽ tự động điều hướng về trang trước đó. 
+        Nếu validate hợp lệ thì trả về kết quả đã được validate */
+
+        // $validatedData = $request->validate([
+        //     'password' => [
+        //         'required',
+        //         'regex:/^[^\s]{8,20}$/'
+        //     ]
+        // ], [
+        //     'password.required' => 'Vui lòng nhập password',
+        //     'password.regex' => 'Password phải có độ dài từ 8-20 ký tự và không chứa khoảng trắng'
+        // ]);
+
+        // if (!password_verify($validatedData['password'], $currentUser->password)) {
+            
+        //     return response()->json([
+        //         'html' => view('profile.currentPasswordInput')->render(),
+        //         'success' => false,
+        //         'message' => 'Mật khẩu hiện tại không chính xác'               
+        //     ]);
+        // }
+
+        // return response()->json([
+        //     'html' => view('profile.verifyNewPasswordInput')->render(),
+        //     'success' => true
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            'password' => [
+                'required',
+                'regex:/^[^\s]{8,20}$/'
+            ]
+        ], [
+            'password.required' => 'Vui lòng nhập mật khẩu hiện tại',
+            'password.regex' => 'Password phải có độ dài từ 8-20 ký tự và không chứa khoảng trắng'
+        ]);
+
+        // Kiểm tra validation
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first('password')
+            ]);
+        } else{
+            if (!password_verify($validator->validated()['password'], $currentUser->password)) {
+                
+                return response()->json([
+                    'html' => view('profile.currentPasswordInput')->render(),
+                    'success' => false,
+                    'message' => 'Mật khẩu hiện tại không chính xác'               
+                ]);
+            } else{
+                return response()->json([
+                    'html' => view('profile.verifyNewPasswordInput')->render(),
+                    'success' => true
+                ]);
+            }
+        }
+
+    }
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
+
+    
+    /* Xử lí yêu cầu AJAX từ sự kiện javascript (code ở file currentPasswordPage.js) 
+    Xử lý sự kiện khi nhấn vào nút XÁC NHẬN ở giao diện nhập mật khẩu hiện tại
+    */
+    // public function showVerifyNewPasswordForm(Request $request)
+    // {
+    //     // Kiểm tra nếu là yêu cầu AJAX
+    //     if ($request->ajax()) {
+    //         // Render phần form xác nhận mật khẩu mới, form này sẽ thay thế cho thẻ div class="right-container-main-inner__bottom" của giao diện trang hồ sơ
+    //         return response()->json([
+    //             'html' => view('profile.verifyNewPasswordInput')->render() // Đây là phần nội dung sẽ thay thế
+    //         ]);
+    //     }
+    //     // Trường hợp không phải AJAX, trả về lỗi 404
+    //     abort(404);
+    // }
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+    /* Xử lí sự kiện khi nhấn nút Lưu mật khẩu mới ở form verifyNewPasswordInput.blade.php */
+    public function handleVerifyNewPassword(Request $request)
+    {
+        // dd($request->all()); // in ra dữ liệu gửi đến server khi nhấn nút Lưu từ form
+        $currentUser = auth()->user();
+
+        if (password_verify($request->input('password_confirmation'), $currentUser->password)) {
+            // Lưu thông báo vào session
+            session()->flash('info', 'Mật khẩu không có thay đổi nào để cập nhật');
+
+            return response()->json([
+                'success' => true,
+                'message' => '[Info] Mật khẩu không có thay đổi nào để cập nhật',
+                'redirect_url' => route('profile.homePage')
+            ]);
+            // return redirect()->route('profile.homePage')->with('info', 'Mật khẩu không có thay đổi nào để cập nhật');
+        } else {
+
+            $validator = Validator::make($request->all(), [
+                'password' => [
+                    'regex:/^[^\s]{8,20}$/'
+                ]
+            ], [
+                'password.regex' => 'Mật khẩu mới phải có độ dài từ 8-20 ký tự và không chứa khoảng trắng'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first('password')
+                ]);
+            } else {
+                $newPassword = password_hash($validator->validated()['password'], PASSWORD_DEFAULT);
+
+                $mysqli = $this->dbConnService->getDBConn();
+                $stmt = $mysqli->prepare("UPDATE users SET password = ? WHERE user_id = ?");
+                $user_id = $currentUser->user_id;
+                $stmt->bind_param('si', $newPassword, $user_id);
+    
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    $mysqli->close();
+
+                    session()->flash('success', 'Cập nhật mật khẩu thành công');
+                    return response()->json([
+                        'success' => true,
+                        'message' => '[Success] Cập nhật mật khẩu thành công',
+                        'redirect_url' => route('profile.homePage')
+                    ]);
+                    // return redirect()->route('profile.homePage')->with('success', 'Cập nhật thông tin thành công');
+                } else {
+                    $stmt->close();
+                    $mysqli->close();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Có lỗi xảy ra. Vui lòng thử lại'
+                    ]);
+                }
+            }
+        }
+    }
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
 }
