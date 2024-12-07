@@ -20,18 +20,25 @@
 	<link rel="stylesheet" href="{{asset('css/layouts/header.css')}}">
 	<link rel="stylesheet" href="{{asset('css/layouts/footer.css')}}">
 
+	<!-- Scripts that needs to execute quickly on page load -->
+	@yield('head-script')
+
 	<!-- View-specific stylings -->
 	@yield('style')
 </head>
 
 <body>
+
 	@include("layouts.header")
 
 	@yield('content')
+
+	@yield('body-script')
 
 	@include("layouts.footer")
 
 	<!-- Định nghĩa stack scripts này để có thể nhúng file JS xử lý vào các file blade (đối với file blade nào có @push('scripts') -->
 	@stack('scripts')
 </body>
+
 </html>
