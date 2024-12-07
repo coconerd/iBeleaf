@@ -43,7 +43,7 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
  */
 class User extends Authenticatable
 {
-    use AuthenticatableTrait;
+	use AuthenticatableTrait;
 	use Notifiable;
 
 	protected $table = 'users';
@@ -91,11 +91,21 @@ class User extends Authenticatable
 
 	public function product_feedbacks()
 	{
-		return $this->hasMany(ProductFeedback::class);
+		return $this->hasMany(ProductFeedback::class, 'user_id', 'user_id');
 	}
 
 	public function return_refund_items()
 	{
 		return $this->hasMany(ReturnRefundItem::class);
+	}
+
+	public function wishlist()
+	{
+		return $this->belongsToMany(
+			Product::class,
+			'wishlists',
+			'user_id',     // Foreign key on the pivot table referencing the user
+			'product_id'   // Foreign key on the pivot table referencing the product
+		);
 	}
 }
