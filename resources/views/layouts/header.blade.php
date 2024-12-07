@@ -12,7 +12,7 @@
 				@if (auth()->check())
 					{{auth()->user()->full_name}}
 				@else
-					<a class="text-white" href="auth/login">Đăng nhập</a>
+					<a class="text-white" href="{{ url('/auth/login') }}">Đăng nhập</a>
 				@endif
 			</span>
 			<i class="bi bi-person"></i>
