@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
+use Log;
 
 class ProductController extends Controller
 {
+
 	public function show(Request $request)
 	{
 		$productId = 'CCNPLT0000';
@@ -62,6 +66,18 @@ class ProductController extends Controller
 			]
 		];
 
+		$product = Product::find($productId);
+
+		$isWishlisted = false;
+		if (Auth::check()) {
+			$user = Auth::user();
+			$isWishlisted = $user->wishlist()
+				->wherePivot('product_id', $productId)
+				->exists();
+		}
+
+		Log::info('User ' . 'already wishlisted' . ' product ' . $productId . ': ' . $isWishlisted);
+
 		return view('product.details', compact(
 			'productId',
 			'productAttributes',
@@ -69,7 +85,9 @@ class ProductController extends Controller
 			'bannerImgSrc',
 			'productImgs',
 			'productCategories',
-			'relatedProducts'
+			'relatedProducts',
+			'product',
+			'isWishlisted',
 		));
 	}
 }

@@ -124,7 +124,7 @@ class ProfileController extends Controller
            Auth::user() thì cần import Illuminate\Support\Facades\Auth;   ==> dễ bị lỗi các trường thông tin user bị null mặc dù user đã đăng nhập rồi
         */
         $user = auth()->user();
-        return view('profile.index', compact('user'));
+        return view('profile.index', compact(var_name: 'user'));
     }
 /*-----------------------------------------------------------------------------------------------------------------------------------------*/
 

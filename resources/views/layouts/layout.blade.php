@@ -24,14 +24,14 @@
 	@yield('head-script')
 
 	<!-- View-specific stylings -->
-	@yield('style')
+	@yield(section: 'style')
 </head>
 
 <body>
 
 	@include("layouts.header")
 
-	@yield('content')
+	@yield(section: 'content')
 
 	@yield('body-script')
 

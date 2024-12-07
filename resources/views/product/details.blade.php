@@ -1,5 +1,10 @@
 @extends("layouts.layout")
 @section("title", "landing-page")
+
+@section("head-script")
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@endsection
+
 @section("style")
 <style>
 	/* Banner styles */
@@ -138,6 +143,34 @@
 	/* Left column - Product image styles */
 	#lcol {
 		padding-left: 1rem;
+	}
+
+	/* Heart button styles */
+	.heart-button-active {
+		opacity: 1;
+		color: red;
+	}
+
+	.heart-button-inactive {
+		opacity: 0.4;
+		color: grey;
+	}
+
+	.heart-button:hover {
+		opacity: 0.8;
+		color: red;
+	}
+
+
+	.heart-button {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		font-size: 24px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		transform: opacity 0.3s ease;
 	}
 
 	/* End of product image styles */
@@ -319,24 +352,40 @@
 		z-index: 1051;
 	}
 
-	.wishlist-button {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-		background: transparent;
-		border: none;
-		color: grey;
-		font-size: 24px;
+	.star-rating {
+		display: flex;
+		flex-direction: row-reverse;
+		gap: 0.3rem;
+		font-size: 1.5rem;
+	}
+
+	.star-rating input {
+		display: none;
+	}
+
+	.star-rating label {
+		color: #ddd;
 		cursor: pointer;
-		transition: color 0.3s ease;
 	}
 
-	.wishlist-button:hover {
-		color: red;
+	.star-rating :checked~label,
+	.star-rating label:hover,
+	.star-rating label:hover~label {
+		color: #ffd700;
 	}
 
-	.wishlist-button.added {
-		color: red;
+	.review-item {
+		padding: 1rem;
+		border-bottom: 1px solid #eee;
+	}
+
+	.review-stars {
+		color: #ffd700;
+	}
+
+	.review-date {
+		color: #666;
+		font-size: 0.9rem;
 	}
 </style>
 @endsection
@@ -374,7 +423,7 @@
 					</div>
 					<button class="nav-arrows prev-arrow" onclick="navigateImage(-1)">&#10094;</button>
 					<button class="nav-arrows next-arrow" onclick="navigateImage(1)">&#10095;</button>
-					<button id="wishlistButton" class="wishlist-button">
+					<button class="heart-button {{ $isWishlisted ? 'heart-button-active' : 'heart-button-inactive' }}">
 						<i class="fas fa-heart"></i>
 					</button>
 				</div>
@@ -613,49 +662,36 @@
 		<div class="container-fluid my-5">
 			<div class="row">
 				<div class="col-12">
-					<h2>Reviews</h2>
-					<p>There are no reviews yet.</p>
+					<h2 id="reviewTitle">Reviews</h2>
+					<div id="reviewsList" class="mb-4">
+						<!-- Reviews will be loaded here dynamically -->
+					</div>
 				</div>
 			</div>
 			<div class="row" style="padding-right: 15vw;">
 				<div class="col-12 align-items-left" style="border: black 1px solid">
 					<div class="card border-0" style="background-color: transparent">
 						<div class="card-body">
-							<h4 class="card-title">Be the first to review "Cây lưỡi hổ Bantel Sensation chậu ươm
-								STBS001"</h4>
-							<div class="form-group mb-4">
-								<label for="rating">Số sao *</label>
-								<div class="btn-group btn-group-toggle" data-toggle="buttons">
-									<label class="ms-5 btn btn-outline-primary">
-										<input type="radio" name="rating" id="rating1" value="1"> <i
-											class="bi bi-star"></i>
-									</label>
-									<label class="btn btn-outline-primary">
-										<input type="radio" name="rating" id="rating2" value="2"> <i
-											class="bi bi-star"></i><i class="bi bi-star"></i>
-									</label>
-									<label class="btn btn-outline-primary">
-										<input type="radio" name="rating" id="rating3" value="3"> <i
-											class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i>
-									</label>
-									<label class="btn btn-outline-primary">
-										<input type="radio" name="rating" id="rating4" value="4"> <i
-											class="bi bi-star"></i><i class="bi bi-star"></i><i
-											class="bi bi-star"></i><i class="bi bi-star"></i>
-									</label>
-									<label class="btn btn-outline-primary">
-										<input type="radio" name="rating" id="rating5" value="5"> <i
-											class="bi bi-star"></i><i class="bi bi-star"></i><i
-											class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i>
-									</label>
+							<h4 class="card-title">Write a Review</h4>
+							<form id="reviewForm">
+								@csrf
+								<input type="hidden" name="product_id" value="{{ $productId }}">
+								<div class="form-group mb-4">
+									<label for="rating">Rating *</label>
+									<div class="star-rating mt-2" style="position: absolute; left: 20px">
+										@for($i = 5; $i >= 1; $i--)
+											<input type="radio" id="star{{$i}}" name="rating" value="{{$i}}" required>
+											<label for="star{{$i}}"><i class="fas fa-star"></i></label>
+										@endfor
+									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label for="review">Đánh giá của bạn *</label>
-								<textarea class="mt-2 mb-3 form-control border-0" id="review" rows="5"
-									style="outline: none !important; box-shadow: none !important;"></textarea>
-							</div>
-							<button type="submit" class="btn btn-primary rounded-1">SUBMIT</button>
+								<div class="form-group mt-5">
+									<label for="review">Đánh giá của bạn (tối thiểu 10 ký tự) *</label>
+									<textarea name="review" class="form-control mt-2" rows="5" required
+										style="background-color: #fff; border: 1px solid #ced4da;"></textarea>
+								</div>
+								<button type="submit" class="btn btn-primary mt-3">Gửi đánh giá</button>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -734,7 +770,6 @@
 	</div>
 </div>
 </div>
-</div>
 <div class="container-fluid"></div>
 
 <!-- Main image modal -->
@@ -747,6 +782,7 @@
 
 @section("body-script")
 <script>
+	let favorited = false;
 	document.addEventListener('DOMContentLoaded', function () {
 		const thumbnails = document.querySelectorAll('.img-thumbnail');
 		const carousel = new bootstrap.Carousel(document.querySelector('#productCarousel'));
@@ -777,31 +813,9 @@
 			counterInput.value = currentValue + 1;
 		});
 
-		const productId = {{ $productId }};
-		const wishlistButton = document.getElementById('wishlistButton');
-
-		wishlistButton.addEventListener('click', function () {
-			fetch('/wishlist/add', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-CSRF-TOKEN': '{{ csrf_token() }}'
-				},
-				body: JSON.stringify({ product_id: productId })
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					wishlistButton.classList.add('added');
-					alert('Product added to your wishlist!');
-				} else {
-					alert('Please log in to add products to your wishlist.');
-				}
-			})
-			.catch(error => {
-				console.error('Error:', error);
-			});
-		});
+		// Update initial heart button state
+		const heartButton = document.querySelector('.heart-button');
+		favorited = heartButton.classList.contains('heart-button-active');
 	});
 
 	let currentImageIndex = 0;
@@ -873,5 +887,105 @@
 		}
 	});
 
+	$('.heart-button').click(function () {
+		const button = $(this);
+		if (favorited) {
+			$.ajax({
+				url: "{{ route('wishlist.remove') }}",
+				method: 'POST',
+				data: {
+					product_id: '{{ $productId }}',
+					_token: '{{ csrf_token() }}'
+				},
+				success: function (response) {
+					favorited = false;
+					button.removeClass('heart-button-active');
+					button.addClass('heart-button-inactive');
+				},
+				error: function (xhr) {
+					alert('Có lỗi khi xóa sản phẩm khỏi danh sách yêu thích.');
+				}
+			});
+		}
+		else {
+			$.ajax({
+				url: "{{ route('wishlist.add') }}",
+				method: 'POST',
+				data: {
+					product_id: '{{ $productId }}',
+					_token: '{{ csrf_token() }}'
+				},
+				success: function (response) {
+					favorited = true;
+					button.removeClass('heart-button-inactive');
+					button.addClass('heart-button-active');
+				},
+				error: function (xhr) {
+					alert('Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích.');
+				}
+			});
+		}
+	});
+
+	// Load and display reviews
+	function loadReviews() {
+		$.get("{{ route('reviews.index', $productId) }}", function (data) {
+			$('#reviewTitle').text(`Reviews (${data.length})`);
+			if (data.length === 0) {
+				$('#reviewsList').html('<p>Chưa có đánh giá nào. Hãy trở thành người đầu tiên đánh giá sản phẩm!</p>');
+				return;
+			}
+
+			const reviewsHtml = data.map(review => `
+				<div class="review-item">
+					<div class="d-flex justify-content-between align-items-center mb-2">
+						<div>
+							<strong>${review.user.full_name}</strong>
+							<div class="review-stars">
+								${'★'.repeat(review.num_star)}${'☆'.repeat(5 - review.num_star)}
+							</div>
+						</div>
+						<span class="review-date">${new Date(review.created_at).toLocaleDateString()}</span>
+					</div>
+					<p class="mb-0">${review.feedback_content}</p>
+				</div>
+			`).join('');
+
+			$('#reviewsList').html(reviewsHtml);
+		});
+	}
+
+	// Handle review submission
+	$('#reviewForm').on('submit', function (e) {
+		e.preventDefault();
+
+		const feedbackContent = $('textarea[name="review"]').val();
+		console.log(feedbackContent);
+		if (feedbackContent.length < 10) {
+			alert('Vui lòng nhập tối thiểu 10 ký tự cho đánh giá của bạn');
+			return;
+		}
+
+		$.ajax({
+			url: "{{ route('reviews.store') }}",
+			method: 'POST',
+			data: $(this).serialize(),
+			success: function (response) {
+				alert('Cảm ơn đã đánh giá sản phẩm!');
+				$('#reviewForm')[0].reset();
+				loadReviews(); // Reload reviews after submission
+			},
+			error: function (xhr) {
+				if (xhr.status === 401) {
+					alert('Vui lòng đăng nhập để đánh giá sản phẩm.');
+				} else {
+					alert('Có lỗi xảy ra khi gửi đánh giá.');
+				}
+			}
+		});
+	});
+
+	// Load reviews on page load
+	loadReviews();
 </script>
 @endsection

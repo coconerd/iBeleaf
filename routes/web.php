@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductConroller;
+use App\Http\Controllers\WishlistController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,11 +36,11 @@ Route::get('/auth/login', [AuthController::class, 'showLoginForm']);
 Route::post('/auth/login', [AuthController::class, 'handleLogin']);
 
 // Register
-Route::get('/auth/register', action: [AuthController::class, 'showRegistrationForm']);
+Route::get('/auth/register', [AuthController::class, 'showRegistrationForm']);
 Route::post('/auth/register', [AuthController::class, 'handleRegister']);
 
 // OAuth2 social login
-Route::post('/auth/login/{social}', action: [AuthController::class, 'showConsentScreen']);
+Route::post('/auth/login/{social}', [AuthController::class, 'showConsentScreen']);
 Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocialCallback']);
 
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này
@@ -62,17 +65,18 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+// Product routes
 Route::get(
 	'/product/{product_id}',
 	[ProductController::class, 'show']
 )->name('product.show');
 
-Route::get('/cart/add/{id}', function ($id) {
-    return "Product $id added to cart.";
-})->name('cart.add');
+// Wishlist routes
+Route::middleware(['auth'])->group(function (): void {
+	Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
+	Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
+});
 
-Route::post('/wishlist/add', [App\Http\Controllers\WishlistController::class, 'add'])->name('wishlist.add');
-
-Route::post('/reviews/store}', function ($id) {
-    return "Review for product $id has been saved.";
-})->name('reviews.store');
+// Review routes
+Route::get('/reviews/{product_id}', [ReviewController::class, 'index'])->name('reviews.index');
+Route::middleware('auth')->post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');

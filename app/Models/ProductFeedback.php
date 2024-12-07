@@ -46,16 +46,16 @@ class ProductFeedback extends Model
 
 	public function product()
 	{
-		return $this->belongsTo(Product::class);
+		return $this->belongsTo(Product::class, 'product_id', 'product_id');
 	}
 
 	public function user()
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(User::class, 'user_id', 'user_id');
 	}
 
 	public function feedback_images()
 	{
-		return $this->hasMany(FeedbackImage::class);
+		return $this->hasMany(FeedbackImage::class, 'product_feedback_id', 'product_feedback_id');
 	}
 }
