@@ -47,7 +47,8 @@ class Product extends Model
 		'total_orders' => 'int',
 		'total_ratings' => 'int',
 		'overall_stars' => 'float',
-		'is_returnable' => 'int'
+		'is_returnable' => 'int',
+		'stock_quantity' => 'int',
 	];
 
 	protected $fillable = [
@@ -60,7 +61,8 @@ class Product extends Model
 		'total_orders',
 		'total_ratings',
 		'overall_stars',
-		'is_returnable'
+		'is_returnable',
+		'stock_quantity',
 	];
 
 	public function order_items()
@@ -70,23 +72,33 @@ class Product extends Model
 
 	public function attributes()
 	{
-		return $this->belongsToMany(Attribute::class, 'product_attributes')
-					->withPivot('value')
-					->withTimestamps();
+		return $this->belongsToMany(Attribute::class, 'product_attributes', 'product_id', 'attribute_id')
+			->withPivot('value')
+			->withTimestamps();
+	}
+
+	public function categories()
+	{
+		return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
 	}
 
 	public function product_categories()
 	{
-		return $this->hasMany(ProductCategory::class);
+		return $this->hasMany(ProductCategory::class, 'product_id', 'product_id');
 	}
 
 	public function product_feedbacks()
 	{
-		return $this->hasMany(ProductFeedback::class);
+		return $this->hasMany(ProductFeedback::class, 'product_id', 'product_id');
 	}
 
 	public function wishlist()
 	{
-		return $this->hasOne(Wishlist::class);
+		return $this->hasOne(Wishlist::class, 'product_id', 'product_id');
+	}
+
+	public function product_images()
+	{
+		return $this->hasMany(ProductImage::class, 'product_id', 'product_id');
 	}
 }
