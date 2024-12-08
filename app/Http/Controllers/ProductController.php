@@ -5,84 +5,128 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use App\Providers\DBConnService;
 use Log;
 
 class ProductController extends Controller
 {
+	protected DBConnService $dbConnService;
 
-	public function show(Request $request)
+	public function __construct(DBConnService $dbConnService)
 	{
-		$productId = 'CCNPLT0000';
-		$productAttributes = [
-			'TÊN KHOA HỌC' => 'Dracaena fragrans',
-			'TÊN THÔNG THƯỜNG' => 'Phát tài bộ - Thiết Mộc lan',
-			'QUY CÁCH SẢN PHẨM' => [
-				'Kích thước chậu: 30x30cm (DxC)',
-				'Chiều cao tổng: 120 - 130 cm'
-			],
-			'ĐỘ KHÔ' => 'Dễ chăm sóc',
-			'YÊU CẦU ÁNH SÁNG' => 'Nắng tán xả, chịu được năng trực tiếp',
-			'NHU CẦU NƯỚC' => 'Tưới nước 2 - 3 lần/tuần'
-		];
+		$this->dbConnService = $dbConnService;
+	}
 
-		$relatedProducts = [];
-		$bannerImgSrc = 'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden.jpg';
-		$productImgs = [
-			'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden.jpg',
-			'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden-02-800x800.jpg',
-		];
-		$productCategories = ['Cây cảnh', 'Cây văn phòng', 'Cây phong thủy'];
+	public function show($product_id)
+	{
+		$productId = $product_id;
 
-		$relatedProducts = [
-			(object) [
-				'title' => 'Cây Phong Thủy A',
-				'price' => '650.000₫',
-				'imgSrc' => 'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden.jpg'
-			],
-			(object) [
-				'title' => 'Cây Văn Phòng B',
-				'price' => '450.000₫',
-				'imgSrc' => 'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden.jpg'
-			],
-			(object) [
-				'title' => 'Cây Cảnh C',
-				'price' => '550.000₫',
-				'imgSrc' => 'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden.jpg'
-			],
-			(object) [
-				'title' => 'Cây Phát Tài D',
-				'price' => '850.000₫',
-				'imgSrc' => 'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden.jpg'
-			],
-			(object) [
-				'title' => 'Cây Sen Đá E',
-				'price' => '250.000₫',
-				'imgSrc' => 'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden.jpg'
-			],
-			(object) [
-				'title' => 'Cây Xương Rồng F',
-				'price' => '350.000₫',
-				'imgSrc' => 'https://mowgarden.com/wp-content/uploads/2023/07/cay-phat-tai-bo-mowgarden.jpg'
-			]
-		];
+		if (!isset($productId)) {
+			return abort(404);
+		}
 
-		$product = Product::find($productId);
+		// Fetch product
+		try {
+			// $product = Product::findOrFail(id: $productId);
+			$product = Product::with('categories')
+				->with([
+					'product_images' => function ($query) {
+						$query->where('image_type', '=', 1)->select('product_image_url', 'product_images.product_id');
+					}
+				])
+				->findOrFail($productId);
+
+			Log::debug('Product: ' . json_encode($product));
+		} catch (\Exception $e) {
+			Log::error('Could not find product with product_id ' . $productId . ': ' . $e->getMessage());
+			return abort(404);
+		}
+
+		$productCategories = $product->categories->pluck('name')->toArray();
+		$productImgs = $product->product_images->pluck('product_image_url')->toArray();
+
+		// Fetch product attributes
+		$conn = $this->dbConnService->getDbConn();
+		$sql = "SELECT A.name, PA.value
+			FROM 
+			(
+				SELECT value, product_id, attribute_id from product_attributes WHERE product_id = ?
+			) AS PA
+			JOIN
+			(
+				SELECT name, attribute_id from attributes
+			) AS A
+			ON A.attribute_id = PA.attribute_id
+		";
+		$pstm = $conn->prepare($sql);
+		$pstm->bind_param('s', $productId);
+
+		$productAttributes = [];
+
+		try {
+			$pstm->execute();
+			$res = $pstm->get_result();
+			$productAttributes = $res->fetch_all(mode: MYSQLI_ASSOC);
+			Log::debug('Product attributes: ' . json_encode($productAttributes));
+			$pstm->close();
+		} catch (\Exception $e) {
+			Log::error('Error fetching product attributes: ' . $e->getMessage());
+			$pstm->close();
+			return abort(500);
+		}
+
+		// Transform product attributes to associative array
+		$productAttributes = array_combine(
+			array_map('trim', array_column($productAttributes, column_key: 'name')),
+			array_map('trim', array_column($productAttributes, 'value'))
+		);
+
+		// Attributes post-processing
+		foreach ($productAttributes as $key => $value) {
+			if ($key === 'QUY CÁCH SẢN PHẨM') {
+				$productAttributes[$key] = array_map(
+					'trim',
+					array_slice(explode('•', string: $value), 1)
+				);
+				Log::debug('Product attribute post processing: ' . json_encode($productAttributes[$key]));
+			}
+		}
+
+		// Fetch related products based on same categories
+		$relatedProducts = Product::whereHas('categories', function ($query) use ($product) {
+			$query->whereIn('categories.category_id', $product->categories->pluck('category_id'));
+		})
+			->where('product_id', '!=', $product->product_id)
+			->with([
+				'product_images' => function ($query) {
+					$query->where('image_type', '=', 1)->select('product_image_url', 'product_id');
+				}
+			])
+			->take(18)
+			->get()
+			->map(function ($product) {
+				return (object) [
+					'product_id' => $product->product_id,
+					'title' => $product->name,
+					'price' => number_format($product->price, 0, '.', ',') . '₫',
+					'imgSrc' => $product->product_images->first()->product_image_url
+				];
+			});
 
 		$isWishlisted = false;
 		if (Auth::check()) {
 			$user = Auth::user();
 			$isWishlisted = $user->wishlist()
-				->wherePivot('product_id', $productId)
+				->wherePivot('product_id', $product_id)
 				->exists();
 		}
 
-		Log::info('User ' . 'already wishlisted' . ' product ' . $productId . ': ' . $isWishlisted);
+		Log::info('User ' . 'already wishlisted' . ' product ' . $product_id . ': ' . $isWishlisted);
 
 		return view('product.details', compact(
 			'productId',
 			'productAttributes',
 			'relatedProducts',
-			'bannerImgSrc',
 			'productImgs',
 			'productCategories',
 			'relatedProducts',

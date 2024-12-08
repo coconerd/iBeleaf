@@ -387,18 +387,69 @@
 		color: #666;
 		font-size: 0.9rem;
 	}
+
+	/* Related products hover effects */
+	.related-products .card {
+		overflow: hidden;
+		position: relative;
+	}
+
+	.related-products .card-img-top {
+		transition: transform 0.3s ease;
+	}
+
+	.related-products .card:hover .card-img-top {
+		transform: scale(1.1);
+	}
+
+	.related-products .hover-heart {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		font-size: 24px;
+		color: white;
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		z-index: 2;
+		background: none;
+		border: none;
+	}
+
+	.related-products .card:hover .hover-heart {
+		opacity: 1;
+	}
+
+	.related-products .view-product {
+		position: absolute;
+		bottom: -40px;
+		left: 0;
+		right: 0;
+		background: rgba(16, 107, 50, 0.7);
+		color: white;
+		text-align: center;
+		padding: 8px;
+		transition: bottom 0.3s ease;
+		text-decoration: none;
+		z-index: 2;
+	}
+
+	.related-products .card:hover .view-product {
+		bottom: 0;
+	}
 </style>
 @endsection
 @section("content")
 <div class="container-fluid">
 	<div class="row banner">
 		<div class="container">
-			<img src="{{ asset(path: $bannerImgSrc) }}" id="bannerImg" alt="Banner Image">
+			<img src="{{ !empty($productImgs) ? $productImgs[0] : asset('images/placeholder-banner.png') }}"
+				id="bannerImg" alt="Banner Image">
 			<div class="text-container">
 				<div class="navigation-links d-flex align-items-center nowrap">
 					<strong class="me-5">
-						<span style="font-size: 1.5rem; color: white;">Cây phát tài b�� 5 - Cây thiết mộc lan
-							CPTK001</span>
+						<span style="font-size: 1.5rem; color: white;">{{ $product->name }}
+							{{ $product->code }}</span>
 					</strong>
 					<a href="#" class="me-3" style="font-size: 1rem">Trang chủ</a>
 					<a href="#" class="me-3" style="font-size: 1rem">Cây Cảnh Văn Phòng</a>
@@ -431,8 +482,7 @@
 					@foreach ($productImgs as $img)
 						<div class="thumbnail-wrapper">
 							<img src="{{ asset($img) }}"
-								class="img-thumbnail {{ $loop->first ? 'js-img-thumbnail-active' : '' }}" alt="Thumbnail"
-								onclick="document.querySelector('.main-image img').src = this.src;document.querySelectorAll('.img-thumbnail').forEach(t => t.classList.remove('js-img-thumbnail-active')); this.classList.add('js-img-thumbnail-active');">
+								class="img-thumbnail {{ $loop->first ? 'js-img-thumbnail-active' : '' }}" alt="Thumbnail">
 						</div>
 					@endforeach
 				</div>
@@ -440,24 +490,24 @@
 
 			<!-- Middle column: Product Details -->
 			<div class="col-md-4" id="mcol">
-				<h2 class="product-title">Cây phát tài bó 5 – Cây thiết mộc lan CPTK001</h2>
+				<h2 class="product-title"> {{ $product->name }} {{ $product->code }}</h2>
 				<p class="product-price text-success fw-bold fs-4">750.000₫</p>
 				<p class="product-description">Cây phát tài bó còn được biết đến với tên gọi khác là cây thiết mộc
 					lan...</p>
 				<table class="table table-borderless">
 					<tbody>
-						@foreach ($productAttributes as $key => $value)
+						@foreach ($productAttributes as $key => $values)
 							<tr>
 								<th class="align-middle">{{ $key }}</th>
 								<td class="align-middle">
-									@if (is_array($value))
+									@if (is_array($values))
 										<ul class="list-unstyled align-middle">
-											@foreach ($value as $item)
-												<li class="align-middle">{{ $item }}</li>
+											@foreach ($values as $value)
+												<li class="align-middle">{{ $value }}</li>
 											@endforeach
 										</ul>
 									@else
-										{{ $value }}
+										{{ $values }}
 									@endif
 								</td>
 							</tr>
@@ -471,14 +521,14 @@
 				</table>
 				<div class="mt-5 d-flex align-items-left mb-5">
 					<div class="d-inline-flex align-items-center border rounded me-3">
-						<button class="btn btn-outline-primary border-0" id="decrementBtn"
+						<button class="btn btn-outline-primary border-0 decrementBtn"
 							style="width: 40px; height: 40px;">-</button>
-						<input type="text" id="counter" class="form-control text-center border-0" value="1"
+						<input type="text" class="counter form-control text-center border-0" value="1"
 							style="width: 50px;" readonly>
-						<button class="btn btn-outline-primary border-0" id="incrementBtn"
+						<button class="btn btn-outline-primary border-0 incrementBtn"
 							style="width: 40px; height: 40px;">+</button>
 					</div>
-					<button class="btn btn-success me-3">Thêm vào giỏ hàng</button>
+					<button id="addCartBtn" class="btn btn-success me-3">Thêm vào giỏ hàng</button>
 				</div>
 				<!-- SKU and Product Categories for show  -->
 				<table class="table table-borderless">
@@ -488,8 +538,8 @@
 						</tr>
 						<tr>
 							<td class="align-middle">
-								<p class="mb-0" style="font-size: 0.85rem; color: var(--bs-dark);">SKU: <span
-										class="">{{$productId}}</>
+								<p class="mb-0" style="font-size: 0.85rem; color: var(--bs-dark);">SKU:
+									{{ $product->code }}
 								</p>
 							</td>
 						</tr>
@@ -627,15 +677,24 @@
 			<h3 class="mb-3 fw-light" style="color: #999999; font-size: 1.5rem">SẢN PHẨM TƯƠNG TỰ</h3>
 			<div id="relatedProductsCarousel" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-inner" style="padding: 0 100px;">
-					@foreach(array_chunk(range(1, 6), 3) as $chunk)
+					@foreach(array_chunk($relatedProducts->toArray(), 6) as $chunk)
 						<div class="carousel-item {{ $loop->first ? 'active' : '' }}">
 							<div class="d-flex justify-content-center">
-								@foreach($relatedProducts as $r)
+								@foreach($chunk as $r)
 									<div class="card me-4 mb-4 mt-4" style="width: 18rem;">
-										<img src="{{ asset($r->imgSrc)}}" class="card-img-top" alt="Related Product">
+										<div style="position: relative; overflow: hidden;">
+											<img src="{{ asset($r->imgSrc)}}" class="card-img-top" alt="Related Product">
+											<button class="hover-heart" data-product-id="{{ $r->product_id }}">
+												<i class="fas fa-heart"></i>
+											</button>
+											<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
+												class="view-product">
+												Xem
+											</a>
+										</div>
 										<div class="card-body text-center">
-											<p class="card-text text-start">{{ $r->title }}</p>
-											<h3 class="text-success" style="font-size: 1.5rem"> {{$r->price}}</>
+											<p class="card-text">{{ $r->title }}</p>
+											<h3 class="text-success" style="font-size: 1.5rem"> {{$r->price}}</h3>
 										</div>
 									</div>
 								@endforeach
@@ -769,14 +828,43 @@
 		</div>
 	</div>
 </div>
-</div>
-<div class="container-fluid"></div>
 
 <!-- Main image modal -->
 <div id="fullscreenModal" class="fullscreen-modal">
 	<span class="modal-close">&times;</span>
 	<img id="fullscreenImage" class="fullscreen-image" src="" alt="Fullscreen view">
 </div>
+
+<!-- Sticky Cart Section -->
+<div class="sticky-bottom border-top shadow-lg py-3" style="background-color: #F9F7F3;">
+	<div class="container d-flex align-items-center justify-content-between">
+		<!-- Product Info -->
+		<div class="d-flex align-items-center">
+			<button class="btn btn-outline-primary btn-sm me-3" onclick="window.scrollTo(0, 0)">
+				<i class="bi bi-chevron-up"></i>
+			</button>
+			<img src="{{ $productImgs[0] }}" alt="Product Image" class="img-fluid rounded me-3"
+				style="width: 50px; height: 50px;">
+			<div>
+				<p class="mb-0 fw-bold text-primary" style="">{{ $product->name ?? 'Tên sản phẩm' }}</p>
+				<small class="text-muted">{{ $product->code ?? 'Mã sản phẩm' }}</small>
+			</div>
+		</div>
+
+		<!-- Price and Quantity -->
+		<div class="d-flex align-items-center">
+			<p class="mb-0 text-success fw-bold me-4 text-success total-price"
+				data-unit-price="{{ $product->price ?? 0 }}">
+				{{ number_format($product->price ?? 0, 0, '.', ',') }}₫
+			</p>
+			<div class="input-group input-group-sm me-3" style="width: 120px;">
+				<button class="btn btn-outline-light border-1 decrementBtn">-</button>
+				<input type="text" class="counter form-control text-center border-0" value="1" min="1">
+				<button class="btn btn-outline-light border-1 incrementBtn">+</button>
+			</div>
+			<button class="btn btn-success btn-sm">Thêm vào giỏ hàng</button>
+		</div>
+	</div>
 </div>
 @endsection
 
@@ -787,35 +875,75 @@
 		const thumbnails = document.querySelectorAll('.img-thumbnail');
 		const carousel = new bootstrap.Carousel(document.querySelector('#productCarousel'));
 
+		// Listeners for thumbnail functionality
 		thumbnails.forEach((thumb, index) => {
 			thumb.addEventListener('click', function () {
 				carousel.to(index);
 				updateThumbnails(index);
+				// Change main image when thumbnail is selected
+				setTimeout(() => {
+					document.querySelector('.main-image img').src = this.src;
+					document.querySelectorAll('.img-thumbnail').forEach(t => t.classList.remove('js-img-thumbnail-active'));
+					this.classList.add('js-img-thumbnail-active');
+				}, 250);
 			});
 		});
 
 		// Counter functionality
-		const decrementButton = document.getElementById("decrementBtn");
-		const incrementButton = document.getElementById("incrementBtn");
-		const counterInput = document.getElementById("counter");
+		const decrementButton = document.getElementsByClassName("decrementBtn");
+		const incrementButton = document.getElementsByClassName("incrementBtn");
+		const counterInput = document.getElementsByClassName("counter");
+		const totalPrice = document.getElementsByClassName("total-price");
 
-		// Event listener for decrement
-		decrementButton.addEventListener("click", function () {
-			let currentValue = parseInt(counterInput.value, 10);
-			if (currentValue > 1) {
-				counterInput.value = currentValue - 1;
-			}
-		});
+		// Retrieve the unit price
+		const unitPrice = parseFloat(totalPrice[0].dataset.unitPrice);
 
-		// Event listener for increment
-		incrementButton.addEventListener("click", function () {
-			let currentValue = parseInt(counterInput.value, 10);
-			counterInput.value = currentValue + 1;
-		});
+		// Event listener for counter decrement
+		for (const button of decrementButton) {
+			button.addEventListener("click", function () {
+				let currentValue = parseInt(counterInput[0].value, 10);
+				if (currentValue > 1) {
+					for (const input of counterInput) {
+						input.value = currentValue - 1;
+					};
+					// Update total price
+					const newTotalPrice = unitPrice * (currentValue - 1);
+					totalPrice[0].textContent = newTotalPrice.toLocaleString('en-US') + '₫';
+				}
+			});
+		}
+
+		// Event listener for counter increment
+		for (const button of incrementButton) {
+			button.addEventListener("click", function () {
+				let currentValue = parseInt(counterInput[0].value, 10);
+				for (const input of counterInput) {
+					input.value = currentValue + 1;
+					// Update total price
+					const newTotalPrice = unitPrice * (currentValue + 1);
+					totalPrice[0].textContent = newTotalPrice.toLocaleString('en-US') + '₫';
+				};
+			});
+		}
 
 		// Update initial heart button state
 		const heartButton = document.querySelector('.heart-button');
 		favorited = heartButton.classList.contains('heart-button-active');
+
+
+		// Only show sticky div when addCartBtn element is out of view
+		window.addEventListener("scroll", function () {
+			const stickyDiv = $('.sticky-bottom')[0];
+			const triggerElement = $('#addCartBtn');
+			const triggerPosition = triggerElement.offset().top - $(window).scrollTop();
+
+			// If the trigger element is out of view (below the viewport)
+			if (triggerPosition < 0) {
+				$(stickyDiv).slideDown(100); // Show sticky div with animation
+			} else {
+				$(stickyDiv).slideUp(100); // Hide sticky div with animation
+			}
+		});
 	});
 
 	let currentImageIndex = 0;
@@ -903,7 +1031,12 @@
 					button.addClass('heart-button-inactive');
 				},
 				error: function (xhr) {
-					alert('Có lỗi khi xóa sản phẩm khỏi danh sách yêu thích.');
+					alert('what the fuck');
+					if (xhr.status === 401) {
+						window.location.href = "{{ route('auth.showLoginForm') }}";
+					} else {
+						alert('Có lỗi khi xóa sản phẩm khỏi danh sách yêu thích.');
+					}
 				}
 			});
 		}
@@ -921,7 +1054,11 @@
 					button.addClass('heart-button-active');
 				},
 				error: function (xhr) {
-					alert('Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích.');
+					if (xhr.status === 401) {
+						window.location.href = "{{ route('auth.showLoginForm') }}";
+					} else {
+						alert('Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích.');
+					}
 				}
 			});
 		}
@@ -977,7 +1114,7 @@
 			},
 			error: function (xhr) {
 				if (xhr.status === 401) {
-					alert('Vui lòng đăng nhập để đánh giá sản phẩm.');
+					window.location.href = "{{ route('auth.showLoginForm') }}";
 				} else {
 					alert('Có lỗi xảy ra khi gửi đánh giá.');
 				}
@@ -987,5 +1124,54 @@
 
 	// Load reviews on page load
 	loadReviews();
+
+	// Add wishlist functionality for related products
+	$('.related-products .hover-heart').click(function (e) {
+		e.preventDefault();
+		const button = $(this);
+		const productId = button.data('product-id');
+
+		if (button.hasClass('heart-button-active')) {
+			$.ajax({
+				url: "{{ route('wishlist.remove') }}",
+				method: 'POST',
+				data: {
+					product_id: productId,
+					_token: '{{ csrf_token() }}'
+				},
+				success: function (response) {
+					button.removeClass('heart-button-active');
+					button.find('i').css('color', 'white');
+				},
+				error: function (xhr) {
+					if (xhr.status === 401) {
+						window.location.href = "{{ route('auth.showLoginForm') }}";
+					} else {
+						alert('Error removing product from wishlist');
+					}
+				}
+			});
+		} else {
+			$.ajax({
+				url: "{{ route('wishlist.add') }}",
+				method: 'POST',
+				data: {
+					product_id: productId,
+					_token: '{{ csrf_token() }}'
+				},
+				success: function (response) {
+					button.addClass('heart-button-active');
+					button.find('i').css('color', 'red');
+				},
+				error: function (xhr) {
+					if (xhr.status === 401) {
+						window.location.href = "{{ route('auth.showLoginForm') }}";
+					} else {
+						alert('Error adding product to wishlist');
+					}
+				}
+			});
+		}
+	});
 </script>
 @endsection
