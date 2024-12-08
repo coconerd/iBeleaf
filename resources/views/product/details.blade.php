@@ -417,7 +417,8 @@
 	}
 
 	.related-products .card:hover .hover-heart {
-		opacity: 1;
+		opacity: 0.4;
+		color: grey;
 	}
 
 	.related-products .view-product {
@@ -451,9 +452,11 @@
 						<span style="font-size: 1.5rem; color: white;">{{ $product->name }}
 							{{ $product->code }}</span>
 					</strong>
-					<a href="#" class="me-3" style="font-size: 1rem">Trang chủ</a>
-					<a href="#" class="me-3" style="font-size: 1rem">Cây Cảnh Văn Phòng</a>
-					<a href="#" class="font-size: 0.75rem"><b>Cây phát tài bộ 5 - Cây thiết mộc lan CPTK001</b></a>
+					<a href="{{ url('/') }}" class="me-3" style="font-size: 1rem">Trang chủ</a>
+					@foreach(array_slice($productCategories, 0, 2) as $category)
+						<a href="#" class="me-3" style="font-size: 1rem">{{ $category }}</a>
+					@endforeach
+					<!-- <a href="#" class="font-size: 0.75rem"><b>Cây phát tài bộ 5 - Cây thiết mộc lan CPTK001</b></a> -->
 				</div>
 			</div>
 		</div>
@@ -685,7 +688,7 @@
 										<div style="position: relative; overflow: hidden;">
 											<img src="{{ asset($r->imgSrc)}}" class="card-img-top" alt="Related Product">
 											<button class="hover-heart" data-product-id="{{ $r->product_id }}">
-												<i class="fas fa-heart"></i>
+												<i class="fas fa-heart" style=""></i>
 											</button>
 											<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
 												class="view-product">

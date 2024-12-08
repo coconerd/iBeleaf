@@ -7,7 +7,7 @@
 			<i class="bi bi-telephone me-1"></i> 0838 369 639 - 09 6688 9393
 		</div>
 		<div>
-			<i class="bi bi-heart me-3" role="button"
+			<i class="fa-solid fa-heart me-3" role="button"
 				onclick="window.location.href='{{ route('wishlist.index') }}'"></i>
 			<span class="me-2">
 				@if (auth()->check())
