@@ -28,13 +28,13 @@ class ProductController extends Controller
 		// Fetch product
 		try {
 			// $product = Product::findOrFail(id: $productId);
-			$product = Product::with('categories')
-				->with([
-					'product_images' => function ($query) {
-						$query->where('image_type', '=', 1)->select('product_image_url', 'product_images.product_id');
-					}
-				])
-				->findOrFail($productId);
+			$product = Product::with(
+				'categories'
+			)->with([
+				'product_images' => function ($query) {
+					$query->where('image_type', '=', 1)->select('product_image_url', 'product_images.product_id');
+				}
+			])->findOrFail($productId);
 
 			Log::debug('Product: ' . json_encode($product));
 		} catch (\Exception $e) {
