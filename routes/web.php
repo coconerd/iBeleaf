@@ -5,7 +5,6 @@ use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductConroller;
 use App\Http\Controllers\WishlistController;
 
 /*
@@ -45,9 +44,9 @@ Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocia
 
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'showProfilePage'])->name('profile.homePage');
-    Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/profile/validate/{field}', [ProfileController::class, 'validateField'])->name('profile.validate');
+	Route::get('/profile', [ProfileController::class, 'showProfilePage'])->name('profile.homePage');
+	Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+	Route::post('/profile/validate/{field}', [ProfileController::class, 'validateField'])->name('profile.validate');
 
 	Route::get('/profile/current-password', [ProfileController::class, 'showCurrentPasswordForm'])->name('profile.currentPassword');
 	Route::post('/profile/currentPassword-verify', [ProfileController::class, 'handleCurrentPasswordVerification'])->name('profile.verifyCurrentPassword');
@@ -73,6 +72,7 @@ Route::get(
 
 // Wishlist routes
 Route::middleware(['auth'])->group(function (): void {
+	Route::get('/wishlist', [WishlistController::class, 'index'])->name(name: 'wishlist.index');
 	Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
 	Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
