@@ -31,13 +31,13 @@ Route::get('/', function () {
  * @notice Authentication routes
  */
 // Login
-Route::get('/auth', [AuthController::class, 'showLoginForm']);
-Route::get('/auth/login', [AuthController::class, 'showLoginForm']);
-Route::post('/auth/login', [AuthController::class, 'handleLogin']);
+Route::get('/auth', [AuthController::class, 'showLoginForm'])->name('auth.index');
+Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('auth.showLoginForm');
+Route::post('/auth/login', [AuthController::class, 'handleLogin'])->name('auth.login');
 
 // Register
-Route::get('/auth/register', [AuthController::class, 'showRegistrationForm']);
-Route::post('/auth/register', [AuthController::class, 'handleRegister']);
+Route::get('/auth/register', [AuthController::class, 'showRegistrationForm'])->name('auth.showRegisterForm');
+Route::post('/auth/register', [AuthController::class, 'handleRegister'])->name('auth.register');
 
 // OAuth2 social login
 Route::post('/auth/login/{social}', [AuthController::class, 'showConsentScreen']);
