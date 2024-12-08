@@ -212,21 +212,26 @@ class AuthController extends Controller
 				$user->full_name = $row['full_name'];
 				$user->email = $row['email'];
 				$user->password = $row['password'];
+				Auth::login($user);
+
+				if (Auth::check()) {
+					Log::debug('Login successful for user: ', ['user_id' => $user->user_id]);
+					$request->session()->regenerate();
+					return redirect()->intended('/');
+				} else {
+					Log::debug('Login failed for user: ', ['user_id' => $user->user_id]);
+					throw new Exception();
+				}
 			} catch (Exception $e) {
-				dd($e);
 				Log::error("An error occurred in func. handleLogin()", [
 					'error' => $e->getMessage(),
 					'request_data' => $request->all(), // Optional: log request data
 				]);
-				return redirect()->back()->withErrors(provider: "Có lỗi xảy ra khi đăng nhập");
+				return redirect()->back()->withErrors("Có lỗi xảy ra khi đăng nhập");
 			} finally {
 				$pstm->close();
 			}
 		}
-
-		Auth::login($user);
-		$request->session()->regenerate();
-		return redirect()->intended('/');
 	}
 
 	// Show registration form
@@ -286,16 +291,17 @@ class AuthController extends Controller
 			]);
 			return redirect()->back()->withErrors("Có lỗi xảy ra khi đăng ký");
 		}
-		// Auth::login($user);
+		Auth::login($user);
 
 		// store new user in cache for 30 minutes
-		Cache::put(
-			$user->email,
-			$user,
-			config('auth.register.userCache.TTLSecs', 60 * 30),
-		);
+		// Cache::put(
+		// 	$user->email,
+		// 	$user,
+		// 	config('auth.register.userCache.TTLSecs', 60 * 30),
+		// );
 
-		return redirect('/auth/login')->with('registerSuccess', "Đăng ký tài khoản thành công, vui lòng đăng nhập");
+		// return redirect('/auth/login')->with('registerSuccess', "Đăng ký tài khoản thành công, vui lòng đăng nhập");
+		return redirect()->intended('/');
 	}
 
 	// Handle logout
@@ -354,12 +360,18 @@ class AuthController extends Controller
 					'password' => $password,
 					'role_type' => 0,
 				]);
-				Auth::login($user);
-				$request->session()->regenerate();
+				Auth::login(user: $user);
 			}
 
-			// route user back to home-page
-			return redirect()->intended('/');
+			if (Auth::check()) {
+				Log::debug('Login successful for user: ', ['user_id' => $user->user_id]);
+				$request->session()->regenerate();
+				return redirect()->intended('/');
+			} else {
+				Log::debug('Login failed for user: ', ['user_id' => $user->user_id]);
+				throw new Exception();
+			}
+
 		} catch (\mysqli_sql_exception $me) {
 			switch ($me->getCode()) {
 				case 1062:
