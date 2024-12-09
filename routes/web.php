@@ -82,7 +82,8 @@ Route::get('/reviews/{product_id}', [ReviewController::class, 'index'])->name('r
 Route::middleware('auth')->post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
 
 //Cart routes
-Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view');
+Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view')
+	->middleware('auth');
 Route::post('/cart/update-count', [CartController::class, 'updateItemsCount'])
 	->name('cart.update-count')
 	->middleware('auth');

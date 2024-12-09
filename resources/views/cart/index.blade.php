@@ -49,7 +49,7 @@
             border: none;
             padding: 6px 16px;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 15px;
             
         }
         .quantity-btn.minus,
@@ -81,7 +81,7 @@
         .col-md-4 {
             position: relative;
             left: 2%;
-            bottom: 30px;
+            bottom: 24px;
         }
         .price {
             font-size: 15px;

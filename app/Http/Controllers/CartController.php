@@ -30,8 +30,6 @@ class CartController extends Controller
             ], 500);
         }
     }
-
-
 }
 
 
