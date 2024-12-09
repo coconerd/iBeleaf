@@ -49,6 +49,7 @@ class Product extends Model
 		'overall_stars' => 'float',
 		'is_returnable' => 'int',
 		'stock_quantity' => 'int',
+		'discount_percentage' => 'float',
 	];
 
 	protected $fillable = [
@@ -57,6 +58,7 @@ class Product extends Model
 		'name',
 		'short_description',
 		'detailed_description',
+		'discount_percentage',
 		'price',
 		'total_orders',
 		'total_ratings',

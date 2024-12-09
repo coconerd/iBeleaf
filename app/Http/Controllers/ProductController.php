@@ -27,14 +27,13 @@ class ProductController extends Controller
 
 		// Fetch product
 		try {
-			// $product = Product::findOrFail(id: $productId);
 			$product = Product::with(
 				'categories'
 			)->with([
-				'product_images' => function ($query) {
-					$query->where('image_type', '=', 1)->select('product_image_url', 'product_images.product_id');
-				}
-			])->findOrFail($productId);
+						'product_images' => function ($query) {
+							$query->where('image_type', '=', 1)->select('product_image_url', 'product_images.product_id');
+						}
+					])->findOrFail($productId);
 
 			Log::debug('Product: ' . json_encode($product));
 		} catch (\Exception $e) {
@@ -44,6 +43,22 @@ class ProductController extends Controller
 
 		$productCategories = $product->categories->pluck('name')->toArray();
 		$productImgs = $product->product_images->pluck('product_image_url')->toArray();
+
+		$isWishlisted = false;
+		$user = null;
+		$wishlistedIds = [];
+		if (Auth::check()) {
+			$user = Auth::user();
+			// $isWishlisted = $user->wishlist()
+			// 	->wherePivot('product_id', $product_id)
+			// 	->exists();
+			$wishlistedIds = Auth::user()->wishlist()
+				->pluck('products.product_id')
+				->toArray();
+			$product->is_wishlisted = in_array($product_id, $wishlistedIds);
+		}
+
+		Log::info('User ' . 'already wishlisted' . ' product ' . $product_id . ': ' . $isWishlisted);
 
 		// Fetch product attributes
 		$conn = $this->dbConnService->getDbConn();
@@ -95,38 +110,49 @@ class ProductController extends Controller
 		// Fetch related products based on same categories
 		$relatedProducts = Product::whereHas('categories', function ($query) use ($product) {
 			$query->whereIn('categories.category_id', $product->categories->pluck('category_id'));
-		})
-			->where('product_id', '!=', $product->product_id)
+		})->where(
+				'product_id',
+				'!=',
+				$product->product_id
+			)->with([
+					'product_images' => function ($query) {
+						$query->where('image_type', '=', 1)->select('product_image_url', 'product_id');
+					}
+				])->take(18)->get()->map(function ($product) use ($wishlistedIds) {
+					return (object) [
+						'product_id' => $product->product_id,
+						'title' => $product->name,
+						'price' => $product->price,
+						'img_url' => $product->product_images->first()->product_image_url,
+						'discount_percentage' => $product->discount_percentage,
+						'is_wishlisted' => in_array($product->product_id, $wishlistedIds)
+					];
+				});
+
+		$discountedProducts = Product::where('discount_percentage', '>', 0)
 			->with([
 				'product_images' => function ($query) {
 					$query->where('image_type', '=', 1)->select('product_image_url', 'product_id');
 				}
 			])
-			->take(18)
+			->take(10)
 			->get()
-			->map(function ($product) {
+			->map(function ($product) use ($wishlistedIds) {
 				return (object) [
 					'product_id' => $product->product_id,
 					'title' => $product->name,
-					'price' => number_format($product->price, 0, '.', ',') . '₫',
-					'imgSrc' => $product->product_images->first()->product_image_url
+					'price' => $product->price,
+					'discount_percentage' => $product->discount_percentage,
+					'img_url' => $product->product_images->first()->product_image_url,
+					'is_wishlisted' => in_array($product->product_id, $wishlistedIds)
 				];
 			});
-
-		$isWishlisted = false;
-		if (Auth::check()) {
-			$user = Auth::user();
-			$isWishlisted = $user->wishlist()
-				->wherePivot('product_id', $product_id)
-				->exists();
-		}
-
-		Log::info('User ' . 'already wishlisted' . ' product ' . $product_id . ': ' . $isWishlisted);
 
 		return view('product.details', compact(
 			'productId',
 			'productAttributes',
 			'relatedProducts',
+			'discountedProducts',
 			'productImgs',
 			'productCategories',
 			'relatedProducts',

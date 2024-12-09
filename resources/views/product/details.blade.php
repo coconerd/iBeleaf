@@ -55,9 +55,34 @@
 		background-color: #fcf9f3;
 	}
 
+	.main-image {
+		position: relative;
+	}
+
 	.main-image img {
 		border-radius: 8px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.main-image .discount-text {
+		background-color: #1BB152; /* Bright pigment green */
+	}
+
+	.discount-text {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		width: 60px;
+		height: 60px;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background-color: #18A04A; /* Darker pigment green */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		border-radius: 5px;
+		padding: 3px;
+		z-index: 10;
 	}
 
 	.thumbnail-container {
@@ -132,10 +157,6 @@
 		transition: transform 0.2s;
 	}
 
-	.related-products .card:hover {
-		/* transform: translateY(-5px); */
-	}
-
 	.reviews textarea {
 		resize: none;
 	}
@@ -147,20 +168,19 @@
 
 	/* Heart button styles */
 	.heart-button-active {
-		opacity: 1;
-		color: red;
+		opacity: 1 !important;
+		color: red !important;
 	}
 
 	.heart-button-inactive {
-		opacity: 0.4;
-		color: grey;
+		opacity: 0.5 !important;
+		color: grey !important;
 	}
 
 	.heart-button:hover {
 		opacity: 0.8;
 		color: red;
 	}
-
 
 	.heart-button {
 		position: absolute;
@@ -262,17 +282,6 @@
 	.carousel-control-prev,
 	.carousel-control-next {
 		display: block;
-	}
-
-	.main-image-container {
-		display: flex;
-		transition: transform 0.3s ease-in-out;
-		width: 100%;
-	}
-
-	.main-image-container img {
-		min-width: 100%;
-		flex-shrink: 0;
 	}
 
 	.main-image:hover .prev-arrow {
@@ -389,25 +398,25 @@
 	}
 
 	/* Related products hover effects */
-	.related-products .card {
+	.card {
 		overflow: hidden;
 		position: relative;
 	}
 
-	.related-products .card-img-top {
+	.card-img-top {
 		transition: transform 0.3s ease;
 	}
 
-	.related-products .card:hover .card-img-top {
+	.card:hover .card-img-top {
 		transform: scale(1.1);
 	}
 
-	.related-products .hover-heart {
+	.hover-heart {
 		position: absolute;
 		top: 10px;
 		right: 10px;
 		font-size: 24px;
-		color: white;
+		color: grey;
 		cursor: pointer;
 		opacity: 0;
 		transition: opacity 0.3s ease;
@@ -416,12 +425,12 @@
 		border: none;
 	}
 
-	.related-products .card:hover .hover-heart {
-		opacity: 0.4;
+	.card:hover .hover-heart {
+		opacity: 0.5;
 		color: grey;
 	}
 
-	.related-products .view-product {
+	.view-product {
 		position: absolute;
 		bottom: -40px;
 		left: 0;
@@ -435,7 +444,7 @@
 		z-index: 2;
 	}
 
-	.related-products .card:hover .view-product {
+	.card:hover .view-product {
 		bottom: 0;
 	}
 </style>
@@ -448,15 +457,14 @@
 				id="bannerImg" alt="Banner Image">
 			<div class="text-container">
 				<div class="navigation-links d-flex align-items-center nowrap">
+					<a href="{{ url('/') }}" class="me-3 fw-bold" style="font-size: 1rem">Trang chủ</a>
+					@foreach(array_slice($productCategories, 0, 2) as $category)
+						<a href="#" class="me-3 fw-bold" style="font-size: 1rem">{{ $category }}</a>
+					@endforeach
 					<strong class="me-5">
 						<span style="font-size: 1.5rem; color: white;">{{ $product->name }}
 							{{ $product->code }}</span>
 					</strong>
-					<a href="{{ url('/') }}" class="me-3" style="font-size: 1rem">Trang chủ</a>
-					@foreach(array_slice($productCategories, 0, 2) as $category)
-						<a href="#" class="me-3" style="font-size: 1rem">{{ $category }}</a>
-					@endforeach
-					<!-- <a href="#" class="font-size: 0.75rem"><b>Cây phát tài bộ 5 - Cây thiết mộc lan CPTK001</b></a> -->
 				</div>
 			</div>
 		</div>
@@ -466,6 +474,11 @@
 			<!-- Column 1: Product Images -->
 			<div class="col-md-5" id="lcol">
 				<div class="main-image">
+					<p
+						class="discount-text text-white fw-bold {{$product->discount_percentage <= 0 ? "visually-hidden" : ""}}">
+						-{{ floor($product->discount_percentage) == $product->discount_percentage
+						? number_format($product->discount_percentage, 0)
+						: number_format($product->discount_percentage, 2) }}%</p>
 					<div id="productCarousel" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
 						<div class="carousel-inner">
 							@foreach ($productImgs as $img)
@@ -477,7 +490,7 @@
 					</div>
 					<button class="nav-arrows prev-arrow" onclick="navigateImage(-1)">&#10094;</button>
 					<button class="nav-arrows next-arrow" onclick="navigateImage(1)">&#10095;</button>
-					<button class="heart-button {{ $isWishlisted ? 'heart-button-active' : 'heart-button-inactive' }}">
+					<button class="heart-button {{ $product->is_wishlisted ? 'heart-button-active' : 'heart-button-inactive' }}">
 						<i class="fas fa-heart"></i>
 					</button>
 				</div>
@@ -493,10 +506,23 @@
 
 			<!-- Middle column: Product Details -->
 			<div class="col-md-4" id="mcol">
-				<h2 class="product-title"> {{ $product->name }} {{ $product->code }}</h2>
-				<p class="product-price text-success fw-bold fs-4">750.000₫</p>
-				<p class="product-description">Cây phát tài bó còn được biết đến với tên gọi khác là cây thiết mộc
-					lan...</p>
+				<h2 class="product-title">{{ $product->short_description }}</h2>
+				@if ($product->discount_percentage > 0)
+					<p class="product-price">
+						<span class="text-muted text-decoration-line-through" style="font-size: 1.3rem;">
+							{{ number_format($product->price, 0, '.', ',') }}₫
+						</span>
+						<br>
+						<span class="text-success fw-bold" style="font-size: 1.4rem;">
+							{{ number_format($product->price * (1 - $product->discount_percentage / 100), 0, '.', ',') }}₫
+						</span>
+					</p>
+				@else
+					<p class="product-price text-success fw-bold" style="font-size: 1.4rem;">
+						{{ number_format($product->price, 0, '.', ',') }}₫
+					</p>
+				@endif
+				<p class="product-description">{{ $product->detailed_description }}</p>
 				<table class="table table-borderless">
 					<tbody>
 						@foreach ($productAttributes as $key => $values)
@@ -626,7 +652,8 @@
 					</div>
 				</div>
 			</div>
-			<!-- Column 3: Product Order Info -->
+
+			<!-- Column 3: (rcol) Product Order Info -->
 			<div class="col-md-3 ms-auto" id="rcol">
 				<div class="card" style="background-color: #F9F7F3;">
 					<!-- Your existing card content -->
@@ -677,7 +704,7 @@
 
 		<!-- Related Products Section -->
 		<div class="related-products mt-5">
-			<h3 class="mb-3 fw-light" style="color: #999999; font-size: 1.5rem">SẢN PHẨM TƯƠNG TỰ</h3>
+			<h3 class="ms-4 mb-3 fw-light" style="color: #999999; font-size: 1.5rem">SẢN PHẨM TƯƠNG TỰ</h3>
 			<div id="relatedProductsCarousel" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-inner" style="padding: 0 100px;">
 					@foreach(array_chunk($relatedProducts->toArray(), 6) as $chunk)
@@ -686,9 +713,14 @@
 								@foreach($chunk as $r)
 									<div class="card me-4 mb-4 mt-4" style="width: 18rem;">
 										<div style="position: relative; overflow: hidden;">
-											<img src="{{ asset($r->imgSrc)}}" class="card-img-top" alt="Related Product">
-											<button class="hover-heart" data-product-id="{{ $r->product_id }}">
-												<i class="fas fa-heart" style=""></i>
+											<p class="discount-text text-white fw-bold {{$r->discount_percentage <= 0 ? "visually-hidden" : ""}}">
+											-{{ floor($r->discount_percentage) == $r->discount_percentage
+											? number_format($r->discount_percentage, 0)
+											: number_format($r->discount_percentage, 2) }}%
+											</p>
+											<img src="{{ asset($r->img_url)}}" class="card-img-top" alt="Related Product">
+											<button class="hover-heart {{$r->is_wishlisted ? "heart-button-active" : ""}}" data-product-id="{{ $r->product_id }}">
+												<i class="fas fa-heart"></i>
 											</button>
 											<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
 												class="view-product">
@@ -697,7 +729,21 @@
 										</div>
 										<div class="card-body text-center">
 											<p class="card-text">{{ $r->title }}</p>
-											<h3 class="text-success" style="font-size: 1.5rem"> {{$r->price}}</h3>
+											@if ($r->discount_percentage > 0)
+												<h3>
+													<span class="text-muted text-decoration-line-through" style="font-size: 1.4rem;">
+														{{ number_format($r->price, 0, '.', ',') }}₫
+													</span>
+													<br>
+													<span class="text-success" style="font-size: 1.3rem">
+														{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
+													</span>
+												</h3>
+											@else
+												<h3 class="text-success" style="font-size: 1.3rem">
+													{{ number_format($r->price, 0, '.', ',') }}₫
+												</h3>
+											@endif
 										</div>
 									</div>
 								@endforeach
@@ -760,7 +806,7 @@
 			</div>
 		</div>
 
-		<!-- Sale products section -->
+		<!-- Discounted products section -->
 		<div class="container my-5">
 			<div class="row">
 				<div class="col-12 d-flex align-items-center">
@@ -769,9 +815,52 @@
 					<div class="flex-grow-1 border-bottom mb-2"></div>
 				</div>
 			</div>
+			<div class="row">
+				@foreach(array_chunk($discountedProducts->toArray(), 5) as $discountChunk)
+					<div class="d-flex justify-content-center">
+						@foreach($discountChunk as $r)
+							<div class="card me-4 mb-4 mt-4" style="width: 18rem;">
+								<div style="position: relative; overflow: hidden;">
+									<p class="discount-text text-white fw-bold {{$r->discount_percentage <= 0 ? "visually-hidden" : ""}}">
+										-{{ floor($r->discount_percentage) == $r->discount_percentage
+										? number_format($r->discount_percentage, 0)
+										: number_format($r->discount_percentage, 2) }}%
+									</p>
+									<img src="{{ asset($r->img_url)}}" class="card-img-top" alt="Related Product">
+									<button class="hover-heart {{ $r->is_wishlisted ? "heart-button-active" : "" }}" data-product-id="{{ $r->product_id }}">
+										<i class="fas fa-heart"></i>
+									</button>
+									<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
+										class="view-product">
+										Xem
+									</a>
+								</div>
+								<div class="card-body text-center">
+									<p class="card-text">{{ $r->title }}</p>
+									@if ($r->discount_percentage > 0)
+										<h3>
+											<span class="text-muted text-decoration-line-through" style="font-size: 1.4rem;">
+												{{ number_format($r->price, 0, '.', ',') }}₫
+											</span>
+											<br>
+											<span class="text-success" style="font-size: 1.3rem;">
+												{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
+											</span>
+										</h3>
+									@else
+										<h3 class="text-success" style="font-size: 1.3rem;">
+											{{ number_format($r->price, 0, '.', ',') }}₫
+										</h3>
+									@endif
+								</div>
+							</div>
+						@endforeach
+					</div>
+				@endforeach
+			</div>
 		</div>
 
-		<!-- Sale products section -->
+		<!-- Warranty Info section -->
 		<div class="container my-5">
 			<div class="row">
 				<div class="col-12 d-flex align-items-center">
@@ -849,7 +938,7 @@
 			<img src="{{ $productImgs[0] }}" alt="Product Image" class="img-fluid rounded me-3"
 				style="width: 50px; height: 50px;">
 			<div>
-				<p class="mb-0 fw-bold text-primary" style="">{{ $product->name ?? 'Tên sản phẩm' }}</p>
+				<p class="mb-0 fw-bold text-primary">{{ $product->short_description ?? 'Tên sản phẩm' }}</p>
 				<small class="text-muted">{{ $product->code ?? 'Mã sản phẩm' }}</small>
 			</div>
 		</div>
@@ -857,8 +946,13 @@
 		<!-- Price and Quantity -->
 		<div class="d-flex align-items-center">
 			<p class="mb-0 text-success fw-bold me-4 text-success total-price"
-				data-unit-price="{{ $product->price ?? 0 }}">
-				{{ number_format($product->price ?? 0, 0, '.', ',') }}₫
+				data-unit-price="{{ $product->price * (1 - $product->discount_percentage / 100) }}">
+				{{ number_format(
+					$product->discount_percentage > 0 ? $product->price * (1 - $product->discount_percentage / 100) : $product->price,
+					0,
+					'.',
+					','
+				) }}₫
 			</p>
 			<div class="input-group input-group-sm me-3" style="width: 120px;">
 				<button class="btn btn-outline-light border-1 decrementBtn">-</button>
@@ -888,7 +982,7 @@
 					document.querySelector('.main-image img').src = this.src;
 					document.querySelectorAll('.img-thumbnail').forEach(t => t.classList.remove('js-img-thumbnail-active'));
 					this.classList.add('js-img-thumbnail-active');
-				}, 250);
+				}, 480);
 			});
 		});
 
@@ -1129,7 +1223,7 @@
 	loadReviews();
 
 	// Add wishlist functionality for related products
-	$('.related-products .hover-heart').click(function (e) {
+	$('.hover-heart').click(function (e) {
 		e.preventDefault();
 		const button = $(this);
 		const productId = button.data('product-id');
@@ -1144,7 +1238,8 @@
 				},
 				success: function (response) {
 					button.removeClass('heart-button-active');
-					button.find('i').css('color', 'white');
+					button.addClass('heart-button-inactive');
+					// button.find('i').css('color', 'white');
 				},
 				error: function (xhr) {
 					if (xhr.status === 401) {
@@ -1163,8 +1258,9 @@
 					_token: '{{ csrf_token() }}'
 				},
 				success: function (response) {
+					button.removeClass('heart-button-inactive');
 					button.addClass('heart-button-active');
-					button.find('i').css('color', 'red');
+					// button.find('i').css('color', 'red');
 				},
 				error: function (xhr) {
 					if (xhr.status === 401) {
