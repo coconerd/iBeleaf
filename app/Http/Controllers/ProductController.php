@@ -122,7 +122,7 @@ class ProductController extends Controller
 					return (object) [
 						'product_id' => $product->product_id,
 						'title' => $product->name,
-						'price' => number_format($product->price, 0, '.', ',') . '₫',
+						'price' => $product->price,
 						'img_url' => $product->product_images->first()->product_image_url,
 						'discount_percentage' => $product->discount_percentage,
 						'is_wishlisted' => in_array($product->product_id, $wishlistedIds)
@@ -141,7 +141,7 @@ class ProductController extends Controller
 				return (object) [
 					'product_id' => $product->product_id,
 					'title' => $product->name,
-					'price' => number_format($product->price, 0, '.', ',') . '₫',
+					'price' => $product->price,
 					'discount_percentage' => $product->discount_percentage,
 					'img_url' => $product->product_images->first()->product_image_url,
 					'is_wishlisted' => in_array($product->product_id, $wishlistedIds)

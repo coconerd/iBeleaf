@@ -457,15 +457,14 @@
 				id="bannerImg" alt="Banner Image">
 			<div class="text-container">
 				<div class="navigation-links d-flex align-items-center nowrap">
+					<a href="{{ url('/') }}" class="me-3 fw-bold" style="font-size: 1rem">Trang chủ</a>
+					@foreach(array_slice($productCategories, 0, 2) as $category)
+						<a href="#" class="me-3 fw-bold" style="font-size: 1rem">{{ $category }}</a>
+					@endforeach
 					<strong class="me-5">
 						<span style="font-size: 1.5rem; color: white;">{{ $product->name }}
 							{{ $product->code }}</span>
 					</strong>
-					<a href="{{ url('/') }}" class="me-3" style="font-size: 1rem">Trang chủ</a>
-					@foreach(array_slice($productCategories, 0, 2) as $category)
-						<a href="#" class="me-3" style="font-size: 1rem">{{ $category }}</a>
-					@endforeach
-					<!-- <a href="#" class="font-size: 0.75rem"><b>Cây phát tài bộ 5 - Cây thiết mộc lan CPTK001</b></a> -->
 				</div>
 			</div>
 		</div>
@@ -507,10 +506,23 @@
 
 			<!-- Middle column: Product Details -->
 			<div class="col-md-4" id="mcol">
-				<h2 class="product-title"> {{ $product->name }} {{ $product->code }}</h2>
-				<p class="product-price text-success fw-bold fs-4">750.000₫</p>
-				<p class="product-description">Cây phát tài bó còn được biết đến với tên gọi khác là cây thiết mộc
-					lan...</p>
+				<h2 class="product-title">{{ $product->short_description }}</h2>
+				@if ($product->discount_percentage > 0)
+					<p class="product-price">
+						<span class="text-muted text-decoration-line-through" style="font-size: 1.3rem;">
+							{{ number_format($product->price, 0, '.', ',') }}₫
+						</span>
+						<br>
+						<span class="text-success fw-bold" style="font-size: 1.4rem;">
+							{{ number_format($product->price * (1 - $product->discount_percentage / 100), 0, '.', ',') }}₫
+						</span>
+					</p>
+				@else
+					<p class="product-price text-success fw-bold" style="font-size: 1.4rem;">
+						{{ number_format($product->price, 0, '.', ',') }}₫
+					</p>
+				@endif
+				<p class="product-description">{{ $product->detailed_description }}</p>
 				<table class="table table-borderless">
 					<tbody>
 						@foreach ($productAttributes as $key => $values)
@@ -692,7 +704,7 @@
 
 		<!-- Related Products Section -->
 		<div class="related-products mt-5">
-			<h3 class="mb-3 fw-light" style="color: #999999; font-size: 1.5rem">SẢN PHẨM TƯƠNG TỰ</h3>
+			<h3 class="ms-4 mb-3 fw-light" style="color: #999999; font-size: 1.5rem">SẢN PHẨM TƯƠNG TỰ</h3>
 			<div id="relatedProductsCarousel" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-inner" style="padding: 0 100px;">
 					@foreach(array_chunk($relatedProducts->toArray(), 6) as $chunk)
@@ -717,7 +729,21 @@
 										</div>
 										<div class="card-body text-center">
 											<p class="card-text">{{ $r->title }}</p>
-											<h3 class="text-success" style="font-size: 1.5rem"> {{$r->price}}</h3>
+											@if ($r->discount_percentage > 0)
+												<h3>
+													<span class="text-muted text-decoration-line-through" style="font-size: 1.4rem;">
+														{{ number_format($r->price, 0, '.', ',') }}₫
+													</span>
+													<br>
+													<span class="text-success" style="font-size: 1.3rem">
+														{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
+													</span>
+												</h3>
+											@else
+												<h3 class="text-success" style="font-size: 1.3rem">
+													{{ number_format($r->price, 0, '.', ',') }}₫
+												</h3>
+											@endif
 										</div>
 									</div>
 								@endforeach
@@ -811,7 +837,21 @@
 								</div>
 								<div class="card-body text-center">
 									<p class="card-text">{{ $r->title }}</p>
-									<h3 class="text-success" style="font-size: 1.5rem"> {{$r->price}}</h3>
+									@if ($r->discount_percentage > 0)
+										<h3>
+											<span class="text-muted text-decoration-line-through" style="font-size: 1.4rem;">
+												{{ number_format($r->price, 0, '.', ',') }}₫
+											</span>
+											<br>
+											<span class="text-success" style="font-size: 1.3rem;">
+												{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
+											</span>
+										</h3>
+									@else
+										<h3 class="text-success" style="font-size: 1.3rem;">
+											{{ number_format($r->price, 0, '.', ',') }}₫
+										</h3>
+									@endif
 								</div>
 							</div>
 						@endforeach
@@ -898,7 +938,7 @@
 			<img src="{{ $productImgs[0] }}" alt="Product Image" class="img-fluid rounded me-3"
 				style="width: 50px; height: 50px;">
 			<div>
-				<p class="mb-0 fw-bold text-primary" style="">{{ $product->name ?? 'Tên sản phẩm' }}</p>
+				<p class="mb-0 fw-bold text-primary">{{ $product->short_description ?? 'Tên sản phẩm' }}</p>
 				<small class="text-muted">{{ $product->code ?? 'Mã sản phẩm' }}</small>
 			</div>
 		</div>
@@ -906,8 +946,13 @@
 		<!-- Price and Quantity -->
 		<div class="d-flex align-items-center">
 			<p class="mb-0 text-success fw-bold me-4 text-success total-price"
-				data-unit-price="{{ $product->price ?? 0 }}">
-				{{ number_format($product->price ?? 0, 0, '.', ',') }}₫
+				data-unit-price="{{ $product->price * (1 - $product->discount_percentage / 100) }}">
+				{{ number_format(
+					$product->discount_percentage > 0 ? $product->price * (1 - $product->discount_percentage / 100) : $product->price,
+					0,
+					'.',
+					','
+				) }}₫
 			</p>
 			<div class="input-group input-group-sm me-3" style="width: 120px;">
 				<button class="btn btn-outline-light border-1 decrementBtn">-</button>
