@@ -21,7 +21,9 @@ class CartController extends Controller
                 ->whereHas('cart') // ensure only cart items associated with a cart are fetched
                 ->get();
             
-            return view('cart.index', compact('cartItems')); // compact() creates an array containing variables and their values
+            $totalPrice = $cartItems->sum(fn($cartItems)
+                =>$cartItems->unit_price * $cartItems->quantity);
+            return view('cart.index', compact('cartItems', 'totalPrice')); // compact() creates an array containing variables and their values
 
         } catch (Exception $e) {
             return response()->json([

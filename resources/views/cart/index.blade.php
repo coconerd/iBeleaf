@@ -11,6 +11,7 @@
 
 @section('style')
     <style>
+        /*quantity minus and plus button*/
         .quantity-input {
             width: 42px;
             height: 36px;
@@ -57,17 +58,51 @@
             color: #106B32;
             font-weight: 600;
         }
-
         .quantity-wrapper {
             display: flex;
             align-items: center;
             margin-top: 0.5rem;
         }
+
+        /*product image*/
         .product-image {
             max-width: 184px;
             max-height: 184px;
             border-radius: 15px;
+            z-index: 0;
         }
+        .image-container {
+            position: relative;
+            width: 100%;
+            z-index: 1;
+        }
+        .discount-label {
+            background-color: #CD853F;
+            color: white;
+            padding: 3px 9px; /* Padding around the text */
+            border-radius: 17px 14px 28px 5px;
+            
+            position: absolute;
+            font-size: 12.25px;
+            display: inline-block; /* Inline block for better sizing */
+            font-weight: 500;
+            top: -5px;
+            left: -3px;
+            z-index: 1;
+        }
+        .discount-label::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: -2.45px; /* Adjust to position the curve */
+            width: 6px;
+            height: 100%;
+            background-color: #CD853F;
+            border-top-left-radius: 24px; /* Curve */
+            border-bottom-left-radius: 30px; /* Curve */
+            z-index: -1;
+        }
+        /**/
         .wishlist-btn {
             border: 1px solid #ddd;
             background: white;
@@ -97,7 +132,7 @@
             font-weight: normal;
             margin-top: 3px;
         }
-        .cart-item {
+        .each-cart-item {
             border-top: 2px solid #EBEBEC;
             padding-top: 1rem;
             margin-top: 0.5rem;
@@ -127,18 +162,23 @@
                 </div>
 
                 @foreach($cartItems as $item)
-                    <div class="d-flex mb-4 align-items-center cart-item">
-                        
-                        <!--Cart Item Image-->
-                        @if ($item->product && $item->product->productImages->where('image_type', 1)->first())
-                            <img src= "{{$item->product->productImages->where('image_type', 1)->first()->product_image_url}}"
-                                alt="Hình ảnh sản phẩm"
-                                class="product-image">
-                        @else
-                            <img src="{{ asset('images/no-image.png') }}"
-                                alt="Không có hình ảnh"
-                                class="product-image">
-                        @endif
+                    <div class="d-flex mb-4 align-items-center each-cart-item">
+
+                        <!--Cart Item Image And Discount Label-->
+                        <div class="item-card">
+                            @if ($item->product && $item->product->productImages->where('image_type', 1)->first())
+                                <div class="image-container">
+                                    <img src= "{{$item->product->productImages->where('image_type', 1)->first()->product_image_url}}"
+                                        alt="Hình ảnh sản phẩm"
+                                        class="product-image">
+                                    <div class="discount-label">Giam 72%</div>
+                                </div>
+                            @else
+                                <img src="{{ asset('images/no-image.png') }}"
+                                    alt="Không có hình ảnh"
+                                    class="product-image">
+                            @endif
+                        </div>
 
                         <!--Cart Item Details-->
                         <div class="container">
@@ -163,7 +203,7 @@
                                     <div class="temp-total-price col-12 col-sm-12 col-md-8">
                                         <!-- Use text-start on mobile, text-end on larger screens -->
                                         <div class="row justify-content-start justify-content-md-end">
-                                            <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm thuế)</span>
+                                            <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm khuyến mãi)</span>
                                             <div class="d-flex align-items-center justify-content-md-end justify-content-start">
                                                 <span class="price total-price me-1">{{ number_format($item->quantity * $item->product->price) }}</span>
                                                 <span class="currency-label">VND</span>
