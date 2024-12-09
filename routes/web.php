@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
-
+use App\Http\Controllers\CartController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -80,3 +80,9 @@ Route::middleware(['auth'])->group(function (): void {
 // Review routes
 Route::get('/reviews/{product_id}', [ReviewController::class, 'index'])->name('reviews.index');
 Route::middleware('auth')->post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
+
+//Cart routes
+Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view');
+Route::post('/cart/update-count', [CartController::class, 'updateItemsCount'])
+	->name('cart.update-count')
+	->middleware('auth');

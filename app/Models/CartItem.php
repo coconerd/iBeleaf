@@ -8,10 +8,11 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class CartItem
- * 
+ *
  * @property int $cart_id
  * @property string $product_id
  * @property int|null $quantity
@@ -36,4 +37,11 @@ class CartItem extends Model
 		'quantity',
 		'unit_price'
 	];
+
+	public function cart(): BelongsTo{
+		return $this->belongsTo(Cart::class, 'cart_id');
+	}
+	public function product(): BelongsTo{
+		return $this->belongsTo(Product::class,'product_id');
+	}
 }

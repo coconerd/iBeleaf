@@ -12,12 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Cart
- * 
+ *
  * @property int $cart_id
  * @property int|null $items_count
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property Collection|User[] $users
  *
  * @package App\Models
@@ -31,12 +31,15 @@ class Cart extends Model
 		'items_count' => 'int'
 	];
 
-	protected $fillable = [
+	protected $fillable = [ //mass-assigned
 		'items_count'
 	];
 
-	public function users()
+	public function user()
 	{
-		return $this->hasMany(User::class, 'card_id');
+		return $this->belongsTo(User::class);
+	}
+	public function items(){
+		return $this->hasMany(CartItem::class);
 	}
 }

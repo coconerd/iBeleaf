@@ -28,7 +28,6 @@ class ProductImage extends Model
 	protected $table = 'product_images';
 	protected $primaryKey = 'product_image_id';
 	public $incrementing = false;
-
 	protected $casts = [
 		'product_image_id' => 'int',
 		'image_type' => 'int'
