@@ -78,10 +78,11 @@
             background: #4a4a4a;
             color: white;
         }
-        .col-md-4 {
-            position: relative;
-            left: 2%;
-            bottom: 24px;
+        .item-detail{
+            margin-bottom: 2%;
+        }
+        .unit-price{
+            margin-top: 5px;
         }
         .price {
             font-size: 15px;
@@ -94,11 +95,21 @@
         .currency-label {
             font-size: 12px;
             font-weight: normal;
+            margin-top: 3px;
         }
         .cart-item {
             border-top: 2px solid #EBEBEC;
             padding-top: 1rem;
             margin-top: 0.5rem;
+        }
+        @media (min-width: 768px) {
+            .temp-total-price {
+                position: relative;
+                right: -15px;
+            }
+        }
+        .cart-control {
+            margin-bottom: 0.5rem;
         }
     </style>
 @endsection
@@ -117,7 +128,7 @@
 
                 @foreach($cartItems as $item)
                     <div class="d-flex mb-4 align-items-center cart-item">
-
+                        
                         <!--Cart Item Image-->
                         @if ($item->product && $item->product->productImages->where('image_type', 1)->first())
                             <img src= "{{$item->product->productImages->where('image_type', 1)->first()->product_image_url}}"
@@ -130,25 +141,35 @@
                         @endif
 
                         <!--Cart Item Details-->
-                        <div class="col-md-4 d-flex flex-column">
-                            <h6 class="fw-semibold mb-2">{{ $item->product->name }}</h6>
-                            <p class="mb-2">
-                                <span class="font-normal">Đơn giá: </span>
-                                <span class="price unit-price">{{ number_format($item->product->price) }}</span>
-                                <span class="currency-label">VND</span>
-                            </p>
+                        <div class="container">
+                            <div class="row item-detail">
+                                <h6 class="fw-semibold col-md-bg-danger">{{ $item->product->name }}</h6>
+                                <p class="col-md-bg-success unit-price">
+                                    <span class="font-normal">Đơn giá: </span>
+                                    <span class="price">{{ number_format($item->product->price) }}</span>
+                                    <span class="currency-label">VND</span>
+                                </p>
+                            </div>
 
-                            <div class="d-flex justify-content-between">
-                                <div class="quantity-wrapper mt-4">
-                                    <button class="quantity-btn minus">-</button>
-                                    <input type="number" class="quantity-input" value="{{ $item->quantity }}"
-                                            min="1" max="99" onchange="calculateItemTotal(this)">
-                                    <button class="quantity-btn plus">+</button>
-                                </div>
-                                
-                                <div class="temp-total-price">
-                                    <span class="font-normal mb-2">Tạm tính (Đã bao gồm thuế)</span>
-                                    <span class="price total-price">{{ number_format($item->quantity * $item->product->price) }}</span>
+                            <div class="cart-control container-fluid px-0">
+                               <div class="row">
+                                    <div class="quantity-wrapper col-12 col-sm-12 col-md-4 mb-3">
+                                        <button class="quantity-btn minus">-</button>
+                                        <input type="number" class="quantity-input" value="{{ $item->quantity }}"
+                                                min="1" max="99" onchange="calculateItemTotal(this)">
+                                        <button class="quantity-btn plus">+</button>
+                                    </div>
+                                    
+                                    <div class="temp-total-price col-12 col-sm-12 col-md-8">
+                                        <!-- Use text-start on mobile, text-end on larger screens -->
+                                        <div class="row justify-content-start justify-content-md-end">
+                                            <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm thuế)</span>
+                                            <div class="d-flex align-items-center justify-content-md-end justify-content-start">
+                                                <span class="price total-price me-1">{{ number_format($item->quantity * $item->product->price) }}</span>
+                                                <span class="currency-label">VND</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
