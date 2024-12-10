@@ -54,7 +54,7 @@
 		"Hiragino Sans GB", "儷黑 Pro", "LiHei Pro", "Heiti TC", 微軟正黑體,
 		"Microsoft JhengHei UI", "Microsoft JhengHei", sans-serif;
 	font-size: 14px;
-	height: 565px;
+	/* height: 565px; */
 	line-height: 16.8px;
 	text-size-adjust: 100%;
 	unicode-bidi: isolate;
@@ -469,10 +469,11 @@
 	background-position-y: 0%;
 	background-repeat: repeat;
 	background-size: auto;
-	border-bottom-left-radius: 2px;
+	/* border-bottom-left-radius: 2px;
 	border-bottom-right-radius: 2px;
 	border-top-left-radius: 2px;
-	border-top-right-radius: 2px;
+	border-top-right-radius: 2px; */
+	border-radius: 2px;
 	box-shadow: rgba(0, 0, 0, 0.13) 0px 1px 2px 0px;
 	box-sizing: border-box;
 	color: rgba(0, 0, 0, 0.8);
@@ -482,8 +483,11 @@
 		"Hiragino Sans GB", "儷黑 Pro", "LiHei Pro", "Heiti TC", 微軟正黑體,
 		"Microsoft JhengHei UI", "Microsoft JhengHei", sans-serif;
 	font-size: 14px;
-	height: 565px;
-	width: 900px;
+	/* width: 900px;
+	height: 565px; */
+	width: 1280px;
+	/* height: 900px; */
+	max-height: 93vh;
 	line-height: 16.8px;
 	margin-left: 27px;
 	min-width: 0px;
@@ -501,8 +505,10 @@
 		"Hiragino Sans GB", "儷黑 Pro", "LiHei Pro", "Heiti TC", 微軟正黑體,
 		"Microsoft JhengHei UI", "Microsoft JhengHei", sans-serif;
 	font-size: 14px;
-	height: 565px;
+	/* height: 565px; */
 	width: 817px;
+	/* height: 100vh; */
+	/* max-height: 70vh; */
 	line-height: 16.8px;
 	min-height: 100%;
 	position: relative;
@@ -514,12 +520,12 @@
 	color: rgba(0, 0, 0, 0.8);
 	display: block;
 	font-size: 14px;
-	height: 565px;
+	/* height: 565px; */
 	width: 900px;
 	line-height: 16.8px;
 	/* padding-bottom: 10px; */
 	padding-left: 20px;
-	padding-right: 20px;
+	padding-right: 13%;
 	padding-top: 0px;
 	text-size-adjust: 100%;
 	unicode-bidi: isolate;
@@ -583,13 +589,15 @@
 	flex-direction: row;
 	/* Sử dụng khi lần đầu load vào trang Profile */
 	font-size: 14px;
-	height: 487px;
-	width: 757px;
+	/* height: 487px; */
+	/* max-height: 90vh; */
+	/* width: 50%; */
 	line-height: 16.8px;
-	padding-top: 30px;
+	padding-top: 20px;
 	text-size-adjust: 100%;
 	unicode-bidi: isolate;
 }
+
 
 .right-container-main-inner__bottom.row {
 	align-items: flex-start;

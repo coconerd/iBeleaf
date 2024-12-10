@@ -1,0 +1,57 @@
+#orders-container {
+	height: 100vh;
+}
+
+#ordersTabContainer {
+	/* height: 487px; */
+	/* Fixed height */
+	/* max-height: 75vh; */
+	/* Ensure consistent height */
+	overflow-y: auto;
+	/* Enable vertical scrolling */
+	overflow-x: auto;
+	/* Prevent horizontal scrolling */
+	position: relative;
+	/* For proper scroll containment */
+	/* padding: 30px 20px; */
+	/* Add padding */
+
+	/* Optional: Customize scrollbar */
+	scrollbar-width: thin;
+	scrollbar-color: #888 #f1f1f1;
+}
+
+/* In orders.css */
+.tab-pane {
+	max-height: 72vh;
+	/* Limit height relative to viewport */
+	overflow-y: auto;
+	/* Enable vertical scrolling */
+	/* padding: 20px; */
+
+	/* Style scrollbar */
+	scrollbar-width: thin;
+	scrollbar-color: #888 #f1f1f1;
+}
+
+/* Optional: Custom webkit scrollbar styling */
+.tab-pane::-webkit-scrollbar {
+	width: 8px;
+}
+
+.tab-pane::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 4px;
+}
+
+.tab-pane::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 4px;
+}
+
+/* Ensure container is full height */
+.tab-content {
+	height: calc(100vh - 200px);
+	/* Adjust based on header height */
+	overflow: hidden;
+}

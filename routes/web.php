@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,8 +60,17 @@ Route::middleware(['auth'])->group(function () {
 	// });
 	Route::post('/profile/verify-newpassword', [ProfileController::class, 'handleVerifyNewPassword'])->name('profile.verifyNewPassword');
 
-	Route::get('/profile/orders', [ProfileController::class, 'showOrders'])->name('profile.orders');
+	Route::get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
 	Route::get('/profile/returns', [ProfileController::class, 'showReturns'])->name('profile.returns');
+});
+
+// Order routes
+Route::middleware(['auth'])->group(function () {
+	Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+	Route::get('/orders/{order_id}', [OrderController::class, 'show'])->name('orders.show');
+	Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
+	Route::post('/orders/update', [OrderController::class, 'update'])->name('orders.update');
+	Route::post('/orders/delete', [OrderController::class, 'delete'])->name('orders.delete');
 });
 
 

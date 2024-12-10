@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="{{ asset('css/profile/verifyNewPasswordInputForm.css') }}">
 <!-- Import Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/profile/orders.css') }}">
 <style>
 	/* Lúc đầu code CSS cho giao diện chính của trang hồ sơ ở đây, 
        nhưng code CSS quá dài nên tách ra thành file CSS riêng, lưu ở public/css/profile/homePage.css 
@@ -128,7 +129,7 @@
 
 					<div class="stardust-dropdown">
 						<div class="stardust-dropdown__item-header">
-							<a class="stardust-dropdown__item orders-link" href="{{ route('profile.orders') }}">
+							<a class="stardust-dropdown__item orders-link" href="{{ route('profile.showOrdersForm') }}">
 								<div class="stardust-dropdown__item-icon">
 									<img src="{{asset('images/icons8-order-50.png')}}"
 										class="stardust-dropdown__item-icon-img">
@@ -437,9 +438,6 @@
 @endsection
 
 @section('body-script')
-<!-- ...existing code... -->
-@endsection
-
 @push('scripts')
 
 	<!-- Bootstrap 5 -->
@@ -450,4 +448,5 @@
 	<script src="{{ asset('js/profile/homePage.js') }}" defer></script>
 	<script src="{{ asset('js/profile/currentPasswordPage.js') }}" defer></script>
 	<script src="{{ asset('js/profile/verifyNewPasswordPage.js') }}" defer></script>
+	<script src="{{ asset('js/profile/orders.js') }}" defer></script>
 @endpush
