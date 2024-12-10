@@ -19,7 +19,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $unit_price
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
+ * @property int $original_price
+ * @property float $discount_amount
+ * @property float $discounted_price
  * @package App\Models
  */
 class CartItem extends Model
@@ -35,7 +37,9 @@ class CartItem extends Model
 
 	protected $fillable = [
 		'quantity',
-		'unit_price'
+		'unit_price',
+		'product_id',
+		'cart_id'
 	];
 
 	public function cart(): BelongsTo{
@@ -43,5 +47,15 @@ class CartItem extends Model
 	}
 	public function product(): BelongsTo{
 		return $this->belongsTo(Product::class,'product_id');
+	}
+
+	public function getOriginalPriceAttribute(){
+		return $this->unit_price * $this->quantity;
+	}
+	public function getDiscountAmountAttribute(){
+		return ($this->getRelation('product')->discount_percentage / 100) * $this->original_price;
+	}
+	public function getDiscountedPriceAttribute(){
+		return $this->original_price - $this->discount_amount;
 	}
 }

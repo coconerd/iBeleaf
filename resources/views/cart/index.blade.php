@@ -64,7 +64,7 @@
             margin-top: 0.5rem;
         }
 
-        /*product image*/
+        /*product image and discount label*/
         .product-image {
             max-width: 184px;
             max-height: 184px;
@@ -146,6 +146,11 @@
         .cart-control {
             margin-bottom: 0.5rem;
         }
+        /*Cart summary section*/
+        .card{
+            background-color: #F7F4F0;
+            
+        }
     </style>
 @endsection
 
@@ -171,7 +176,9 @@
                                     <img src= "{{$item->product->productImages->where('image_type', 1)->first()->product_image_url}}"
                                         alt="Hình ảnh sản phẩm"
                                         class="product-image">
-                                    <div class="discount-label">Giam 72%</div>
+                                    @if($item->product->discount_percentage > 0)
+                                        <div class="discount-label">Giảm {{$item->product->discount_percentage}}%</div>
+                                    @endif
                                 </div>
                             @else
                                 <img src="{{ asset('images/no-image.png') }}"
@@ -205,7 +212,7 @@
                                         <div class="row justify-content-start justify-content-md-end">
                                             <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm khuyến mãi)</span>
                                             <div class="d-flex align-items-center justify-content-md-end justify-content-start">
-                                                <span class="price total-price me-1">{{ number_format($item->quantity * $item->product->price) }}</span>
+                                                <span class="price total-price me-1">{{ number_format($item->discounted_price) }}</span>
                                                 <span class="currency-label">VND</span>
                                             </div>
                                         </div>
@@ -221,21 +228,33 @@
 
             <!-- Cart Summary Section -->
             <div class="col-lg-4">
-                <div class="card shadow-sm">
+                <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title mb-4">Order Summary</h5>
-                        <div class="mb-3">
-                            <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code">
-                            <button class="btn apply-btn w-100 mt-2">Apply Coupon</button>
+                        <h5 class="card-title mb-4">Thông tin đơn hàng ({{$cartItems->count()}})</h5>
+                        <div id ="container">
+                            <div class="row">
+                                <p class="info col-6 left-side">Thành tiền ({{$cartItems->count()}} mặt hàng)</p>
+                                <p class="info col-6 right-side">{{ number_format($totalDiscountedPrice) }} VND</p>
+                            </div>
+                            <div class="row">
+                                <p class="info col-6 left-side">Phí vận chuyển</p>
+                                <p class="info col-6 right-side">Miễn phí giao hàng</p>
+                            </div>
+                            <div class="row">
+                                <p class="info col-6 left-side">Tổng khuyến mãi</p>
+                                <p class="info col-6 right-side">{{ number_format($totalDiscountAmount) }} VND</p>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal:</span>
-                            <span id="subtotal">0₫</span>
+
+                        <div class="container">
+                            <div class="row">
+                                <div>
+                                    <input type="text" class="form-control col-6" id="couponCode" placeholder="Nhập mã giảm giá">
+                                </div>
+                                <button class="btn apply-btn col-6">Áp dụng</button>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Shipping:</span>
-                            <span>Free</span>
-                        </div>
+
                         <hr>
                         <div class="d-flex justify-content-between mb-4">
                             <strong>Total:</strong>
