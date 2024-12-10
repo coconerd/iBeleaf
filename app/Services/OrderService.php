@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Order;
+use Illuminate\Support\Facades\Log;
+
+class OrderService
+{
+	public function getUserOrders($userId, $filters = [])
+	{
+		$query = Order::where('orders.user_id', $userId)
+			->with([
+				'order_items.product' => function ($query) {
+					$query->select('product_id', 'name', 'price', 'discount_percentage')
+						->with([
+							'product_images' => function ($query) {
+								$query->where('image_type', 1)
+									->select('product_id', 'product_image_url');
+							}
+						]);
+				}
+			]);
+
+		foreach ($filters as $key => $value) {
+			switch ($key) {
+				case 'status':
+				case 'payment_method':
+				case 'is_paid':
+				case 'is_delivered':
+					$query->where($key, $value);
+					break;
+				case 'payment_date':
+				case 'created_at':
+					$query->whereTime($key, $value);
+					break;
+				default:
+					break;
+			}
+		}
+
+		$query->orderBy('created_at', 'desc');
+
+		$orders = $query->get();
+		Log::debug('Orders retrieved: ', $orders->toArray());
+		return $orders;
+	}
+}
