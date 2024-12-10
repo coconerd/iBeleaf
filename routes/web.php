@@ -56,7 +56,6 @@ Route::middleware(['auth'])->group(function () {
 	// 		'url' => route('profile.showVerifyNewPasswordForm')
 	// 	]);
 	// });
-
 	Route::post('/profile/verify-newpassword', [ProfileController::class, 'handleVerifyNewPassword'])->name('profile.verifyNewPassword');
 
 	Route::get('/profile/orders', [ProfileController::class, 'showOrders'])->name('profile.orders');

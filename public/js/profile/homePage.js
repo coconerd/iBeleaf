@@ -62,6 +62,22 @@ $(document).ready(function () {
     $('#dobModal').on('show.bs.modal', function () {
         handleFieldChange('dob');
     });
+
+    $('.orders-link').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('href'),
+            method: 'GET',
+            success: function(response) {
+                $('#right-container-main-inner__bottom').html(response.html);
+				$('#right-container-main-inner__top-h1').text('Đơn mua hàng của bạn');
+				$('#right-container-main-inner__top-div').text('Danh sách đơn mua hàng của bạn');
+            },
+            error: function() {
+                alert('Không thể tải đơn mua của bạn.');
+            }
+        });
+    });
 });
 /*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
