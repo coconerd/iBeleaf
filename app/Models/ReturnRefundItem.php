@@ -38,7 +38,8 @@ class ReturnRefundItem extends Model
 	protected $casts = [
 		'order_items_id' => 'int',
 		'user_id' => 'int',
-		'quantity' => 'int'
+		'quantity' => 'int',
+		'status' => 'string',
 	];
 
 	protected $fillable = [

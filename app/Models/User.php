@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Class User
@@ -43,6 +45,8 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
  */
 class User extends Authenticatable
 {
+	use HasFactory;
+
 	use AuthenticatableTrait;
 	use Notifiable;
 
@@ -86,7 +90,7 @@ class User extends Authenticatable
 
 	public function orders()
 	{
-		return $this->hasMany(Order::class);
+		return $this->hasMany(Order::class, 'user_id', 'user_id');
 	}
 
 	public function product_feedbacks()

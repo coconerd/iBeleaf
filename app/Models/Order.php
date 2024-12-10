@@ -9,6 +9,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Order
@@ -35,6 +36,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
+	use HasFactory;
+
 	protected $table = 'orders';
 	protected $primaryKey = 'order_id';
 
@@ -46,7 +49,7 @@ class Order extends Model
 		'total_price' => 'int',
 		'payment_date' => 'datetime',
 		'is_paid' => 'int',
-		'is_delivered' => 'int'
+		'status' => 'string'
 	];
 
 	protected $fillable = [
@@ -58,7 +61,7 @@ class Order extends Model
 		'payment_date',
 		'payment_method',
 		'is_paid',
-		'is_delivered',
+		'status',
 		'additional_note'
 	];
 
