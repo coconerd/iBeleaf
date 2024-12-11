@@ -48,6 +48,7 @@ class Order extends Model
 		'deliver_cost' => 'int',
 		'total_price' => 'int',
 		'payment_date' => 'datetime',
+		'deliver_time' => 'datetime',
 		'is_paid' => 'int',
 		'status' => 'string'
 	];
@@ -62,7 +63,8 @@ class Order extends Model
 		'payment_method',
 		'is_paid',
 		'status',
-		'additional_note'
+		'additional_note',
+		'deliver_time',
 	];
 
 	public function user()
