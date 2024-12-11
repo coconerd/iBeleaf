@@ -12,50 +12,56 @@ use App\Models\CartItem;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Get formatted cart data for the given user
+ *
+ * @param User $user
+ * @return array
+ */
+
 //Backend logic: handles db updates and fetches cart items
 class CartController extends Controller
 {
+    private function getCartItems(User $user) : array{
+        //eager loading
+        $cartItems = CartItem::with(['product'])
+                ->where('cart_id', $user->card_id) // ensure only cart items associated with user are fetched
+                ->get();
+
+        $totalPrice = $cartItems->sum('original_price');
+        $totalDiscountAmount = $cartItems->sum('discount_amount');
+        $totalDiscountedPrice = $totalPrice - $totalDiscountAmount;
+
+        return [
+            'cartItems' => $cartItems,
+            'totalPrice' => $totalPrice,
+            'totalDiscountAmount' => $totalDiscountAmount,
+            'totalDiscountedPrice' => $totalDiscountedPrice
+        ];
+    }
+
     public function showCartItems(Request $request)
     {
+        $defaultResponse = [
+            'cartItems' => collect(),
+            'totalPrice' => 0,
+            'totalDiscountAmount' => 0,
+            'totalDiscountedPrice' => 0
+        ];
         try {
-
-            // Check if user is authenticated
-            if (!Auth::check()) {
-                return redirect()->route('login');
+            $response = null;
+            $user = Auth::user();
+            if(!$user){
+                $response = $defaultResponse;
             }
-            $userId = Auth::id();
-            $user = User::find($userId);
-
-            if (!$userId || !$user->card_id) {
-                return view('cart.index', [
-                    'cartItems' => collect(),
-                    'totalPrice' => 0,
-                    'totalDiscountAmount' => 0,
-                    'totalDiscountedPrice' => 0
-                ]);
+            if ($user instanceof User) {
+                $cartItems = $this->getCartItems($user);
+                $response = view('cart.index', $cartItems);
+            } else {
+                $response = $defaultResponse;
             }
-
-            // Eloquent ORM to fetch cart items from db
-            $cartItems = CartItem::with(['product']) //eager loading
-                ->where('cart_id', $user->card_id) // ensure only cart items associated with cart are fetched
-                ->get();
+            return $response;
             
-            // total original price
-            $totalPrice = $cartItems->sum('original_price');
-
-            // Calculate total discounted amount
-            $totalDiscountAmount = $cartItems->sum('discount_amount');
-
-            // Calculate final price after discounts
-            $totalDiscountedPrice = $totalPrice - $totalDiscountAmount;
-
-            return view('cart.index', compact(
-                'cartItems',
-                'totalPrice',
-                'totalDiscountAmount',
-                'totalDiscountedPrice'
-            )); // compact() creates an array containing variables and their values
-
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,

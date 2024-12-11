@@ -147,9 +147,81 @@
             margin-bottom: 0.5rem;
         }
         /*Cart summary section*/
+        .card-title{
+            margin-left: -3px;
+        }
         .card{
-            background-color: #F7F4F0;
-            
+            background-color: rgba(247, 244, 240, 0.6);
+            border: none;
+            box-shadow: none;
+            position: relative;
+            left: 20px;
+        }
+        .left-side{
+            text-align: left;
+            color: #7E7E7E;
+            font-weight: 400;
+        }
+        .right-side{
+            text-align: right;
+        }
+        #total-discounted-price{
+            font-weight: 600;
+            color: #1E4733;
+        }
+        .form-control {
+            border: 0.5px solid #ced4da;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+        }
+        .apply-btn {
+            height: 100%;
+            background-color: #0f5a29;
+            height: 100%;
+            border: 0.5px solid #1E4733;
+            border-left: none;
+            border-radius: 0 5px 5px 0;
+        }
+        #apply-coupon{
+            font-size: 16px;
+        }
+        #couponCode::placeholder {
+            color: #A9A9A9;
+            opacity: 0.7;
+
+        }
+        #couponCode {
+            color: #000; /* Normal text color for input value */
+        }
+        #couponCode:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: #ced4da;
+        }
+        #cart-summary-line{
+            border-top: 2px solid #949A90;
+            margin-top: 2rem;
+        }
+        .btn-primary{
+            background-color: #0f5a29;
+            border-radius: 8px;
+            border: none;
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+        .btn.btn-primary:hover{
+            background-color: #1E4733;
+            transition: background-color 0.3s ease;
+        }
+        .d-flex.justify-content-between {
+            margin-bottom: 0.5rem !important; /* Reduced from mb-4 */
+        }
+        #vat {
+            font-size: 14px;
+            text-align: right;
+            opacity: 0.35;
+            margin-bottom: 1rem;
+            line-height: 1;
         }
     </style>
 @endsection
@@ -165,7 +237,7 @@
                     <p class="fw-semibold">Mặt hàng ({{$cartItems->count()}})</p>
                     <p class="fw-semibold">Tạm tính</p>
                 </div>
-
+                
                 @foreach($cartItems as $item)
                     <div class="d-flex mb-4 align-items-center each-cart-item">
 
@@ -234,7 +306,7 @@
                         <div id ="container">
                             <div class="row">
                                 <p class="info col-6 left-side">Thành tiền ({{$cartItems->count()}} mặt hàng)</p>
-                                <p class="info col-6 right-side">{{ number_format($totalDiscountedPrice) }} VND</p>
+                                <p class="info col-6 right-side" id="total-discounted-price">{{ number_format($totalDiscountedPrice) }} VND</p>
                             </div>
                             <div class="row">
                                 <p class="info col-6 left-side">Phí vận chuyển</p>
@@ -246,21 +318,20 @@
                             </div>
                         </div>
 
-                        <div class="container">
-                            <div class="row">
-                                <div>
-                                    <input type="text" class="form-control col-6" id="couponCode" placeholder="Nhập mã giảm giá">
-                                </div>
-                                <button class="btn apply-btn col-6">Áp dụng</button>
-                            </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="couponCode" placeholder="Nhập mã giảm giá">
+                            <button class="btn apply-btn" id="apply-coupon" style="width: 25%;">ÁP DỤNG</button>
                         </div>
 
-                        <hr>
+                        <hr id="cart-summary-line">
                         <div class="d-flex justify-content-between mb-4">
-                            <strong>Total:</strong>
-                            <strong id="total">0₫</strong>
+                            <strong>Tổng tiền:</strong>
+                            <strong id="total">{{number_format($totalDiscountedPrice)}} VND</strong>
                         </div>
-                        <button class="btn btn-primary w-100">Proceed to Checkout</button>
+                        <div id="vat">
+                            <i>(Đã bao gồm VAT)</i>
+                        </div>
+                        <button class="btn btn-primary w-100">Thanh toán</button>
                     </div>
                 </div>
             </div>
