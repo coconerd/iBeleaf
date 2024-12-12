@@ -41,18 +41,33 @@ class OrderController extends Controller
 
 	public function submitFeedback(Request $request)
 	{
-		$request->validate([
-			'feedbacks.*.product_id' => 'required|exists:products,product_id',
-			'feedbacks.*.feedback_content' => 'required|string|max:255',
-			'feedbacks.*.num_star' => 'required|integer|min:1|max:5',
-			'feedbacks.*.images.*' => 'nullable|image|max:2048',
-		]);
+		$request->validate(
+			[
+				'feedbacks.*.product_id' => 'required|exists:products,product_id',
+				'feedbacks.*.feedback_content' => 'required|string|max:255',
+				'feedbacks.*.num_star' => 'required|integer|min:1|max:5',
+				'feedbacks.*.images.*' => 'nullable|image|max:2048',
+			],
+			[
+				'feedbacks.*.product_id.required' => 'Mã sảp phẩm không được để trống.',
+				'feedbacks.*.product_id.exists' => 'Mã sản phẩm không tồn tại.',
+				'feedbacks.*.feedback_content.required' => 'Noi dung phản hồi không được để trống.',
+				'feedbacks.*.feedback_content.string' => 'Nội dung phản hồi phải là một chuỗi.',
+				'feedbacks.*.feedback_content.max' => 'Nội dung phản hồi không được vượt quá 255 ký tự.',
+				'feedbacks.*.num_star.required' => 'Sô sao không được để trống.',
+				'feedbacks.*.num_star.integer' => 'Số sao phải là một số nguyên.',
+				'feedbacks.*.num_star.min' => 'Số sao không được nhỏ hơn 1.',
+				'feedbacks.*.num_star.max' => 'Số sao không được lớn hơn 5.',
+				'feedbacks.*.images.*.image' => 'Hình ảnh phải là một tệp hình ảnh.',
+				'feedbacks.*.images.*.max' => 'Hình ảnh không được vượt quá 2MB.',
+			]
+		);
 
 		Log::debug('OrderController@submitFeedback: Request data: ', $request->all());
 
 		$feedbacks = $request->all('feedbacks')['feedbacks'];
 		$user = Auth::user();
-		
+
 		DB::beginTransaction();
 		try {
 			foreach ($feedbacks as $_ => $feedback) {
