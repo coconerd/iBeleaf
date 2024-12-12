@@ -12,13 +12,16 @@ class OrderService
 		$query = Order::where('orders.user_id', $userId)
 			->with([
 				'order_items.product' => function ($query) {
-					$query->select('product_id', 'name', 'price', 'discount_percentage')
+					$query->select('product_id', 'code', 'short_description', 'price', 'discount_percentage')
 						->with([
 							'product_images' => function ($query) {
 								$query->where('image_type', 1)
 									->select('product_id', 'product_image_url');
 							}
 						]);
+				},
+				'voucher' => function ($query) {
+					$query->select('voucher_id', 'voucher_name', 'value', 'voucher_type');
 				}
 			]);
 

@@ -13,6 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 		// Create mock orders
-        $this->call(OrderSeeder::class);
+        $this->call([
+			VoucherSeeder::class,
+            OrderSeeder::class,
+            ProductSeeder::class,
+        ]);
     }
 }

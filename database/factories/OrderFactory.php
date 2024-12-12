@@ -14,19 +14,42 @@ class OrderFactory extends Factory
 	public function definition()
 	{
 		$provisionalPrice = 0; // Will be calculated after creating OrderItems
-		$deliverCost = 30000;
+		$deliverCost = 50000; // fixed, for now
 		$totalPrice = 0; // Will be calculated after creating OrderItems
 
+		$prepStatus = $this->faker->randomElement(['pending', 'delivering', 'delivered']);
+		if ($prepStatus === 'delivered' || $prepStatus === 'completed') {
+			$prepDeliverTime = $this->faker->dateTimeBetween('-1 month', 'now');
+		} elseif ($prepStatus === 'delivering') {
+			$prepDeliverTime = $this->faker->dateTimeBetween('+1 day', '+1 week');
+		} else {
+			$prepDeliverTime = null;
+		}
+
+		$isPaidPrep = $prepStatus == 'completed' 
+			? true 
+			: $this->faker->boolean(35);
+
+		// One out of 4 products will have a voucher id, voucher id is randomly selected
+		$prepVoucherId = $this->faker->boolean(25)
+			? Voucher::query()->inRandomOrder()->value('voucher_id')
+			: null;
+
+		$prepUserId = User::query()->exists()
+			? User::query()->orderBy('user_id')->first()->value('user_id')
+			: User::factory();
+
 		return [
-			'user_id' => User::query()->orderBy('user_id')->first()->value('user_id') ?? User::factory(),
-			'voucher_id' => null,
+			'user_id' => $prepUserId,
+			'voucher_id' => $prepVoucherId,
 			'provisional_price' => $provisionalPrice,
 			'deliver_cost' => $deliverCost,
 			'total_price' => $totalPrice,
-			'payment_date' => $this->faker->dateTimeBetween('-1 month', 'now'),
+			'payment_date' => $isPaidPrep ? $this->faker->dateTimeBetween('-1 month', 'now') : null,
+			'deliver_time' => $prepDeliverTime,
 			'payment_method' => $this->faker->randomElement(['COD', 'Banking']),
-			'is_paid' => $this->faker->boolean(),
-			'status' => $this->faker->randomElement(['pending', 'delivering', 'delivered']),
+			'is_paid' => $isPaidPrep,
+			'status' => $prepStatus,
 			'additional_note' => $this->faker->optional()->sentence()
 		];
 	}

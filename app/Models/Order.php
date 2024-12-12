@@ -74,7 +74,7 @@ class Order extends Model
 
 	public function voucher()
 	{
-		return $this->belongsTo(Voucher::class);
+		return $this->belongsTo(Voucher::class , 'voucher_id', 'voucher_id');
 	}
 
 	public function order_items()
