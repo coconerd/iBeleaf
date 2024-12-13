@@ -116,7 +116,7 @@
     outline: 0 !important;
 }
 
-.image-preview {
+.preview-image-container {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;

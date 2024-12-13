@@ -160,7 +160,7 @@ $('.feedbackBtn').on('click', function() {
                     <input type="file" name="feedbacks[{{ $item->product_id }}][images][]" accept="image/*" multiple
                         class="form-control" onchange="previewImages(this, '{{ $item->product_id }}')">
                     <!-- Image preview container -->
-                    <div id="preview-{{ $item->product_id }}" class="image-preview mt-2"></div>
+                    <div id="preview-{{ $item->product_id }}" class="preview-image-container mt-2"></div>
                 </div>
                 <hr>`;
             @endforeach
