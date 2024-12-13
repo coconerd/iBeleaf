@@ -38,6 +38,6 @@ class FeedbackImage extends Model
 
 	public function product_feedback()
 	{
-		return $this->belongsTo(ProductFeedback::class);
+		return $this->belongsTo(related: ProductFeedback::class);
 	}
 }

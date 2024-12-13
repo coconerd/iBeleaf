@@ -72,6 +72,90 @@ document.addEventListener('DOMContentLoaded', function () {
 			$(stickyDiv).slideUp(100); // Hide sticky div with animation
 		}
 	});
+
+	// Global array to track uploaded files
+	let uploadedImgs = [];
+
+	function copyFilesToInput(inputElement) {
+		// Create a DataTransfer object
+		const dataTransfer = new DataTransfer();
+
+		// Add all files from uploadedFiles array to DataTransfer
+		uploadedImgs.forEach(file => {
+			dataTransfer.items.add(file);
+		});
+
+		// Set the input's files to the DataTransfer's files
+		inputElement.files = dataTransfer.files;
+	}
+
+	// Handle image selection (image input change)
+	$('#reviewForm input[name="images[]"]').on('change', function () {
+		const input = $(this)[0];
+		const previewContainer = $('#preview-image-container');
+		const imgCounter = $('#imgCounter');
+
+		console.log('input is: ', input);
+
+		if (input.files && input.files.length > 0) {
+			// Add new files to uploadedFiles array
+			const newFiles = Array.from(input.files);
+			if (uploadedImgs.length + newFiles.length > 5) {
+				alert('Bạn chỉ có thể tải lên tối đa 5 ảnh.');
+				return;
+			}
+
+			uploadedImgs = [...uploadedImgs, ...newFiles];
+			// Update input.files to match uploadedFiles
+			copyFilesToInput(input);
+			console.log('uploadedFiles: ', uploadedImgs);
+			console.log('dataTransfer.files: ', input.files);
+			console.log('input.files after update: ', input.files);
+
+			// Preview new files
+			newFiles.forEach(file => {
+				let reader = new FileReader();
+				reader.onload = function (e) {
+					const imgHtml = `
+                    <div class="position-relative p-2">
+                        <img src="${e.target.result}" class="preview-image" style="width: 100px; height: 100px;">
+                        <button type="button" class="btn-close position-absolute top-0 end-0" data-index="${uploadedImgs.length - 1}" aria-label="Close"></button>
+                    </div>
+                `;
+					previewContainer.children().last().before(imgHtml);
+				};
+				reader.readAsDataURL(file);
+			});
+
+			console.log('input images: ', input.files);
+			imgCounter.text(`Tải ảnh lên (${uploadedImgs.length}/5)`);
+			// input.value = ''; // Reset input to allow selecting same file
+		}
+	});
+
+	// Handle image removal
+	$('#preview-image-container').on('click', '.btn-close', function () {
+		const index = $(this).data('index');
+		uploadedImgs.splice(index, 1);
+		$(this).parent().remove();
+
+		const input = $('#reviewForm input[name="images[]"]')[0];
+		copyFilesToInput(input);
+
+		$('#imgCounter').text(`Tải ảnh lên (${uploadedImgs.length}/5)`);
+
+		// Update indices of remaining close buttons
+		$('.btn-close').each(function (i) {
+			$(this).data('index', i);
+		});
+	});
+
+	// Handle image upload button click
+	uploadBtn = $('#preview-image-container > div:last-child');
+	uploadBtn.on('click', function () {
+		let imgInput = $('#reviewForm input[name="images[]"]');
+		imgInput.click()
+	})
 });
 
 let currentImageIndex = 0;
@@ -230,7 +314,7 @@ function loadReviews(productId) {
 }
 
 // Handle review submission
-$('#reviewForm').on('submit', function (e) {
+$('#reviewForm').on('halal', function (e) {
 	e.preventDefault();
 
 	const feedbackContent = $('textarea[name="review"]').val();
@@ -241,7 +325,7 @@ $('#reviewForm').on('submit', function (e) {
 	}
 
 	$.ajax({
-		url: "/feedback/store",
+		url: "/product/submit-feedback",
 		method: 'POST',
 		data: $(this).serialize(),
 		success: function (response) {
@@ -257,10 +341,16 @@ $('#reviewForm').on('submit', function (e) {
 			}
 		}
 	});
+
+	// Reset reviewForm's state data after form submission
+	uploadedImgs = [];
+	$('#preview-image-container').children().not(':last').remove();
+	$('#imgCounter').text('Tải ảnh lên (0/5)');
+	$('.star-rating input[type="radio"]').each(function () {
+		$(this).prop('checked', false);
+	});
 });
 
-// // Load reviews on page load
-// loadReviews();
 
 // Add wishlist functionality for related products
 $('.hover-heart').click(function (e) {

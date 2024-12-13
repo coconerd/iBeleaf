@@ -75,10 +75,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Product routes
-Route::get(
-	'/product/{product_id}',
-	[ProductController::class, 'show']
-)->name('product.show');
+Route::get('/product/{product_id}', [ProductController::class, 'show'])
+	->name('product.show');
+Route::middleware(['auth'])
+	->post('/product/submit-feedback', [ProductController::class, 'submitFeedback'])
+	->name('product.submitFeedback');
 
 // Wishlist routes
 Route::middleware(['auth'])->group(function (): void {
@@ -89,7 +90,6 @@ Route::middleware(['auth'])->group(function (): void {
 
 // Feedback routes
 Route::get('/feedback/{product_id}', [FeedbackController::class, 'index'])->name('feedback.index');
-Route::middleware('auth')->post('/feedback/store', [FeedbackController::class, 'store'])->name('feedback.store');
 
 //Cart routes
 Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view')

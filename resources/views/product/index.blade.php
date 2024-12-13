@@ -340,8 +340,12 @@
 				<div class="col-12 align-items-left" style="border: black 1px solid">
 					<div class="card border-0" style="background-color: transparent">
 						<div class="card-body">
-							<h4 class="card-title">Write a Review</h4>
-							<form id="reviewForm">
+							<h4 class="card-title">Hãy để lại đánh giá</h4>
+							<form id="reviewForm" 
+								action="{{ route('product.submitFeedback') }}" 
+								method="POST"
+								enctype="multipart/form-data"
+							>
 								@csrf
 								<input type="hidden" name="product_id" value="{{ $productId }}">
 								<div class="form-group mb-4">
@@ -355,8 +359,21 @@
 								</div>
 								<div class="form-group mt-5">
 									<label for="review">Đánh giá của bạn (tối thiểu 10 ký tự) *</label>
-									<textarea name="review" class="form-control mt-2" rows="5" required
+									<textarea name="review" minlength=10 maxlength=255 class="form-control mt-2" rows="5" required
 										style="background-color: #fff; border: 1px solid #ced4da;"></textarea>
+									<!-- image upload component -->
+									<label class="form-label mt-2" id='imgCounter'>Tải ảnh lên (tối đa 5)</label>
+									<input type="file" name="images[]" accept="image/*" multiple
+										class="form-control visually-hidden">
+								</div>
+								<!-- Preview uploaded images -->
+								<div class="d-flex flex-wrap" id='preview-image-container'>
+									<!-- Add new image button -->
+									<div class="p-2" style="background-color: transparent;">
+										<div class="d-flex justify-content-center align-items-center border border-dashed" style="width: 100px; height: 100px; cursor: pointer;"">
+											<span class="fs-3">+</span>
+										</div>
+									</div>
 								</div>
 								<button type="submit" class="btn btn-primary mt-3">Gửi đánh giá</button>
 							</form>

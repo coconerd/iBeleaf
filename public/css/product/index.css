@@ -447,3 +447,22 @@ body {
 .card:hover .view-product {
 	bottom: 0;
 }
+
+textarea:focus {
+	outline: 0 !important;
+	box-shadow: none !important;
+}
+
+#preview-image-container {
+	/* display: flex; */
+	gap: 20px;
+	/* flex-wrap: wrap; */
+}
+
+.preview-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
