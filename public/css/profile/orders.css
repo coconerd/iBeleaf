@@ -1,4 +1,4 @@
-#orders-container {
+#ordersContainer {
 	height: 100vh;
 }
 
@@ -23,7 +23,8 @@
 
 /* In orders.css */
 .tab-pane {
-	max-height: 72vh;
+	/* position: relative; */
+	max-height: 83%;
 	/* Limit height relative to viewport */
 	overflow-y: auto;
 	/* Enable vertical scrolling */
@@ -55,3 +56,8 @@
 	/* Adjust based on header height */
 	overflow: hidden;
 }
+
+.pending-color {
+	color: #C78B5E;
+}
+

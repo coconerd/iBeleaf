@@ -1,8 +1,37 @@
 @foreach($orders as $order)
-	<div class="card mb-4">
+	<div class="card mb-4" style="border-radius: 8px;">
 		<div class="card-header d-flex justify-content-between align-items-center">
-			<span>Trạng thái đơn hàng</span>
-			<span>Giao: 14h30 23/5/2024</span>
+		@switch($order->status)
+			@case('pending')
+			<div>
+				<i class="bi bi-box me-1" style="font-size: 1.1rem; color: #949A90;"></i>
+				<span class="text-uppercase text" style="color: #949A90;">Chờ lấy hàng</span>
+			</div>
+				@break
+			@case('delivering')
+			<div>
+				<i class="bi bi-truck me-1" style="font-size: 1.1rem; color: #435E53;"></i>
+				<span class="text-uppercase" style="color: #435E53;">Đang giao</span>
+			</div>
+				@break
+			@case('completed')
+				<span class="text-uppercase" style="color: #18A04A;">Hoàn thành</span>
+				@break
+			@case('delivered')
+				<div class="d-flex d-row">
+					<i class="bi bi-truck text-success me-1" style="font-size: 1.1rem;"></i>
+					<span class="text-uppercase text-success">Đã giao</span>		
+				</div>
+				@break
+			@default
+				<span class="text-uppercase">{{ $order->status }}</span>
+				@break
+		@endswitch
+		@if ($order->status == 'pending' || $order->status == 'delivering')
+			<span>Đặt lúc: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</span>
+		@elseif ($order->status == 'completed' || $order->status == 'delivered')
+			<span>Giao hàng: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($order->delivery_time)->format('d/m/Y H:i') }}</span>	
+		@endif
 		</div>
 		<div class="card-body p-0">
 			<!-- Loop through order items -->
@@ -11,45 +40,294 @@
 					<div class="d-flex">
 						<!-- Product Image -->
 						<img src="{{ $item->product->product_images[0]->product_image_url ?? asset('images/placeholder-plant.jpg') }}"
-							alt="Product Image" class="me-3" style="width: 80px; height: auto;">
+							alt="Product Image" class="me-3" style="width: 80px; height: auto; border-radius: 3px;">
 						<!-- Product Details -->
 						<div>
 							<h6 class="mb-1">{{ $item->product->short_description }}</h6>
-							<p class="mb-1">Product code: {{ $item->product->code }}</p>
-							<p class="mb-1">x {{ $item->quantity }}</p>
+							<p style="color: grey;">Mã sản phẩm: {{ $item->product->code }}</p>
+							<p>x {{ $item->quantity }}</p>
 						</div>
 						<!-- Pricing -->
-						<div class="ms-auto text-end">
+						<div class="ms-auto text-end d-flex align-items-center">
 							@if ($item->product->discount_percentage > 0)
-								<p style="color: #28a745;">
-									<span class="text-muted text-decoration-line-through" style="font-size: 1.3rem;">
+								<p class="mb-0">
+									<span class="text-muted text-decoration-line-through" style="font-size: 1.1rem; color:#949A90;">
 										{{ number_format($item->product->price, 0, '.', ',') }}₫
 									</span>
 									<br>
-									<span class="text-success fw-bold" style="font-size: 1.4rem;">
+									<span class="fw-bold" style="font-size: 1.2rem; color: #435E53;">
 										{{ number_format($item->product->price * (1 - $item->product->discount_percentage / 100), 0, '.', ',') }}₫
 									</span>
 								</p>
 							@else
-									<p class="text-success fw-bold" style="font-size: 1.4rem; color: #28a745;">
-										{{ number_format($item->product->price, 0, '.', ',') }}₫
-									</p>
-								</div>
+								<p class="fw-bold mb-0" style="font-size: 1.2rem; color: #435E53;">
+									{{ number_format($item->product->price, 0, '.', ',') }}₫
+								</p>
 							@endif
+						</div>
 					</div>
 				</div>
 			@endforeach
 		</div>
 		<div class="card-footer d-flex justify-content-between align-items-center">
-			<span>Thành tiền: <strong>{{ number_format($order->total_price, 0, ',', '.') }}đ</strong></span>
+			@if ($order->voucher_id != null) 
+			<div class="d-flex flex-column">
+				<span class="me-2">
+					@if ($order->voucher->voucher_type == 'cash')
+						Voucher:
+					@else
+						Coupon:
+					@endif
+					<strong style="font-variant: normal;">{{ $order->voucher->voucher_name }}</strong>
+				</span>
+				<span>Thành tiền: <strong>{{ number_format($order->total_price, 0, ',', '.') }}đ</strong></span>
+			</div>
+			@else
+				<span>Thành tiền: <strong>{{ number_format($order->total_price, 0, ',', '.') }}đ</strong></span>
+			@endif
 			<div>
-				<button class="btn btn-outline-success btn-sm rounded-full" id="feedbackBtn">Đánh giá</button>
-				<button class="btn btn-outline-primary btn-sm rounded-full" id="repurchaseBtn">Mua lại</button>
-				<button class="btn btn-outline-danger btn-sm roundd-full" id="refundReturnBtn">Trả / hoàn</button>
+				<button class="btn btn-sm rounded text-white feedbackBtn" data-order-id="{{ $order->order_id }}" style="background-color: #1E4733;">Đánh giá</button>
+				<button class="btn btn-sm rounded" id="repurchaseBtn" style="border: 1px solid black;">Mua lại</button>
+				<button class="btn btn-sm rounded" id="refundReturnBtn" style="border: 1px solid black;">Trả hàng/ Hoàn tiền</button>
 			</div>
 		</div>
 	</div>
-	@if($orders->isEmpty())
-		<p>Bạn chưa có đơn hàng nào.</p>
-	@endif
 @endforeach
+@if($orders->isEmpty())
+	<div class="d-flex flex-column align-items-center mt-5">
+		<i class="bi bi-bag fs-5" style="color: #212529 !important;"></i>
+		<p class="fs-5 mt-4" style="color: #212529 !important;">Bạn chưa có đơn hàng nào.</p>
+	</div>
+@endif
+
+<!-- Feedback Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable"> <!-- Make dialog scrollable -->
+        <div class="modal-content" style="max-height: 80vh;"> <!-- Set fixed max height -->
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase fw-light">Đánh giá sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('orders.submitFeedback') }}" method="POST" enctype="multipart/form-data"> <!-- Add enctype -->
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="order_id" id="modalOrderId" value="">
+                    <!-- Feedback items will be loaded here -->
+                    <div id="feedbackItems"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-muted fw-light" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn fw-bold">Gửi đánh giá</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+$('.feedbackBtn').on('click', function() {
+    var orderId = $(this).data('order-id');
+    $('#modalOrderId').val(orderId);
+    var feedbackItems = '';
+    @foreach($orders as $order)
+        if ({{ $order->order_id }} == orderId) {
+            @foreach($order->order_items as $item)
+                feedbackItems += `
+                <div class="mb-4">
+					<div class="d-flex flex-row">
+						<img src="{{ $item->product->product_images[0]->product_image_url ?? asset('images/placeholder-plant.jpg') }}"
+							alt="Product Image" class="me-3" style="width: 80px; height: auto; border-radius: 3px;">
+						<div class="d-flex flex-column">
+							<h6>{{ $item->product->short_description }}</h6>
+							<p style="color: grey;">Mã sản phẩm: {{ $item->product->code }}</p>
+							<p>x {{ $item->quantity }}</p>
+						</div>
+					</div>
+                    <input type="hidden" name="feedbacks[{{ $item->product_id }}][product_id]" value="{{ $item->product_id }}">
+                    <label class="form-label">Nội dung phản hồi</label>
+					<textarea class="form-control" name="feedbacks[{{ $item->product_id }}][feedback_content]" rows="3" maxlength="255" minlength="10"></textarea>
+                    <label class="form-label mt-2">Đánh giá</label>
+                    <div class="star-rating mt-2 mb-3" style="right: 20px">
+                        @for($i = 5; $i >= 1; $i--)
+                            <input type="radio" id="star{{ $item->product_id }}_{{ $i }}" name="feedbacks[{{ $item->product_id }}][num_star]" value="{{ $i }}" required>
+                            <label for="star{{ $item->product_id }}_{{ $i }}"><i class="fas fa-star"></i></label>
+                        @endfor
+                    </div>
+                    <label class="form-label mt-2" id='imgCounter'>Tải ảnh lên (tối đa 5)</label>
+                    <input type="file" name="feedbacks[{{ $item->product_id }}][images][]" accept="image/*" multiple
+                        class="form-control" onchange="previewImages(this, '{{ $item->product_id }}')">
+                    <!-- Image preview container -->
+                    <div id="preview-{{ $item->product_id }}" class="image-preview mt-2"></div>
+                </div>
+                <hr>`;
+            @endforeach
+        }
+    @endforeach
+    $('#feedbackItems').html(feedbackItems);
+    $('#feedbackModal').modal('show');
+});
+
+function limitFiles(input, maxFiles) {
+    if (input.files.length > maxFiles) {
+        alert('Bạn chỉ có thể tải lên tối đa ' + maxFiles + ' ảnh.');
+        input.value = '';
+    }
+}
+
+// Function to preview images
+function previewImages(input, productId) {
+    var previewContainer = document.getElementById('preview-' + productId);
+    previewContainer.innerHTML = '';
+    if (input.files && input.files.length > 0) {
+        if (input.files.length > 5) {
+            alert('Bạn chỉ có thể tải lên tối đa 5 ảnh.');
+			input.value = '';
+			$('#imgCounter').text(`Tải ảnh lên (0/5)`);
+            return;
+        }
+        Array.from(input.files).forEach(function(file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('preview-image');
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+		$('#imgCounter').text(`Tải ảnh lên (${input.files.length}/5)`);
+    }
+}
+</script>
+<style>
+#feedbackItems {
+	overflow-y: auto;
+	/* Enable vertical scrolling */
+	overflow-x: hidden;
+	/* Prevent horizontal scrolling */
+	position: relative;
+	/* For proper scroll containment */
+	/* padding: 30px 20px; */
+	/* Add padding */
+
+	/* Optional: Customize scrollbar */
+	/* height: 80vh; */
+	scrollbar-width: thin;
+	scrollbar-color: #888 #f1f1f1;
+}
+/* Optional: Custom webkit scrollbar styling */
+#feedbackItems::-webkit-scrollbar {
+	width: 8px;
+}
+
+#feedbackItems::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 4px;
+}
+
+#feedbackItems::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 4px;
+}
+
+.modal-dialog {
+  max-height: 90vh; /* Ensure modal does not exceed 90% of viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Style for feedback items container */
+#feedbackItems {
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    scroll-behavior: smooth;
+    
+    /* Scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+/* Webkit scrollbar styling */
+#feedbackItems::-webkit-scrollbar {
+    width: 6px;
+}
+
+#feedbackItems::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#feedbackItems::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+/* Modal styling */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.modal-body {
+    flex: 1;
+    padding: 0;
+    margin: 0;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    background: white;
+}
+
+.modal-title {
+	color: #949A90;;
+}
+
+.modal {
+	background-color: #F9F7F3;
+}
+
+.star-rating {
+	display: flex;
+	flex-direction: row-reverse;
+	gap: 0.3rem;
+	font-size: 1.5rem;
+}
+
+.star-rating input {
+	display: none;
+}
+
+.star-rating label {
+	color: #ddd;
+	cursor: pointer;
+}
+
+.star-rating :checked~label,
+.star-rating label:hover,
+.star-rating label:hover~label {
+	color: #ffd700;
+}
+
+.form-control:focus {
+    border-color: #C78B5E !important; /* Match your theme's green color */
+    /* box-shadow: 0 0 0 0.25rem rgba(67, 94, 83, 0.25) !important; Subtle green glow */
+	box-shadow: none !important; /* Remove default focus effect */
+    outline: 0 !important;
+}
+
+.image-preview {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.preview-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+</style>

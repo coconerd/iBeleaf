@@ -28,12 +28,13 @@ class FeedbackImage extends Model
 	protected $primaryKey = 'feedback_image_id';
 
 	protected $casts = [
-		'product_feedback_id' => 'int'
+		'product_feedback_id' => 'int',
+		'feedback_image' => 'binary'  // Add cast for LONGBLOB
 	];
 
 	protected $fillable = [
 		'product_feedback_id',
-		'feedback_image'
+		'feedback_image', // Make sure this is included
 	];
 
 	public function product_feedback()

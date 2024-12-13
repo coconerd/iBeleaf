@@ -140,7 +140,7 @@
 			<span>or</span>
 			<button onclick="event.preventDefault(); document.getElementById('facebook-login-form').submit();"
 				type="submit" class="btn btn-google d-flex align-items-center justify-content-center">
-				<i class="bi bi-google"></i> Đăng nhập với Facebook
+				<i class="bi bi-facebook"></i> Đăng nhập với Facebook
 			</button>
 			<form id="google-login-form" action="/auth/login/google" method="POST" style="display: none;">
 				@csrf

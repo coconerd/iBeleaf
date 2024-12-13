@@ -16,7 +16,7 @@
 					<a class="text-white" href="{{ url('/auth/login') }}">Đăng nhập</a>
 				@endif
 			</span>
-			<i class="bi bi-person"></i>
+			<i class="bi bi-person" onclick="window.location.href='{{ route('profile.homePage') }}'"></i>
 		</div>
 	</div>
 </div>
@@ -85,17 +85,18 @@
 					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 					<a href="#" class="search mt-2"><i class="bi bi-search"></i></a>
 				</form>
-				
+
 				<!-- Cart icon -->
 				<li class="nav-item ms-4 mt-1">
 					<div class="cart-container">
-        				<a href="{{ route('cart.view') }}" class="cart me-3">
-            				<i class="fa-solid fa-cart-shopping cart-icon" style="color: #1e362d;"></i>
-            				<span class="cart-badge" id="cart-count" data-cart-id="{{ Auth::user()->cart->cart_id ?? 0 }}">
-                				{{ Auth::user()->cart->items_count ?? 0 }}
-            				</span>
-        				</a>
-    				</div>
+						<a href="{{ route('cart.view') }}" class="cart me-3">
+							<i class="fa-solid fa-cart-shopping cart-icon" style="color: #1e362d;"></i>
+							<span class="cart-badge" id="cart-count"
+								data-cart-id="{{ Auth::user()->cart->cart_id ?? 0 }}">
+								{{ Auth::user()->cart->items_count ?? 0 }}
+							</span>
+						</a>
+					</div>
 				</li>
 		</div>
 	</div>
@@ -107,34 +108,34 @@
 
 <!-- Cart's style -->
 <style>
-    .cart-container {
-        position: relative;
-        display: inline-block;
-    }
+	.cart-container {
+		position: relative;
+		display: inline-block;
+	}
 
-    .cart-icon {
-        font-size: 22px;
+	.cart-icon {
+		font-size: 22px;
 		position: absolute;
 		top: 4px;
 		left: 14px;
-    }
+	}
 
-    .cart-badge {
-        position: absolute;
-        top: -9px;
-        left: 28px;
-        background-color: #F72C5B;
-        color: white;
-        border-radius: 50%;
-        padding: 2px 4px;
-        font-size: 10px;
-        min-width: 18px;
-        text-align: center;
-    }
+	.cart-badge {
+		position: absolute;
+		top: -9px;
+		left: 28px;
+		background-color: #F72C5B;
+		color: white;
+		border-radius: 50%;
+		padding: 2px 4px;
+		font-size: 10px;
+		min-width: 18px;
+		text-align: center;
+	}
 
-    .cart:hover {
-        text-decoration: none;
-        color: inherit;
-    }
+	.cart:hover {
+		text-decoration: none;
+		color: inherit;
+	}
 </style>
 <!-- End of navbar -->

@@ -35,12 +35,16 @@ class Voucher extends Model
 	protected $casts = [
 		'voucher_start_date' => 'datetime',
 		'voucher_end_date' => 'datetime',
-		'value' => 'int'
+		'value' => 'int',
+		'voucher_type' => 'string',
+		'voucher_name' => 'string',
+		'description' => 'string',
+		'voucher_id' => 'int',
 	];
 
 	protected $fillable = [
 		'voucher_name',
-		'voucher_type',
+		'voucher_type', // percentage or cash
 		'description',
 		'voucher_start_date',
 		'voucher_end_date',
