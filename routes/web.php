@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ use App\Http\Controllers\OrderController;
  * @notice Landing page
  */
 Route::get('/', function () {
-	return view('product/index');
+	return view('tmp');
 });
 
 
@@ -71,8 +71,8 @@ Route::middleware(['auth'])->group(function () {
 	Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 	Route::post('/orders/update', [OrderController::class, 'update'])->name('orders.update');
 	Route::post('/orders/delete', [OrderController::class, 'delete'])->name('orders.delete');
+	Route::post('/orders/submit-feedback', [OrderController::class, 'submitFeedback'])->name('orders.submitFeedback');
 });
-
 
 // Product routes
 Route::get(

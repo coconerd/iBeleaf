@@ -148,7 +148,7 @@ class ProductController extends Controller
 				];
 			});
 
-		return view('product.details', compact(
+		return view('product.index', compact(
 			'productId',
 			'productAttributes',
 			'relatedProducts',
