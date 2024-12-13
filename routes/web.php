@@ -87,9 +87,9 @@ Route::middleware(['auth'])->group(function (): void {
 	Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
 
-// Review routes
-Route::get('/reviews/{product_id}', [ReviewController::class, 'index'])->name('reviews.index');
-Route::middleware('auth')->post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
+// Feedback routes
+Route::get('/feedback/{product_id}', [FeedbackController::class, 'index'])->name('feedback.index');
+Route::middleware('auth')->post('/feedback/store', [FeedbackController::class, 'store'])->name('feedback.store');
 
 //Cart routes
 Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view')

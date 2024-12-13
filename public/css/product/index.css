@@ -1,0 +1,449 @@
+/* Banner styles */
+.banner .container {
+	position: relative;
+	height: 100px;
+	padding: 0;
+	margin: 0;
+	/* Adjust the height as needed */
+}
+
+.banner {
+	overflow-x: hidden;
+	width: 100vw;
+}
+
+#bannerImg {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.banner .text-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	color: white;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.banner .navigation-links {
+	margin-top: 1rem;
+}
+
+.banner .navigation-links a {
+	color: white;
+	text-decoration: none;
+	margin: 0 1rem;
+}
+
+/* End of banner styles */
+body {
+	background-color: #fcf9f3;
+}
+
+.main-image {
+	position: relative;
+}
+
+.main-image img {
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.main-image .discount-text {
+	background-color: #1BB152;
+	/* Bright pigment green */
+}
+
+.discount-text {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 60px;
+	height: 60px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: #18A04A;
+	/* Darker pigment green */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	padding: 3px;
+	z-index: 10;
+}
+
+.thumbnail-container {
+	display: flex;
+	gap: 1rem;
+}
+
+.thumbnail-wrapper {
+	width: 8rem;
+	height: 7.5rem;
+	overflow: hidden;
+	/* Ensure the image overflows the frame */
+	position: relative;
+	background-color: transparent;
+	border: none;
+	border-radius: 25px;
+	padding: 0px;
+}
+
+.img-thumbnail {
+	width: 115%;
+	height: 110%;
+	/* Slightly zoomed in */
+	object-fit: cover;
+	position: relative;
+	/* Position the image absolutely within the wrapper */
+	border: none;
+	background-color: transparent;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: transform 0.39s ease-in-out, opacity 0.39s ease-in-out;
+	opacity: 0.5;
+	margin: 0px;
+}
+
+.img-thumbnail:hover {
+	transform: translateY(-5px);
+	/* Push the image up slightly */
+	opacity: 1;
+}
+
+.js-img-thumbnail-active {
+	opacity: 1;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-title {
+	font-size: 1.75rem;
+	font-weight: bold;
+}
+
+.product-price {
+	color: #28a745;
+}
+
+.hotline-section ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hotline-section a {
+	color: #007bff;
+}
+
+.hotline-section a:hover {
+	text-decoration: underline;
+}
+
+.related-products .card {
+	border: none;
+	transition: transform 0.2s;
+}
+
+.reviews textarea {
+	resize: none;
+}
+
+/* Left column - Product image styles */
+#lcol {
+	padding-left: 1rem;
+}
+
+/* Heart button styles */
+.heart-button-active {
+	opacity: 1 !important;
+	color: red !important;
+}
+
+.heart-button-inactive {
+	opacity: 0.5 !important;
+	color: grey !important;
+}
+
+.heart-button:hover {
+	opacity: 0.8;
+	color: red;
+}
+
+.heart-button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 24px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	transform: opacity 0.3s ease;
+}
+
+/* End of product image styles */
+
+/* Middle column - Product details style */
+#mcol {
+	padding-right: 2rem;
+}
+
+.table th {
+	font-weight: normal;
+	font-size: medium;
+	color: #6c757d;
+	background-color: transparent;
+	padding: 5px;
+}
+
+.table tr {
+	margin: 0;
+}
+
+.table td {
+	padding-left: 0;
+	background-color: transparent;
+	font-size: medium;
+	padding: 5px;
+}
+
+.table ul {
+	list-style-type: none;
+	padding-left: 0;
+	margin-bottom: 0;
+}
+
+.table ul li {
+	margin: 0px;
+}
+
+/* Add these new styles */
+#carouselBadge .carousel-control-prev,
+#carouselBadge .carousel-control-next {
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	border-radius: 50%;
+	width: 40px;
+	object-fit: contain;
+}
+
+#carouselBadge:hover .carousel-control-prev,
+#carouselBadge:hover .carousel-control-next {
+	opacity: 1;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#carouselBadge {
+	box-shadow: none;
+}
+
+#carouselBadge .carousel-inner {
+	border: none;
+	background-color: transparent;
+	box-shadow: none;
+}
+
+/* End of product details style */
+
+/* Right col styles */
+
+/* End of right col styles */
+
+.main-image {
+	position: relative;
+	width: 100%;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.carousel-inner {
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-item img {
+	width: 100%;
+	object-fit: cover;
+}
+
+/* Hide Bootstrap's default controls */
+.carousel-control-prev,
+.carousel-control-next {
+	display: block;
+}
+
+.main-image:hover .prev-arrow {
+	transform: translate(0, -50%);
+}
+
+.main-image:hover .next-arrow {
+	transform: translate(0, -50%);
+}
+
+.main-image:hover .nav-arrows {
+	opacity: 1;
+	/* Instead of display:flex, use opacity */
+}
+
+
+.nav-arrows {
+	position: absolute;
+	top: 50%;
+	width: 40px;
+	height: 40px;
+	background: none;
+	background-color: transparent;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	/* Changed from 'none' to 'flex' */
+	align-items: center;
+	justify-content: center;
+	font-size: 24px;
+	transition: all 0.3s ease;
+	opacity: 0;
+	/* Instead of display:none, use opacity */
+}
+
+.prev-arrow {
+	left: 10px;
+	transform: translate(-20px, -50%);
+}
+
+.next-arrow {
+	right: 10px;
+	transform: translate(20px, -50%);
+}
+
+/* Fullscreen modal styles */
+.fullscreen-modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.9);
+	z-index: 1050;
+	cursor: pointer;
+}
+
+.fullscreen-image {
+	max-height: 90vh;
+	max-width: 90vw;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.modal-close {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	color: white;
+	font-size: 30px;
+	cursor: pointer;
+	z-index: 1051;
+}
+
+.star-rating {
+	display: flex;
+	flex-direction: row-reverse;
+	gap: 0.3rem;
+	font-size: 1.5rem;
+}
+
+.star-rating input {
+	display: none;
+}
+
+.star-rating label {
+	color: #ddd;
+	cursor: pointer;
+}
+
+.star-rating :checked~label,
+.star-rating label:hover,
+.star-rating label:hover~label {
+	color: #ffd700;
+}
+
+.review-item {
+	padding: 1rem;
+	border-bottom: 1px solid #eee;
+}
+
+.review-stars {
+	color: #ffd700;
+}
+
+.review-date {
+	color: #666;
+	font-size: 0.9rem;
+}
+
+.feedback-image {
+	border-radius: 3px;
+	margin-block-end: 10px;
+	cursor: pointer;
+	user-select: none;
+}
+
+/* Related products hover effects */
+.card {
+	overflow: hidden;
+	position: relative;
+}
+
+.card-img-top {
+	transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+	transform: scale(1.1);
+}
+
+.hover-heart {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 24px;
+	color: grey;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	z-index: 2;
+	background: none;
+	border: none;
+}
+
+.card:hover .hover-heart {
+	opacity: 0.5;
+	color: grey;
+}
+
+.view-product {
+	position: absolute;
+	bottom: -40px;
+	left: 0;
+	right: 0;
+	background: rgba(16, 107, 50, 0.7);
+	color: white;
+	text-align: center;
+	padding: 8px;
+	transition: bottom 0.3s ease;
+	text-decoration: none;
+	z-index: 2;
+}
+
+.card:hover .view-product {
+	bottom: 0;
+}
