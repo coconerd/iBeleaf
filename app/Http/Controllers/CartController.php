@@ -2,30 +2,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\JsonResponse;
-use App\Models\Cart;
 use App\Models\User;
-use App\Exceptions\CartCountUpdateException;
-use Illuminate\Validation\ValidationException;
 use App\Models\CartItem;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-
-/**
- * Get formatted cart data for the given user
- *
- * @param User $user
- * @return array
- */
+use App\Models\Cart;
 
 //Backend logic: handles db updates and fetches cart items
 class CartController extends Controller
 {
     private function getCartItems(User $user) : array{
-        //eager loading
-        $cartItems = CartItem::with(['product'])
-                ->where('cart_id', $user->card_id) // ensure only cart items associated with user are fetched
+        $cartId = $user->getAttribute('cart_id');
+        $cartItems = CartItem::with(['product']) // Eloquent ORM: fetches all cart items with associated product
+                ->where('cart_id', $cartId) // Condition to ensure only cart items of the user are fetched
                 ->get();
 
         $totalPrice = $cartItems->sum('original_price');
@@ -42,25 +31,14 @@ class CartController extends Controller
 
     public function showCartItems(Request $request)
     {
-        $defaultResponse = [
-            'cartItems' => collect(),
-            'totalPrice' => 0,
-            'totalDiscountAmount' => 0,
-            'totalDiscountedPrice' => 0
-        ];
         try {
-            $response = null;
-            $user = Auth::user();
-            if(!$user){
-                $response = $defaultResponse;
+            if (Auth::check()) {
+                $user = Auth::user();
+                if ($user instanceof User) {
+                    $cartItems = $this->getCartItems($user);
+                    return view('cart.index', $cartItems);
+                }
             }
-            if ($user instanceof User) {
-                $cartItems = $this->getCartItems($user);
-                $response = view('cart.index', $cartItems);
-            } else {
-                $response = $defaultResponse;
-            }
-            return $response;
             
         } catch (Exception $e) {
             return response()->json([
@@ -70,11 +48,51 @@ class CartController extends Controller
         }
     }
 
-    // public function insertItemToCart(Request $request){
-    //     try {
+    public function insertItemToCart(Request $request){
+        try {
+            $user = Auth::user();
+            $productId = $request->input('product_id');
+            $quantity = $request->input('quantity', 1);
+            $unitPrice = $request->input('unit_price');
 
-    //     }
-    // }
+            // Retrieve the user's cart or create a new one if it doesnt exist
+            $cart = Cart::firstOrCreate(
+                ['user_id' => $user->id],
+                ['item_count' => 0]
+            );
+            // Retrieve the cart items if it already exists
+            $cartId = $cart->getAttribute('id');
+            $cartItem = CartItem::where('cart_id', $cartId)
+                                ->where('product_id', $productId);
+            
+            if ($cartItem){
+                $cartItem->quantity += $quantity;
+                $cartItem->save();
+            }else{
+                $cartItem = new CartItem();
+                $cartItem->cart_id = $cartId;
+                $cartItem->product_id = $productId;
+                $cartItem->quantity = $quantity;
+                $cartItem->unit_price = $unitPrice;
+                $cartItem->save();
+            }
+
+            // Update the items count
+            $cart->items_count = CartItem::where('cart_id', $cartId)->sum('quantity');
+            $cart->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item added to cart successfully'
+            ], 200);
+
+        } catch (Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to insert item to cart',
+            ], 500);
+        }
+    }
 }
 
 

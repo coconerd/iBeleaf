@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Models\Cart;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -37,7 +37,7 @@ class UserFactory extends Factory
             'gender' => $this->faker->randomElement(['Nam', 'Nữ', 'Khác']),
             'date_of_birth' => $this->faker->date(),
             'avatar' => $this->faker->imageUrl(200, 200, 'people'),
-            'card_id' => null
+            'cart_id' => null
         ];
     }
 
@@ -49,5 +49,20 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function configure(){ // Create a cart for each created user
+        return $this->afterCreating(function ($user) {
+            $userId = $user->getAttribute('user_id');
+            $cart = Cart::create([
+                'cart_id' => $userId,
+                'items_count' => 0
+            ]);
+
+            $user->update([
+                'cart_id' => $cart->cart_id
+            ]);
+            
+        });
     }
 }
