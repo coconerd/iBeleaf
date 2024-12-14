@@ -227,7 +227,7 @@
         .d-flex.justify-content-between {
             margin-bottom: 0.5rem !important; /* Reduced from mb-4 */
         }
-        #vat {
+        #ship {
             font-size: 14px;
             text-align: right;
             opacity: 0.35;
@@ -251,23 +251,23 @@
                 <h5 class="fw-bold mb-3">Giỏ hàng</h5>
                 <div class="d-flex justify-content-between">
                     <p class="fw-semibold">Mặt hàng
-                        (<span class="cart-items-count">{{$totalQuantity}}</span>)
+                        (<span class="items-count">{{ $totalQuantity }}</span>)
                     </p>
                     <p class="fw-semibold">Tạm tính</p>
                 </div>
                 
                 @foreach($cartItems as $item)
-                    <div class="d-flex mb-4 align-items-center each-cart-item" data-cart-id="{{ $item->cart_id}}">
+                    <div class="d-flex mb-4 align-items-center each-cart-item" data-cart-id="{{ $item->cart_id }}">
 
                         <!--Cart Item Image And Discount Label-->
                         <div class="item-cart">
                             @if ($item->product && $item->product->productImages->where('image_type', 1)->first())
                                 <div class="image-container">
-                                    <img src= "{{$item->product->productImages->where('image_type', 1)->first()->product_image_url}}"
+                                    <img src= "{{ $item->product->productImages->where('image_type', 1)->first()->product_image_url }}"
                                         alt="Hình ảnh sản phẩm"
                                         class="product-image">
                                     @if($item->product->discount_percentage > 0)
-                                        <div class="discount-label">Giảm {{$item->product->discount_percentage}}%</div>
+                                        <div class="discount-label">Giảm {{ $item->product->discount_percentage }}%</div>
                                     @endif
                                 </div>
                             @else
@@ -308,9 +308,10 @@
                                             <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm khuyến mãi)</span>
                                             <div class="d-flex align-items-center justify-content-md-end justify-content-start">
                                                 <span class="price total-uprice me-1"
+                                                    data-cart-id="{{ $item->cart_id }}"
                                                     data-unit-price="{{ $item->unit_price }}"
                                                     data-discount-percent="{{ $item->product->discount_percent ?? 0}}">
-                                                    {{ number_format($item->unit_price * $item->quantity * (1 - ($item->product->discount_percentage ?? 0) / 100)) }}
+                                                    {{ number_format($item->discounted_price) }}
                                                 <span class="currency-label">VND</span>
                                             </div>
                                         </div>
@@ -329,19 +330,18 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title mb-4">Thông tin đơn hàng
-                            (<span class="order-items-count">{{$totalQuantity}}</span>)
+                            (<span class="items-count">{{ $totalQuantity }}</span>)
                         </h5>
                         <div id ="container">
                             <div class="row">
                                 <p class="info col-6 left-side">Thành tiền
-                                    (<span class="cart-items-count">{{$totalQuantity}} mặt hàng</span>)
+                                    (<span class="items-count-mh">{{ $totalQuantity }} mặt hàng</span>)
                                 </p>
-                                <p class="info col-6 right-side" id="total-discounted-price">{{ number_format($totalDiscountedPrice) }} VND</p>
+                                <p class="info col-6 right-side" id="total-discounted-price">
+                                    <span id="first-total-price">{{ number_format($totalDiscountedPrice) }} VND</span>
+                                </p>
                             </div>
-                            <div class="row">
-                                <p class="info col-6 left-side">Phí vận chuyển</p>
-                                <p class="info col-6 right-side">Miễn phí giao hàng</p>
-                            </div>
+
                             <div class="row">
                                 <p class="info col-6 left-side">Tổng khuyến mãi</p>
                                 <p class="info col-6 right-side">{{ number_format($totalDiscountAmount) }} VND</p>
@@ -358,8 +358,8 @@
                             <strong class="total">Tổng tiền:</strong>
                             <strong class="total">{{number_format($totalDiscountedPrice)}} VND</strong>
                         </div>
-                        <div id="vat">
-                            <i>(Đã bao gồm VAT)</i>
+                        <div id="ship">
+                            <i>(Chưa bao gồm phí vận chuyển)</i>
                         </div>
                         <button class="btn btn-primary w-100">Thanh toán</button>
                     </div>

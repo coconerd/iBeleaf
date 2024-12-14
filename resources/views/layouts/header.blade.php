@@ -93,7 +93,7 @@
 							<i class="fa-solid fa-cart-shopping cart-icon" style="color: #1e362d;"></i>
 							<span class="cart-badge" id="cart-count"
 								data-cart-id="{{ Auth::user()->cart->cart_id ?? 0 }}">
-								{{ Auth::user()->cart->items_count ?? 0 }}
+								{{ $totalQuantity ?? 0 }}
 							</span>
 						</a>
 					</div>

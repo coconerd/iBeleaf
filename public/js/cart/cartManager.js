@@ -25,7 +25,8 @@ $(document).ready(function () {
             }
             updateButtonStates(value);
             calculatePrice($input);
-            updateCartTotals();
+            updateCartCount();
+            calculateCartTotal();
         });
 
         $minusBtn.on('click', function() {
@@ -35,7 +36,8 @@ $(document).ready(function () {
                 $input.val(value);
                 updateButtonStates(value);
                 calculatePrice($input);
-                updateCartTotals();
+                updateCartCount();
+                calculateCartTotal();
 
             } else if (value === 1) {
                 if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
@@ -51,55 +53,58 @@ $(document).ready(function () {
                 $input.val(value);  
                 updateButtonStates(value);
                 calculatePrice($input);
-                updateCartTotals();
+                updateCartCount();
+                calculateCartTotal();
             }
         })
 
     })
 })
 
-function updateCartTotals() {
+function updateCartCount() {
     let totalQuantity = 0;
     $('.quantity-input').each(function () {
         totalQuantity += parseInt($(this).val());
     });
-    
-    $('.order-items-count').text(totalQuantity);
-    $('.cart-items-count').text(totalQuantity + ' mặt hàng');
+
+    $('.items-count').text(totalQuantity);
+    $('.items-count-mh').text(totalQuantity + ' mặt hàng');
+    $('#cart-count').text(totalQuantity);
 }
-function removeCartItem($input) { 
-    const $cartItem = $input.closest('.each-cart-item');
-    const cartItemId = $cartItem.data('cart-id');
 
-    $.ajax({
-        url: 'cart/remove-item' + cartItemId,
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (response) {
-            // Remove cart form DOM
-            $cartItem.remove();
+// function removeCartItem($input) { 
+//     const $cartItem = $input.closest('.each-cart-item');
+//     const cartItemId = $cartItem.data('cart-id');
 
-            // Update cart total
-            if (response.cartCount) {
-                $()
-            }
-        }
+//     $.ajax({
+//         url: 'cart/remove-item' + cartItemId,
+//         method: 'DELETE',
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         },
+//         success: function (response) {
+//             // Remove cart form DOM
+//             $cartItem.remove();
 
-    })
+//             // Update cart total
+//             if (response.cartCount) {
+//                 $()
+//             }
+//         }
 
-    $cartItem.remove();
-}                                     
+//     })
+
+//     $cartItem.remove();
+// }                                     
 
 function calculatePrice($input) {
     try {
         const $item = $input.closest(".cart-control");
         const $price = $item.find(".price.total-uprice");
 
-        const unitPrice = parseInt($price.attr("data-unit-price"));
+        const unitPrice = parseInt($price.data("unit-price"));
         const discountPercent = parseInt(
-            $price.attr("data-discount-percent")
+            $price.data("discount-percent")
         );
         const quantity = parseInt($input.val());
 
@@ -110,17 +115,37 @@ function calculatePrice($input) {
             });
             return;
         }
-
+        
         const subTotal = unitPrice * quantity;
         const subDiscountedTotal = subTotal * (1 - discountPercent / 100);
 
-        $price.text(formatPrice(subDiscountedTotal));
+        $price.html(
+            `${formatPrice(
+                subDiscountedTotal
+            )} <span class="currency-label">VND</span>`
+        );
     } catch (error) {
         console.error("Price calculation error:", error);
     }
     // updateCartCount($item.data('cart-id'));
 }
 
+function calculateCartTotal() {
+    let total = 0;
+
+    $('.each-cart-item').each(function () {
+        const quantity = parseInt($(this).find('.quantity-input').val());
+        const price = parseFloat($(this).find(".price").data("price"));
+        const discount = parseFloat($(this).find(".price").data("discount"));
+
+        const discountedPrice = price * (1 - discount / 100);
+        const subTotal = discountedPrice * quantity;
+
+        total += subTotal;
+    });
+
+    $('#first-total-price').text(formatPrice(total) + ' VND');
+}
 // function updateCartCount(cartId) {
 //     // Log to verify cartId
 // 	console.log("Updating cart:", cartId);

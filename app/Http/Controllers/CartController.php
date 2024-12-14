@@ -20,7 +20,7 @@ class CartController extends Controller
         $totalDiscountAmount = $cartItems->sum('discount_amount');
         $totalDiscountedPrice = $totalPrice - $totalDiscountAmount;
         $totalQuantity = $cartItems->sum('quantity');
-
+        
         return [
             'cartItems' => $cartItems,
             'totalPrice' => $totalPrice,
