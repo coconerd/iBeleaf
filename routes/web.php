@@ -97,3 +97,5 @@ Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view')
 Route::post('/cart/update-count', [CartController::class, 'updateItemsCount'])
 	->name('cart.update-count')
 	->middleware('auth');
+Route::delete('/cart/{cartId}/{productId}', [CartController::class, 'removeCartItem'])->name('cart.remove')
+	->middleware('auth');

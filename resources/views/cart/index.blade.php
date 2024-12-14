@@ -3,6 +3,7 @@
 
 @section("body-script")
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/cart/cartManager.js') }}"></script>
 @endsection
 
@@ -257,8 +258,10 @@
                 </div>
                 
                 @foreach($cartItems as $item)
-                    <div class="d-flex mb-4 align-items-center each-cart-item" data-cart-id="{{ $item->cart_id }}">
-
+                    <div class="d-flex mb-4 align-items-center each-cart-item"
+                        data-cart-id="{{ $item->cart_id }}"
+                        data-product-id="{{ $item->product_id}}">
+                    
                         <!--Cart Item Image And Discount Label-->
                         <div class="item-cart">
                             @if ($item->product && $item->product->productImages->where('image_type', 1)->first())
@@ -296,10 +299,12 @@
                                <div class="row">
                                     <div class="quantity-wrapper col-12 col-sm-12 col-md-4 mb-3">
                                         <button class="quantity-btn minus">-</button>
-                                        <input type="number" class="quantity-input" value="{{ $item->quantity }}"
-                                                min="1" max="{{ $item->product->stock_quantity }}" onchange="calculateItemTotal(this)">
+                                        <input type="number" class="quantity-input"
+                                                value="{{ $item->quantity }}"
+                                                min="1" max="{{ $item->product->stock_quantity }}"
+                                                data-max-stock="{{ $item->product->stock_quantity }}"
+                                                oninput="validateQuantity(this)">
                                         <button class="quantity-btn plus">+</button>
-                                        <small class="text-danger stock-error style="display: none;">Maximum stock quantity reached!</small>
                                     </div>
                                     
                                     <div class="temp-total-price col-12 col-sm-12 col-md-8">

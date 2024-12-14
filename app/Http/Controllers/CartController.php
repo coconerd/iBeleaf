@@ -20,7 +20,7 @@ class CartController extends Controller
         $totalDiscountAmount = $cartItems->sum('discount_amount');
         $totalDiscountedPrice = $totalPrice - $totalDiscountAmount;
         $totalQuantity = $cartItems->sum('quantity');
-        
+
         return [
             'cartItems' => $cartItems,
             'totalPrice' => $totalPrice,
@@ -34,17 +34,16 @@ class CartController extends Controller
     {
         try {
             if (Auth::check()) {
-                $user = Auth::user();
+                $user = Auth::user(); // Gets User model instance
                 if ($user instanceof User) {
                     $cartItems = $this->getCartItems($user);
                     return view('cart.index', $cartItems);
                 }
             }
-            
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch cart items',
+                'message' => 'Failed to fetch cart items!',
             ], 500);
         }
     }
@@ -84,48 +83,46 @@ class CartController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Item added to cart successfully'
+                'message' => 'Item added to cart successfully!'
             ], 200);
 
         } catch (Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to insert item to cart',
+                'message' => 'Failed to insert item to cart!',
             ], 500);
         }
     }
 
-    public function removeItemFromCart(Request $request)
+    public function removeCartItem($cartId, $productId)
     {
         try {
-            $cartId = $request->cart_id;
-            $productId = $request->product_id;
             $cartItem = CartItem::where('cart_id', $cartId)
                 ->where('product_id', $productId);
 
-            if (!$cartItem) {
+            if ($cartItem instanceof CartItem ) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Cart item not found'
+                    'message' => 'Cart item not found!'
                 ], 404);
             }
-
+            
             $cartItem->delete();
 
-            // Update cart counts
             $cart = Cart::find($cartId);
             $cart->items_count = CartItem::where('cart_id', $cartId)->sum('quantity');
             $cart->save();
 
             return response()->json([
                 'success' => true,
-                // 'cartTotal' => CartItem::where('cart_id', $cartId)->sum('total_price');
-                'cartCount' => $cart->items_count
+                'message' => 'Item removed successfully!',
+                'items count' => $cart->items_count
             ]);
+
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error removing item'
+                'message' => 'Failed to remove item!'
             ], 500);
         }
     }

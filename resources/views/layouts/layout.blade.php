@@ -20,11 +20,15 @@
 	<link rel="stylesheet" href="{{asset('css/layouts/header.css')}}">
 	<link rel="stylesheet" href="{{asset('css/layouts/footer.css')}}">
 
+	<!-- SweetAlert2 Cart CSS -->
+    <link href="{{ asset('css/cart/cartAlert.css') }}" rel="stylesheet">
+
 	<!-- Scripts that needs to execute quickly on page load -->
 	@yield('head-script')
 
 	<!-- View-specific stylings -->
 	@yield(section: 'style')
+
 </head>
 
 <body>
