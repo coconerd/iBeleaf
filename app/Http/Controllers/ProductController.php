@@ -6,15 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Providers\DBConnService;
+use App\Services\FeedbackService;
 use Log;
 
 class ProductController extends Controller
 {
 	protected DBConnService $dbConnService;
+	protected FeedbackService $feedbackService;
 
-	public function __construct(DBConnService $dbConnService)
+	public function __construct(DBConnService $dbConnService, FeedbackService $feedbackService)
 	{
 		$this->dbConnService = $dbConnService;
+		$this->feedbackService = $feedbackService;
 	}
 
 	public function show($product_id)
@@ -29,11 +32,13 @@ class ProductController extends Controller
 		try {
 			$product = Product::with(
 				'categories'
-			)->with([
-						'product_images' => function ($query) {
-							$query->where('image_type', '=', 1)->select('product_image_url', 'product_images.product_id');
-						}
-					])->findOrFail($productId);
+			)
+				->with([
+					'product_images' => function ($query) {
+						$query->where('image_type', '=', 1)->select('product_image_url', 'product_images.product_id');
+					}
+				])
+				->findOrFail($productId);
 
 			Log::debug('Product: ' . json_encode($product));
 		} catch (\Exception $e) {
@@ -148,7 +153,7 @@ class ProductController extends Controller
 				];
 			});
 
-		return view('product.details', compact(
+		return view('product.index', compact(
 			'productId',
 			'productAttributes',
 			'relatedProducts',
@@ -159,5 +164,36 @@ class ProductController extends Controller
 			'product',
 			'isWishlisted',
 		));
+	}
+
+	public function submitFeedback(Request $request)
+	{
+		$request->validate([
+			'product_id' => 'required|exists:products,product_id',
+			'review' => 'required|string|min:10|max:255',
+			'rating' => 'required|integer|min:1|max:5',
+			'images' => 'nullable|array|max:5',
+			'images.*' => 'image|max:2048'
+		]);
+		
+		Log::info('Request data: ' . json_encode($request->all()));
+
+		$user = Auth::user();
+		$requestData = $request->all();
+		$feedback = [
+			'user_id' => $user->user_id,
+			'product_id' => $requestData['product_id'],
+			'feedback_content' => $requestData['review'],
+			'num_star' => $requestData['rating'],
+			'images' => $requestData['images']
+		];
+
+		$user = Auth::user();
+		try {
+			$this->feedbackService->store($feedback, $user->user_id);
+		} catch (\Exception $e) {
+			return redirect()->back()->with('error', 'Có lỗi xảy ra khi gửi đánh giá!');
+		}
+		return redirect()->back()->with('success', 'Cảm ơn bạn đã gửi đánh giá!');
 	}
 }

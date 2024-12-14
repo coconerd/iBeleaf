@@ -29,7 +29,6 @@ class FeedbackImage extends Model
 
 	protected $casts = [
 		'product_feedback_id' => 'int',
-		'feedback_image' => 'binary'  // Add cast for LONGBLOB
 	];
 
 	protected $fillable = [
@@ -39,6 +38,6 @@ class FeedbackImage extends Model
 
 	public function product_feedback()
 	{
-		return $this->belongsTo(ProductFeedback::class);
+		return $this->belongsTo(related: ProductFeedback::class);
 	}
 }

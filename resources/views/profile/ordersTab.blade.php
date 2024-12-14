@@ -43,7 +43,11 @@
 							alt="Product Image" class="me-3" style="width: 80px; height: auto; border-radius: 3px;">
 						<!-- Product Details -->
 						<div>
-							<h6 class="mb-1">{{ $item->product->short_description }}</h6>
+							<h6 class="mb-1" onmouseup="window.location.href='{{
+								route('product.show', ['product_id' => $item->product->product_id])
+							}}'">
+								{{ $item->product->short_description }}
+							</h6>
 							<p style="color: grey;">Mã sản phẩm: {{ $item->product->code }}</p>
 							<p>x {{ $item->quantity }}</p>
 						</div>
@@ -156,7 +160,7 @@ $('.feedbackBtn').on('click', function() {
                     <input type="file" name="feedbacks[{{ $item->product_id }}][images][]" accept="image/*" multiple
                         class="form-control" onchange="previewImages(this, '{{ $item->product_id }}')">
                     <!-- Image preview container -->
-                    <div id="preview-{{ $item->product_id }}" class="image-preview mt-2"></div>
+                    <div id="preview-{{ $item->product_id }}" class="preview-image-container mt-2"></div>
                 </div>
                 <hr>`;
             @endforeach
@@ -198,136 +202,5 @@ function previewImages(input, productId) {
     }
 }
 </script>
-<style>
-#feedbackItems {
-	overflow-y: auto;
-	/* Enable vertical scrolling */
-	overflow-x: hidden;
-	/* Prevent horizontal scrolling */
-	position: relative;
-	/* For proper scroll containment */
-	/* padding: 30px 20px; */
-	/* Add padding */
 
-	/* Optional: Customize scrollbar */
-	/* height: 80vh; */
-	scrollbar-width: thin;
-	scrollbar-color: #888 #f1f1f1;
-}
-/* Optional: Custom webkit scrollbar styling */
-#feedbackItems::-webkit-scrollbar {
-	width: 8px;
-}
-
-#feedbackItems::-webkit-scrollbar-track {
-	background: #f1f1f1;
-	border-radius: 4px;
-}
-
-#feedbackItems::-webkit-scrollbar-thumb {
-	background: #888;
-	border-radius: 4px;
-}
-
-.modal-dialog {
-  max-height: 90vh; /* Ensure modal does not exceed 90% of viewport height */
-  overflow-y: auto; /* Enable vertical scrolling */
-}
-
-/* Style for feedback items container */
-#feedbackItems {
-    max-height: 60vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 1rem;
-    scroll-behavior: smooth;
-    
-    /* Scrollbar styling */
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
-}
-
-/* Webkit scrollbar styling */
-#feedbackItems::-webkit-scrollbar {
-    width: 6px;
-}
-
-#feedbackItems::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-#feedbackItems::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-/* Modal styling */
-.modal-content {
-    display: flex;
-    flex-direction: column;
-    max-height: 90vh;
-}
-
-.modal-body {
-    flex: 1;
-    padding: 0;
-    margin: 0;
-}
-
-.modal-footer {
-    border-top: 1px solid #dee2e6;
-    background: white;
-}
-
-.modal-title {
-	color: #949A90;;
-}
-
-.modal {
-	background-color: #F9F7F3;
-}
-
-.star-rating {
-	display: flex;
-	flex-direction: row-reverse;
-	gap: 0.3rem;
-	font-size: 1.5rem;
-}
-
-.star-rating input {
-	display: none;
-}
-
-.star-rating label {
-	color: #ddd;
-	cursor: pointer;
-}
-
-.star-rating :checked~label,
-.star-rating label:hover,
-.star-rating label:hover~label {
-	color: #ffd700;
-}
-
-.form-control:focus {
-    border-color: #C78B5E !important; /* Match your theme's green color */
-    /* box-shadow: 0 0 0 0.25rem rgba(67, 94, 83, 0.25) !important; Subtle green glow */
-	box-shadow: none !important; /* Remove default focus effect */
-    outline: 0 !important;
-}
-
-.image-preview {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.preview-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('css/profile/ordersTab.css') }}">

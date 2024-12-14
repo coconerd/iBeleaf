@@ -58,7 +58,7 @@ class User extends Authenticatable
 		'user_id' => 'int',
 		'role_type' => 'int',
 		'date_of_birth' => 'datetime',
-		'card_id' => 'int',
+		'cart_id' => 'int',
 		'password' => 'hashed'
 	];
 
@@ -80,7 +80,7 @@ class User extends Authenticatable
 		'gender',
 		'date_of_birth',
 		'avatar',
-		'card_id'
+		'cart_id'
 	];
 
 	public function cart()

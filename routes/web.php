@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ use App\Http\Controllers\OrderController;
  * @notice Landing page
  */
 Route::get('/', function () {
-	return view('product/index');
+	return view('tmp');
 });
 
 
@@ -71,14 +71,15 @@ Route::middleware(['auth'])->group(function () {
 	Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 	Route::post('/orders/update', [OrderController::class, 'update'])->name('orders.update');
 	Route::post('/orders/delete', [OrderController::class, 'delete'])->name('orders.delete');
+	Route::post('/orders/submit-feedback', [OrderController::class, 'submitFeedback'])->name('orders.submitFeedback');
 });
 
-
 // Product routes
-Route::get(
-	'/product/{product_id}',
-	[ProductController::class, 'show']
-)->name('product.show');
+Route::get('/product/{product_id}', [ProductController::class, 'show'])
+	->name('product.show');
+Route::middleware(['auth'])
+	->post('/product/submit-feedback', [ProductController::class, 'submitFeedback'])
+	->name('product.submitFeedback');
 
 // Wishlist routes
 Route::middleware(['auth'])->group(function (): void {
@@ -87,9 +88,8 @@ Route::middleware(['auth'])->group(function (): void {
 	Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
 
-// Review routes
-Route::get('/reviews/{product_id}', [ReviewController::class, 'index'])->name('reviews.index');
-Route::middleware('auth')->post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
+// Feedback routes
+Route::get('/feedback/{product_id}', [FeedbackController::class, 'index'])->name('feedback.index');
 
 // Cart routes
 Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view')

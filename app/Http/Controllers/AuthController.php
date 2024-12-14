@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Cart;
 use Illuminate\Support\Facades\Cache;
 use Exception;
 use Auth;
@@ -274,14 +276,21 @@ class AuthController extends Controller
 			$randomUsername = AuthUtils::random_username($emailPrefix);
 		}
 		try {
+			DB::beginTransaction();
+			$cart = Cart::create(attributes: [
+				'items_count' => 0,
+			]);
 			$user = User::create(attributes: [
 				'full_name' => $name,
 				'user_name' => $randomUsername,
 				'email' => $email,
 				'password' => $password,
 				'role_type' => 0,
+				'cart_id' => $cart->cart_id,
 			]);
+			DB::commit();
 		} catch (Exception $e) {
+			DB::rollback();
 			if (strpos($e->getMessage(), "1062 Duplicate") !== false) {
 				return redirect()->back()->withErrors("Email đã được đăng ký");
 			}
@@ -354,11 +363,18 @@ class AuthController extends Controller
 			} else {
 				$name = $googleUser->getName();
 				$password = AuthUtils::random_password();
+				$emailPrefix = explode('@', $email)[0];
+				$randomUsername = AuthUtils::random_username($emailPrefix);
+				$cart = Cart::create(attributes: [
+					'items_count' => 0,
+				]);
 				$user = User::create([
 					'email' => $email,
 					'full_name' => $name,
+					'user_name' => $randomUsername,
 					'password' => $password,
 					'role_type' => 0,
+					'cart_id' => $cart->cart_id,
 				]);
 				Auth::login(user: $user);
 			}

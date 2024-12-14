@@ -45,7 +45,7 @@ class OrderService
 		$query->orderBy('created_at', 'desc');
 
 		$orders = $query->get();
-		Log::debug('Orders retrieved: ', $orders->toArray());
+		// Log::debug('Orders retrieved: ', $orders->toArray());
 		return $orders;
 	}
 }
