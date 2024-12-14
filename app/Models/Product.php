@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Product
- * 
+ *
  * @property string $product_id
  * @property int|null $type
  * @property string|null $code
@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $is_returnable
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property Collection|OrderItem[] $order_items
  * @property Collection|Attribute[] $attributes
  * @property Collection|ProductCategory[] $product_categories

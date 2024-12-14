@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 
-//Backend logic: handles db updates and fetches cart items
 class CartController extends Controller
 {
     private function getCartItems(User $user) : array{
@@ -20,12 +19,14 @@ class CartController extends Controller
         $totalPrice = $cartItems->sum('original_price');
         $totalDiscountAmount = $cartItems->sum('discount_amount');
         $totalDiscountedPrice = $totalPrice - $totalDiscountAmount;
+        $totalQuantity = $cartItems->sum('quantity');
 
         return [
             'cartItems' => $cartItems,
             'totalPrice' => $totalPrice,
             'totalDiscountAmount' => $totalDiscountAmount,
-            'totalDiscountedPrice' => $totalDiscountedPrice
+            'totalDiscountedPrice' => $totalDiscountedPrice,
+            'totalQuantity' => $totalQuantity
         ];
     }
 
@@ -93,6 +94,40 @@ class CartController extends Controller
             ], 500);
         }
     }
-}
 
+    public function removeItemFromCart(Request $request)
+    {
+        try {
+            $cartId = $request->cart_id;
+            $productId = $request->product_id;
+            $cartItem = CartItem::where('cart_id', $cartId)
+                ->where('product_id', $productId);
+
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cart item not found'
+                ], 404);
+            }
+
+            $cartItem->delete();
+
+            // Update cart counts
+            $cart = Cart::find($cartId);
+            $cart->items_count = CartItem::where('cart_id', $cartId)->sum('quantity');
+            $cart->save();
+
+            return response()->json([
+                'success' => true,
+                // 'cartTotal' => CartItem::where('cart_id', $cartId)->sum('total_price');
+                'cartCount' => $cart->items_count
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error removing item'
+            ], 500);
+        }
+    }
+}
 

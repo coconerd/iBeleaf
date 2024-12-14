@@ -91,7 +91,7 @@ Route::middleware(['auth'])->group(function (): void {
 Route::get('/reviews/{product_id}', [ReviewController::class, 'index'])->name('reviews.index');
 Route::middleware('auth')->post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
 
-//Cart routes
+// Cart routes
 Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view')
 	->middleware('auth');
 Route::post('/cart/update-count', [CartController::class, 'updateItemsCount'])
