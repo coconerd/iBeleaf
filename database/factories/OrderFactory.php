@@ -17,7 +17,15 @@ class OrderFactory extends Factory
 		$deliverCost = 50000; // fixed, for now
 		$totalPrice = 0; // Will be calculated after creating OrderItems
 
-		$prepStatus = $this->faker->randomElement(['pending', 'delivering', 'delivered', 'cancelled', 'returned', 'refunded']);
+		$prepStatus = $this->faker->randomElement([
+			'pending',
+			'delivering',
+			'delivered',
+			'cancelled',
+			'returned',
+			'refunded',
+			'completed'
+		]);
 		if ($prepStatus === 'delivered' || $prepStatus === 'completed') {
 			$prepDeliverTime = $this->faker->dateTimeBetween('-1 month', 'now');
 		} elseif ($prepStatus === 'delivering') {
@@ -26,8 +34,8 @@ class OrderFactory extends Factory
 			$prepDeliverTime = null;
 		}
 
-		$isPaidPrep = $prepStatus == 'completed' 
-			? true 
+		$isPaidPrep = $prepStatus == 'completed'
+			? true
 			: $this->faker->boolean(35);
 
 		// One out of 4 products will have a voucher id, voucher id is randomly selected
