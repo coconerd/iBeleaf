@@ -8,6 +8,7 @@ use App\Services\FeedbackService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Models\Order;
 
 class OrderController extends Controller
 {
@@ -23,8 +24,8 @@ class OrderController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->has('status')) {
-			$status = $request->query(key: 'status');
-			Log::debug('OrderController@index: status is not empty: ' . $status);
+			$status = explode(',', $request->query(key: 'status'));
+			Log::debug('OrderController@index: status is not empty: ' . json_encode($status));
 		} else {
 			Log::debug('OrderController@index: status is empty');
 		}
@@ -33,6 +34,8 @@ class OrderController extends Controller
 			$user->user_id,
 			!empty($status) ? ['status' => $status] : []
 		);
+
+		Log::debug('Retrieved orders: ' ,  ($orders->toArray()));
 		return response()->json([
 			'success' => true,
 			'html' => view('profile.ordersTab', compact('orders'))->render()
@@ -80,5 +83,43 @@ class OrderController extends Controller
 			return redirect()->back()->with('error', 'Có lỗi xảy ra khi gửi đánh giá!');
 		}
 		return redirect()->back()->with('success', 'Cảm ơn bạn đã gửi đánh giá!');
+	}
+
+	public function cancel($orderId) 
+	{
+		try {
+			Log::debug('orderId is ', [$orderId]);
+			$order = Order::findOrFail($orderId);
+			
+			// Check if order belongs to authenticated user
+			if ($order->user_id !== Auth::id()) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Unauthorized access'
+				], 403);
+			}
+
+			// Check if order can be cancelled (only pending orders)
+			if ($order->status !== 'pending') {
+				return response()->json([
+					'success' => false,
+					'message' => 'Chỉ có thể hủy đơn hàng đang chờ xử lý'
+				], 400);
+			}
+
+			$order->status = 'cancelled';
+			$order->save();
+
+			return response()->json([
+				'success' => true,
+				'message' => 'Đã hủy đơn hàng thành công'
+			]);
+		} catch (\Exception $e) {
+			Log::error('OrderControlle@cancel: ' . $e->getMessage());
+			return response()->json([
+				'success' => false,
+				'message' => 'Có lỗi xảy ra khi hủy đơn hàng'
+			], 500);
+		}
 	}
 }

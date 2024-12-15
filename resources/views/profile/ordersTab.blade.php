@@ -1,5 +1,5 @@
 @foreach($orders as $order)
-	<div class="card mb-4" style="border-radius: 8px;">
+	<div class="card mb-4" style="border-radius: 8px;" data-order-id="{{ $order->order_id }}">
 		<div class="card-header d-flex justify-content-between align-items-center">
 		@switch($order->status)
 			@case('pending')
@@ -14,13 +14,27 @@
 				<span class="text-uppercase" style="color: #435E53;">Đang giao</span>
 			</div>
 				@break
-			@case('completed')
-				<span class="text-uppercase" style="color: #18A04A;">Hoàn thành</span>
-				@break
 			@case('delivered')
 				<div class="d-flex d-row">
 					<i class="bi bi-truck text-success me-1" style="font-size: 1.1rem;"></i>
 					<span class="text-uppercase text-success">Đã giao</span>		
+				</div>
+				@break
+			@case('cancelled')
+				<div class="d-flex d-row">
+					<span class="text-uppercase text-danger">Đã hủy</span>		
+				</div>
+				@break
+			@case('returned')
+				<div class="d-flex d-row">
+					<i class="fa-solid fa-arrow-right-arrow-left me-3 mt-1"></i>
+					<span class="text-uppercase">Đổi hàng</span>		
+				</div>
+				@break
+			@case('refunded')
+				<div class="d-flex d-row">
+					<i class="fa-solid fa-arrow-left me-3 mt-1"></i>
+					<span class="text-uppercase">Trả hàng / hoàn tiền</span>		
 				</div>
 				@break
 			@default
@@ -90,9 +104,13 @@
 				<span>Thành tiền: <strong>{{ number_format($order->total_price, 0, ',', '.') }}đ</strong></span>
 			@endif
 			<div>
-				<button class="btn btn-sm rounded text-white feedbackBtn" data-order-id="{{ $order->order_id }}" style="background-color: #1E4733;">Đánh giá</button>
-				<button class="btn btn-sm rounded" id="repurchaseBtn" style="border: 1px solid black;">Mua lại</button>
-				<button class="btn btn-sm rounded" id="refundReturnBtn" style="border: 1px solid black;">Trả hàng/ Hoàn tiền</button>
+				@if ($order->status === "delivered")
+					<button class="btn btn-sm rounded text-white feedbackBtn" data-order-id="{{ $order->order_id }}" style="background-color: #1E4733;">Đánh giá</button>
+					<button class="btn btn-sm rounded" id="repurchaseBtn" style="border: 1px solid black;">Mua lại</button>
+					<button class="btn btn-sm rounded" id="refundReturnBtn" style="border: 1px solid black;">Trả hàng/ Hoàn tiền</button>
+				@elseif ($order->status === "pending")
+					<button class="btn btn-sm btn-outline-warning" id="cancelBtn" style="">Hủy đơn</button>
+				@endif
 			</div>
 		</div>
 	</div>

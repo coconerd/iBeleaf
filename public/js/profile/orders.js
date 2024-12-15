@@ -6,7 +6,13 @@ $(document).on('ordersTabLoaded', function (e) {
 			return;
 		}
 		const token = $('meta[name="csrf-token"]').attr('content');
-		const status = tabPane.attr('data-order-status');
+		let status = tabPane.attr('data-order-status');
+		if (status) {
+			status = encodeURIComponent(status);
+		}
+
+		console.log('status = ', status);
+
 		let url = '/orders' + '?token=' + token;
 		if (status) {
 			url += '&status=' + status;
@@ -38,11 +44,41 @@ $(document).on('ordersTabLoaded', function (e) {
 	// Add listeners for all tab clicksThe problem is that
 	$('button.nav-link').each(function () {
 		$(this).on('click', function () {
-			tabClass = $(this).attr('data-order-status') + 'Tab';
+			tabClass = $(this).attr('aria-controls') + 'Tab';
 			console.debug('Tab class: ' + tabClass);
 			loadOrdersTab(tabClass);
 		})
 	})
+
+	// Handle order cancel button click
+	$(document).on('click', '#cancelBtn', function(e) {
+		e.preventDefault();
+		
+		if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
+			const orderId = $(this).closest('.card').data('orderId');
+			const token = $('meta[name="csrf-token"]').attr('content');
+			
+			$.ajax({
+				url: `/orders/cancel/${orderId}`,
+				method: 'POST',
+				headers: {
+					'X-CSRF-TOKEN': token
+				},
+				success: function(response) {
+					if (response.success) {
+						// Reload current tab to show updated order status
+						const currentTab = $('.nav-link.active').attr('aria-controls') + 'Tab';
+						loadOrdersTab(currentTab);
+					} else {
+						alert(response.message);
+					}
+				},
+				error: function(xhr) {
+					alert(xhr.responseJSON?.message || 'Có lỗi xảy ra khi hủy đơn hàng');
+				}
+			});
+		}
+	});
 });
 
 
