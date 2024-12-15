@@ -268,10 +268,22 @@
         .voucher-box .voucher-info {
             font-weight: bold;
             margin-bottom: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
         }
-        .voucher-box .voucher-discount {
-            font-size: 0.9rem;
+        .voucher-box #voucher-discount {
+            font-size: 14px;
             color: #6c757d;
+            font-style: italic;
+        }
+        #voucher-description{
+            font-weight: 400;
+            font-size: 16px;
+        }
+        #voucher-error{
+            font-size: 15px;
         }
     </style>
 @endsection
@@ -403,7 +415,7 @@
                                         <p class="voucher-info">
                                             <span id="voucher-description"></span>
                                         </p>
-                                        <span class="voucher-discount"></span>
+                                        <span id="voucher-discount"></span>
                                     </div>
                                 </div>
                             </div>
