@@ -17,7 +17,7 @@ class OrderFactory extends Factory
 		$deliverCost = 50000; // fixed, for now
 		$totalPrice = 0; // Will be calculated after creating OrderItems
 
-		$prepStatus = $this->faker->randomElement(['pending', 'delivering', 'delivered']);
+		$prepStatus = $this->faker->randomElement(['pending', 'delivering', 'delivered', 'cancelled', 'returned', 'refunded']);
 		if ($prepStatus === 'delivered' || $prepStatus === 'completed') {
 			$prepDeliverTime = $this->faker->dateTimeBetween('-1 month', 'now');
 		} elseif ($prepStatus === 'delivering') {
