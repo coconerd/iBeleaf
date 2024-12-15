@@ -28,6 +28,14 @@ class OrderService
 		foreach ($filters as $key => $value) {
 			switch ($key) {
 				case 'status':
+					if (is_array($value)) {
+						Log::debug('Status is array: ', $value);
+						$query->whereIn($key, $value);
+					} else {
+						Log::debug('Status is not array: ', $value);
+						$query->where($key, $value);
+					}
+					break;
 				case 'payment_method':
 				case 'is_paid':
 				case 'is_delivered':
