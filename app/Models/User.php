@@ -17,7 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Class User
- * 
+ *
  * @property int $user_id
  * @property int $role_type
  * @property string|null $email
@@ -35,7 +35,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property int|null $card_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property Cart|null $cart
  * @property Collection|Order[] $orders
  * @property Collection|ProductFeedback[] $product_feedbacks

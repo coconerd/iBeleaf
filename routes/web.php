@@ -8,7 +8,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FeedbackController;
-
+use App\Http\Controllers\VoucherController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -92,10 +92,19 @@ Route::middleware(['auth'])->group(function (): void {
 Route::get('/feedback/{product_id}', [FeedbackController::class, 'index'])->name('feedback.index');
 
 // Cart routes
-Route::get('/cart', [CartController::class, 'showCartItems'])->name('cart.view')
-	->middleware('auth');
-Route::post('/cart/update-count', [CartController::class, 'updateItemsCount'])
-	->name('cart.update-count')
-	->middleware('auth');
-Route::delete('/cart/{cartId}/{productId}', [CartController::class, 'removeCartItem'])->name('cart.remove')
-	->middleware('auth');
+Route::middleware(['auth'])->group(function(){
+	Route::get('/cart/items', [CartController::class, 'showCartItems'])
+		->name('cart.items');
+	Route::post('/cart/update', [CartController::class, 'updateItemsCount'])
+		->name('cart.update');
+	Route::delete('/cart/{cartId}/{productId}', [CartController::class, 'removeCartItem'])
+		->name('cart.remove');
+	Route::get('/cart/shipping', [CartController::class, 'showShipping'])
+		->name('cart.shipping');
+});
+
+//Voucher routes
+Route::middleware(['auth'])->group(function (): void {
+	Route::post('voucher/validate', [VoucherController::class, 'validateVoucher'])
+	->name('voucher.validate');
+});

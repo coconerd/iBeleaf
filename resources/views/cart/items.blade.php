@@ -5,6 +5,7 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/cart/cartManager.js') }}"></script>
+    <script src="{{ asset('js/cart/voucherManager.js') }}"></script>
 @endsection
 
 @section('style')
@@ -133,7 +134,7 @@
             font-weight: 600;
             color: #1E4733;
         }
-        .total-uprice{
+        .final-total-uprice{
             font-size: 18px;
         }
         .currency-label {
@@ -147,7 +148,7 @@
             margin-top: 0.5rem;
         }
         @media (min-width: 768px) {
-            .temp-total-price {
+            .temp-final-total-price-price {
                 position: relative;
                 right: -15px;
             }
@@ -178,7 +179,7 @@
         .right-side{
             text-align: right;
         }
-        #total-discounted-price{
+        #final-total-discounted-price{
             font-weight: 600;
             color: #1E4733;
         }
@@ -195,17 +196,17 @@
             border-left: none;
             border-radius: 0 5px 5px 0;
         }
-        #apply-coupon{
+        #voucher-apply{
             font-size: 16px;
         }
-        #couponCode::placeholder {
+        #voucher-input::placeholder {
             color: #A9A9A9;
             opacity: 0.7;
         }
-        #couponCode {
+        #voucher-input {
             color: #000; /* Normal text color for input value */
         }
-        #couponCode:focus {
+        #voucher-input:focus {
             outline: none;
             box-shadow: none;
             border-color: #ced4da;
@@ -235,10 +236,42 @@
             margin-bottom: 1rem;
             line-height: 1;
         }
-        .total{
+        .final-total-price{
             color: #435E53;
             font-weight: 600;
             font-size: 18px;
+        }
+        #shipping-href {
+            font-size: 16px;
+        }
+
+        /*Voucher Section*/
+        .voucher-box {
+            border: 1px solid rgba(244, 240, 232);
+            background-color: rgba(244, 240, 232);
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        .voucher-box .voucher-icon {
+            color: #28a745;
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        .voucher-box .voucher-details {
+            display: flex;
+            align-items: center;
+        }
+        .voucher-box .voucher-info {
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+        .voucher-box .voucher-discount {
+            font-size: 0.9rem;
+            color: #6c757d;
         }
     </style>
 @endsection
@@ -307,12 +340,12 @@
                                         <button class="quantity-btn plus">+</button>
                                     </div>
                                     
-                                    <div class="temp-total-price col-12 col-sm-12 col-md-8">
+                                    <div class="temp-final-total-price-price col-12 col-sm-12 col-md-8">
                                         <!-- Use text-start on mobile, text-end on larger screens -->
                                         <div class="row justify-content-start justify-content-md-end">
                                             <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm khuyến mãi)</span>
                                             <div class="d-flex align-items-center justify-content-md-end justify-content-start">
-                                                <span class="price total-uprice me-1"
+                                                <span class="price final-total-uprice me-1"
                                                     data-cart-id="{{ $item->cart_id }}"
                                                     data-unit-price="{{ $item->unit_price }}"
                                                     data-discount-percent="{{ $item->product->discount_percent ?? 0}}">
@@ -342,31 +375,55 @@
                                 <p class="info col-6 left-side">Thành tiền
                                     (<span class="items-count-mh">{{ $totalQuantity }} mặt hàng</span>)
                                 </p>
-                                <p class="info col-6 right-side" id="total-discounted-price">
+                                <p class="info col-6 right-side" id="final-total-discounted-price">
                                     <span id="first-total-price">{{ number_format($totalDiscountedPrice) }} VND</span>
                                 </p>
                             </div>
 
                             <div class="row">
                                 <p class="info col-6 left-side">Tổng khuyến mãi</p>
-                                <p class="info col-6 right-side">{{ number_format($totalDiscountAmount) }} VND</p>
+                                <p class="info col-6 right-side"><span id="#voucher-amount">{{ number_format($totalDiscountAmount) }} VND</span></p>
                             </div>
                         </div>
 
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="couponCode" placeholder="Nhập mã giảm giá">
-                            <button class="btn apply-btn" id="apply-coupon" style="width: 25%;">ÁP DỤNG</button>
+                        <div class="voucher-section">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="voucher-input" placeholder="Nhập mã voucher">
+                                <button class="btn apply-btn" id="voucher-apply" style="width: 25%;">ÁP DỤNG</button>
+                            </div>
+                            <div id="voucher-amount"></div>
+
+                            <div id="voucher-error" class="text-danger mb-2" style="display: none;"></div>
+                            <div class="voucher-box" style="display: none;" id="valid-voucher-box">
+                                <div class="voucher-details">
+                                    <div class="voucher-icon">
+                                        <i class="fa-regular fa-circle-check" style="color: #c78b5e;"></i>
+                                    </div>
+                                    <div>
+                                        <p class="voucher-info">
+                                            <span id="voucher-description"></span>
+                                        </p>
+                                        <span class="voucher-discount"></span>
+                                    </div>
+                                </div>
+                            </div>
+            
                         </div>
 
                         <hr id="cart-summary-line">
                         <div class="d-flex justify-content-between mb-4">
-                            <strong class="total">Tổng tiền:</strong>
-                            <strong class="total">{{number_format($totalDiscountedPrice)}} VND</strong>
+                            <strong class="final-total-price">Tổng tiền:</strong>
+                            <strong class="final-total-price"><span id="final-price">{{number_format($totalDiscountedPrice)}} VND</span></strong>
                         </div>
                         <div id="ship">
                             <i>(Chưa bao gồm phí vận chuyển)</i>
                         </div>
                         <button class="btn btn-primary w-100">Thanh toán</button>
+                        <div class="text-center mt-3">
+                            <a href="{{ route('cart.shipping') }}" id="shipping-href" class="text-center">
+                                <u>Xác nhận thông tin giao hàng</u>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

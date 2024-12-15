@@ -1,4 +1,86 @@
-'use strict';
+$(document).ready(function () {
+    const $quantityWrappers = $(".quantity-wrapper");
+
+    function updateButtonStates($minusBtn, $plusBtn, value, maxStock) {
+        $minusBtn.prop("disabled", value < 1);
+        $plusBtn.prop("disabled", value >= maxStock);
+    }
+
+    // Quantity changes handling
+    $quantityWrappers.each(function () {
+        const $minusBtn = $(this).find(".minus");
+        const $plusBtn = $(this).find(".plus");
+        const $input = $(this).find(".quantity-input");
+        const maxStock = parseInt($input.attr("max"));
+
+        updateButtonStates(
+            $minusBtn,
+            $plusBtn,
+            parseInt($input.val()),
+            maxStock
+        );
+
+        $input.on("change", function () {
+            let value = parseInt($input.val());
+            if (value > maxStock) {
+                value = maxStock;
+                $input.val(value);
+            } else if (value < 1) {
+                value = 1;
+                $input.val(value);
+            }
+            hanldeQuantityUpdate($(this));
+            updateButtonStates(
+                $minusBtn,
+                $plusBtn,
+                parseInt($input.val()),
+                maxStock
+            );
+        });
+
+        $minusBtn.on("click", async function () {
+            let value = parseInt($input.val());
+
+            if (value === 1) {
+                await showMinQuantityAlert($input);
+                return;
+            }
+
+            value--;
+            $input.val(value);
+            hanldeQuantityUpdate($(this));
+            updateButtonStates(
+                $minusBtn,
+                $plusBtn,
+                parseInt($input.val()),
+                maxStock
+            );
+        });
+
+        $plusBtn.on("click", function () {
+            let value = parseInt($input.val());
+            if (value < maxStock) {
+                value++;
+                $input.val(value);
+                hanldeQuantityUpdate($(this));
+            }
+        });
+
+        $(".quantity-input").on("keydown", preventInvalidChars);
+        $(".quantity-input").on("input", function () {
+            validateQuantityInput(this);
+        });
+    });
+});
+
+function hanldeQuantityUpdate($input) {
+    const value = parseInt($input.val());
+    updateCartCount();
+    calculatePrice($input);
+    calculateCartTotal();
+    updateDiscountAmount($input);
+}
+
 function showMinQuantityAlert($input) {
     if (!$input || !($input instanceof jQuery)) {
         throw new TypeError("Invalid input parameter");
@@ -24,10 +106,8 @@ function showMinQuantityAlert($input) {
         confirmButtonText: "Xác nhận",
         cancelButtonText: "Hủy",
         focusConfirm: false, // Removes focus from the confirm button
-        allowOutsideClick: false
-
-    })
-    .then((result) => {
+        allowOutsideClick: false,
+    }).then((result) => {
         if (result.isConfirmed) {
             const cartItem = $input.closest(".each-cart-item");
             const cartId = cartItem.data("cart-id");
@@ -36,94 +116,34 @@ function showMinQuantityAlert($input) {
             if (!cartId || !productId) {
                 throw new Error("Missing cart or product ID");
             }
-            console.log("Debug - Attempting delete:", { cartId, productId }); 
+            console.log("Debug - Attempting delete:", { cartId, productId });
 
             return $.ajax({
                 url: `/cart/${cartId}/${productId}`,
                 type: "DELETE",
                 headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
                 },
                 dataType: "json"
-            })
-            .then((response) => {
+            }).then((response) => {
                 console.log("Server response:", response);
                 if (response.success) {
                     cartItem.remove();
                     updateCartCount();
                     calculateCartTotal();
                 }
-            })
-            .catch((error) => {
+            }).catch((error) => {
                 console.error(
-                    "Server Error Details:", error.responseJSON || error
-                )
+                    "Server Error Details:",
+                    error.responseJSON || error
+                );
             });
         }
-        return Promise.reject('User cancelled!');
+        return Promise.reject("User cancelled!");
     });
 }
-
-$(document).ready(function () {
-    const $quantityWrappers = $(".quantity-wrapper");
-
-    $quantityWrappers.each(function () {
-        const $minusBtn = $(this).find(".minus");
-        const $plusBtn = $(this).find(".plus");
-        const $input = $(this).find(".quantity-input");
-        const maxStock = parseInt($input.attr("max"));
-
-        function updateButtonStates(value) {
-            $minusBtn.prop("disabled", value < 1);
-            $plusBtn.prop("disabled", value >= maxStock);
-        }
-
-        updateButtonStates(parseInt($input.val()));
-
-        $input.on("change", function () {
-            let value = parseInt($input.val());
-            if (value > maxStock) {
-                value = maxStock;
-                $input.val(value);
-            } else if (value < 1) {
-                value = 1;
-                $input.val(value);
-            }
-            updateButtonStates(value);
-            calculatePrice($input);
-            updateCartCount();
-            calculateCartTotal();
-        });
-
-        $minusBtn.on("click", async function () {
-            let value = parseInt($input.val());
-
-            if (value === 1) {
-                await showMinQuantityAlert($input);
-                return;
-            }
-
-            value--;
-            $input.val(value);
-            updateButtonStates(value);
-            calculatePrice($input);
-            updateCartCount();
-            calculateCartTotal();
-        });
-
-        $plusBtn.on("click", function () {
-            let value = parseInt($input.val());
-            if (value < maxStock) {
-                value++;
-                $input.val(value);
-                updateButtonStates(value);
-                calculatePrice($input);
-                updateCartCount();
-                calculateCartTotal();
-            }
-        });
-    });
-});
 
 /* Validate quantity input*/
 function validateQuantityInput(input) {
@@ -143,11 +163,6 @@ function preventInvalidChars(e) {
         e.preventDefault();
     }
 }
-
-$(".quantity-input").on("keydown", preventInvalidChars);
-$(".quantity-input").on("input", function () {
-    validateQuantityInput(this);
-});
 
 function updateCartCount() {
     let totalQuantity = 0;
@@ -172,7 +187,7 @@ function calculatePrice($input) {
         // Validate inputs
         if (isNaN(quantity)) {
             console.error("Invalid inputs:", {
-                quantity,
+                quantity
             });
             return;
         }
@@ -188,7 +203,23 @@ function calculatePrice($input) {
     } catch (error) {
         console.error("Price calculation error:", error);
     }
-    // updateCartCount($item.data('cart-id'));
+}
+
+function updateDiscountAmount($input) {
+    const $item = $input.closest(".card-body");
+    const $discount = $item.find("#total-discount-amount");
+    const quantity = parseInt($input.val());
+    const unitPrice = parseInt(
+        $item.find(".price.total-uprice").data("unit-price")
+    );
+    const discountPercent = parseInt(
+        $item.find(".price.total-uprice").data("discount-percent")
+    );
+
+    if ($discount.length) {
+        const discountAmount = unitPrice * quantity * (discountPercent / 100);
+        $discount.text(formatPrice(discountAmount) + " VND");
+    }
 }
 
 function calculateCartTotal() {

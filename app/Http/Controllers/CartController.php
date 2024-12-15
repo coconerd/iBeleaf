@@ -11,23 +11,34 @@ use App\Models\Cart;
 class CartController extends Controller
 {
     private function getCartItems(User $user) : array{
-        $cartId = $user->getAttribute('cart_id');
-        $cartItems = CartItem::with(['product']) // Eloquent ORM: fetches all cart items with associated product
+        try {
+            $cartId = $user->getAttribute('cart_id');
+            $cartItems = CartItem::with(['product']) // Eloquent ORM: fetches all cart items with associated product
                 ->where('cart_id', $cartId) // Condition to ensure only cart items of the user are fetched
                 ->get();
+            
+            $totalPrice = $cartItems->sum('original_price');
+            $totalDiscountAmount = $cartItems->sum('discount_amount');
+            $totalDiscountedPrice = $totalPrice - $totalDiscountAmount;
+            $totalQuantity = $cartItems->sum('quantity');
 
-        $totalPrice = $cartItems->sum('original_price');
-        $totalDiscountAmount = $cartItems->sum('discount_amount');
-        $totalDiscountedPrice = $totalPrice - $totalDiscountAmount;
-        $totalQuantity = $cartItems->sum('quantity');
-
-        return [
+            return [
             'cartItems' => $cartItems,
             'totalPrice' => $totalPrice,
             'totalDiscountAmount' => $totalDiscountAmount,
             'totalDiscountedPrice' => $totalDiscountedPrice,
             'totalQuantity' => $totalQuantity
-        ];
+            ];
+        } catch (Exception $e) {
+            return [
+            'cartItems' => [],
+            'totalPrice' => 0,
+            'totalDiscountAmount' => 0,
+            'totalDiscountedPrice' => 0,
+            'totalQuantity' => 0,
+            'error' => 'Failed to fetch cart items!'
+            ];
+        }
     }
 
     public function showCartItems(Request $request)
@@ -37,7 +48,7 @@ class CartController extends Controller
                 $user = Auth::user(); // Gets User model instance
                 if ($user instanceof User) {
                     $cartItems = $this->getCartItems($user);
-                    return view('cart.index', $cartItems);
+                    return view('cart.items', $cartItems);
                 }
             }
         } catch (Exception $e) {
@@ -100,7 +111,7 @@ class CartController extends Controller
             $cartItem = CartItem::where('cart_id', $cartId)
                 ->where('product_id', $productId);
 
-            if ($cartItem instanceof CartItem ) {
+            if ($cartItem instanceof CartItem) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Cart item not found!'

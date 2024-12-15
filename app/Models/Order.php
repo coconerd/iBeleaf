@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Order
- * 
+ *
  * @property int $order_id
  * @property int|null $user_id
  * @property int|null $voucher_id
@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string|null $additional_note
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property User|null $user
  * @property Voucher|null $voucher
  * @property Collection|OrderItem[] $order_items

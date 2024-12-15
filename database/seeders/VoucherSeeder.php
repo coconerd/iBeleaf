@@ -42,7 +42,7 @@ class VoucherSeeder extends Seeder
             'description' => 'Mùa đông noel 2024 - sale 24% tất cả sản phẩm',
             'voucher_start_date' => now()->addDays(5),
             'voucher_end_date' => now()->addDays(35),
-            'value' => 25,
+            'value' => 24,
         ]);
     }
 }
