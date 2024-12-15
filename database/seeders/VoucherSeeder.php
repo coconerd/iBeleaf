@@ -13,7 +13,7 @@ class VoucherSeeder extends Seeder
         Voucher::create([
             'voucher_name' => 'WELCOME10',
             'voucher_type' => 'percentage',
-            'description' => 'Nhận được ưu đãi 10% cho đơn hàng đầu tiên',
+            'description' => 'Giảm ngay 10% cho lần mua sắm đầu tiên',
             'voucher_start_date' => now()->subDays(50),
             'voucher_end_date' => now()->addDays(60),
             'value' => 10,
@@ -22,7 +22,7 @@ class VoucherSeeder extends Seeder
         Voucher::create([
             'voucher_name' => 'SAVE50K',
             'voucher_type' => 'cash',
-            'description' => 'Giảm 50,000 VND với đơn trên 500,000 VND',
+            'description' => 'Giảm 50,000 VND với đơn hàng trên 500,000 VND',
             'voucher_start_date' => now(),
             'voucher_end_date' => now()->addDays(15),
             'value' => 50000,
@@ -31,7 +31,7 @@ class VoucherSeeder extends Seeder
         Voucher::create([
             'voucher_name' => 'TETDL2025',
             'voucher_type' => 'percentage',
-            'description' => 'Tết Dương Lịch 2025 - Giảm giá 25% cho tất cả sản phẩm',
+            'description' => 'Tết Dương Lịch 2025 - Giảm sốc 25% cho toàn bộ đơn hàng',
             'voucher_start_date' => now()->addDays(5),
             'voucher_end_date' => now()->addDays(55),
             'value' => 25,
@@ -39,7 +39,7 @@ class VoucherSeeder extends Seeder
         Voucher::create([
             'voucher_name' => 'NOEN24',
             'voucher_type' => 'percentage',
-            'description' => 'Mùa đông noel 2024 - sale 24% tất cả sản phẩm',
+            'description' => 'Noel giảm giá 24% cho mọi đơn hàng!',
             'voucher_start_date' => now()->addDays(5),
             'voucher_end_date' => now()->addDays(35),
             'value' => 24,
