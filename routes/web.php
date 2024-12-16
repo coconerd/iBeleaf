@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VoucherController;
@@ -100,8 +101,8 @@ Route::middleware(['auth'])->group(function(){
 		->name('cart.update');
 	Route::delete('/cart/{cartId}/{productId}', [CartController::class, 'removeCartItem'])
 		->name('cart.remove');
-	Route::get('/cart/shipping', [CartController::class, 'showShipping'])
-		->name('cart.shipping');
+	Route::get('/cart/checkout', [CheckOutController::class, 'showShippingForm'])
+		->name('cart.checkout');
 });
 
 //Voucher routes

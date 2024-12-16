@@ -119,10 +119,7 @@
             padding: 5px 10px;
             border-radius: 50%;
         }
-        .apply-btn {
-            background: #4a4a4a;
-            color: white;
-        }
+        
         .item-detail{
             margin-bottom: 2%;
         }
@@ -191,10 +188,22 @@
         .apply-btn {
             height: 100%;
             background-color: #1E4733;
+            color: white;
             height: 100%;
             border: 0.5px solid #1E4733;
             border-left: none;
             border-radius: 0 5px 5px 0;
+        }
+        .apply-btn:hover {
+            background-color: #0f5a29;
+            color: white;
+        }
+        .apply-btn:active,
+        .apply-btn:focus {
+            background-color: #1E4733 !important;
+            color: white !important;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(30, 71, 51, 0.2);
         }
         #voucher-apply{
             font-size: 16px;
@@ -285,6 +294,7 @@
         #voucher-error{
             font-size: 15px;
         }
+
     </style>
 @endsection
 
@@ -431,10 +441,10 @@
                         <div id="ship">
                             <i>(Chưa bao gồm phí vận chuyển)</i>
                         </div>
-                        <button class="btn btn-primary w-100">Thanh toán</button>
+                        <a href="{{ route('cart.checkout') }}" class="btn btn-primary w-100">Thanh toán</a>
                         <div class="text-center mt-3">
-                            <a href="{{ route('cart.shipping') }}" id="shipping-href" class="text-center">
-                                <u>Xác nhận thông tin giao hàng</u>
+                            <a id="shipping-href" class="text-center">
+                                <u>Tiếp tục mua hàng</u>
                             </a>
                         </div>
                     </div>
