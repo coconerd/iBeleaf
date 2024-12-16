@@ -206,7 +206,7 @@ CREATE TABLE `orders` (
   `deliver_time` datetime DEFAULT NULL,
   `payment_method` varchar(50) DEFAULT NULL,
   `is_paid` tinyint(3) UNSIGNED DEFAULT 0,
-  `status` enum('pending','delivering','delivered', 'cancelled', 'returned', 'refunded') DEFAULT 'pending',
+  `status` enum('pending','delivering','delivered', 'completed', 'cancelled', 'returned', 'refunded') DEFAULT 'pending',
   `additional_note` longtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
@@ -14363,7 +14363,7 @@ CREATE TABLE `vouchers` (
 --   `voucher_id` char(6) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `voucher_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `voucher_name` varchar(255) DEFAULT NULL,
-  `voucher_type` enum('percentage', 'cash') DEFAULT NULL,
+  `voucher_type` enum('percentage', 'cash', 'free_shipping', 'BOGO') DEFAULT NULL,
   `description` longtext DEFAULT NULL,
   `voucher_start_date` datetime DEFAULT NULL,
   `voucher_end_date` datetime DEFAULT NULL,
@@ -14585,3 +14585,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
