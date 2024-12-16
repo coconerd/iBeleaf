@@ -185,7 +185,31 @@ $('.feedbackBtn').on('click', function() {
         }
     @endforeach
     $('#feedbackItems').html(feedbackItems);
-    $('#feedbackModal').modal('show');
+    $('#feedbackModal').modal('show').appendTo('body');
+
+    // Handle star rating persistence
+    $('.star-rating input').on('change', function() {
+        var selectedRating = $(this).val();
+        $(this).siblings('label').each(function() {
+            var starValue = $(this).prev('input').val();
+            if (starValue <= selectedRating) {
+                $(this).addClass('selected');
+            } else {
+                $(this).removeClass('selected');
+            }
+        });
+    });
+
+    $('.star-rating label').hover(
+        function() {
+            $(this).addClass('hover');
+            $(this).prevAll().addClass('hover');
+        },
+        function() {
+            $(this).removeClass('hover');
+            $(this).prevAll().removeClass('hover');
+        }
+    );
 });
 
 function limitFiles(input, maxFiles) {

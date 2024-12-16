@@ -43,8 +43,8 @@
 			<!-- Shipping Orders -->
 		</div>
 		<div class="tab-pane fade deliveredTab" role="tabpanel" aria-labelledby="shipping-tab"
-		data-order-status="delivering">
-			<!-- Shipping Orders -->
+		data-order-status="delivered">
+			<!-- delivered Orders -->
 		</div>
 		<div class="tab-pane fade cancelledTab" role="tabpanel" aria-labelledby="cancelled-tab"
 		data-order-status="cancelled">

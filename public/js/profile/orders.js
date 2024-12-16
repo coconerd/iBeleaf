@@ -79,6 +79,8 @@ $(document).on('ordersTabLoaded', function (e) {
 			});
 		}
 	});
+
+	$('#feedbackModal').modal('show').appendTo('body');
 });
 
 
