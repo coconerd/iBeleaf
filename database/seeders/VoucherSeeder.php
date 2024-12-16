@@ -36,6 +36,7 @@ class VoucherSeeder extends Seeder
             'voucher_end_date' => now()->addDays(55),
             'value' => 25,
         ]);
+
         Voucher::create([
             'voucher_name' => 'NOEN24',
             'voucher_type' => 'percentage',
@@ -43,6 +44,24 @@ class VoucherSeeder extends Seeder
             'voucher_start_date' => now()->addDays(5),
             'voucher_end_date' => now()->addDays(35),
             'value' => 24,
+        ]);
+
+        Voucher::create([
+            'voucher_name' => 'FREESHIP300',
+            'voucher_type' => 'free_shipping',
+            'description' => 'Miễn phí vận chuyển cho đơn hàng từ 300,000 VND',
+            'voucher_start_date' => now()->addDays(1),
+            'voucher_end_date' => now()->addDays(45),
+            'value' => 0
+        ]);
+
+        Voucher::create([
+            'voucher_name' => 'BOGO2025',
+            'voucher_type' => 'BOGO',
+            'description' => 'Mua 1 tặng 1 mừng xuân Ất Tỵ',
+            'voucher_start_date' => now(),
+            'voucher_end_date' => now()->addDays(30),
+            'value' => 0,
         ]);
     }
 }
