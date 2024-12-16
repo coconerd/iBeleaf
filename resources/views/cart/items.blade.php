@@ -134,7 +134,7 @@
             font-weight: 600;
             color: #1E4733;
         }
-        .final-total-uprice{
+        .total-uprice{
             font-size: 18px;
         }
         .currency-label {
@@ -357,11 +357,12 @@
                                         <div class="row justify-content-start justify-content-md-end">
                                             <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm khuyến mãi)</span>
                                             <div class="d-flex align-items-center justify-content-md-end justify-content-start">
-                                                <span class="price final-total-uprice me-1"
+                                                <span class="price total-uprice me-1"
                                                     data-cart-id="{{ $item->cart_id }}"
                                                     data-unit-price="{{ $item->unit_price }}"
                                                     data-discount-percent="{{ $item->product->discount_percent ?? 0}}">
                                                     {{ number_format($item->discounted_price) }}
+                                                </span>
                                                 <span class="currency-label">VND</span>
                                             </div>
                                         </div>

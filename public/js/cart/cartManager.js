@@ -74,9 +74,8 @@ $(document).ready(function () {
 });
 
 function hanldeQuantityUpdate($input) {
-    const value = parseInt($input.val());
     updateCartCount();
-    calculatePrice($input);
+    calculatePrice($input.siblings('.quantity-input'));
     calculateCartTotal();
     updateDiscountAmount($input);
 }
@@ -184,10 +183,9 @@ function calculatePrice($input) {
         const discountPercent = parseInt($price.data("discount-percent"));
         const quantity = parseInt($input.val());
 
-        // Validate inputs
         if (isNaN(quantity)) {
             console.error("Invalid inputs:", {
-                quantity
+                quantity,
             });
             return;
         }
