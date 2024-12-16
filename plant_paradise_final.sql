@@ -206,7 +206,7 @@ CREATE TABLE `orders` (
   `deliver_time` datetime DEFAULT NULL,
   `payment_method` varchar(50) DEFAULT NULL,
   `is_paid` tinyint(3) UNSIGNED DEFAULT 0,
-  `status` enum('pending', 'delivering', 'delivered', 'cancelled', 'returned', 'refunded', 'completed') DEFAULT 'pending',
+  `status` enum('pending','delivering','delivered', 'cancelled', 'returned', 'refunded') DEFAULT 'pending',
   `additional_note` longtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
@@ -14372,6 +14372,19 @@ CREATE TABLE `vouchers` (
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `voucherrules`
+--
+CREATE TABLE `voucher_rules` (
+  `rule_id` int PRIMARY KEY AUTO_INCREMENT,
+  `rule_type` varchar(100),
+  `rule_value` text,
+  `voucher_id` int NOT NULL
+);
+
 --
 -- Indexes for dumped tables
 --
@@ -14561,9 +14574,14 @@ ALTER TABLE `wishlists`
   ADD CONSTRAINT `FK_Wishlists_Products` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_Wishlists_Users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
   
+
+--
+-- Constraints for table voucherrules
+--
+ALTER TABLE `voucher_rules`
+  ADD CONSTRAINT `FK_VoucherRules_Vouchers` FOREIGN KEY (`voucher_id`) REFERENCES `vouchers` (`voucher_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
