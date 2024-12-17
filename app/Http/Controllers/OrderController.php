@@ -25,19 +25,28 @@ class OrderController extends Controller
 
 	public function index(Request $request)
 	{
-		if ($request->has('status')) {
-			$status = explode(',', $request->query(key: 'status'));
-			Log::debug('OrderController@index: status is not empty: ' . json_encode($status));
-		} else {
-			Log::debug('OrderController@index: status is empty');
+		// if ($request->has('status')) {
+		// 	$status = explode(',', $request->query(key: 'status'));
+		// 	Log::debug('OrderController@index: status is not empty: ' . json_encode($status));
+		// } else {
+		// 	Log::debug('OrderController@index: status is empty');
+		// }
+
+		$queryParams = $request->query();
+
+		if (isset($queryParams['status'])) {
+			$queryParams['status'] = explode(',', $queryParams['status']);
 		}
+
+		Log::debug('OrderController@index: queryParams is: ', $queryParams);
+		
 		$user = Auth::user();
 		$orders = $this->orderService->getUserOrders(
 			$user->user_id,
-			!empty($status) ? ['status' => $status] : []
+			!empty($queryParams) ? $queryParams : []
 		);
 
-		Log::debug('Retrieved orders: ' ,  ($orders->toArray()));
+		Log::debug('Retrieved orders: ', ($orders->toArray()));
 		return response()->json([
 			'success' => true,
 			'html' => view('profile.ordersTab', compact('orders'))->render()
@@ -87,12 +96,12 @@ class OrderController extends Controller
 		return redirect()->back()->with('success', 'Cảm ơn bạn đã gửi đánh giá!');
 	}
 
-	public function cancel($orderId) 
+	public function cancel($orderId)
 	{
 		try {
 			Log::debug('orderId is ', [$orderId]);
 			$order = Order::findOrFail($orderId);
-			
+
 			// Check if order belongs to authenticated user
 			if ($order->user_id !== Auth::id()) {
 				return response()->json([
@@ -173,5 +182,20 @@ class OrderController extends Controller
 			Log::error('OrderController@submitRefundReturn: ' . $e);
 			return redirect()->back()->with('error', 'Có lỗi xảy ra khi gửi yêu cầu.');
 		}
+	}
+
+	public function showDetail($order_id)
+	{
+		$order = Order::with(['order_items.product.product_images', 'voucher'])
+			->findOrFail($order_id);
+
+		$discount_amount = 0;
+		if (!empty($order->voucher)) {
+			$discount_amount = $order->voucher->voucher_type === 'cash'
+				? $order->voucher->value
+				: $order->total_price * $order->voucher->value / 100;
+		}
+
+		return view('orders.detail', compact('order', 'discount_amount'));
 	}
 }

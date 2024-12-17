@@ -7,11 +7,11 @@
 		</li>
 		<li class="nav-item" role="presentation">
 			<button class="nav-link pendingTab" data-bs-toggle="tab" data-order-status="pending" type="button"
-				role="tab" aria-controls="pending" aria-selected="false">Chờ lấy hàng</button>
+				role="tab" aria-controls="pending" aria-selected="false">Đang xử lý</button>
 		</li>
 		<li class="nav-item" role="presentation">
 			<button class="nav-link deliveringTab" data-bs-toggle="tab" data-order-status="delivering" type="button"
-				role="tab" aria-controls="delivering" aria-selected="false">Chờ giao hàng</button>
+				role="tab" aria-controls="delivering" aria-selected="false">Đang giao hàng</button>
 		</li>
 		<li class="nav-item" role="presentation">
 			<button class="nav-link deliveredTab" data-bs-toggle="tab" data-order-status="delivered" type="button"
@@ -34,15 +34,15 @@
 			data-order-status="">
 		</div>
 		<!-- Other Tabs (Repeat similar structure for other statuses) -->
-		<div class="tab-pane fade pendingTab" role="tabpanel" aria-labelledby="pending-payment-tab"
+		<div class="tab-pane fade pendingTab" role="tabpanel" aria-labelledby="pending-tab"
 		data-order-status="pending">
 			<!-- Pending Orders -->
 		</div>
-		<div class="tab-pane fade deliveringTab" role="tabpanel" aria-labelledby="shipping-tab"
+		<div class="tab-pane fade deliveringTab" role="tabpanel" aria-labelledby="delivering-tab"
 		data-order-status="delivering">
 			<!-- Shipping Orders -->
 		</div>
-		<div class="tab-pane fade deliveredTab" role="tabpanel" aria-labelledby="shipping-tab"
+		<div class="tab-pane fade deliveredTab" role="tabpanel" aria-labelledby="delivered-tab"
 		data-order-status="delivered">
 			<!-- delivered Orders -->
 		</div>

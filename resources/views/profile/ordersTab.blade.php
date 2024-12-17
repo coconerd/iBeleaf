@@ -1,18 +1,22 @@
 @foreach($orders as $order)
     <div class="card mb-4 order-card" style="border-radius: 12px;" data-order-id="{{ $order->order_id }}">
-        <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex justify-content-between align-items-center"
+			onmouseup="window.location.href='{{ route('orders.detail', ['order_id' => $order->order_id]) }}'"
+		>
         @switch($order->status)
             @case('pending')
-            <div>
-                <i class="bi bi-box me-1" style="font-size: 1.1rem; color: #949A90;"></i>
-                <span class="text-uppercase text" style="color: #949A90;">Chờ lấy hàng</span>
-            </div>
+				<div>
+            	    <span class="text-uppercase text" style="color: #949A90;">
+						<i class="bi bi-box me-1" style="font-size: 1.1rem; color: #949A90;"></i>
+						Đang xử lý
+					</span>
+            	</div>
                 @break
             @case('delivering')
-            <div>
-                <i class="bi bi-truck me-1" style="font-size: 1.1rem; color: #435E53;"></i>
-                <span class="text-uppercase" style="color: #435E53;">Đang giao</span>
-            </div>
+            	<div>
+            	    <i class="bi bi-truck me-1" style="font-size: 1.1rem; color: #435E53;"></i>
+            	    <span class="text-uppercase" style="color: #435E53;">Đang giao</span>
+            	</div>
                 @break
             @case('delivered')
                 <div class="d-flex d-row">
@@ -54,7 +58,8 @@
                     <div class="d-flex product-item" data-order-items-id="{{ $item->order_items_id }}">
                         <!-- Product Image -->
                         <img src="{{ $item->product->product_images[0]->product_image_url ?? asset('images/placeholder-plant.jpg') }}"
-                            alt="Product Image" class="me-3 product-image-thumbnail" style="width: 80px; height: auto; border-radius: 3px;">
+                            alt="Product Image" class="me-3 product-image-thumbnail" style="width: 80px; height: auto; border-radius: 3px;"
+							onmouseup="window.location.href='{{ route('orders.detail', ['order_id' => $order->order_id]) }}'">
                         <!-- Product Details -->
                         <div>
                             <h6 class="mb-1 product-short-description" onmouseup="window.location.href='{{
@@ -109,7 +114,7 @@
                     <button class="btn btn-sm rounded" id="repurchaseBtn" style="border: 1px solid black;">Mua lại</button>
                     <button class="btn btn-sm rounded refundReturnBtn" style="border: 1px solid black;">Trả hàng/ Hoàn tiền</button>
                 @elseif ($order->status === "pending")
-                    <button class="btn btn-sm btn-outline-warning" id="cancelBtn" style="">Hủy đơn</button>
+                    <button class="btn btn-sm btn-outline-warning" id="cancelBtn">Hủy đơn</button>
                 @endif
             </div>
         </div>
@@ -118,10 +123,9 @@
 
 @if($orders->isEmpty())
     <div class="empty-state">
-        <i class="bi bi-bag fs-1 mb-3" style="color: #435E53;"></i>
-        <h5 class="fw-light">Bạn chưa có đơn hàng nào</h5>
+        <h5 class="mt-5 fw-light">Bạn chưa có đơn hàng nào</h5>
         <p class="text-muted">Hãy bắt đầu mua sắm để tạo đơn hàng đầu tiên của bạn</p>
-        <a href="{{ route('products.index') }}" class="btn btn-primary mt-2">
+        <a href="/" class="btn btn-primary mt-2">
             Khám phá sản phẩm
         </a>
     </div>
@@ -161,7 +165,7 @@
             </div>
             <form action="{{ route('orders.submitRefundReturn') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="modal-body p-3 ">
+                <div class="modal-body p-4">
                     <input type="hidden" name="order_id" class="refundReturnOrderId">
 
                     <!-- Select request type -->

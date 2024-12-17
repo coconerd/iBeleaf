@@ -61,3 +61,7 @@
 	color: #C78B5E;
 }
 
+button.nav-link.active {
+	font-weight: bold;
+}
+
