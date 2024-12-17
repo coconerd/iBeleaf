@@ -1,0 +1,87 @@
+
+.back-link {
+    color: #435E53;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.back-link:hover {
+    color: #C78B5E;
+}
+
+.order-card, .summary-card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border-radius: 12px;
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 1rem 1.5rem;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.badge-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-delivering {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.badge-delivered {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-item {
+    transition: background-color 0.15s ease;
+}
+
+.product-item:hover {
+    background-color: #f8f9fa;
+}
+
+.summary-card {
+    position: sticky;
+    top: 20px;
+}
+
+.summary-item {
+    color: #6c757d;
+}
+
+.summary-total {
+    color: #435E53;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .summary-card {
+        margin-top: 1rem;
+        position: static;
+    }
+}
