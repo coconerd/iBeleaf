@@ -30,7 +30,7 @@ Route::get('/', function () {
 
 
 /**
- * @notice Authentication routes
+ * @notice Auth routes
  */
 // Login
 Route::get('/auth', [AuthController::class, 'showLoginForm'])->name('auth.index');
@@ -60,22 +60,15 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::get('/profile/current-password', [ProfileController::class, 'showCurrentPasswordForm'])->name('profile.currentPassword');
 	Route::post('/profile/currentPassword-verify', [ProfileController::class, 'handleCurrentPasswordVerification'])->name('profile.verifyCurrentPassword');
-	// Route::get('/profile/form-newpassword', [ProfileController::class, 'showVerifyNewPasswordForm'])->name('profile.showVerifyNewPasswordForm');
-	// Route::get('/get-showVerifyNewPasswordForm-url', function() {
-	// 	return response()->json([
-	// 		'url' => route('profile.showVerifyNewPasswordForm')
-	// 	]);
-	// });
 	Route::post('/profile/verify-newpassword', [ProfileController::class, 'handleVerifyNewPassword'])->name('profile.verifyNewPassword');
 
-	Route::get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
-	Route::get('/profile/returns', [ProfileController::class, 'showReturnsForm'])->name('profile.returns');
+	Route::middleware(['role:0'])->get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
+	Route::middleware(['role:0'])->get('/profile/returns', [ProfileController::class, 'showReturnsForm'])->name('profile.returns');
 });
 
 // Order routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-	Route::get('/orders/{order_id}', [OrderController::class, 'show'])->name('orders.show');
 	Route::get('/orders/{order_id}/detail', [OrderController::class, 'showDetail'])->name('orders.detail');
 	Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 	Route::post('/orders/update', [OrderController::class, 'update'])->name('orders.update');
@@ -88,12 +81,12 @@ Route::middleware(['auth'])->group(function () {
 // Product routes
 Route::get('/product/{product_id}', [ProductController::class, 'show'])
 	->name('product.show');
-Route::middleware(['auth'])
+Route::middleware(['auth', 'role:0'])
 	->post('/product/submit-feedback', [ProductController::class, 'submitFeedback'])
 	->name('product.submitFeedback');
 
 // Wishlist routes
-Route::middleware(['auth'])->group(function (): void {
+Route::middleware(['auth', 'role:0'])->group(function (): void {
 	Route::get('/wishlist', [WishlistController::class, 'index'])->name(name: 'wishlist.index');
 	Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
 	Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
@@ -103,7 +96,7 @@ Route::middleware(['auth'])->group(function (): void {
 Route::get('/feedback/{product_id}', [FeedbackController::class, 'index'])->name('feedback.index');
 
 // Cart routes
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::get('/cart/items', [CartController::class, 'showCartItems'])
 		->name('cart.items');
 	Route::post('/cart/update', [CartController::class, 'updateItemsCount'])
@@ -114,7 +107,7 @@ Route::middleware(['auth'])->group(function(){
 		->name('cart.checkout');
 });
 
-//Voucher routes
+// Voucher routes
 Route::middleware(['auth'])->group(function (): void {
 	Route::post('voucher/validate', [VoucherController::class, 'validateVoucher'])
 	->name('voucher.validate');
