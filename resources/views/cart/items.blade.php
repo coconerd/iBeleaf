@@ -75,6 +75,11 @@
                                                 oninput="validateQuantity(this)"
                                                 data-discount-percentage="{{ $item->product->discount_percentage }}">
                                         <button class="quantity-btn plus">+</button>
+
+                                        <i class="fa-solid fa-trash-can ms-2 remove-item-btn fs-5" 
+                                            style="color: #c78b5e; cursor: pointer;"
+                                            data-cart-id="{{ $item->cart_id }}"
+                                            data-product-name="{{ $item->product->name }}"></i>
                                     </div>
                                     
                                     <div class="temp-final-total-price-price col-12 col-sm-12 col-md-8">

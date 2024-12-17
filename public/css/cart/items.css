@@ -45,6 +45,39 @@
 	color: #106B32;
 	font-weight: 600;
 }
+.remove-item-btn {
+    margin-left: 2rem !important;
+}
+.remove-item-btn {
+    margin-left: 2rem !important;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect - gentle bounce and color change */
+.remove-item-btn:hover {
+    transform: scale(1.4);
+    color: #b06b3e !important; /* Darker shade of the original color */
+    cursor: pointer;
+}
+
+/* Click effect - shrink */
+.remove-item-btn:active {
+    transform: scale(0.95);
+}
+
+/* Optional: Add a gentle shake animation */
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.remove-item-btn:hover {
+    animation: shake 0.5s ease;
+}
+
 /* .quantity-btn.plus::disable{
 	cursor: not-allowed;
 	color: #EBEBEC;
@@ -54,6 +87,7 @@
 	display: flex;
 	align-items: center;
 	margin-top: 0.5rem;
+	position: relative;
 }
 .stock-error {
 	font-size: 12px;
@@ -63,10 +97,34 @@
 	transition: opacity 0.3s ease;
 }
 /*product image and discount label*/
+@keyframes gentlePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+.product-image {
+    max-width: 184px;
+    max-height: 184px;
+    border-radius: 15px;
+    z-index: 0;
+    /* transition: all 0.3s ease; */
+    border: 2px solid #e8d5c4;  /* Add soft border color */
+}
+
+/* Add hover effect for the border */
+/* .image-container:hover .product-image {
+    border-color: #c78b5e;  
+    transform: scale(1.05);
+	top: -7px; 
+    left: -5px;
+}*/
+.each-cart-item:hover {
+    animation: gentlePulse 2s infinite;
+} 
 .product-image {
 	max-width: 184px;
 	max-height: 184px;
-	border-radius: 15px;
+	border-radius: 20px;
 	z-index: 0;
 }
 .image-container {
@@ -87,6 +145,7 @@
 	top: -5px;
 	left: -3px;
 	z-index: 1;
+	transition: all 0.9s ease;
 }
 .discount-label::after {
 	content: '';
@@ -99,6 +158,7 @@
 	border-top-left-radius: 24px; /* Curve */
 	border-bottom-left-radius: 30px; /* Curve */
 	z-index: -1;
+	transition: all 0.9s ease;
 }
 /**/
 .wishlist-btn {
@@ -109,7 +169,12 @@
 }
 
 .item-detail{
+	color: #1E4733;
 	margin-bottom: 2%;
+	margin-left: 4px;
+}
+.cart-control {
+	margin-left: 1rem;
 }
 .unit-price{
 	margin-top: 5px;
@@ -117,7 +182,7 @@
 .price {
 	font-size: 15px;
 	font-weight: 600;
-	color: #1E4733;
+	color: #1E362D;
 }
 .total-uprice{
 	font-size: 18px;

@@ -70,8 +70,99 @@ $(document).ready(function () {
         $(".quantity-input").on("input", function () {
             validateQuantityInput(this);
         });
+
+        $('.remove-item-btn').on('click', function() {
+            const cartItem = $(this).closest('.each-cart-item');
+            const cartId = cartItem.data('cart-id');
+            const productId = cartItem.data('product-id');
+            const productName = $(this).data('product-name');
+
+            Swal.fire({
+                title: '<h4 style="color: #1E362D; font-size: 24px;">Xác nhận xóa</h4>',
+                html: `
+            <div style="color: #666; font-size: 16px; margin: 15px 0;">
+                Bạn có chắc chắn muốn xóa <span style="color: #1E362D; font-weight: 600;">${productName}</span> khỏi giỏ hàng?
+            </div>
+        `,
+                icon: null,
+                showCancelButton: true,
+                confirmButtonColor: "#c78b5e",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: '<i class="fas fa-trash-alt"></i> Xóa',
+                cancelButtonText: "Hủy",
+                customClass: {
+                    popup: "custom-swal-popup",
+                    confirmButton: "custom-confirm-button",
+                    cancelButton: "custom-cancel-button",
+                },
+                buttonsStyling: true,
+                reverseButtons: true,
+                padding: "2em",
+                background: "#fff",
+                borderRadius: "15px",
+                showClass: {
+                    popup: "animate__animated animate__fadeInDown",
+                },
+                hideClass: {
+                    popup: "animate__animated animate__fadeOutUp",
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/cart/${cartId}/${productId}`,
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                "content"
+                            ),
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                // Remove the item from DOM
+                                cartItem.fadeOut(300, function () {
+                                    $(this).remove();
+                                    updateCartCount();
+                                    calculateCartTotal();
+                                });
+
+                                // Success notification
+                                Swal.fire({
+                                    title: '<h4 style="color: #1E362D;">Đã xóa thành công!</h4>',
+                                    html: '<div style="color: #666;">Sản phẩm đã được xóa khỏi giỏ hàng</div>',
+                                    icon: "success",
+                                    timer: 1500,
+                                    showConfirmButton: false,
+                                    customClass: {
+                                        popup: "custom-swal-popup",
+                                    },
+                                });
+
+                                // If cart is empty after removal, reload the page
+                                if ($(".each-cart-item").length === 1) {
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                }
+                            }
+                        },
+                        error: function (xhr) {
+                            Swal.fire({
+                                title: '<h4 style="color: #dc3545;">Lỗi!</h4>',
+                                html: '<div style="color: #666;">Có lỗi xảy ra khi xóa sản phẩm</div>',
+                                icon: "error",
+                                customClass: {
+                                    popup: "custom-swal-popup",
+                                },
+                            });
+                            console.error("Error:", xhr.responseJSON);
+                        },
+                    });
+                }
+            });
+        });
     });
 });
+
 
 function hanldeQuantityUpdate($input) {
     updateCartCount();
@@ -243,7 +334,7 @@ function calculateCartTotal() {
 
         total += subTotal;
     });
-    console.log('Final total Price: ', total);
+    // console.log('Final total Price: ', total);
     $("#first-total-price").text(formatPrice(total) + " VND");
     $("#final-price").text(formatPrice(total) + " VND");
 }
