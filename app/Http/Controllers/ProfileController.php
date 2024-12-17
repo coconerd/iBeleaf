@@ -125,8 +125,8 @@ class ProfileController extends Controller
 	{
 		// return view('profile.index'); /* Dùng này thì trong file index dùng trực tiếp auth()->user() thay cho biến $user */  ==> cách này không khuyến khích vì vi phạm nguyên tắc MVC
 		/* auth()->user() thì luôn khả dụng, không cần import          ==> khuyến khích sử dụng
-							 Auth::user() thì cần import Illuminate\Support\Facades\Auth;   ==> dễ bị lỗi các trường thông tin user bị null mặc dù user đã đăng nhập rồi
-						  */
+										 Auth::user() thì cần import Illuminate\Support\Facades\Auth;   ==> dễ bị lỗi các trường thông tin user bị null mặc dù user đã đăng nhập rồi
+									  */
 		$user = auth()->user();
 		return view('profile.index', compact(var_name: 'user'));
 	}
@@ -229,7 +229,7 @@ class ProfileController extends Controller
 		$currentUser = auth()->user();
 
 		/* Sử dụng hàm $request->validate thì khi validate phát hiện có lỗi sẽ tự động điều hướng về trang trước đó. 
-						  Nếu validate hợp lệ thì trả về kết quả đã được validate */
+									  Nếu validate hợp lệ thì trả về kết quả đã được validate */
 		$validatedData = $request->validate([
 			'username' => ['required', new UsernameRule($currentUser)],
 			'fullname' => ['required', new FullnameRule()],
@@ -324,8 +324,8 @@ class ProfileController extends Controller
 
 
 	/* Xử lí yêu cầu AJAX từ sự kiện javascript (code ở file homePage.js) 
-			 Xử lý sự kiện khi nhấn vào dropdown "Đổi mật khẩu" ở giao diện trang hồ sơ
-			 */
+				   Xử lý sự kiện khi nhấn vào dropdown "Đổi mật khẩu" ở giao diện trang hồ sơ
+				   */
 	public function showCurrentPasswordForm(Request $request)
 	{
 		// Kiểm tra nếu là yêu cầu AJAX
@@ -348,7 +348,7 @@ class ProfileController extends Controller
 		// dd($request->all()); // in ra dữ liệu gửi đến server khi nhấn nút Lưu từ form
 
 		/* Sử dụng hàm $request->validate thì khi validate phát hiện có lỗi sẽ tự động điều hướng về trang trước đó. 
-						  Nếu validate hợp lệ thì trả về kết quả đã được validate */
+									  Nếu validate hợp lệ thì trả về kết quả đã được validate */
 
 		// $validatedData = $request->validate([
 		//     'password' => [
@@ -411,8 +411,8 @@ class ProfileController extends Controller
 
 
 	/* Xử lí yêu cầu AJAX từ sự kiện javascript (code ở file currentPasswordPage.js) 
-			 Xử lý sự kiện khi nhấn vào nút XÁC NHẬN ở giao diện nhập mật khẩu hiện tại
-			 */
+				   Xử lý sự kiện khi nhấn vào nút XÁC NHẬN ở giao diện nhập mật khẩu hiện tại
+				   */
 	// public function showVerifyNewPasswordForm(Request $request)
 	// {
 	//     // Kiểm tra nếu là yêu cầu AJAX
@@ -493,8 +493,8 @@ class ProfileController extends Controller
 
 
 	/* Xử lí yêu cầu AJAX từ sự kiện javascript (code ở file homePage.js) 
-			 Xử lý sự kiện khi nhấn vào dropdown "Đơn mua" ở giao diện trang hồ sơ
-			 */
+				   Xử lý sự kiện khi nhấn vào dropdown "Đơn mua" ở giao diện trang hồ sơ
+				   */
 	public function showOrdersForm(Request $request)
 	{
 		if ($request->ajax()) {
@@ -510,8 +510,16 @@ class ProfileController extends Controller
 	{
 		if ($request->ajax()) {
 			$returnRefundItems = ReturnRefundItem::where('user_id', auth()->id())
+				->with([
+					'order_item.product.product_images' => function ($query) {
+						$query->where('image_type', 1)
+							->select('product_image_url', 'product_id');
+					}
+				])
 				->orderBy('created_at', 'desc')
 				->get();
+
+			Log::debug('Return refund items: ' . json_encode($returnRefundItems));
 			return response()->json([
 				'html' => view('profile.returns', compact('returnRefundItems'))->render()
 			]);

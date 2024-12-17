@@ -46,7 +46,7 @@
                         <div class="col-md-8">
                             <h6 class="card-subtitle mb-2">Mã đơn hàng: {{ $item->order_item->order_id }}</h6>
                             <div class="product-info d-flex align-items-center mb-3">
-                                <img src="{{ $item->order_item->product->product_images->first()->image_url ?? 'default.jpg' }}" 
+                                <img src="{{ $item->order_item->product->product_images->first()->product_image_url ?? asset('images/placeholder-plant.jpg') }}" 
                                     class="product-image-thumbnail me-3" alt="Product image">
                                 <div>
                                     <h6 class="mb-1">{{ $item->order_item->product->name }}</h6>
@@ -54,7 +54,28 @@
                                 </div>
                             </div>
                             <div class="reason mt-2">
-                                <p class="mb-1"><strong>Lý do:</strong> {{ $item->reason_tag }}</p>
+                                <p class="mb-1"><strong>Lý do:</strong>
+								@switch ($item->reason_tag)
+									@case('wrong_product')
+										<span> Sai sản phẩm</span>
+										@break
+									@case('damaged')
+										<span>Sản phẩm bị hư/hỏng</span>
+										@break	
+									@case('not_as_described')
+										<span>Sản phẩm không đúng với mô tả</span>
+										@break	
+									@case('quality_issue')
+										<span>Không hài lòng về chất lượng</span>
+										@break
+									@case('change_mind')
+										<span>Muốn đổi sang mặt hàng khác</span>
+										@break	
+									@default('other')
+										<span>Lý do khác</span>
+										@break
+								@endswitch	
+								</p>
                                 <p class="mb-0"><small>{{ $item->reason_description }}</small></p>
                             </div>
                         </div>
@@ -64,7 +85,7 @@
                                     <p class="mb-2"><small>Hình ảnh đính kèm:</small></p>
                                     <div class="d-flex flex-wrap gap-2">
                                         @foreach($item->refund_return_images as $image)
-                                            <img src="data:image/jpeg;base64,{{ base64_encode($image->refund_return_image) }}" 
+                                            <img src="data:image/jpeg;base64,{{ base64_encode($image->refund_return_image) ?? asset('images/placeholder-plant.jpg') }}" 
                                                 class="img-thumbnail" alt="Return image"
                                                 style="width: 60px; height: 60px; object-fit: cover;"
                                                 onclick="showFullImage(this.src)">
