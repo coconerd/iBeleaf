@@ -1,5 +1,5 @@
 <!-- Top Header with time and contact info -->
-<div class="header-top py-1">
+<div class="header-top py-2">
 	<div class="container d-flex justify-content-between align-items-center">
 		<div>
 			<i class="bi bi-clock me-1"></i> 08:30 - 22:00
@@ -16,7 +16,7 @@
 					<a class="text-white" href="{{ url('/auth/login') }}">Đăng nhập</a>
 				@endif
 			</span>
-			<i class="bi bi-person" onclick="window.location.href='{{ route('profile.homePage') }}'"></i>
+			<i class="fa-solid fa-user" onclick="window.location.href='{{ route('profile.homePage') }}'"></i>
 		</div>
 	</div>
 </div>
