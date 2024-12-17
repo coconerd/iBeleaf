@@ -72,7 +72,8 @@
                                                 value="{{ $item->quantity }}"
                                                 min="1" max="{{ $item->product->stock_quantity }}"
                                                 data-max-stock="{{ $item->product->stock_quantity }}"
-                                                oninput="validateQuantity(this)">
+                                                oninput="validateQuantity(this)"
+                                                data-discount-percentage="{{ $item->product->discount_percentage }}">
                                         <button class="quantity-btn plus">+</button>
                                     </div>
                                     

@@ -80,7 +80,9 @@ function hanldeQuantityUpdate($input) {
         : $input.siblings(".quantity-input");
     calculatePrice($quantityInput);
     calculateCartTotal();
-    updateDiscountAmount($quantityInput);
+    if ($input.data('discount-percentage') > 0) {
+        updateDiscountAmount($quantityInput);
+    }
 }
 
 function showMinQuantityAlert($input) {
@@ -241,10 +243,12 @@ function calculateCartTotal() {
 
         total += subTotal;
     });
-
+    console.log('Final total Price: ', total);
     $("#first-total-price").text(formatPrice(total) + " VND");
+    $("#final-price").text(formatPrice(total) + " VND");
 }
 
 function formatPrice(price) {
     return new Intl.NumberFormat("VND").format(price);
 }
+

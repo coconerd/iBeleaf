@@ -75,9 +75,8 @@ function validateVoucherName(name) {
                 );
                 $("#valid-voucher-box").slideDown(80);
                 $("#voucher-error").slideUp(80);
-                $("#final-price").text(
-                    formatPrice(cartTotal - voucherDiscount) + " VND"
-                );
+
+                $("#final-price").text(formatPrice(cartTotal - voucherDiscount));
             } else {
                 handleVoucherError(response);
                 return;
