@@ -55,4 +55,8 @@ class Voucher extends Model
 	{
 		return $this->hasMany(Order::class);
 	}
+	public function voucherRules()
+    {
+        return $this->hasMany(VoucherRule::class, 'voucher_id', 'voucher_id');
+    }
 }
