@@ -206,7 +206,7 @@ CREATE TABLE `orders` (
   `deliver_time` datetime DEFAULT NULL,
   `payment_method` varchar(50) DEFAULT NULL,
   `is_paid` tinyint(3) UNSIGNED DEFAULT 0,
-  `status` enum('pending','delivering','delivered', 'completed', 'cancelled', 'returned', 'refunded') DEFAULT 'pending',
+  `status` enum('pending','delivering','delivered', 'cancelled', 'returned', 'refunded') DEFAULT 'pending',
   `additional_note` longtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
