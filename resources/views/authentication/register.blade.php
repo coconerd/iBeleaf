@@ -165,12 +165,8 @@
 						<input type="email" class="form-control" placeholder="Địa chỉ email" name="email">
 					</div>
 					<div class="mb-3">
-						<div class="input-group">
-							<input type="password" class="form-control" placeholder="Mật khẩu" name="password" id="password">
-							<span class="input-group-text" style="border-left: none;" onclick="togglePasswordVisibility()">
-								<i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
-							</span>
-						</div>
+						<input type="password" class="form-control" placeholder="Mật khẩu" name="password"
+							id="password">
 					</div>
 					<button type="submit" class="btn btn-login">Đăng ký</button>
 					<div class="text-center mt-3">
@@ -191,21 +187,4 @@
 		</div>
 	</div>
 </div>
-@endsection
-@section('body-script')
-<script>
-    function togglePasswordVisibility() {
-        const passwordField = document.getElementById('password');
-        const icon = document.getElementById('togglePasswordIcon');
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            icon.classList.remove('bi-eye-slash');
-            icon.classList.add('bi-eye');
-        } else {
-            passwordField.type = 'password';
-            icon.classList.remove('bi-eye');
-            icon.classList.add('bi-eye-slash');
-        }
-    }
-</script>
 @endsection

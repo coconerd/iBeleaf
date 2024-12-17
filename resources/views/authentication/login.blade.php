@@ -133,13 +133,13 @@
 			<h2>Welcome Back!</h2>
 			<p>We source the healthiest and most beautiful plants to bring natures finest to your home. We provide
 				expert care advice to ensure your plants thrive.</p>
-			<button onclick="event.preventDefault(); document.getElementById('google-login-form').submit();" type="submit"
-				class="btn btn-google d-flex align-items-center justify-content-center">
+			<button onclick="event.preventDefault(); document.getElementById('google-login-form').submit();"
+				type="submit" class="btn btn-google d-flex align-items-center justify-content-center">
 				<i class="bi bi-google"></i> Đăng nhập với Google
 			</button>
 			<span>or</span>
-			<button onclick="event.preventDefault(); document.getElementById('facebook-login-form').submit();" type="submit"
-				class="btn btn-google d-flex align-items-center justify-content-center">
+			<button onclick="event.preventDefault(); document.getElementById('facebook-login-form').submit();"
+				type="submit" class="btn btn-google d-flex align-items-center justify-content-center">
 				<i class="bi bi-facebook"></i> Đăng nhập với Facebook
 			</button>
 			<form id="google-login-form" action="/auth/login/google" method="POST" style="display: none;">
@@ -162,12 +162,8 @@
 						<input type="email" class="form-control" placeholder="Địa chỉ email" name="email">
 					</div>
 					<div class="mb-3">
-						<div class="input-group">
-							<input type="password" style="border: none;" class="form-control" placeholder="Mật khẩu" name="password" id="password">
-							<span class="input-group-text" style="border-left: none;" onclick="togglePasswordVisibility()">
-								<i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
-							</span>
-						</div>
+						<input type="password" style="border: none;" class="form-control" placeholder="Mật khẩu"
+							name="password" id="password">
 					</div>
 					<div class="d-flex justify-content-between">
 						<span class="forgot-password">Quên mật khẩu?</span>
@@ -197,21 +193,4 @@
 		</div>
 	</div>
 </div>
-@endsection
-@section('body-script')
-<script>
-    function togglePasswordVisibility() {
-        const passwordField = document.getElementById('password');
-        const icon = document.getElementById('togglePasswordIcon');
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            icon.classList.remove('bi-eye-slash');
-            icon.classList.add('bi-eye');
-        } else {
-            passwordField.type = 'password';
-            icon.classList.remove('bi-eye');
-            icon.classList.add('bi-eye-slash');
-        }
-    }
-</script>
 @endsection
