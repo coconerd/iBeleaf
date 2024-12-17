@@ -15,8 +15,8 @@ class VoucherController extends Controller
 	private const ERROR_CODES = [
         'INVALID' => 'Voucher không hợp lệ!',
         'EXPIRED' => 'Voucher đã hết hạn sử dụng!',
-        'FIRST_USED' => 'Voucher chỉ áp dụng cho đơn hàng đầu tiên!',
-        'MIN_PRICE' => 'Voucher chỉ áp dụng cho đơn hàng từ :value đồng trở lên!'
+        'FIRST_ORDER' => 'Voucher chỉ áp dụng cho khách hàng mới!',
+		'MIN_PRICE' => '' // Hanlde it in JS
     ];
 
 	private function formatResponse($valid, $data = [])
@@ -27,7 +27,7 @@ class VoucherController extends Controller
 	public function validateVoucher(Request $request){
 		$code = $request->input('voucher_name');
 		$cartTotal = $request->input('cart_total');
-		$userId = Auth::id();
+		$userId = Auth::user()->user_id;
 
 		$voucher = Voucher::with('voucherRules')
 			->where('voucher_name', $code)
@@ -42,20 +42,28 @@ class VoucherController extends Controller
             ]);
         }
 		
-		// Get and validate voucher rules
+		// Validate voucher rules
 		foreach ($voucher->voucherRules as $rule) {
 			try {
-				$validationRule = $rule->validateRule($userId, $cartTotal);
-				if (!$validationRule['valid']) {
+				$ruleController = new VoucherRuleController($rule->rule_type, $rule->rule_value);
+				$validationRule = $ruleController->validateRule($userId, $cartTotal);
+
+				if (!$validationRule['is_valid']) {
 					return $this->formatResponse(false, [
-                        'ecode' => 'INVALID',
-                        'voucher_type' => $voucher->voucher_type,
-                        'message' => self::ERROR_CODES[$validationRule['rule']],
-                        'cart_total' => $cartTotal
+						'ecode' => $validationRule['rule_type'],
+						'voucher_type' => $voucher->voucher_type,
+						'message' => self::ERROR_CODES[$validationRule['rule_type']],
+						'cart_total' => $cartTotal,
+						'min_price' => $validationRule['min_price'] ?? 0,
+						'order_count' => $validationRule['order_count'] ?? 0
                     ]);
 				}
 			} catch (\Exception $e) {
 				Log::error('Invalid voucher code: ' . $e->getMessage());
+				return $this->formatResponse(false, [
+					'ecode' => 'INVALID',
+					'message' => self::ERROR_CODES['INVALID']
+				]);
 			}
 		}
 
@@ -63,7 +71,6 @@ class VoucherController extends Controller
             'voucher_name' => $voucher->voucher_name,
             'voucher_type' => $voucher->voucher_type,
             'voucher_value' => $voucher->value,
-            'message' => 'Voucher code is valid!',
             'voucher_description' => $voucher->description,
             'cart_total' => $cartTotal
         ]);

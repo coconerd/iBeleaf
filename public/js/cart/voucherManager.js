@@ -21,17 +21,17 @@ function handleVoucherError(errorResponse) {
     const $voucherError = $("#voucher-error");
     const errorCode = errorResponse.ecode;
     const voucherType = errorResponse.voucher_type;
-    const additionalPrice = errorResponse.minPrice - errorResponse.cart_total;
+    const additionalPrice = errorResponse.min_price - errorResponse.cart_total;
     let errorMessage = "";
 
     if (
         errorCode === "MIN_PRICE" &&
         (voucherType === "cash" || voucherType === "percentage")) {
-        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} VND để sử dụng Voucher`;
+        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} VND để sử dụng Voucher bạn nhé!`;
     } else if (
         errorCode === "MIN_PRICE" &&
         (voucherType === "free_shipping")) {
-        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} VND để  được miễn phí giao hàng`;
+        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} VND để  được miễn phí giao hàng!`;
     } else {
         errorMessage = errorResponse.message
     }
@@ -61,11 +61,11 @@ function validateVoucherName(name) {
         success: function (response) {
             if (response.valid) {
                 console.log("Voucher validation response:", response);
-                
+                console.log('Order count: ', response.order_count)
                 const voucherDiscount = calculateDiscount(
                     cartTotal,
                     response.voucher_type,
-                    response.cart_total
+                    response.voucher_value
                 );
 
                 updateVoucherBoxDisplay(
@@ -73,8 +73,8 @@ function validateVoucherName(name) {
                     voucherDiscount,
                     response.voucher_type
                 );
-                $("#valid-voucher-box").slideDown(100);
-                $("#voucher-error").slideUp(100);
+                $("#valid-voucher-box").slideDown(80);
+                $("#voucher-error").slideUp(80);
                 $("#final-price").text(
                     formatPrice(cartTotal - voucherDiscount) + " VND"
                 );
