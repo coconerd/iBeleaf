@@ -152,6 +152,9 @@ class AuthController extends Controller
 
 	public function showLoginForm()
 	{
+if (Auth::check()) {
+			return redirect()->intended('/');
+		}
 		return view('authentication.login');
 	}
 
