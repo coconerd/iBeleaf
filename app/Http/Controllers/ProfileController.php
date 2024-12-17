@@ -14,108 +14,112 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Providers\DBConnService; // Import DBConnService của ducminh đã viết sẵn để khởi tạo đối tượng connection đến csdl
 use App\Services\OrderService;
+use App\Services\CredentialsValidatorService;
 
 /* Import class CredentialsValidator của ducminh đã viết sẵn ở AuthController để sau này có thể sử dụng */
-class CredentialsValidator
-{
-	protected DBConnService $dbConnService;
+// class CredentialsValidator
+// {
+// 	protected DBConnService $dbConnService;
 
-	public function __construct(DBConnService $dBConnService)
-	{
-		$this->dbConnService = $dBConnService;
-	}
+// 	public function __construct(DBConnService $dBConnService)
+// 	{
+// 		$this->dbConnService = $dBConnService;
+// 	}
 
-	public function validateAndReturnEmail(array $request_data, bool $is_login = false): mixed
-	{
-		// check empty email
-		if (empty($request_data["email"])) {
-			throw new Exception("email is required");
-		}
+// 	public function validateAndReturnEmail(array $request_data, bool $is_login = false): mixed
+// 	{
+// 		// check empty email
+// 		if (empty($request_data["email"])) {
+// 			throw new Exception("email is required");
+// 		}
 
-		$email = $request_data["email"];
+// 		$email = $request_data["email"];
 
-		// email length check
-		if (strlen($email) > 255) {
-			throw new Exception("email is too long");
-		}
+// 		// email length check
+// 		if (strlen($email) > 255) {
+// 			throw new Exception("email is too long");
+// 		}
 
-		// email format check
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			throw new Exception("email format is invalid");
-		}
+// 		// email format check
+// 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+// 			throw new Exception("email format is invalid");
+// 		}
 
-		// check email availability
-		if (!$is_login) {
-			try {
-				$conn = $this->dbConnService->getDBConn();
-				$sql = "select email from users where email = ?";
-				$pstm = $conn->prepare($sql);
-				$pstm->bind_param("s", $email);
-				$pstm->execute();
-				$result = $pstm->get_result();
-				if ($result->num_rows > 0) {
-					throw new Exception(message: "email has been taken");
-				}
-			} catch (Exception $e) {
-				Log::error("Error occurred when validating email", [
-					'error' => $e->getMessage(),
-				]);
-			} finally {
-				$pstm->close();
-			}
-		}
+// 		// check email availability
+// 		if (!$is_login) {
+// 			try {
+// 				$conn = $this->dbConnService->getDBConn();
+// 				$sql = "select email from users where email = ?";
+// 				$pstm = $conn->prepare($sql);
+// 				$pstm->bind_param("s", $email);
+// 				$pstm->execute();
+// 				$result = $pstm->get_result();
+// 				if ($result->num_rows > 0) {
+// 					throw new Exception(message: "email has been taken");
+// 				}
+// 			} catch (Exception $e) {
+// 				Log::error("Error occurred when validating email", [
+// 					'error' => $e->getMessage(),
+// 				]);
+// 			} finally {
+// 				$pstm->close();
+// 			}
+// 		}
 
-		// not throwing any exception, all good
-		return $email;
-	}
+// 		// not throwing any exception, all good
+// 		return $email;
+// 	}
 
-	public function validateAndReturnName(array $request_data)
-	{
-		// check empty name
-		if (empty($request_data["name"])) {
-			throw new Exception("user's name is required");
-		}
+// 	public function validateAndReturnName(array $request_data)
+// 	{
+// 		// check empty name
+// 		if (empty($request_data["name"])) {
+// 			throw new Exception("user's name is required");
+// 		}
 
-		$name = $request_data["name"];
+// 		$name = $request_data["name"];
 
-		if (strlen($name) > 255) {
-			throw new Exception("name is too long");
-		}
+// 		if (strlen($name) > 255) {
+// 			throw new Exception("name is too long");
+// 		}
 
-		// not throwing any exception, all good
-		return $name;
-	}
+// 		// not throwing any exception, all good
+// 		return $name;
+// 	}
 
-	public function valdiateAndReturnPassword(array $request_data)
-	{
-		// check empty password
-		if (empty($request_data["password"])) {
-			throw new Exception("password is required");
-		}
+// 	public function valdiateAndReturnPassword(array $request_data)
+// 	{
+// 		// check empty password
+// 		if (empty($request_data["password"])) {
+// 			throw new Exception("password is required");
+// 		}
 
-		$password = $request_data["password"];
+// 		$password = $request_data["password"];
 
-		// password length check
-		if (strlen($password) < 8) {
-			throw new Exception(message: "password must be at least 8 characters");
-		}
+// 		// password length check
+// 		if (strlen($password) < 8) {
+// 			throw new Exception(message: "password must be at least 8 characters");
+// 		}
 
-		// not throwing any exception, all good
-		return $password;
-	}
-}
+// 		// not throwing any exception, all good
+// 		return $password;
+// 	}
+// }
 
 class ProfileController extends Controller
 {
-	protected CredentialsValidator $credentialsValidator;
+	protected CredentialsValidatorService $credentialsValidatorService;
 	protected DBConnService $dbConnService;
 	protected OrderService $orderService;
 
-	public function __construct(DBConnService $dbConnService, OrderService $orderService)
-	{
+	public function __construct(
+		DBConnService $dbConnService,
+		OrderService $orderService,
+		CredentialsValidatorService $credentialsValidatorService
+	) {
 		$this->dbConnService = $dbConnService;
-		$this->credentialsValidator = new CredentialsValidator($dbConnService);
 		$this->orderService = $orderService;
+		$this->credentialsValidatorService = $credentialsValidatorService;
 	}
 	/*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -125,8 +129,8 @@ class ProfileController extends Controller
 	{
 		// return view('profile.index'); /* Dùng này thì trong file index dùng trực tiếp auth()->user() thay cho biến $user */  ==> cách này không khuyến khích vì vi phạm nguyên tắc MVC
 		/* auth()->user() thì luôn khả dụng, không cần import          ==> khuyến khích sử dụng
-										 Auth::user() thì cần import Illuminate\Support\Facades\Auth;   ==> dễ bị lỗi các trường thông tin user bị null mặc dù user đã đăng nhập rồi
-									  */
+											   Auth::user() thì cần import Illuminate\Support\Facades\Auth;   ==> dễ bị lỗi các trường thông tin user bị null mặc dù user đã đăng nhập rồi
+											*/
 		$user = auth()->user();
 		return view('profile.index', compact(var_name: 'user'));
 	}
@@ -229,16 +233,16 @@ class ProfileController extends Controller
 		$currentUser = auth()->user();
 
 		/* Sử dụng hàm $request->validate thì khi validate phát hiện có lỗi sẽ tự động điều hướng về trang trước đó. 
-									  Nếu validate hợp lệ thì trả về kết quả đã được validate */
+											Nếu validate hợp lệ thì trả về kết quả đã được validate */
 		$validatedData = $request->validate([
 			'username' => ['required', new UsernameRule($currentUser)],
 			'fullname' => ['required', new FullnameRule()],
 			'email' => [
-				'required',
-				'email',
-				Rule::unique('users', 'email')->ignore($currentUser->user_id, 'user_id'),
-				'regex:/^[\w\.-]+@(gmail\.com|gm\.uit\.edu\.vn|uit\.edu\.vn)$/'
-			],
+					'required',
+					'email',
+					Rule::unique('users', 'email')->ignore($currentUser->user_id, 'user_id'),
+					'regex:/^[\w\.-]+@(gmail\.com|gm\.uit\.edu\.vn|uit\.edu\.vn)$/'
+				],
 			'phone' => [
 				'required',
 				'regex:/^[0-9]{10}$/'
@@ -324,8 +328,8 @@ class ProfileController extends Controller
 
 
 	/* Xử lí yêu cầu AJAX từ sự kiện javascript (code ở file homePage.js) 
-				   Xử lý sự kiện khi nhấn vào dropdown "Đổi mật khẩu" ở giao diện trang hồ sơ
-				   */
+					  Xử lý sự kiện khi nhấn vào dropdown "Đổi mật khẩu" ở giao diện trang hồ sơ
+					  */
 	public function showCurrentPasswordForm(Request $request)
 	{
 		// Kiểm tra nếu là yêu cầu AJAX
@@ -348,7 +352,7 @@ class ProfileController extends Controller
 		// dd($request->all()); // in ra dữ liệu gửi đến server khi nhấn nút Lưu từ form
 
 		/* Sử dụng hàm $request->validate thì khi validate phát hiện có lỗi sẽ tự động điều hướng về trang trước đó. 
-									  Nếu validate hợp lệ thì trả về kết quả đã được validate */
+											Nếu validate hợp lệ thì trả về kết quả đã được validate */
 
 		// $validatedData = $request->validate([
 		//     'password' => [
@@ -411,8 +415,8 @@ class ProfileController extends Controller
 
 
 	/* Xử lí yêu cầu AJAX từ sự kiện javascript (code ở file currentPasswordPage.js) 
-				   Xử lý sự kiện khi nhấn vào nút XÁC NHẬN ở giao diện nhập mật khẩu hiện tại
-				   */
+					  Xử lý sự kiện khi nhấn vào nút XÁC NHẬN ở giao diện nhập mật khẩu hiện tại
+					  */
 	// public function showVerifyNewPasswordForm(Request $request)
 	// {
 	//     // Kiểm tra nếu là yêu cầu AJAX
@@ -493,8 +497,8 @@ class ProfileController extends Controller
 
 
 	/* Xử lí yêu cầu AJAX từ sự kiện javascript (code ở file homePage.js) 
-				   Xử lý sự kiện khi nhấn vào dropdown "Đơn mua" ở giao diện trang hồ sơ
-				   */
+					  Xử lý sự kiện khi nhấn vào dropdown "Đơn mua" ở giao diện trang hồ sơ
+					  */
 	public function showOrdersForm(Request $request)
 	{
 		if ($request->ajax()) {
@@ -511,11 +515,11 @@ class ProfileController extends Controller
 		if ($request->ajax()) {
 			$returnRefundItems = ReturnRefundItem::where('user_id', auth()->id())
 				->with([
-					'order_item.product.product_images' => function ($query) {
-						$query->where('image_type', 1)
-							->select('product_image_url', 'product_id');
-					}
-				])
+						'order_item.product.product_images' => function ($query) {
+							$query->where('image_type', 1)
+								->select('product_image_url', 'product_id');
+						}
+					])
 				->orderBy('created_at', 'desc')
 				->get();
 
