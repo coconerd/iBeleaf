@@ -207,7 +207,7 @@
 													</td>
 													<td class="myprofile-table-row-td2" id="myprofile-table-row1td2">
 														<div class="myprofile-table-row-td2__div" style="height: 64px;">
-															<div class="myprofile-table-row-td2__div-content">
+															<div class="myprofile-table-row-td2__div-content" style="border-radius: 7px;">
 																<!-- <input type="text" placeholder="" class="profile-username-input" value="{{ auth()->check() ? auth()->user()->user_name : '' }}" > -->
 																<input type="text" name="username" placeholder=""
 																	class="profile-username-input"
@@ -224,7 +224,7 @@
 													</td>
 													<td class="myprofile-table-row-td2" id="myprofile-table-row2td2">
 														<div class="myprofile-table-row-td2__div" style="height: 40px;">
-															<div class="myprofile-table-row-td2__div-content">
+															<div class="myprofile-table-row-td2__div-content" style="border-radius: 7px;">
 																<input type="text" name="fullname" placeholder=""
 																	class="profile-name-input"
 																	value="{{ auth()->check() ? $user->full_name : '' }}">

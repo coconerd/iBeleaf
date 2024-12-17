@@ -102,30 +102,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function loadNewPasswordForm() 
 {
     // Toggle mật khẩu mới
-    const toggleNewPassword = document.getElementById("toggle-new-password");
     const newPasswordInput = document.getElementById("new_password");
-    const eyeNewOpen = document.getElementById("eye-new-open");
-    const eyeNewClosed = document.getElementById("eye-new-closed");
-
-    toggleNewPassword.addEventListener("click", function () {
-        const isPassword = newPasswordInput.type === "password";
-        newPasswordInput.type = isPassword ? "text" : "password";
-        eyeNewClosed.style.display = isPassword ? "none" : "inline";
-        eyeNewOpen.style.display = isPassword ? "inline" : "none";
-    });
 
     // Toggle nhập lại mật khẩu
-    const toggleConfirmPassword = document.getElementById("toggle-confirm-password");
     const confirmPasswordInput = document.getElementById("confirm_password");
-    const eyeConfirmOpen = document.getElementById("eye-confirm-open");
-    const eyeConfirmClosed = document.getElementById("eye-confirm-closed");
-
-    toggleConfirmPassword.addEventListener("click", function () {
-        const isPassword = confirmPasswordInput.type === "password";
-        confirmPasswordInput.type = isPassword ? "text" : "password";
-        eyeConfirmClosed.style.display = isPassword ? "none" : "inline";
-        eyeConfirmOpen.style.display = isPassword ? "inline" : "none";
-    });
 
     // Ẩn thông báo lỗi khi người dùng bắt đầu nhập
     const newPasswordError = document.querySelector(".new-password-error");

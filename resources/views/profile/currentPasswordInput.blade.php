@@ -13,10 +13,6 @@
                 <!-- @if (isset($errors) && $errors->has('password'))
                     <small class="text-danger">{{ $errors->first('password') }}</small>
                 @endif -->
-                <button type="button" class="toggle-current-password-button" id="toggle-current-password">
-                    <span id="eye-closed">👁️‍🗨️</span>
-                    <span id="eye-open" style="display: none;">👁️</span>
-                </button>
             </div>
             <small class="text-danger current-password-error"></small>
         </div>

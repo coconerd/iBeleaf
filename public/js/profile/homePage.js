@@ -210,21 +210,21 @@ document.getElementById('stardust-dropdown__item-changePassword').addEventListen
 /*-----------------------------------------------------------------------------------------------------------------------------------------*/
 function loadCurrentPasswordForm() {
 	// Mở và đóng icon con mắt khi click vào input password
-	document.getElementById('toggle-current-password').addEventListener('click', function () {
-		const passwordField = document.getElementById('current-password-field');
-		const eyeClosed = document.getElementById('eye-closed');
-		const eyeOpen = document.getElementById('eye-open');
+	// document.getElementById('toggle-current-password').addEventListener('click', function () {
+	// 	const passwordField = document.getElementById('current-password-field');
+	// 	const eyeClosed = document.getElementById('eye-closed');
+	// 	const eyeOpen = document.getElementById('eye-open');
 
-		if (passwordField.type === 'password') {
-			passwordField.type = 'text';
-			eyeClosed.style.display = 'none';
-			eyeOpen.style.display = 'inline';
-		} else {
-			passwordField.type = 'password';
-			eyeClosed.style.display = 'inline';
-			eyeOpen.style.display = 'none';
-		}
-	});
+	// 	if (passwordField.type === 'password') {
+	// 		passwordField.type = 'text';
+	// 		eyeClosed.style.display = 'none';
+	// 		eyeOpen.style.display = 'inline';
+	// 	} else {
+	// 		passwordField.type = 'password';
+	// 		eyeClosed.style.display = 'inline';
+	// 		eyeOpen.style.display = 'none';
+	// 	}
+	// });
 
 	// Nếu input password không rỗng thì enable button
 	document.getElementById('current-password-field').addEventListener('input', function () {
