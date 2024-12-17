@@ -24,7 +24,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'role_type' => $this->faker->numberBetween(0, 1),
+            // 'role_type' => $this->faker->numberBetween(0, 1),
+            'role_type' => 0,
             'email' => $this->faker->unique()->safeEmail(),
             'full_name' => $this->faker->name(),
             'user_name' => $this->faker->unique()->userName(),
