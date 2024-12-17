@@ -35,8 +35,10 @@ class Authenticate extends BaseAuthenticate
 			// For web requests, store current URL
 			$request->session()->put('url.intended', $request->fullUrl());
 			Log::debug('Stored intended URL: ' . $request->fullUrl());
-			return route('auth.showLoginForm');
-
+			return
+				str_contains($request->fullUrl(), '/admin')
+				? route('admin.showLoginForm')
+				: route('auth.showLoginForm');
 		} catch (\Exception $e) {
 			Log::error('Auth redirect failed', ['error' => $e->getMessage()]);
 			return route('auth.showLoginForm');
