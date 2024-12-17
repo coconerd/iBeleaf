@@ -60,7 +60,6 @@ $(document).ready(function () {
 			`;
 		});
 
-
 		const modal = $(this).closest('.modal');
 		console.log('modal is: ', modal);
 		modal.find('.refundReturnItemsList').html(itemList);
