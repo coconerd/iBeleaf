@@ -33,7 +33,8 @@ class OrderFactory extends Factory
 			$prepDeliverTime = null;
 		}
 
-		$isPaidPrep = $prepStatus == 'completed'
+		$isPaidPrep =
+			in_array($prepStatus, ['delivering', 'delivered'])
 			? true
 			: $this->faker->boolean(35);
 
@@ -74,10 +75,22 @@ class OrderFactory extends Factory
 			// Calculate provisional_price by summing total_price of OrderItems
 			$provisionalPrice = $orderItems->sum('total_price');
 
+
 			// Update the Order with the calculated prices
-			$deliverCost = 50000;
 			$order->provisional_price = $provisionalPrice;
-			$order->total_price = $provisionalPrice + $deliverCost;
+			$order->total_price = $provisionalPrice + $order->deliver_cost;
+
+			// Apply voucher/coupon if available
+			if (!empty($order->voucher)) {
+				switch ($order->voucher->voucher_type) {
+					case 'cash':
+						$order->total_price -= $order->voucher->value;
+						break;
+					default:
+						$order->total_price *= 1 - $order->voucher->value / 100;
+						break;
+				}
+			}
 			$order->save();
 		});
 	}
