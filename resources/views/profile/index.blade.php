@@ -146,7 +146,7 @@
 
 					<div class="stardust-dropdown">
 						<div class="stardust-dropdown__item-header">
-							<a class="stardust-dropdown__item" href="{{route('profile.returns')}}">
+							<a class="stardust-dropdown__item returns" href="{{route('profile.returns')}}">
 								<div class="stardust-dropdown__item-icon">
 									<img src="{{asset('images/icons8-return-purchase-50.png')}}"
 										class="stardust-dropdown__item-icon-img">

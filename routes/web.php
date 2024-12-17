@@ -62,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::post('/profile/verify-newpassword', [ProfileController::class, 'handleVerifyNewPassword'])->name('profile.verifyNewPassword');
 
 	Route::get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
-	Route::get('/profile/returns', [ProfileController::class, 'showReturns'])->name('profile.returns');
+	Route::get('/profile/returns', [ProfileController::class, 'showReturnsForm'])->name('profile.returns');
 });
 
 // Order routes
@@ -74,7 +74,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::post('/orders/delete', [OrderController::class, 'delete'])->name('orders.delete');
 	Route::post('/orders/submit-feedback', [OrderController::class, 'submitFeedback'])->name('orders.submitFeedback');
 	Route::post('/orders/cancel/{order_id}', [OrderController::class, 'cancel'])->name('orders.cancel');
-Route::post('/orders/submit-refund-return', [OrderController::class, 'submitRefundReturn'])->name('orders.submitRefundReturn');
+	Route::post('/orders/submit-refund-return', [OrderController::class, 'submitRefundReturn'])->name('orders.submitRefundReturn');
 });
 
 // Product routes

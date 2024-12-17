@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\ReturnRefundItem;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Providers\DBConnService; // Import DBConnService của ducminh đã viết sẵn để khởi tạo đối tượng connection đến csdl
@@ -504,4 +505,17 @@ class ProfileController extends Controller
 		abort(404);
 	}
 	/*-----------------------------------------------------------------------------------------------------------------------------------------*/
+
+	public function showReturnsForm(Request $request)
+	{
+		if ($request->ajax()) {
+			$returnRefundItems = ReturnRefundItem::where('user_id', auth()->id())
+				->orderBy('created_at', 'desc')
+				->get();
+			return response()->json([
+				'html' => view('profile.returns', compact('returnRefundItems'))->render()
+			]);
+		}
+		abort(404);
+	}
 }

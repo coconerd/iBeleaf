@@ -83,6 +83,24 @@ $(document).ready(function () {
 			}
 		});
 	});
+
+	$('.returns').on('click', function (e) {
+		e.preventDefault();
+		$.ajax({
+			url: $(this).attr('href'),
+			method: 'GET',
+			success: function (response) {
+				$('#right-container-main-inner__bottom').html(response.html);
+				$('#right-container-main-inner__top-h1').text('Yêu cầu đổi trả hàng');
+				$('#right-container-main-inner__top-div').text('Quản lý các yêu cầu đổi trả hàng của bạn');
+				$('.profile-page-container').css('height', '900px');
+				$('.right-container').css('height', '96vh');
+			},
+			error: function () {
+				alert('Không thể tải yêu cầu đổi trả hàng của bạn.');
+			}
+		});
+	});
 });
 /*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -168,7 +186,7 @@ document.getElementById('stardust-dropdown__item-changePassword').addEventListen
 	fetch(url, {
 		method: 'GET',
 		headers: {
-			'X-Requested-With': 'XMLHttpRequest'  // Xác nhận đây là yêu cầu AJAX
+			'X-Requested-With': 'XMLHttpRequest'  // Xác nhận đây l�� yêu cầu AJAX
 		}
 	})
 		.then(response => response.json())
