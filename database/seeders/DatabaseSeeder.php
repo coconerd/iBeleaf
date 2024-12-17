@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
 			VoucherSeeder::class,
             OrderSeeder::class,
             ProductSeeder::class,
-            VoucherRuleSeeder::class
+            VoucherRuleSeeder::class,
+            ReturnRefundItemSeeder::class,
         ]);
     }
 }

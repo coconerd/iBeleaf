@@ -49,7 +49,7 @@ class ReturnRefundItem extends Model
 		'quantity',
 		'reason_tag',
 		'reason_description',
-		'status'
+		'status' // one of these: 'pending','accepted','rejected','received'
 	];
 
 	public function order_item()
