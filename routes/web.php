@@ -37,6 +37,9 @@ Route::get('/auth', [AuthController::class, 'showLoginForm'])->name('auth.index'
 Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('auth.showLoginForm');
 Route::post('/auth/login', [AuthController::class, 'handleLogin'])->name('auth.login');
 
+// Logout
+Route::post('/auth/logout', [AuthController::class, 'handleLogout'])->name('auth.logout');
+
 // Register
 Route::get('/auth/register', [AuthController::class, 'showRegistrationForm'])->name('auth.showRegisterForm');
 Route::post('/auth/register', [AuthController::class, 'handleRegister'])->name('auth.register');
@@ -44,6 +47,10 @@ Route::post('/auth/register', [AuthController::class, 'handleRegister'])->name('
 // OAuth2 social login
 Route::post('/auth/login/{social}', [AuthController::class, 'showConsentScreen']);
 Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocialCallback']);
+
+// Admin routes
+Route::get('/admin/login', [AuthController::class, 'showAdminLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'handleAdminLogin'])->name('admin.handleLogin');
 
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này
 Route::middleware(['auth'])->group(function () {

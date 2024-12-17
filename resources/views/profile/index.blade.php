@@ -161,6 +161,25 @@
 						</div>
 					</div>
 
+					<!-- Logout button -->
+					<div class="stardust-dropdown" style="margin-top: auto;">
+						<div class="stardust-dropdown__item-header">
+							<form method="POST" action="{{ route('auth.logout') }}" style="width: 100%;">
+								@csrf
+								<button type="submit" class="stardust-dropdown__item" style="width: 100%; background: none; border: none; text-align: left;">
+									<div class="stardust-dropdown__item-icon">
+									</div>
+										<i class="fa-solid fa-right-from-bracket" style="font-size: 1.2rem; color: #384da3; position: relative; right: 32px;"></i>
+									<div class="stardust-dropdown__item-text d-flex" style="position:relative; right: 25px;">
+										<span class="stardust-dropdown__item-text-span">Đăng xuất</span>
+									</div>
+								</button>
+							</form>
+						</div>
+						<div class="stardust-dropdown__item-body" style="opacity: 0;">
+							<div class="stardust-dropdown__item-body-padding"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 
