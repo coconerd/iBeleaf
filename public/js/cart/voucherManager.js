@@ -1,13 +1,13 @@
 $(document).ready(function () {
-	$("#voucher-apply").on("click", function (e) {
-		e.preventDefault();
-		const voucherCode = $("#voucher-input").val().trim().toUpperCase();
-		if (voucherCode) {
-			validateVoucherCode(voucherCode);
-		}
-	});
+    $("#voucher-apply").on("click", function (e) {
+        e.preventDefault();
+        const voucherName = $("#voucher-input").val().trim().toUpperCase();
+        if (voucherName) {
+            validateVoucherName(voucherName);
+        }
+    });
 
-	$("#voucher-input").keypress(function (e) {
+    $("#voucher-input").keypress(function (e) {
         if (e.which == 13) {
             // Enter key
             e.preventDefault();
@@ -16,42 +16,80 @@ $(document).ready(function () {
     });
 });
 
-function validateVoucherCode(code) {
+function handleVoucherError(errorResponse) {
+    const $voucherBox = $("#valid-voucher-box");
+    const $voucherError = $("#voucher-error");
+    const errorCode = errorResponse.ecode;
+    const voucherType = errorResponse.voucher_type;
+    const additionalPrice = errorResponse.minPrice - errorResponse.cart_total;
+    let errorMessage = "";
+
+    if (
+        errorCode === "MIN_PRICE" &&
+        (voucherType === "cash" || voucherType === "percentage")) {
+        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} VND để sử dụng Voucher`;
+    } else if (
+        errorCode === "MIN_PRICE" &&
+        (voucherType === "free_shipping")) {
+        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} VND để  được miễn phí giao hàng`;
+    } else {
+        errorMessage = errorResponse.message
+    }
+    
+    $("#voucher-error").text(errorMessage);
+    $voucherBox.hide();
+    $voucherError.show();
+}
+
+function validateVoucherName(name) {
+    const cartTotal = parseInt(
+        $("#first-total-price")
+            .text()
+            .replace(/[^0-9.-]+/g, "")
+    );
+    console.log("Sending cartTotal:", cartTotal);
     $.ajax({
         url: "/voucher/validate",
         method: "POST",
         data: {
-            code: code
+            voucher_name: name,
+            cart_total: cartTotal,
         },
         headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
         success: function (response) {
             if (response.valid) {
-                const cartTotal = parseInt(
-                    $("#first-total-price")
-                        .text()
-                        .replace(/[^0-9.-]+/g, "")
-                );
+                console.log("Voucher validation response:", response);
+                
                 const voucherDiscount = calculateDiscount(
                     cartTotal,
-                    response.type,
-                    response.value
+                    response.voucher_type,
+                    response.cart_total
                 );
 
-                updateVoucherBoxDisplay(response.description, voucherDiscount, response.type);
-                showVoucherBox(true);
+                updateVoucherBoxDisplay(
+                    response.voucher_description,
+                    voucherDiscount,
+                    response.voucher_type
+                );
+                $("#valid-voucher-box").slideDown(100);
+                $("#voucher-error").slideUp(100);
                 $("#final-price").text(
                     formatPrice(cartTotal - voucherDiscount) + " VND"
                 );
             } else {
-                $("#voucher-error").text(response.message);
-                showVoucherBox(false);
+                handleVoucherError(response);
+                return;
             }
         },
-        error: function (e) {
-            console.error("Voucher validation error:", e);
-            showVoucherBox(false);
+        error: function (xhr) {
+            console.error("Voucher validation error:", xhr);
+            if (xhr.responseJSON) {
+                handleVoucherError(xhr.responseJSON);
+            } else {
+                handleVoucherError({ message: "INVALID" });
+            }
         },
     });
 }
@@ -77,22 +115,6 @@ function updateVoucherBoxDisplay(description, value, type) {
             .show();
     } else {
         $("#voucher-discount").hide();
-    }
-}
-
-function showVoucherBox(isValid) {
-    const $voucherBox = $("#valid-voucher-box");
-    const $voucherError = $("#voucher-error");
-
-    if (isValid) {
-        $voucherBox.slideDown(300); // Animate down in 300ms
-		$voucherError.slideUp(300);
-		// $("#voucher-description").parent().parent().parent().show();
-		console.log("Voucher applied successfully!");
-
-    } else {
-        $voucherBox.slideUp(300); // Animate up in 300ms
-        $voucherError.text("Mã giảm giá không hợp lệ!").slideDown(300);
     }
 }
 
