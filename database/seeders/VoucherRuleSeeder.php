@@ -18,6 +18,10 @@ class VoucherRuleSeeder extends Seeder
             'FREESHIP300' => [
                 'rule_type' => 'min_price',
                 'rule_value' => '300000'
+            ],
+            'WELCOME10' => [
+                'rule_type' => 'first_order',
+                'rule_value' => '0'
             ]
         ];
 
