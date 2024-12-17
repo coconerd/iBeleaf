@@ -75,9 +75,12 @@ $(document).ready(function () {
 
 function hanldeQuantityUpdate($input) {
     updateCartCount();
-    calculatePrice($input.siblings('.quantity-input'));
+    const $quantityInput = $input.is("input")
+        ? $input
+        : $input.siblings(".quantity-input");
+    calculatePrice($quantityInput);
     calculateCartTotal();
-    updateDiscountAmount($input);
+    updateDiscountAmount($quantityInput);
 }
 
 function showMinQuantityAlert($input) {
@@ -193,29 +196,34 @@ function calculatePrice($input) {
         const subTotal = unitPrice * quantity;
         const subDiscountedTotal = subTotal * (1 - discountPercent / 100);
 
-        $price.html(
-            `${formatPrice(
-                subDiscountedTotal
-            )} <span class="currency-label">VND</span>`
-        );
+        $price.text(formatPrice(subDiscountedTotal));
     } catch (error) {
         console.error("Price calculation error:", error);
     }
 }
 
 function updateDiscountAmount($input) {
-    const $item = $input.closest(".card-body");
+    const $item = $input.closest("body").find(".card-body");
     const $discount = $item.find("#total-discount-amount");
     const quantity = parseInt($input.val());
+    console.log("Quantity:", quantity); 
+
     const unitPrice = parseInt(
-        $item.find(".price.total-uprice").data("unit-price")
+        $input.closest(".cart-control").find(".total-uprice").data("unit-price")
     );
+    console.log("Unit price:", unitPrice);
+
     const discountPercent = parseInt(
-        $item.find(".price.total-uprice").data("discount-percent")
+        $input
+            .closest(".cart-control")
+            .find(".total-uprice")
+            .data("discount-percent")
     );
+    console.log("Discount percentage:", discountPercent);
 
     if ($discount.length) {
         const discountAmount = unitPrice * quantity * (discountPercent / 100);
+        console.log("Total discount amount: ", discountAmount);
         $discount.text(formatPrice(discountAmount) + " VND");
     }
 }

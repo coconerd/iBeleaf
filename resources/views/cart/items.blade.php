@@ -84,7 +84,7 @@
                                                 <span class="price total-uprice me-1"
                                                     data-cart-id="{{ $item->cart_id }}"
                                                     data-unit-price="{{ $item->unit_price }}"
-                                                    data-discount-percent="{{ $item->product->discount_percent ?? 0}}">
+                                                    data-discount-percent="{{ $item->product->discount_percentage ?? 0}}">
                                                     {{ number_format($item->discounted_price) }}
                                                 </span>
                                                 <span class="currency-label">VND</span>
@@ -119,7 +119,7 @@
 
                             <div class="row">
                                 <p class="info col-6 left-side">Tổng khuyến mãi</p>
-                                <p class="info col-6 right-side"><span id="#voucher-amount">{{ number_format($totalDiscountAmount) }} VND</span></p>
+                                <p class="info col-6 right-side"><span id="total-discount-amount">{{ number_format($totalDiscountAmount) }} VND</span></p>
                             </div>
                         </div>
 
