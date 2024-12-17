@@ -47,10 +47,31 @@ Route::post('/auth/register', [AuthController::class, 'handleRegister'])->name('
 // OAuth2 social login
 Route::post('/auth/login/{social}', [AuthController::class, 'showConsentScreen']);
 Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocialCallback']);
+/** End auth routes */
 
-// Admin routes
-Route::get('/admin/login', [AuthController::class, 'showAdminLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AuthController::class, 'handleAdminLogin'])->name('admin.handleLogin');
+/**
+ * @notice Admin routes
+ */
+Route::prefix('admin')->name('admin.')->group(function () {
+	// Public admin routes
+	Route::get('/', function() {
+		return Auth::check() && Auth::user()->role_type === 1 
+			? redirect()->route('admin.dashboard')
+			: redirect()->route('admin.showLoginForm');
+	})->name('index');
+	Route::get('/login', [AuthController::class, 'showAdminLoginForm'])->name('showLoginForm');
+	Route::post('/login', [AuthController::class, 'handleAdminLogin'])->name('handleLogin');
+	
+	// Protected admin routes
+	Route::middleware(['auth', 'role:1'])->group(function () {
+		Route::get('/dashboard', [AuthController::class, 'showAdminDashboard'])->name('dashboard');
+		Route::post('/logout', [AuthController::class, 'handleAdminLogout'])->name('logout');
+	});
+});
+
+/**
+ * End admin routes
+ */
 
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này
 Route::middleware(['auth'])->group(function () {
@@ -110,5 +131,5 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 // Voucher routes
 Route::middleware(['auth'])->group(function (): void {
 	Route::post('voucher/validate', [VoucherController::class, 'validateVoucher'])
-	->name('voucher.validate');
+		->name('voucher.validate');
 });

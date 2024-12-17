@@ -67,7 +67,7 @@ class AuthController extends Controller
 
 	public function showLoginForm()
 	{
-if (Auth::check()) {
+		if (Auth::check()) {
 			return redirect()->intended('/');
 		}
 		return view('authentication.login');
@@ -331,6 +331,73 @@ if (Auth::check()) {
 			return redirect('/auth/login')->withErrors("Có lỗi xảy ra khi đăng nhập");
 		} finally {
 			$pstm->close();
+		}
+	}
+
+	public function showAdminLoginForm()
+	{
+		if (Auth::check() && Auth::user()->role_type == 1) {
+			return redirect()->intended('/admin/dashboard');
+		}
+		return view('admin.auth.login');
+	}
+
+	public function handleAdminLogin(Request $request)
+	{
+		$request_data = $_POST;
+		$password = "";
+
+		try {
+			$username = $request_data["username"];
+			$password = $this->credentialsValidatorService->validateAndReturnPassword($request_data);
+
+			$conn = $this->dbConnService->getDBConn();
+			$sql = "select user_id, full_name, email, password, role_type from users where user_name = ?";
+			$pstm = $conn->prepare($sql);
+			$pstm->bind_param("s", $username);
+			$pstm->execute();
+			$result = $pstm->get_result();
+
+			if ($result->num_rows == 0) {
+				Log::debug('User not found in database', [
+					'email' => $username,
+				]);
+				throw new Exception("Invalid credentials");
+			}
+
+			$row = $result->fetch_assoc();
+			Log::debug('User found in database', [
+				'user' => $row,
+			]);
+
+			// Check if user is admin
+			if ($row['role_type'] != 1) {
+				throw new Exception("Unauthorized access");
+			}
+
+			// Verify password
+			if (!password_verify($password, $row['password'])) {
+				throw new Exception("Invalid credentials");
+			}
+
+			$user = new User();
+			$user->user_id = $row['user_id'];
+			$user->full_name = $row['full_name'];
+			$user->email = $row['email'];
+			$user->password = $row['password'];
+			$user->role_type = $row['role_type'];
+
+			Auth::login($user);
+			$request->session()->regenerate();
+
+			return redirect()->intended('/admin/dashboard');
+
+		} catch (Exception $e) {
+			Log::error("Admin login error", [
+				'error' => $e->getMessage(),
+				'email' => $username
+			]);
+			return redirect()->back()->withErrors($e->getMessage());
 		}
 	}
 }
