@@ -38,7 +38,7 @@
     max-height: 60vh;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1rem;
+    padding: 0.5rem;
     scroll-behavior: smooth;
     
     /* Scrollbar styling */
@@ -66,11 +66,11 @@
     display: flex;
     flex-direction: column;
     max-height: 90vh;
+	/* overflow-y: auto; */
 }
 
 .modal-body {
     flex: 1;
-    padding: 0;
     margin: 0;
 }
 
@@ -132,4 +132,27 @@
 
 .card-body h6 {
 	cursor: pointer;
+}
+
+.increase-quantity, .decrease-quantity {
+	cursor: pointer;
+	border: none;
+	/* border-radius: 5px; */
+	background-color: lightgrey;
+	color: black;
+}
+
+.increase-quantity:hover, .decrease-quantity:hover {
+	background-color: #8B0000;
+	color: white;
+}
+
+.remove-item {
+	cursor: pointer;
+	background-color: transparent;
+	outline-color: none;
+	border-color: none;
+	font-weight: bold;
+	color: grey;
+	/* object-fit: contain; */
 }

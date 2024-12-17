@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::post('/orders/delete', [OrderController::class, 'delete'])->name('orders.delete');
 	Route::post('/orders/submit-feedback', [OrderController::class, 'submitFeedback'])->name('orders.submitFeedback');
 	Route::post('/orders/cancel/{order_id}', [OrderController::class, 'cancel'])->name('orders.cancel');
+Route::post('/orders/submit-refund-return', [OrderController::class, 'submitRefundReturn'])->name('orders.submitRefundReturn');
 });
 
 // Product routes

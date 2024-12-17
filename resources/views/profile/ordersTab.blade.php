@@ -51,19 +51,19 @@
 			<!-- Loop through order items -->
 			@foreach($order->order_items as $item)
 				<div class="p-3 {{ !$loop->last ? 'border-bottom' : '' }}">
-					<div class="d-flex">
+					<div class="d-flex product-item" data-order-items-id="{{ $item->order_items_id }}">
 						<!-- Product Image -->
 						<img src="{{ $item->product->product_images[0]->product_image_url ?? asset('images/placeholder-plant.jpg') }}"
-							alt="Product Image" class="me-3" style="width: 80px; height: auto; border-radius: 3px;">
+							alt="Product Image" class="me-3 product-image-thumbnail" style="width: 80px; height: auto; border-radius: 3px;">
 						<!-- Product Details -->
 						<div>
-							<h6 class="mb-1" onmouseup="window.location.href='{{
+							<h6 class="mb-1 product-short-description" onmouseup="window.location.href='{{
 								route('product.show', ['product_id' => $item->product->product_id])
 							}}'">
 								{{ $item->product->short_description }}
 							</h6>
 							<p style="color: grey;">Mã sản phẩm: {{ $item->product->code }}</p>
-							<p>x {{ $item->quantity }}</p>
+							<p class="purchaseQuantity">x {{ $item->quantity }}</p>
 						</div>
 						<!-- Pricing -->
 						<div class="ms-auto text-end d-flex align-items-center">
@@ -96,7 +96,7 @@
 					@else
 						Coupon:
 					@endif
-					<strong style="font-variant: normal;">{{ $order->voucher->voucher_name }}</strong>
+					<strong style="font-letiant: normal;">{{ $order->voucher->voucher_name }}</strong>
 				</span>
 				<span>Thành tiền: <strong>{{ number_format($order->total_price, 0, ',', '.') }}đ</strong></span>
 			</div>
@@ -107,7 +107,7 @@
 				@if ($order->status === "delivered")
 					<button class="btn btn-sm rounded text-white feedbackBtn" data-order-id="{{ $order->order_id }}" style="background-color: #1E4733;">Đánh giá</button>
 					<button class="btn btn-sm rounded" id="repurchaseBtn" style="border: 1px solid black;">Mua lại</button>
-					<button class="btn btn-sm rounded" id="refundReturnBtn" style="border: 1px solid black;">Trả hàng/ Hoàn tiền</button>
+					<button class="btn btn-sm rounded refundReturnBtn" style="border: 1px solid black;">Trả hàng/ Hoàn tiền</button>
 				@elseif ($order->status === "pending")
 					<button class="btn btn-sm btn-outline-warning" id="cancelBtn" style="">Hủy đơn</button>
 				@endif
@@ -115,6 +115,7 @@
 		</div>
 	</div>
 @endforeach
+
 @if($orders->isEmpty())
 	<div class="d-flex flex-column align-items-center mt-5">
 		<i class="bi bi-bag fs-5" style="color: #212529 !important;"></i>
@@ -125,7 +126,7 @@
 <!-- Feedback Modal -->
 <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable"> <!-- Make dialog scrollable -->
-        <div class="modal-content" style="max-height: 80vh;"> <!-- Set fixed max height -->
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-uppercase fw-light">Đánh giá sản phẩm</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -145,11 +146,88 @@
         </div>
     </div>
 </div>
+
+<!-- Refund/Return Modal -->
+<div class="modal fade" data-order-id="" id="refundReturnModal" tabindex="-1" aria-labelledby="refundReturnModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content" style="overflow-y: auto;">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase fw-light">Đổi / Trả Hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('orders.submitRefundReturn') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+				<div class="modal-body p-3 ">
+					<input type="hidden" name="order_id" class="refundReturnOrderId">
+
+					<!-- Select request type -->
+					<div class="mb-4">
+						<label class="form-label">Chọn loại yêu cầu</label>
+						<select class="form-select" name="request_type" required>
+							<option value="">-- Chọn --</option>
+							<option value="return">Đổi hàng</option>
+							<option value="refund">Trả hàng</option>
+						</select>
+					</div>
+
+					<!-- Select items to return/refund -->
+					<div class="mb-4">
+						<label class="form-label">Chọn sản phẩm</label>
+						<select class="form-select refundReturnItemsSelect" multiple required>
+							<!-- Options will be populated via JavaScript -->
+						</select>
+					</div>
+
+					<!-- Selected items list -->
+					<div class="refundReturnItemsList mb-4">
+						<!-- Selected items will be displayed here -->
+					</div>
+
+					<!-- Reason tag -->
+					<div class="mb-4">
+						<label class="form-label">Lý do đổi/trả</label>
+						<label class="form-label">Chọn lý do</label>
+						<select class="form-select" name="reason_tag" required>
+							<option value="">-- Chọn lý do --</option>
+							<option value="wrong_item">Giao sai sản phẩm</option>
+							<option value="damaged">Sản phẩm bị hư hỏng</option>
+							<option value="not_as_described">Sản phẩm không như mô tả</option>
+							<option value="quality_issue">Vấn đề chất lượng</option>
+							<option value="change_mind">Đổi ý</option>
+							<option value="other">Lý do khác</option>
+						</select>
+					</div>
+
+					<!-- Reason description -->
+					<div class="mb-4">
+						<label class="form-label">Mô tả chi tiết về lý do yêu cầu đổi/trả &nbsp;<i class="bi bi-info-circle-fill text-muted"></i></label>
+						<textarea class="form-control" name="reason_description" rows="4" required minlength="0" maxLength="255"></textarea>
+					</div>
+
+					<!-- Upload images -->
+					<div class="mb-5">
+						<label class="form-label" id="refundReturnImgCounter">Tải ảnh lên (tối đa 5 ảnh/mỗi sản phẩm đã mua)</label>
+						<input type="file" name="images[]" accept="image/*" multiple class="form-control" onchange="previewRefundReturnImages(this)">
+					</div>
+
+					<!-- Image preview container -->
+					<div id="refundReturnPreviewContainer" class="preview-image-container mt-2"></div>
+
+				</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-muted fw-light" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn fw-bold">Gửi yêu cầu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
 $('.feedbackBtn').on('click', function() {
-    var orderId = $(this).data('order-id');
+    let orderId = $(this).data('order-id');
     $('#modalOrderId').val(orderId);
-    var feedbackItems = '';
+    let feedbackItems = '';
     @foreach($orders as $order)
         if ({{ $order->order_id }} == orderId) {
             @foreach($order->order_items as $item)
@@ -189,9 +267,9 @@ $('.feedbackBtn').on('click', function() {
 
     // Handle star rating persistence
     $('.star-rating input').on('change', function() {
-        var selectedRating = $(this).val();
+        let selectedRating = $(this).val();
         $(this).siblings('label').each(function() {
-            var starValue = $(this).prev('input').val();
+            let starValue = $(this).prev('input').val();
             if (starValue <= selectedRating) {
                 $(this).addClass('selected');
             } else {
@@ -221,7 +299,7 @@ function limitFiles(input, maxFiles) {
 
 // Function to preview images
 function previewImages(input, productId) {
-    var previewContainer = document.getElementById('preview-' + productId);
+    let previewContainer = document.getElementById('preview-' + productId);
     previewContainer.innerHTML = '';
     if (input.files && input.files.length > 0) {
         if (input.files.length > 5) {
@@ -231,9 +309,9 @@ function previewImages(input, productId) {
             return;
         }
         Array.from(input.files).forEach(function(file) {
-            var reader = new FileReader();
+            let reader = new FileReader();
             reader.onload = function(e) {
-                var img = document.createElement('img');
+                let img = document.createElement('img');
                 img.src = e.target.result;
                 img.classList.add('preview-image');
                 previewContainer.appendChild(img);
@@ -242,7 +320,42 @@ function previewImages(input, productId) {
         });
 		$('#imgCounter').text(`Tải ảnh lên (${input.files.length}/5)`);
     }
+
+	$('#feedbackModal').modal('show').appendTo('body');
+}
+
+function previewRefundReturnImages(inputElement) {
+    const modal = $(inputElement).closest('.modal');
+    const previewContainer = modal.find('#refundReturnPreviewContainer');
+    const imgCounter = modal.find('#refundReturnImgCounter');
+
+    previewContainer.html("");
+	selectedItemsQuantity = 0;
+	modal.find('.refund-item').each(function() {
+		const quantityInput = $(this).find('.quantity-input');
+		selectedItemsQuantity += parseInt(quantityInput.val());
+	})	
+
+    if (inputElement.files && inputElement.files.length > 0) {
+        if (inputElement.files.length > 5 * selectedItemsQuantity) {
+            alert(`Bạn chỉ có thể tải lên tối đa ${5 * selectedItemsQuantity} ảnh.`);
+            inputElement.value = '';
+            imgCounter.text(`Tải ảnh lên (tối đa 5 ảnh/mỗi sản phẩm đã mua)`);
+            return;
+        }
+        Array.from(inputElement.files).forEach(function (file) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                let img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('preview-image');
+                previewContainer.append(img);
+            };
+            reader.readAsDataURL(file);
+        });
+        imgCounter.text(`Tải ảnh lên (${inputElement.files.length}/${5 * selectedItemsQuantity})`);
+    }
 }
 </script>
-
+<script src="{{ asset('js/profile/ordersTab.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('css/profile/ordersTab.css') }}">

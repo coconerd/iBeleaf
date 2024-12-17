@@ -51,20 +51,20 @@ $(document).on('ordersTabLoaded', function (e) {
 	})
 
 	// Handle order cancel button click
-	$(document).on('click', '#cancelBtn', function(e) {
+	$(document).on('click', '#cancelBtn', function (e) {
 		e.preventDefault();
-		
+
 		if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
 			const orderId = $(this).closest('.card').data('orderId');
 			const token = $('meta[name="csrf-token"]').attr('content');
-			
+
 			$.ajax({
 				url: `/orders/cancel/${orderId}`,
 				method: 'POST',
 				headers: {
 					'X-CSRF-TOKEN': token
 				},
-				success: function(response) {
+				success: function (response) {
 					if (response.success) {
 						// Reload current tab to show updated order status
 						const currentTab = $('.nav-link.active').attr('aria-controls') + 'Tab';
@@ -73,14 +73,12 @@ $(document).on('ordersTabLoaded', function (e) {
 						alert(response.message);
 					}
 				},
-				error: function(xhr) {
+				error: function (xhr) {
 					alert(xhr.responseJSON?.message || 'Có lỗi xảy ra khi hủy đơn hàng');
 				}
 			});
 		}
 	});
-
-	$('#feedbackModal').modal('show').appendTo('body');
 });
 
 

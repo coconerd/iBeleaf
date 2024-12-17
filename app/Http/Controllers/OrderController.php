@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\Order;
+use App\Models\RefundReturnImage;
+use App\Models\ReturnRefundItem;
 
 class OrderController extends Controller
 {
@@ -120,6 +122,56 @@ class OrderController extends Controller
 				'success' => false,
 				'message' => 'Có lỗi xảy ra khi hủy đơn hàng'
 			], 500);
+		}
+	}
+
+	public function submitRefundReturn(Request $request)
+	{
+		$request->validate([
+			// 'order_id' => 'required|exists:orders,order_id',
+			'request_type' => 'required|in:return,refund',
+			'items' => 'required|array',
+			'items.*.order_items_id' => 'required|exists:order_items,order_items_id',
+			'items.*.quantity' => 'required|integer|min:1',
+			'reason_tag' => 'required|string|max:255',
+			'reason_description' => 'required|string',
+			'images.*' => 'nullable|image|max:2048',
+		], [
+			// Custom error messages
+		]);
+
+		DB::beginTransaction();
+
+		try {
+			$user = Auth::user();
+			foreach ($request->input('items') as $itemData) {
+				$returnRefundItem = ReturnRefundItem::create([
+					'order_items_id' => $itemData['order_items_id'],
+					'user_id' => $user->user_id,
+					'type' => $request->input('request_type'),
+					'quantity' => $itemData['quantity'],
+					'reason_tag' => $request->input('reason_tag'),
+					'reason_description' => $request->input('reason_description'),
+					'status' => 'pending',
+				]);
+
+				// Handle images
+				if ($request->hasFile('images')) {
+					foreach ($request->file('images') as $image) {
+						$path = $image->store('refund_return_images', 'public');
+						RefundReturnImage::create([
+							'refund_return_image' => $path,
+							'return_refund_id' => $returnRefundItem->return_refund_id,
+						]);
+					}
+				}
+			}
+			DB::commit();
+			return redirect()->back()->with('success', 'Yêu cầu của bạn đã được gửi thành công.');
+		} catch (\Exception $e) {
+			DB::rollBack();
+			Log::error('OrderController@submitRefundReturn: ' . $e);
+			return redirect()->back()->with('error', 'Có lỗi xảy ra khi gửi yêu cầu.');
 		}
 	}
 }
