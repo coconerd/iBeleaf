@@ -126,6 +126,8 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 		->name('cart.remove');
 	Route::get('/cart/checkout', [CheckOutController::class, 'showShippingForm'])
 		->name('cart.checkout');
+	Route::post('/cart/insert', [CartController::class, 'insertItemToCart'])
+		->name('cart.insert');
 });
 
 // Voucher routes

@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Only show sticky div when addCartBtn element is out of view
 	window.addEventListener("scroll", function () {
 		const stickyDiv = $('.sticky-bottom')[0];
-		const triggerElement = $('#addCartBtn');
+		const triggerElement = $('.addCartBtn');
 		const triggerPosition = triggerElement.offset().top - $(window).scrollTop();
 
 		// If the trigger element is out of view (below the viewport)
@@ -229,13 +229,16 @@ document.addEventListener('keydown', function (e) {
 
 $('.heart-button').click(function () {
 	const button = $(this);
+	const productId = button.data('product-id');
 	if (favorited) {
 		$.ajax({
-			url: "{{ route('wishlist.remove') }}",
+			url: "/wishlist/remove",
 			method: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
 			data: {
-				product_id: '{{ $productId }}',
-				_token: '{{ csrf_token() }}'
+				product_id: productId,
 			},
 			success: function (response) {
 				favorited = false;
@@ -254,11 +257,13 @@ $('.heart-button').click(function () {
 	}
 	else {
 		$.ajax({
-			url: "{{ route('wishlist.add') }}",
+			url: "/wishlist/add",
 			method: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
 			data: {
-				product_id: '{{ $productId }}',
-				_token: '{{ csrf_token() }}'
+				product_id: productId,
 			},
 			success: function (response) {
 				favorited = true;
@@ -360,45 +365,72 @@ $('.hover-heart').click(function (e) {
 
 	if (button.hasClass('heart-button-active')) {
 		$.ajax({
-			url: "{{ route('wishlist.remove') }}",
+			url: "/wishlist/remove",
 			method: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
 			data: {
 				product_id: productId,
-				_token: '{{ csrf_token() }}'
 			},
 			success: function (response) {
 				button.removeClass('heart-button-active');
 				button.addClass('heart-button-inactive');
-				// button.find('i').css('color', 'white');
 			},
 			error: function (xhr) {
-				if (xhr.status === 401) {
-					window.location.href = "{{ route('auth.showLoginForm') }}";
-				} else {
-					alert('Error removing product from wishlist');
-				}
+				alert('Lỗi khi thêm sản phẩm vào danh sách yêu thích');
 			}
 		});
 	} else {
 		$.ajax({
-			url: "{{ route('wishlist.add') }}",
+			url: "/wishlist/add",
 			method: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
 			data: {
 				product_id: productId,
-				_token: '{{ csrf_token() }}'
 			},
 			success: function (response) {
 				button.removeClass('heart-button-inactive');
 				button.addClass('heart-button-active');
-				// button.find('i').css('color', 'red');
 			},
 			error: function (xhr) {
-				if (xhr.status === 401) {
-					window.location.href = "{{ route('auth.showLoginForm') }}";
-				} else {
-					alert('Error adding product to wishlist');
-				}
+				alert('Lỗi khi thêm sản phẩm vào danh sách yêu thích');
 			}
 		});
 	}
+});
+
+// Handle adding product to cart
+$('.addCartBtn').on('click', function () {
+	console.debug('triggered');
+	const quantity = $('.counter').first().val();
+	const productId = $(this).data('product-id');
+
+	$.ajax({
+		url: "/cart/insert",
+		method: 'POST',
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+		data: {
+			product_id: productId,
+			quantity: quantity ?? 0,
+			unit_price: 100000,
+		},
+		success: function () {
+			$('.counter').val(1);
+			$('.alert-success').html('');
+			$('.alert-success').html('<strong>Sản phẩm đã được thêm vào giỏ hàng</strong>');
+			$('.alert-success').removeClass('visually-hidden');
+			$('.alert-success').fadeIn().delay(2000).fadeOut();
+		},
+		error: function () {
+			$('.alert-danger').html('');
+			$('.alert-danger').html('<strong>Không thể thêm sản phẩm vào giỏ hàng</strong>');
+			$('.alert-danger').removeClass('visually-hidden');
+			$('.alert-danger').fadeIn().delay(2000).fadeOut();
+		}
+	});
 });

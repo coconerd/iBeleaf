@@ -28,7 +28,8 @@ class Wishlist extends Model
 	public $incrementing = false;
 
 	protected $casts = [
-		'user_id' => 'int'
+		'user_id' => 'int',
+		'product_id' => 'string',
 	];
 
 	protected $fillable = [

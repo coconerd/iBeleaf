@@ -10,6 +10,13 @@
 @endsection
 
 @section("content")
+<!-- Custom alerts (hidden by default) -->
+<div class="mt-2 alert alert-success visually-hidden" style="position: fixed; top: 10%; right: 2%; z-index: 1000;">
+</div>
+
+<div class="mt-2 alert alert-danger visually-hidden" style="position: fixed; top: 10%; right: 2%; z-index: 1000;"> </div>
+
+<!-- Main container of page -->
 <div class="container-fluid">
 	<div class="row banner">
 		<div class="container">
@@ -37,8 +44,8 @@
 					<p
 						class="discount-text text-white fw-bold {{$product->discount_percentage <= 0 ? "visually-hidden" : ""}}">
 						-{{ floor($product->discount_percentage) == $product->discount_percentage
-						? number_format($product->discount_percentage, 0)
-						: number_format($product->discount_percentage, 2) }}%</p>
+	? number_format($product->discount_percentage, 0)
+	: number_format($product->discount_percentage, 2) }}%</p>
 					<div id="productCarousel" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
 						<div class="carousel-inner">
 							@foreach ($productImgs as $img)
@@ -50,7 +57,8 @@
 					</div>
 					<button class="nav-arrows prev-arrow" onclick="navigateImage(-1)">&#10094;</button>
 					<button class="nav-arrows next-arrow" onclick="navigateImage(1)">&#10095;</button>
-					<button class="heart-button {{ $product->is_wishlisted ? 'heart-button-active' : 'heart-button-inactive' }}">
+					<button
+						class="heart-button {{ $product->is_wishlisted ? 'heart-button-active' : 'heart-button-inactive' }}">
 						<i class="fas fa-heart"></i>
 					</button>
 				</div>
@@ -117,7 +125,8 @@
 						<button class="btn btn-outline-primary border-0 incrementBtn"
 							style="width: 40px; height: 40px;">+</button>
 					</div>
-					<button id="addCartBtn" class="btn btn-success me-3">Thêm vào giỏ hàng</button>
+					<button class="btn btn-success me-3 addCartBtn" data-product-id="{{ $productId }}">Thêm
+						vào giỏ hàng</button>
 				</div>
 				<!-- SKU and Product Categories for show  -->
 				<table class="table table-borderless">
@@ -268,47 +277,50 @@
 			<div id="relatedProductsCarousel" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-inner" style="padding: 0 100px;">
 					@foreach(array_chunk($relatedProducts->toArray(), 6) as $chunk)
-						<div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-							<div class="d-flex justify-content-center">
-								@foreach($chunk as $r)
-									<div class="card me-4 mb-4 mt-4" style="width: 18rem;">
-										<div style="position: relative; overflow: hidden;">
-											<p class="discount-text text-white fw-bold {{$r->discount_percentage <= 0 ? "visually-hidden" : ""}}">
-											-{{ floor($r->discount_percentage) == $r->discount_percentage
+								<div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+									<div class="d-flex justify-content-center">
+										@foreach($chunk as $r)
+															<div class="card me-4 mb-4 mt-4" style="width: 18rem;">
+																<div style="position: relative; overflow: hidden;">
+																	<p
+																		class="discount-text text-white fw-bold {{$r->discount_percentage <= 0 ? "visually-hidden" : ""}}">
+																		-{{ floor($r->discount_percentage) == $r->discount_percentage
 											? number_format($r->discount_percentage, 0)
 											: number_format($r->discount_percentage, 2) }}%
-											</p>
-											<img src="{{ asset($r->img_url)}}" class="card-img-top" alt="Related Product">
-											<button class="hover-heart {{$r->is_wishlisted ? "heart-button-active" : ""}}" data-product-id="{{ $r->product_id }}">
-												<i class="fas fa-heart"></i>
-											</button>
-											<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
-												class="view-product">
-												Xem
-											</a>
-										</div>
-										<div class="card-body text-center">
-											<p class="card-text">{{ $r->title }}</p>
-											@if ($r->discount_percentage > 0)
-												<h3>
-													<span class="text-muted text-decoration-line-through" style="font-size: 1.4rem;">
-														{{ number_format($r->price, 0, '.', ',') }}₫
-													</span>
-													<br>
-													<span class="text-success" style="font-size: 1.3rem">
-														{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
-													</span>
-												</h3>
-											@else
-												<h3 class="text-success" style="font-size: 1.3rem">
-													{{ number_format($r->price, 0, '.', ',') }}₫
-												</h3>
-											@endif
-										</div>
+																	</p>
+																	<img src="{{ asset($r->img_url)}}" class="card-img-top" alt="Related Product">
+																	<button class="hover-heart {{$r->is_wishlisted ? "heart-button-active" : ""}}"
+																		data-product-id="{{ $r->product_id }}">
+																		<i class="fas fa-heart"></i>
+																	</button>
+																	<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
+																		class="view-product">
+																		Xem
+																	</a>
+																</div>
+																<div class="card-body text-center">
+																	<p class="card-text">{{ $r->title }}</p>
+																	@if ($r->discount_percentage > 0)
+																		<h3>
+																			<span class="text-muted text-decoration-line-through"
+																				style="font-size: 1.4rem;">
+																				{{ number_format($r->price, 0, '.', ',') }}₫
+																			</span>
+																			<br>
+																			<span class="text-success" style="font-size: 1.3rem">
+																				{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
+																			</span>
+																		</h3>
+																	@else
+																		<h3 class="text-success" style="font-size: 1.3rem">
+																			{{ number_format($r->price, 0, '.', ',') }}₫
+																		</h3>
+																	@endif
+																</div>
+															</div>
+										@endforeach
 									</div>
-								@endforeach
-							</div>
-						</div>
+								</div>
 					@endforeach
 				</div>
 				<button class="carousel-control-prev" type="button" data-bs-target="#relatedProductsCarousel"
@@ -341,11 +353,8 @@
 					<div class="card border-0" style="background-color: transparent">
 						<div class="card-body">
 							<h4 class="card-title">Hãy để lại đánh giá</h4>
-							<form id="reviewForm" 
-								action="{{ route('product.submitFeedback') }}" 
-								method="POST"
-								enctype="multipart/form-data"
-							>
+							<form id="reviewForm" action="{{ route('product.submitFeedback') }}" method="POST"
+								enctype="multipart/form-data">
 								@csrf
 								<input type="hidden" name="product_id" value="{{ $productId }}">
 								<div class="form-group mb-4">
@@ -359,7 +368,8 @@
 								</div>
 								<div class="form-group mt-5">
 									<label for="review">Đánh giá của bạn (tối thiểu 10 ký tự) *</label>
-									<textarea name="review" minlength=10 maxlength=255 class="form-control mt-2" rows="5" required
+									<textarea name="review" minlength=10 maxlength=255 class="form-control mt-2"
+										rows="5" required
 										style="background-color: #fff; border: 1px solid #ced4da;"></textarea>
 									<!-- image upload component -->
 									<label class="form-label mt-2" id='imgCounter'>Tải ảnh lên (tối đa 5)</label>
@@ -370,8 +380,9 @@
 								<div class="d-flex flex-wrap" id='preview-image-container'>
 									<!-- Add new image button -->
 									<div class="p-2" style="background-color: transparent;">
-										<div class="d-flex justify-content-center align-items-center border border-dashed" style="width: 100px; height: 100px; cursor: pointer;"">
-											<span class="fs-3">+</span>
+										<div class="d-flex justify-content-center align-items-center border border-dashed"
+											style="width: 100px; height: 100px; cursor: pointer;"">
+											<span class=" fs-3">+</span>
 										</div>
 									</div>
 								</div>
@@ -394,45 +405,47 @@
 			</div>
 			<div class="row">
 				@foreach(array_chunk($discountedProducts->toArray(), 5) as $discountChunk)
-					<div class="d-flex justify-content-center">
-						@foreach($discountChunk as $r)
-							<div class="card me-4 mb-4 mt-4" style="width: 18rem;">
-								<div style="position: relative; overflow: hidden;">
-									<p class="discount-text text-white fw-bold {{$r->discount_percentage <= 0 ? "visually-hidden" : ""}}">
-										-{{ floor($r->discount_percentage) == $r->discount_percentage
-										? number_format($r->discount_percentage, 0)
-										: number_format($r->discount_percentage, 2) }}%
-									</p>
-									<img src="{{ asset($r->img_url)}}" class="card-img-top" alt="Related Product">
-									<button class="hover-heart {{ $r->is_wishlisted ? "heart-button-active" : "" }}" data-product-id="{{ $r->product_id }}">
-										<i class="fas fa-heart"></i>
-									</button>
-									<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
-										class="view-product">
-										Xem
-									</a>
-								</div>
-								<div class="card-body text-center">
-									<p class="card-text">{{ $r->title }}</p>
-									@if ($r->discount_percentage > 0)
-										<h3>
-											<span class="text-muted text-decoration-line-through" style="font-size: 1.4rem;">
-												{{ number_format($r->price, 0, '.', ',') }}₫
-											</span>
-											<br>
-											<span class="text-success" style="font-size: 1.3rem;">
-												{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
-											</span>
-										</h3>
-									@else
-										<h3 class="text-success" style="font-size: 1.3rem;">
-											{{ number_format($r->price, 0, '.', ',') }}₫
-										</h3>
-									@endif
-								</div>
-							</div>
-						@endforeach
-					</div>
+						<div class="d-flex justify-content-center">
+							@foreach($discountChunk as $r)
+										<div class="card me-4 mb-4 mt-4" style="width: 18rem;">
+											<div style="position: relative; overflow: hidden;">
+												<p
+													class="discount-text text-white fw-bold {{$r->discount_percentage <= 0 ? "visually-hidden" : ""}}">
+													-{{ floor($r->discount_percentage) == $r->discount_percentage
+								? number_format($r->discount_percentage, 0)
+								: number_format($r->discount_percentage, 2) }}%
+												</p>
+												<img src="{{ asset($r->img_url)}}" class="card-img-top" alt="Related Product">
+												<button class="hover-heart {{ $r->is_wishlisted ? "heart-button-active" : "" }}"
+													data-product-id="{{ $r->product_id }}">
+													<i class="fas fa-heart"></i>
+												</button>
+												<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
+													class="view-product">
+													Xem
+												</a>
+											</div>
+											<div class="card-body text-center">
+												<p class="card-text">{{ $r->title }}</p>
+												@if ($r->discount_percentage > 0)
+													<h3>
+														<span class="text-muted text-decoration-line-through" style="font-size: 1.4rem;">
+															{{ number_format($r->price, 0, '.', ',') }}₫
+														</span>
+														<br>
+														<span class="text-success" style="font-size: 1.3rem;">
+															{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
+														</span>
+													</h3>
+												@else
+													<h3 class="text-success" style="font-size: 1.3rem;">
+														{{ number_format($r->price, 0, '.', ',') }}₫
+													</h3>
+												@endif
+											</div>
+										</div>
+							@endforeach
+						</div>
 				@endforeach
 			</div>
 		</div>
@@ -525,18 +538,19 @@
 			<p class="mb-0 text-success fw-bold me-4 text-success total-price"
 				data-unit-price="{{ $product->price * (1 - $product->discount_percentage / 100) }}">
 				{{ number_format(
-					$product->discount_percentage > 0 ? $product->price * (1 - $product->discount_percentage / 100) : $product->price,
-					0,
-					'.',
-					','
-				) }}₫
+	$product->discount_percentage > 0 ? $product->price * (1 - $product->discount_percentage / 100) : $product->price,
+	0,
+	'.',
+	','
+) }}₫
 			</p>
 			<div class="input-group input-group-sm me-3" style="width: 120px;">
 				<button class="btn btn-outline-light border-1 decrementBtn">-</button>
 				<input type="text" class="counter form-control text-center border-0" value="1" min="1">
 				<button class="btn btn-outline-light border-1 incrementBtn">+</button>
 			</div>
-			<button class="btn btn-success btn-sm">Thêm vào giỏ hàng</button>
+			<button class="btn btn-success btn-sm addCartBtn" data-product-id="{{ $productId }} ">Thêm vào giỏ
+				hàng</button>
 		</div>
 	</div>
 </div>
