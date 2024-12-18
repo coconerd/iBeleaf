@@ -22,8 +22,8 @@ class OrderFactory extends Factory
 			'delivering',
 			'delivered',
 			'cancelled',
-			'returned',
-			'refunded',
+			// 'returned',
+			// 'refunded',
 		]);
 		if ($prepStatus === 'delivered' || $prepStatus === 'completed') {
 			$prepDeliverTime = $this->faker->dateTimeBetween('-1 month', 'now');
