@@ -85,7 +85,7 @@ class User extends Authenticatable
 
 	public function cart()
 	{
-		return $this->belongsTo(Cart::class, 'card_id');
+		return $this->belongsTo(Cart::class, 'cart_id', 'cart_id');
 	}
 
 	public function orders()
