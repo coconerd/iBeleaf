@@ -224,6 +224,7 @@ CREATE TABLE `order_items` (
   `product_id` varchar(10) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `total_price` int(11) DEFAULT NULL,
+  `discounted_amount` int(11) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

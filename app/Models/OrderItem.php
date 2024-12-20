@@ -38,14 +38,16 @@ class OrderItem extends Model
 	protected $casts = [
 		'order_id' => 'int',
 		'quantity' => 'int',
-		'total_price' => 'int'
+		'total_price' => 'int',
+		'discounted_amount' => 'int'
 	];
 
 	protected $fillable = [
 		'order_id',
 		'product_id',
 		'quantity',
-		'total_price'
+		'total_price',
+		'discounted_amount'
 	];
 
 	public function order()
