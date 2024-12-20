@@ -141,10 +141,12 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 		->name('cart.update');
 	Route::delete('/cart/{cartId}/{productId}', [CartController::class, 'removeCartItem'])
 		->name('cart.remove');
-	Route::get('/cart/checkout', [CheckOutController::class, 'showShippingForm'])
+	Route::get('/cart/checkout', [CheckOutController::class, 'showCheckoutForm'])
 		->name('cart.checkout');
 	Route::post('/cart/insert', [CartController::class, 'insertItemToCart'])
 		->name('cart.insert');
+	Route::post('/cart/items-update', [CartController::class, 'updateCartItems'])
+		->name('cart.items.update');
 });
 
 // Voucher routes

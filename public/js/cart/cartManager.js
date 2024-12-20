@@ -1,18 +1,10 @@
 $(document).ready(function () {
     const $quantityWrappers = $(".quantity-wrapper");
 
-    // When having out-of-stock item
-    // function updateItemCount() {
-    //     const inStockCount = $(".each-cart-item:not(.out-of-stock)").length;
-    //     $(".items-count").text(inStockCount);
-    // }
-
     function updateButtonStates($minusBtn, $plusBtn, value, maxStock) {
         $minusBtn.prop("disabled", value < 1);
         $plusBtn.prop("disabled", value >= maxStock);
     }
-
-    // updateItemCount();
     
     // Quantity changes handling
     $quantityWrappers.each(function () {
@@ -179,12 +171,41 @@ $(document).ready(function () {
 
     //Checkout Button (Thanh toan) handling
     $('#checkout-btn').on('click', function () {
-        return $.ajax([
-            
-        ]);
+        // Collect all cart items data
+        const cartItems = [];
+        $('.each-cart-item').each(function() {
+            cartItems.push({
+                product_id: $(this).data('product-id'),
+                quantity: $(this).find('.quantity-input').val()
+            });
+        });
+
+        // Send AJAX request
+        $.ajax({
+            url: `/cart/items-update`,
+            type: "POST",
+            data: {
+                items: cartItems
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    updateCartCount(response.items_counts)
+                    // Redirect to address submisstion page
+                    window.location.href = "/cart/checkout";
+                }
+            },
+            error: function (xhr) {
+                console.error("Error:", xhr.responseJSON);
+            }
+        });
     });
 });
-
 
 function hanldeQuantityUpdate($input) {
     updateCartCount();
@@ -288,7 +309,7 @@ function updateCartCount() {
         totalQuantity += parseInt($(this).val() || 0);
     });
     console.log("Total In-Stock Quantity:", totalQuantity);
-    
+
     $(".items-count").text(totalQuantity);
     $(".items-count-mh").text(totalQuantity + " mặt hàng");
     $("#cart-count").text(totalQuantity);

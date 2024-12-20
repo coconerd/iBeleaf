@@ -169,7 +169,7 @@
                         <div id="ship">
                             <i>(Chưa bao gồm phí vận chuyển)</i>
                         </div>
-                        <a href="{{ route('cart.checkout') }}" class="btn btn-primary w-100" id="checkout-btn">Thanh toán</a>
+                        <button class="btn btn-primary w-100" id="checkout-btn">Thanh toán</button>
                         <div class="text-center mt-3">
                             <a id="shipping-href" class="text-center">
                                 <u>Tiếp tục mua hàng</u>
