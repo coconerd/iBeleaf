@@ -1,4 +1,19 @@
 let favorited = false;
+
+function showSuccessAlert(message) {
+	$('.alert-success').html('');
+	$('.alert-success').html(`<strong>${message}</strong>`);
+	$('.alert-success').removeClass('visually-hidden');
+	$('.alert-success').fadeIn().delay(2000).fadeOut();
+};
+
+function showErrorAlert(message) {
+	$('.alert-danger').html('');
+	$('.alert-danger').html(`<strong>${message}</strong>`);
+	$('.alert-danger').removeClass('visually-hidden');
+	$('.alert-danger').fadeIn().delay(2000).fadeOut();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 	const thumbnails = document.querySelectorAll('.img-thumbnail');
 	const carousel = new bootstrap.Carousel(document.querySelector('#productCarousel'));
@@ -244,13 +259,14 @@ $('.heart-button').click(function () {
 				favorited = false;
 				button.removeClass('heart-button-active');
 				button.addClass('heart-button-inactive');
+				showSuccessAlert('Đã xóa sản phẩm vào danh sách yêu thích');
 			},
 			error: function (xhr) {
 				alert('what the fuck');
 				if (xhr.status === 401) {
-					window.location.href = "{{ route('auth.showLoginForm') }}";
+					window.location.href = '/auth/login';
 				} else {
-					alert('Có lỗi khi xóa sản phẩm khỏi danh sách yêu thích.');
+					showErrorAlert('Có lỗi khi thêm sản phẩm vào danh sách yêu thích');
 				}
 			}
 		});
@@ -269,12 +285,13 @@ $('.heart-button').click(function () {
 				favorited = true;
 				button.removeClass('heart-button-inactive');
 				button.addClass('heart-button-active');
+				showSuccessAlert('Đã thêm sản phẩm vào danh sách yêu thích');
 			},
 			error: function (xhr) {
 				if (xhr.status === 401) {
-					window.location.href = "{{ route('auth.showLoginForm') }}";
+					window.location.href = '/auth/login';
 				} else {
-					alert('Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích.');
+					showErrorAlert('Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích.');
 				}
 			}
 		});
@@ -334,15 +351,15 @@ $('#reviewForm').on('halal', function (e) {
 		method: 'POST',
 		data: $(this).serialize(),
 		success: function (response) {
-			alert('Cảm ơn đã đánh giá sản phẩm!');
+			showSuccessAlert('Cảm ơn đã đánh giá sản phẩm!');
 			$('#reviewForm')[0].reset();
 			loadReviews(); // Reload reviews after submission
 		},
 		error: function (xhr) {
 			if (xhr.status === 401) {
-				window.location.href = "{{ route('auth.showLoginForm') }}";
+				window.location.href = "/auth/login";
 			} else {
-				alert('Có lỗi xảy ra khi gửi đánh giá.');
+				showErrorAlert('Có lỗi xảy ra khi gửi đánh giá.');
 			}
 		}
 	});
@@ -376,9 +393,10 @@ $('.hover-heart').click(function (e) {
 			success: function (response) {
 				button.removeClass('heart-button-active');
 				button.addClass('heart-button-inactive');
+				showSuccessAlert('Đã xóa sản phẩm vào danh sách yêu thích');
 			},
 			error: function (xhr) {
-				alert('Lỗi khi thêm sản phẩm vào danh sách yêu thích');
+				showErrorAlert('Có lỗi xảy ra khi xóa sản phẩm vào danh sách yêu thích');
 			}
 		});
 	} else {
@@ -394,9 +412,10 @@ $('.hover-heart').click(function (e) {
 			success: function (response) {
 				button.removeClass('heart-button-inactive');
 				button.addClass('heart-button-active');
+				showSuccessAlert('Đã thêm sản phẩm vào danh sách yêu thích');
 			},
 			error: function (xhr) {
-				alert('Lỗi khi thêm sản phẩm vào danh sách yêu thích');
+				showErrorAlert('Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích');
 			}
 		});
 	}
@@ -417,20 +436,13 @@ $('.addCartBtn').on('click', function () {
 		data: {
 			product_id: productId,
 			quantity: quantity ?? 0,
-			unit_price: 100000,
 		},
 		success: function () {
 			$('.counter').val(1);
-			$('.alert-success').html('');
-			$('.alert-success').html('<strong>Sản phẩm đã được thêm vào giỏ hàng</strong>');
-			$('.alert-success').removeClass('visually-hidden');
-			$('.alert-success').fadeIn().delay(2000).fadeOut();
+			showSuccessAlert('Đã thêm sản phẩm vào giỏ hàng');
 		},
 		error: function () {
-			$('.alert-danger').html('');
-			$('.alert-danger').html('<strong>Không thể thêm sản phẩm vào giỏ hàng</strong>');
-			$('.alert-danger').removeClass('visually-hidden');
-			$('.alert-danger').fadeIn().delay(2000).fadeOut();
+			showErrorAlert('Có lỗi khi thêm sản phẩm vào giỏ hàng');
 		}
 	});
 });
