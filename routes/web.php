@@ -10,6 +10,7 @@ use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,7 +41,7 @@ Route::post('/auth/login', [AuthController::class, 'handleLogin'])->name('auth.l
 // Logout
 Route::post('/auth/logout', [AuthController::class, 'handleLogout'])->name('auth.logout');
 
-// Register
+// Registe
 Route::get('/auth/register', [AuthController::class, 'showRegistrationForm'])->name('auth.showRegisterForm');
 Route::post('/auth/register', [AuthController::class, 'handleRegister'])->name('auth.register');
 
@@ -54,25 +55,40 @@ Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocia
  */
 Route::prefix('admin')->name('admin.')->group(function () {
 	// Public admin routes
-	Route::get('/', function() {
-		return Auth::check() && Auth::user()->role_type === 1 
-			? redirect()->route('admin.dashboard')
-			: redirect()->route('admin.showLoginForm');
+	Route::get('/', function () {
+		if (!Auth::check()) {
+			return redirect()->route('admin.showLoginForm');
+		}
+		return Auth::user()->role_type === 1
+			? redirect()->route('admin.showDashboardPage')
+			: redirect()->back()->with('error', 'Bạn không có quyền truy cập trang này');
 	})->name('index');
-	Route::get('/login', [AuthController::class, 'showAdminLoginForm'])->name('showLoginForm');
-	Route::post('/login', [AuthController::class, 'handleAdminLogin'])->name('handleLogin');
-	
-	// Protected admin routes
+
+	Route::prefix('auth')->name('auth.')->group(function () {
+		Route::get('/login', [AuthController::class, 'showAdminLoginForm'])->name('showLoginForm');
+		Route::post('/login', [AuthController::class, 'handleAdminLogin'])->name('handleLogin');
+	});
+
+	// Admin protected routes
 	Route::middleware(['auth', 'role:1'])->group(function () {
-		Route::get('/dashboard', [AuthController::class, 'showAdminDashboard'])->name('dashboard');
-		Route::post('/logout', [AuthController::class, 'handleAdminLogout'])->name('logout');
+		// Admin orders route
+		Route::prefix('orders')->name('orders.')->group(function () {
+			Route::get('/', [AdminController::class, 'showOrdersPage'])->name('showOrdersPage');
+			Route::get('/{order_id}/details', [AdminController::class, 'getOrderDetails'])->name('getOrdersDetails');
+			Route::get('/edit', [AdminController::class, 'edit'])->name('edit');
+			// Route::get('/orders', [AdminController::class, 'index'])->name('.management');
+			Route::post('/update-field', [AdminController::class, 'updateOrderField'])
+				->name('updateField');
+		});
+		Route::get('/dashboard', [AdminController::class, 'showDashboardPage'])->name('showDashboardPage');
+
+		// Route to handle AJAX order updates
 	});
 });
 
 /**
  * End admin routes
  */
-
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này
 Route::middleware(['auth'])->group(function () {
 	Route::get('/profile', [ProfileController::class, 'showProfilePage'])->name('profile.homePage');
@@ -97,7 +113,7 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::post('/orders/submit-feedback', [OrderController::class, 'submitFeedback'])->name('orders.submitFeedback');
 	Route::post('/orders/cancel/{order_id}', [OrderController::class, 'cancel'])->name('orders.cancel');
 	Route::post('/orders/submit-refund-return', [OrderController::class, 'submitRefundReturn'])->name('orders.submitRefundReturn');
-Route::get('/orders/{order_id}/claims', [OrderController::class, 'getClaims'])->name('orders.claims');
+	Route::get('/orders/{order_id}/claims', [OrderController::class, 'getClaims'])->name('orders.claims');
 });
 
 // Product routes

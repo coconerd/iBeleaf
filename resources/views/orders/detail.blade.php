@@ -53,11 +53,11 @@
 							@endswitch
                         </span>
                     </div>
-                    <div class="text-muted">
+                    <div class="text-muted fw-light">
                         {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}
                         @if($order->status === 'delivered')
                             <br>
-                            <small>Giao hàng: {{ \Carbon\Carbon::parse($order->deliver_time)->format('d/m/Y H:i') }}</small>
+                            <small class="fw-light">Giao hàng: {{ \Carbon\Carbon::parse($order->deliver_time)->format('d/m/Y H:i') }}</small>
                         @endif
                     </div>
                 </div>
