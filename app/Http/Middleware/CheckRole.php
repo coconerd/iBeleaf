@@ -9,10 +9,6 @@ class CheckRole
 {
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (!auth()->check()) {
-            return redirect('auth.login');
-        }
-
         if (!in_array(auth()->user()->role_type, $roles)) {
 			return redirect()->back()->with('error', 'Không có quyền truy cập');
         }
