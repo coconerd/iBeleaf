@@ -7,15 +7,19 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    public function run()
-    {
+	public function run()
+	{
 		// create a user admin
-		User::create([
-			'full_name' => 'Nguyễn Văn Admin',
-			'email' => 'admin@example.com',
-			'user_name' => 'admin1',
-			'password' => bcrypt('password'),
-			'role_type' => '1',
-		]);
-    }
+		$user = User::where(['role_type' => 1])->first();
+
+		if (!$user) {
+			User::create([
+				'full_name' => 'Nguyễn Văn Admin',
+				'email' => 'admin@example.com',
+				'user_name' => 'admin1',
+				'password' => bcrypt('password'),
+				'role_type' => '1',
+			]);
+		}
+	}
 }
