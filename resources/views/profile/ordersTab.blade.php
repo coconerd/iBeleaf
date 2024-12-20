@@ -48,7 +48,7 @@
         @if ($order->status == 'pending' || $order->status == 'delivering')
             <span>Đặt lúc: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</span>
         @elseif ($order->status == 'completed' || $order->status == 'delivered')
-            <span>Giao hàng: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($order->delivery_time)->format('d/m/Y H:i') }}</span>    
+            <span>Giao hàng: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($order->deliver_time)->format('d/m/Y H:i') }}</span>    
         @endif
         </div>
         <div class="card-body p-0">
@@ -171,11 +171,22 @@
                     <!-- Select request type -->
                     <div class="mb-4">
                         <label class="form-label">Chọn loại yêu cầu</label>
-                        <select class="form-select" name="request_type" required>
-                            <option value="">-- Chọn --</option>
-                            <option value="return">Đổi hàng</option>
-                            <option value="refund">Trả hàng</option>
-                        </select>
+                        <div class="request-type-group d-flex gap-3">
+                            <label class="request-type-btn">
+                                <input type="radio" name="request_type" value="return" required>
+                                <span class="btn-content">
+                                    <i class="bi bi-arrow-left-right me-2"></i>
+                                    Đổi hàng
+                                </span>
+                            </label>
+                            <label class="request-type-btn">
+                                <input type="radio" name="request_type" value="refund" required>
+                                <span class="btn-content">
+                                    <i class="bi bi-arrow-return-left me-2"></i>
+                                    Trả hàng
+                                </span>
+                            </label>
+                        </div>
                     </div>
 
                     <!-- Select items to return/refund -->
@@ -194,7 +205,6 @@
                     <!-- Reason tag -->
                     <div class="mb-4">
                         <label class="form-label">Lý do đổi/trả</label>
-                        <label class="form-label">Chọn lý do</label>
                         <select class="form-select" name="reason_tag" required>
                             <option value="">-- Chọn lý do --</option>
                             <option value="wrong_item">Giao sai sản phẩm</option>

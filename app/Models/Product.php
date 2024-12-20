@@ -104,7 +104,19 @@ class Product extends Model
 		return $this->hasMany(ProductImage::class, 'product_id', 'product_id');
 	}
 
-	public function productImages(){
+	public function productImages()
+	{
 		return $this->hasMany(ProductImage::class, 'product_id', 'product_id');
+	}
+
+	public function getClaimsDurationDays()
+	{
+		$categories = $this->categories()->pluck('name')->toArray();
+		foreach ($categories as $category) {
+			$firstLetter = explode(" ", $category)[0];
+			return strtolower($firstLetter) === "cây"
+				? config('constants.refund_return_policy.duration.plants')
+				: config('constants.refund_return_policy.duration.others');
+		}
 	}
 }

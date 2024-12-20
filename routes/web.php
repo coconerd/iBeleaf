@@ -97,6 +97,7 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::post('/orders/submit-feedback', [OrderController::class, 'submitFeedback'])->name('orders.submitFeedback');
 	Route::post('/orders/cancel/{order_id}', [OrderController::class, 'cancel'])->name('orders.cancel');
 	Route::post('/orders/submit-refund-return', [OrderController::class, 'submitRefundReturn'])->name('orders.submitRefundReturn');
+Route::get('/orders/{order_id}/claims', [OrderController::class, 'getClaims'])->name('orders.claims');
 });
 
 // Product routes

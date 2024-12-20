@@ -21,10 +21,6 @@
 			<button class="nav-link cancelledTab" data-bs-toggle="tab" data-order-status="cancelled" type="button"
 				role="tab" aria-controls="cancelled" aria-selected="false">Đã hủy</button>
 		</li>
-		<li class="nav-item" role="presentation">
-			<button class="nav-link returnedrefundedTab" data-bs-toggle="tab" data-order-status="returned,refunded" type="button"
-				role="tab" aria-controls="returnedRefunded" aria-selected="false">Đổi / trả hàng</button>
-		</li>
 	</ul>
 
 	<!-- Tabs Content -->
@@ -49,10 +45,6 @@
 		<div class="tab-pane fade cancelledTab" role="tabpanel" aria-labelledby="cancelled-tab"
 		data-order-status="cancelled">
 			<!-- Cancelled Orders -->
-		</div>
-		<div class="tab-pane fade returnedRefundedTab" role="tabpanel" aria-labelledby="returns-tab"
-		data-order-status="returned,refunded">
-			<!-- Returns/Refund Orders -->
 		</div>
 	</div>
 </div>

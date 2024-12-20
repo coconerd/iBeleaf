@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Services\OrderService;
 use App\Services\FeedbackService;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
 use App\Models\RefundReturnImage;
 use App\Models\ReturnRefundItem;
 
@@ -25,28 +28,22 @@ class OrderController extends Controller
 
 	public function index(Request $request)
 	{
-		// if ($request->has('status')) {
-		// 	$status = explode(',', $request->query(key: 'status'));
-		// 	Log::debug('OrderController@index: status is not empty: ' . json_encode($status));
-		// } else {
-		// 	Log::debug('OrderController@index: status is empty');
-		// }
-
 		$queryParams = $request->query();
 
+		// Convert status to array regardlessly, to handle case of multiple status values
 		if (isset($queryParams['status'])) {
 			$queryParams['status'] = explode(',', $queryParams['status']);
 		}
 
 		Log::debug('OrderController@index: queryParams is: ', $queryParams);
-		
+
 		$user = Auth::user();
 		$orders = $this->orderService->getUserOrders(
 			$user->user_id,
 			!empty($queryParams) ? $queryParams : []
 		);
 
-		Log::debug('Retrieved orders: ', ($orders->toArray()));
+		Log::debug('Retrieved orders: ', $orders->toArray());
 		return response()->json([
 			'success' => true,
 			'html' => view('profile.ordersTab', compact('orders'))->render()
@@ -139,6 +136,7 @@ class OrderController extends Controller
 		$request->validate([
 			// 'order_id' => 'required|exists:orders,order_id',
 			'request_type' => 'required|in:return,refund',
+			'order_id' => 'required|exists:orders,order_id',
 			'items' => 'required|array',
 			'items.*.order_items_id' => 'required|exists:order_items,order_items_id',
 			'items.*.quantity' => 'required|integer|min:1',
@@ -152,13 +150,39 @@ class OrderController extends Controller
 		DB::beginTransaction();
 
 		try {
+			// Logic validation
 			$user = Auth::user();
-			foreach ($request->input('items') as $itemData) {
+			$order = Order::findOrFail($request->input('order_id'));
+			$items = $request->input('items');
+			$products = Product::whereIn(
+				'product_id',
+				OrderItem::whereIn('order_items_id', array_column($items, 'order_items_id'))
+					->pluck('product_id')
+			)->get();
+			Log::debug('Products for checking: ', ['products' => $products]);
+			if ($order->status !== 'delivered') {
+				return redirect()->back()->with('error', 'Chỉ có thể yêu cầu đổi trả cho đơn hàng đã giao hàng.');
+			}
+			foreach ($products as $product) {
+				Log::debug("checking claim date for product " . $product->name);
+				$claimDaysDuration = $product->getClaimsDurationDays();
+				$deliverDate = $order->deliver_time;
+				Log::debug('Claim days duration: ', ['claimDaysDuration' => $claimDaysDuration]);
+				Log::debug('Deliver date: ', ['deliverDate' => $deliverDate]);
+
+				$isClaimable = date_diff(now(), $deliverDate)->days <= $claimDaysDuration;
+				Log::debug('Is claimable: ', ['isClaimable' => $isClaimable]);
+				if (!$isClaimable) {
+					return redirect()->back()->with('error', 'Đã hết thời hạn đổi trả cho sản phẩm ' . $product->name);
+				}
+			}
+
+			foreach ($items as $item) {
 				$returnRefundItem = ReturnRefundItem::create([
-					'order_items_id' => $itemData['order_items_id'],
+					'order_items_id' => $item['order_items_id'],
 					'user_id' => $user->user_id,
 					'type' => $request->input('request_type'),
-					'quantity' => $itemData['quantity'],
+					'quantity' => $item['quantity'],
 					'reason_tag' => $request->input('reason_tag'),
 					'reason_description' => $request->input('reason_description'),
 					'status' => 'pending',
@@ -177,7 +201,7 @@ class OrderController extends Controller
 			}
 			DB::commit();
 			return redirect()->back()->with('success', 'Yêu cầu của bạn đã được gửi thành công.');
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			DB::rollBack();
 			Log::error('OrderController@submitRefundReturn: ' . $e);
 			return redirect()->back()->with('error', 'Có lỗi xảy ra khi gửi yêu cầu.');
@@ -197,5 +221,54 @@ class OrderController extends Controller
 		}
 
 		return view('orders.detail', compact('order', 'discount_amount'));
+	}
+
+	public function getClaims($order_id)
+	{
+		try {
+			if (empty($order_id)) {
+				Log::error('OrderController@getClaimsStatus: Order ID is required');
+				return response()->json([
+					'success' => false,
+					'message' => 'Order ID is required'
+
+				], 400);
+			}
+
+			$order = Order::findOrFail($order_id);
+			$orderDate = $order->created_at;
+			$orderItems = $order->order_items()->get();
+			$claims = [];
+
+			foreach ($orderItems as $item) {
+				$product = $item->product()->get()->first();
+				$claimDurationDays = $product->getClaimsDurationDays();
+				$claimDeadline = $orderDate->addDays($claimDurationDays);
+
+				Log::debug('Product: ', ['product' => $product]);
+				Log::debug('claimDays: ', ['claimDays' => $claimDurationDays]);
+
+				$isClaimable = now() <= $claimDeadline;
+				array_push($claims, [
+					'order_items_id' => $item->order_items_id,
+					'product_id' => $product->product_id,
+					'isClaimable' => $isClaimable,
+					'claimDeadline' => $claimDeadline,
+					'claimDurationDays' => $claimDurationDays,
+					'reason' => $isClaimable ? 'Còn thời hạn đổi trả' : 'Hết thời hạn đổi trả',
+				]);
+			}
+
+			return response()->json([
+				'success' => true,
+				'claims' => $claims
+			]);
+		} catch (Exception $e) {
+			Log::error('OrderController@getClaimsStatus: ' . $e->getMessage());
+			return response()->json([
+				'success' => false,
+				'message' => 'Failed to fetch claims status'
+			], 500);
+		}
 	}
 }
