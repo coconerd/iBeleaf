@@ -65,7 +65,7 @@
     transform: scale(0.95);
 }
 
-/* Optional: Add a gentle shake animation */
+/* Animation for Bin icon*/
 @keyframes shake {
     0% { transform: rotate(0deg); }
     25% { transform: rotate(-10deg); }
@@ -78,11 +78,6 @@
     animation: shake 0.5s ease;
 }
 
-/* .quantity-btn.plus::disable{
-	cursor: not-allowed;
-	color: #EBEBEC;
-	opacity: 0.2;
-} */
 .quantity-wrapper {
 	display: flex;
 	align-items: center;
@@ -111,22 +106,15 @@
     border: 2px solid #e8d5c4;  /* Add soft border color */
 }
 
-/* Add hover effect for the border */
-/* .image-container:hover .product-image {
-    border-color: #c78b5e;  
-    transform: scale(1.05);
-	top: -7px; 
-    left: -5px;
-}*/
+/* Default state with animation */
+.each-cart-item {
+    transition: transform 0.3s ease;
+}
+
 .each-cart-item:hover {
     animation: gentlePulse 2s infinite;
-} 
-.product-image {
-	max-width: 184px;
-	max-height: 184px;
-	border-radius: 20px;
-	z-index: 0;
 }
+
 .image-container {
 	position: relative;
 	width: 100%;
@@ -173,6 +161,7 @@
 	margin-bottom: 2%;
 	margin-left: 4px;
 }
+
 .cart-control {
 	margin-left: 1rem;
 }
@@ -197,6 +186,7 @@
 	padding-top: 1rem;
 	margin-top: 0.5rem;
 }
+
 @media (min-width: 768px) {
 	.temp-final-total-price-price {
 		position: relative;
@@ -346,4 +336,86 @@
 }
 #voucher-error{
 	font-size: 15px;
+}
+
+.testimonial-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background-color: rgba(247, 244, 240, 0.7);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(199, 139, 94, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+}
+
+.testimonial-content {
+    margin-bottom: 20px;
+}
+
+.testimonial-text {
+    color: #1E362D;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.testimonial-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #c78b5e;
+}
+
+.author-name {
+    margin: 0;
+    color: #1E362D;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/*Out of stock item*/
+.each-cart-item.out-of-stock {
+    opacity: 0.7;
+    position: relative;
+    filter: grayscale(50%);
+    pointer-events: none;
+    width: 100%;
+}
+
+.each-cart-item.out-of-stock::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+    border-radius: 8px;
+}
+.each-cart-item.out-of-stock .text-danger {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    opacity: 1;
+    color: red !important;
 }

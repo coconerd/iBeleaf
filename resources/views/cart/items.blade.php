@@ -27,10 +27,9 @@
                 </div>
                 
                 @foreach($cartItems as $item)
-                    <div class="d-flex mb-4 align-items-center each-cart-item"
+                    <div class="d-flex mb-4 align-items-center each-cart-item {{ $item->product->stock_quantity <= 0 ? 'out-of-stock' : '' }}"
                         data-cart-id="{{ $item->cart_id }}"
-                        data-product-id="{{ $item->product_id}}">
-                    
+                        data-product-id="{{ $item->product_id }}">
                         <!--Cart Item Image And Discount Label-->
                         <div class="item-cart">
                             @if ($item->product && $item->product->productImages->where('image_type', 1)->first())
@@ -67,6 +66,7 @@
                             <div class="cart-control container-fluid px-0">
                                <div class="row">
                                     <div class="quantity-wrapper col-12 col-sm-12 col-md-4 mb-3">
+                                        <!--Disable the quantity input and buttons when out of stock-->
                                         <button class="quantity-btn minus">-</button>
                                         <input type="number" class="quantity-input"
                                                 value="{{ $item->quantity }}"
@@ -76,7 +76,7 @@
                                                 data-discount-percentage="{{ $item->product->discount_percentage }}">
                                         <button class="quantity-btn plus">+</button>
 
-                                        <i class="fa-solid fa-trash-can ms-2 remove-item-btn fs-5" 
+                                        <i class="fa-solid fa-trash-can ms-2 remove-item-btn fs-5"
                                             style="color: #c78b5e; cursor: pointer;"
                                             data-cart-id="{{ $item->cart_id }}"
                                             data-product-name="{{ $item->product->name }}"></i>
@@ -85,16 +85,22 @@
                                     <div class="temp-final-total-price-price col-12 col-sm-12 col-md-8">
                                         <!-- Use text-start on mobile, text-end on larger screens -->
                                         <div class="row justify-content-start justify-content-md-end">
-                                            <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm khuyến mãi)</span>
-                                            <div class="d-flex align-items-center justify-content-md-end justify-content-start">
-                                                <span class="price total-uprice me-1"
-                                                    data-cart-id="{{ $item->cart_id }}"
-                                                    data-unit-price="{{ $item->unit_price }}"
-                                                    data-discount-percent="{{ $item->product->discount_percentage ?? 0}}">
-                                                    {{ number_format($item->discounted_price) }}
-                                                </span>
-                                                <span class="currency-label">VND</span>
-                                            </div>
+                                            @if($item->product->stock_quantity > 0)
+                                                <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm khuyến mãi)</span>
+                                                <div class="d-flex align-items-center justify-content-md-end justify-content-start">
+                                                    <span class="price total-uprice me-1"
+                                                        data-cart-id="{{ $item->cart_id }}"
+                                                        data-unit-price="{{ $item->unit_price }}"
+                                                        data-discount-percent="{{ $item->product->discount_percentage ?? 0}}">
+                                                        {{ number_format($item->discounted_price) }}
+                                                    </span>
+                                                    <span class="currency-label">VND</span>
+                                                </div>
+                                            @else
+                                                <div class="d-flex align-items-center justify-content-md-end justify-content-start">
+                                                    <span class="text-danger">Sản phẩm hiện đã hết hàng</span>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +167,7 @@
                         <div id="ship">
                             <i>(Chưa bao gồm phí vận chuyển)</i>
                         </div>
-                        <a href="{{ route('cart.checkout') }}" class="btn btn-primary w-100">Thanh toán</a>
+                        <a href="{{ route('cart.checkout') }}" class="btn btn-primary w-100" id="checkout-btn">Thanh toán</a>
                         <div class="text-center mt-3">
                             <a id="shipping-href" class="text-center">
                                 <u>Tiếp tục mua hàng</u>
@@ -170,6 +176,21 @@
                     </div>
                 </div>
             </div>
+
+            <!--Voucher Announcement Section-->
+            <!-- <div class="testimonial-container mt-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">
+                            Mình học được rất nhiều điều bổ ích từ khóa học này, đặc biệt là phần về ngôn ngữ thị giác. Anh Phương cũng rất nhiệt tình và luôn sẵn sàng hỗ trợ, giải đáp thắc mắc của mình.
+                        </p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="{{ asset('images/testimonials/avatar.jpg') }}" alt="Avatar" class="testimonial-avatar">
+                        <h4 class="author-name">Trần Đăng Khoa</h4>
+                    </div>
+                </div>
+            </div> -->
         </div>
     @else
         <div class="text-center py-5">
