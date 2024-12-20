@@ -93,9 +93,12 @@
 							<i class="fa-solid fa-cart-shopping cart-icon" style="color: #1e362d;"></i>
 							<span class="cart-badge" id="cart-count"
 								data-cart-id="{{ Auth::user()->cart->cart_id ?? 0 }}">
-								{{ 
-									Auth::check()
-									? Auth::user()->cart()->first()->items_count
+								{{
+									Auth::check() && Auth::user()->cart
+									? Auth::user()->cart->items()
+										->join('products', 'cart_items.product_id', '=', 'products.product_id')
+										->where('products.stock_quantity', '>', 0)
+										->sum('cart_items.quantity')
 									: 0
 								}}
 							</span>
