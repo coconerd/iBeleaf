@@ -15,14 +15,16 @@ class OrderItemFactory extends Factory
 	{
 		$product = Product::inRandomOrder()->first(); // Get random product from db
 		$quantity = $this->faker->numberBetween(1, 5);
-		$discount = (float) ($product->getAttribute('discount_percentage') / 100);
-		$totalPrice = ($product->price * (1 - $discount)) * $quantity;
+		$discountPercentage = (float) ($product->getAttribute('discount_percentage') / 100);
+		$discountedAmount = $product->price * $discountPercentage;
+		$totalPrice = ($product->price - $discountedAmount) * $quantity;
 
 		return [
 			'order_id' => Order::factory(),
 			'product_id' => $product->product_id,
 			'quantity' => $quantity,
-			'total_price' => $totalPrice
+			'total_price' => $totalPrice,
+			'discounted_amount' => $discountedAmount
 		];
 	}
 
