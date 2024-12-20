@@ -19,11 +19,18 @@
 
 		@if($errors->any())
 			<div class="alert alert-danger">
-				{{$errors->first()}}
+				@switch ($errors->first())
+					@case('Invalid credentials')
+						Thông tin đăng nhập không chính xác.
+						@break
+					@default
+						Có lỗi xảy ra. Vui lòng thử lại sau.
+						@break
+				@endswitch
 			</div>
 		@endif
 
-		<form method="POST" action="{{ route('admin.handleLogin') }}">
+		<form method="POST" action="{{ route('admin.auth.handleLogin') }}">
 			@csrf
 			<div class="mb-3">
 				<input type="text" class="form-control" placeholder="Tên đăng nhập" name="username" required>
