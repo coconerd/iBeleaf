@@ -33,12 +33,10 @@ class CartItem extends Model
 		'cart_id' => 'int',
 		'product_id' => 'string',
 		'quantity' => 'int',
-		'unit_price' => 'int'
 	];
 
 	protected $fillable = [
 		'quantity',
-		'unit_price',
 		'product_id',
 		'cart_id'
 	];
@@ -47,6 +45,11 @@ class CartItem extends Model
 	{
 		return $this->belongsTo(Cart::class, 'cart_id');
 	}
+
+	public function getUnitPriceAttribute() {
+		return $this->getRelation('product')->price;
+	}
+
 	public function product(): BelongsTo
 	{
 		return $this->belongsTo(Product::class, 'product_id');

@@ -97,7 +97,6 @@ CREATE TABLE `cart_items` (
   `cart_id` int(11) NOT NULL,
   `product_id` varchar(10) NOT NULL,
   `quantity` int(11) DEFAULT NULL,
-  `unit_price` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
