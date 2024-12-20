@@ -70,12 +70,19 @@ $(document).ready(function () {
         $(".quantity-input").on("input", function () {
             validateQuantityInput(this);
         });
+        // Add blur handler to set minimum value = 1 when user leaves field empty
+        $(".quantity-input").on("blur", function () {
+            if (!this.value) {
+                this.value = 1;
+                $(this).trigger("change");
+            }
+        });
 
-        $('.remove-item-btn').on('click', function() {
-            const cartItem = $(this).closest('.each-cart-item');
-            const cartId = cartItem.data('cart-id');
-            const productId = cartItem.data('product-id');
-            const productName = $(this).data('product-name');
+        $(".remove-item-btn").on("click", function () {
+            const cartItem = $(this).closest(".each-cart-item");
+            const cartId = cartItem.data("cart-id");
+            const productId = cartItem.data("product-id");
+            const productName = $(this).data("product-name");
 
             Swal.fire({
                 title: '<h4 style="color: #1E362D; font-size: 24px;">Xác nhận xóa</h4>',
@@ -241,6 +248,7 @@ function showMinQuantityAlert($input) {
 
 /* Validate quantity input*/
 function validateQuantityInput(input) {
+    if (input.value === "") return;
     // Remove non-numeric characters
     let value = input.value.replace(/[^0-9]/g, "");
     let numValue = parseInt(value) || 1;
