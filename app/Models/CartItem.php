@@ -28,9 +28,10 @@ class CartItem extends Model
 {
 	protected $table = 'cart_items';
 	public $incrementing = false;
-	
+
 	protected $casts = [
 		'cart_id' => 'int',
+		'product_id' => 'string',
 		'quantity' => 'int',
 		'unit_price' => 'int'
 	];
@@ -42,20 +43,33 @@ class CartItem extends Model
 		'cart_id'
 	];
 
-	public function cart(): BelongsTo{
+	public function cart(): BelongsTo
+	{
 		return $this->belongsTo(Cart::class, 'cart_id');
 	}
-	public function product(): BelongsTo{
-		return $this->belongsTo(Product::class,'product_id');
+	public function product(): BelongsTo
+	{
+		return $this->belongsTo(Product::class, 'product_id');
 	}
 
-	public function getOriginalPriceAttribute(){
+	public function getOriginalPriceAttribute()
+	{
 		return $this->unit_price * $this->quantity;
 	}
-	public function getDiscountAmountAttribute(){
+	public function getDiscountAmountAttribute()
+	{
 		return ($this->getRelation('product')->discount_percentage / 100) * $this->original_price;
 	}
-	public function getDiscountedPriceAttribute(){
+	public function getDiscountedPriceAttribute()
+	{
 		return $this->original_price - $this->discount_amount;
 	}
+
+	// Override the default save query to handle composite keys
+	protected function setKeysForSaveQuery($query)
+	{
+		return $query->where('cart_id', $this->getAttribute('cart_id'))
+			->where('product_id', $this->getAttribute('product_id'));
+	}
+
 }

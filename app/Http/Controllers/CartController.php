@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CartItem;
@@ -8,6 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 use Log;
+use DB;
 
 class CartController extends Controller
 {
@@ -66,73 +68,64 @@ class CartController extends Controller
 		try {
 			$user = Auth::user();
 			$productId = $request->input('product_id');
-			$quantity = $request->input('quantity', 1);
-			$unitPrice = $request->input('unit_price');
+			$quantity = (int) $request->input('quantity', 1);
 
-			// Retrieve the user's cart or create a new one if it doesnt exist
-			$cart = Cart::find($user->cart_id);
-			if ($user->cart_id !== null) {
-				Log::debug('User has exsiting cart: ', ['cart' => $user->cart()]);
-				// $cart = Cart::where('cart_id', '=', $user->cart_id);
-				Log::debug('Cart id:', ['id' => $user->cart_id]);
-			} else {
-				$cart = Cart::create(['items_count' => 0]);
-				$user->cart()->update(['cart_id' => $cart->cart_id]);
-				Log::debug('User not have exsiting cart, new cart created: ', ['newCart' => $cart]);
+			// Validate product exists
+			if (!Product::find($productId)) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Product not found'
+				], 404);
 			}
 
-			Log::debug('HERE');
+			// Get or create cart in a single query
+			$cart = Cart::firstOrCreate(
+				['cart_id' => $user->cart_id],
+				['items_count' => 0]
+			);
 
-			// Retrieve the cart items if it already exists
-			// $cartId = $cart->getAttribute('id');
-			// $cartItem = CartItem::where('cart_id', $user->cart_id)
-			// 	->where('product_id', $productId);
+			if (!$user->cart_id) {
+				$user->cart_id = $cart->cart_id;
+				$user->save();
+			}
 
-				$cartItem = CartItem::with(['product']) // Eloquent ORM: fetches all cart items with associated product
-				->where('cart_id', $user->cart_id) // Condition to ensure only cart items of the user are fetched
-				->get()
+			// Update or create cart item using updateOrCreate
+			$cartItem = CartItem::where('cart_id', $cart->cart_id)
+				->where('product_id', $productId)
 				->first();
-			Log::debug('cartItems is: ' . json_encode($cartItem));
 
-			Log::debug('HERE2');
-
-			if (!$cartItem) {
-				CartItem::create([
-					'cart_id' => $user->cart_id,
-					'product_id' => $productId,
-					'quantity' => $quantity,
-					'unit_price' => $unitPrice
-				]);
+			if ($cartItem) {
+				$cartItem->quantity += $quantity;
+				$cartItem->save();
 			} else {
-				Log::debug('HERE22');
-				CartItem::where([
-					'cart_id' => $user->cart_id,
-					'product_id' => $productId
-				])->update([
-					'quantity' => $cartItem->quantity + $quantity
+				CartItem::create([
+					'cart_id' => $cart->cart_id,
+					'product_id' => $productId,
+					'quantity' => $quantity
 				]);
-					
-				
 			}
 
-			Log::debug('HERE3');
-
-			// Update the items count
-			$cart->items_count = CartItem::where('cart_id', $user->cart_id)
+			// Update cart items count efficiently
+			$cart->items_count = CartItem::where('cart_id', $cart->cart_id)
 				->sum('quantity');
 			$cart->save();
 
-			Log::debug('HERE4');
-			$cart->save();
 			return response()->json([
 				'success' => true,
-				'message' => 'Item added to cart successfully!'
-			], 200);
+				'message' => 'Item added to cart successfully',
+				'items_count' => $cart->items_count
+			]);
+
 		} catch (Exception $e) {
-			Log::error('CartController@insertItemToCart: ', ['error' => $e]);
+			Log::error('Failed to add item to cart', [
+				'user_id' => Auth::id(),
+				'product_id' => $productId ?? null,
+				'error' => $e->getMessage()
+			]);
+
 			return response()->json([
 				'success' => false,
-				'message' => 'Failed to insert item to cart!',
+				'message' => 'Failed to add item to cart'
 			], 500);
 		}
 	}
