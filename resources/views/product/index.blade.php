@@ -1,5 +1,5 @@
 @extends("layouts.layout")
-@section("title", "landing-page")
+@section("title", "Chi tiết sản phẩm")
 
 @section("head-script")
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -14,7 +14,8 @@
 <div class="mt-2 alert alert-success visually-hidden" style="position: fixed; top: 10%; right: 2%; z-index: 1000;">
 </div>
 
-<div class="mt-2 alert alert-danger visually-hidden" style="position: fixed; top: 10%; right: 2%; z-index: 1000;"> </div>
+<div class="mt-2 alert alert-danger visually-hidden" style="position: fixed; top: 10%; right: 2%; z-index: 1000;">
+</div>
 
 <!-- Main container of page -->
 <div class="container-fluid">
@@ -58,7 +59,8 @@
 					<button class="nav-arrows prev-arrow" onclick="navigateImage(-1)">&#10094;</button>
 					<button class="nav-arrows next-arrow" onclick="navigateImage(1)">&#10095;</button>
 					<button
-						class="heart-button {{ $product->is_wishlisted ? 'heart-button-active' : 'heart-button-inactive' }}">
+						class="heart-button {{ $product->is_wishlisted ? 'heart-button-active' : 'heart-button-inactive' }}"
+						data-product-id="{{ $product->product_id }}">
 						<i class="fas fa-heart"></i>
 					</button>
 				</div>
@@ -486,10 +488,8 @@
 						</h4>
 						<p style="text-align: justify;">
 							Đối với các sản phẩm cây xanh, nếu gặp tình trạng hư hại, héo úa hoặc suy
-							yếu khi được giao, quý khách vui lòng liên hệ với <b>Plant Paradise</b> trong vòng <b>7
-								ngày</b> để
-							được đổi
-							cây mới.
+							yếu khi được giao, quý khách có thể yêu cầu đổi trả cây mới hàng trong vòng <b>7 ngày</b>,
+							hoặc vui lòng liên hệ với <b>Plant Paradise</b>để được hỗ trợ.
 						</p>
 					</div>
 				</div>
