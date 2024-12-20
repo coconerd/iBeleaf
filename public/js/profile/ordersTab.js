@@ -8,18 +8,52 @@ $(document).ready(function () {
 		const modal = $(`#refundReturnModal`);
 		console.log('found modal: ', modal);
 		modal.find('.refundReturnOrderId').val(orderId);
+		$('.modalOrderId').val(orderId);
+
+		let claims = [];
+		// Get orders's claims status
+		$.ajax({
+			url: `/orders/${orderId}/claims`,
+			method: 'GET',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			success: function (response) {
+				claims = response.claims;
+				console.log('claims: ', claims);
+				modal.find('.refundReturnItemsSelect').find('option').each(function () {
+					const orderItemsId = $(this).val();
+					const claim = claims.find(claim => (
+						claim.order_items_id === Number(orderItemsId)
+					));
+					if (!!claim && claim.isClaimable === false) {
+						// $(this).prop('disabled', true);
+						$(this).text($(this).text() + ' - ' + claim.reason);
+						$(this).css('color', 'orange');
+						$(this).css('font-style', 'italic');
+						$(this).css('opacity', '0.7');
+					}
+				});
+			},
+			error: function (err) {
+				console.log('Error fetching claims: ', err);
+				console.error('error: ', err);
+			}
+		});
 
 		// Populate the items select box
 		let itemsOptions = '';
 		$(this).closest('.card').find('.product-item').each(function () {
-			let orderItemsId = $(this).data('order-items-id');
-			let productName = $(this).find('.product-short-description').text().trim();
-			let productImgUrl = $(this).find('.product-image-thumbnail').attr('src');
-			let purchaseQuantity = $(this).find('.purchaseQuantity').text().trim().replace('x ', '');
+			const orderItemsId = $(this).data('order-items-id');
+			const productName = $(this).find('.product-short-description').text().trim();
+			const productImgUrl = $(this).find('.product-image-thumbnail').attr('src');
+			const purchaseQuantity = $(this).find('.purchaseQuantity').text().trim().replace('x ', '');
+
 			itemsOptions += `
-				<option data-img-url="${productImgUrl}" 
+				<option data-img-url="${productImgUrl} " 
 					data-purchase-quantity="${purchaseQuantity}"
-					value="${orderItemsId}">${productName} (số lượng: ${purchaseQuantity})
+					value="${orderItemsId}">
+						${productName} (số lượng: ${purchaseQuantity})
 				</option>`;
 		});
 		modal.find('.refundReturnItemsSelect').html(itemsOptions);
