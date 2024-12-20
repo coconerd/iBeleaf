@@ -171,9 +171,8 @@ function hanldeQuantityUpdate($input) {
         : $input.siblings(".quantity-input");
     calculatePrice($quantityInput);
     calculateCartTotal();
-    if ($input.data('discount-percentage') > 0) {
-        updateDiscountAmount($quantityInput);
-    }
+    updateDiscountAmount();
+    
 }
 
 function showMinQuantityAlert($input) {
@@ -295,16 +294,17 @@ function calculatePrice($input) {
     }
 }
 
-function updateDiscountAmount($input) {
-    const $item = $input.closest("body").find(".card-body");
-    const $discount = $item.find("#total-discount-amount");
-    const quantity = parseInt($input.val());
-    console.log("Quantity:", quantity); 
+function updateDiscountAmount() {
+    const $input = $('.quantity-input');
+    const $summary = $(".card-body");
+    const $discount = $summary.find("#total-discount-amount");
+    const quantity = $input.val();
 
-    const unitPrice = parseInt(
-        $input.closest(".cart-control").find(".total-uprice").data("unit-price")
-    );
-    console.log("Unit price:", unitPrice);
+    console.log("Summary element:", $summary);
+    console.log("Discount element:", $discount);
+    console.log("Quantity:", quantity);
+    
+    const unitPrice = $input.closest(".cart-control").find(".total-uprice").data("unit-price");
 
     const discountPercent = parseInt(
         $input
@@ -312,7 +312,6 @@ function updateDiscountAmount($input) {
             .find(".total-uprice")
             .data("discount-percent")
     );
-    console.log("Discount percentage:", discountPercent);
 
     if ($discount.length) {
         const discountAmount = unitPrice * quantity * (discountPercent / 100);
