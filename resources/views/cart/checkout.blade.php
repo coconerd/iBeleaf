@@ -31,8 +31,8 @@
 					<input type="text" class="form-control" id="phone" placeholder="Số điện thoại">
 				</div>
 				<div class="mb-3">
-					<label for="city" class="form-label">Thành Phố/Tỉnh <span class="required">*</span></label>
-					<select class="form-select" id="city">
+					<label for="province" class="form-label">Thành Phố/Tỉnh <span class="required">*</span></label>
+					<select class="form-select" id="province">
 						<option selected>Lựa chọn Tỉnh/Thành Phố</option>
 					</select>
 				</div>
@@ -67,7 +67,7 @@
         </div>
 
         <!-- Payment Method Section -->
-        <div class="col-md-6 col-12 right-body ps-md-5">
+        <class class="col-md-6 col-12 right-body ps-md-5">
 			<!-- Shipping privacy-->
 			<div id="shipping-privacy">
             	<span class="section-title">Qui định về phí vận chuyển</span>
@@ -77,53 +77,74 @@
 					<p><i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i> Dieu 1</p>
 					<p><i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i> Dieu 2</p>
 					<p><i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i> Dieu 3</p>
+				</div>
 			</div>
-
-            <span class="section-title">Phương thức thanh toán</span>
-			<hr class="line">
-            <p class="text-danger" id="address-warning">Vui lòng nhập địa chỉ giao hàng</p>
 			
-            <!-- Banking Payment -->
-            <div class="payment-method d-flex align-items-center justify-content-between disabled" class="type">
-                <div class="d-flex align-items-center">
-                    <img src="https://www.muji.com.vn/_next/static/media/payment_online.20c772c1.svg" alt="BANKING">
-					<span>
-						<span class="payment-type">BANKING</span><br>
-                        <small>Chuyển khoản ngân hàng, MOMO, VNPAY, Apple Pay</small>
-                    </span>
-                </div>
-                <input type="radio" name="payment" class="form-check-input">
-            </div>
+			<div id="payment-body">
+				<span class="section-title">Phương thức thanh toán</span>
+				<hr class="line">
+				<p class="text-danger" id="address-warning">Vui lòng nhập địa chỉ giao hàng</p>
+					<div class="payment-method d-flex align-items-center justify-content-between disabled" class="type">
+						<div class="d-flex align-items-center">
+							<img src="https://www.muji.com.vn/_next/static/media/payment_online.20c772c1.svg" alt="BANKING">
+							<span>
+								<span class="payment-type">BANKING</span><br>
+								<small>Chuyển khoản ngân hàng, MOMO, VNPAY, Apple Pay</small>
+							</span>
+						</div>
+						<input type="radio" name="payment" class="form-check-input">
+					</div>
 
-            <!-- Cash on Delivery -->
-            <div class="payment-method d-flex align-items-center justify-content-between disabled" class="type">
-                <div class="d-flex align-items-center">
-                    <img src="https://www.muji.com.vn/_next/static/media/cod.6f018bcd.svg" alt="Cash">
-                    <span class="payment-type">Thanh Toán Khi Nhận Hàng</span>
-                </div>
-                <input type="radio" name="payment" class="form-check-input">
-            </div>
-
+					<!-- Cash on Delivery -->
+					<div class="payment-method d-flex align-items-center justify-content-between disabled" class="type">
+						<div class="d-flex align-items-center">
+							<img src="https://www.muji.com.vn/_next/static/media/cod.6f018bcd.svg" alt="Cash">
+							<span class="payment-type">Thanh Toán Khi Nhận Hàng</span>
+						</div>
+						<input type="radio" name="payment" class="form-check-input">
+					</div>
+			</div>
 			<!--Order Summary-->
-			<div class="container mt-5">
+			<div class="container mt-5" id="order-summary">
 				<span class="section-title">Thông tin đơn hàng</span>
 				<hr class="line">
-				<div class="order-summary mt-4">
-					<div class="d-flex">
-						<img src="https://via.placeholder.com/150" alt="Ao Cardigan">
-						<div class="ml-3">
-							<h5>Áo Cardigan Cổ V MUJI</h5>
-							<p>Màu Sắc: Nâu Mocha Đậm</p>
-							<p>Kích Cỡ: L</p>
-							<p>Số lượng: 1</p>
+				<div class="mt-4">
+					<div class="order-items">
+					<!-- Single Order Item -->
+					<div class="order-item">
+						<div class="d-flex gap-3">
+							<div class="order-item-image position-relative">
+								<span class="item-quantity-badge">1</span>
+								<img src="https://via.placeholder.com/150" alt="Product Image">
+							</div>
+							<div class="order-item-details flex-grow-1">
+								<div class="d-flex justify-content-between align-items-start">
+									<div>
+										<h5 class="item-title mb-1">Tempting Tuna Cat Treats</h5>
+										<p class="item-brand">Temptations</p>
+									</div>
+									<span class="item-price">$5.99</span>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="mt-3">
-						<p>Tạm tính (1 mặt hàng): <span class="float-right">799.000 VNĐ</span></p>
-						<p>Phí vận chuyển: <span class="float-right">Chưa Tính Toán</span></p>
-						<p>Tổng tiền: <span class="total float-right">799.000 VNĐ</span> (Đã bao gồm VAT)</p>
+
+				<div class="order-summary-details">
+					<div class="summary-row">
+						<span>Tạm tính (1 mặt hàng)</span>
+						<span>799.000 VNĐ</span>
 					</div>
-					<button class="btn btn-custom btn-block mt-4">Thanh toán</button>
+					<div class="summary-row">
+						<span>Phí vận chuyển</span>
+						<span class="shipping-cost">Chưa Tính Toán</span>
+					</div>
+					<div class="summary-row total">
+						<span>Tổng tiền (Đã bao gồm VAT)</span>
+						<span class="total-amount">799.000 VNĐ</span>
+					</div>
+				</div>
+
+				<button class="btn btn-custom w-100">Thanh toán</button>
 				</div>
 			</div>
         </div>
