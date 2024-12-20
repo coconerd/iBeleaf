@@ -1,11 +1,19 @@
 $(document).ready(function () {
     const $quantityWrappers = $(".quantity-wrapper");
 
+    // When having out-of-stock item
+    // function updateItemCount() {
+    //     const inStockCount = $(".each-cart-item:not(.out-of-stock)").length;
+    //     $(".items-count").text(inStockCount);
+    // }
+
     function updateButtonStates($minusBtn, $plusBtn, value, maxStock) {
         $minusBtn.prop("disabled", value < 1);
         $plusBtn.prop("disabled", value >= maxStock);
     }
 
+    // updateItemCount();
+    
     // Quantity changes handling
     $quantityWrappers.each(function () {
         const $minusBtn = $(this).find(".minus");
@@ -168,6 +176,13 @@ $(document).ready(function () {
             });
         });
     });
+
+    //Checkout Button (Thanh toan) handling
+    $('#checkout-btn').on('click', function () {
+        return $.ajax([
+            
+        ]);
+    });
 });
 
 
@@ -268,10 +283,12 @@ function preventInvalidChars(e) {
 
 function updateCartCount() {
     let totalQuantity = 0;
-    $(".quantity-input").each(function () {
-        totalQuantity += parseInt($(this).val());
+    
+    $(".all-cart-items .each-cart-item:not(.out-of-stock) .quantity-input").each(function() {
+        totalQuantity += parseInt($(this).val() || 0);
     });
-
+    console.log("Total In-Stock Quantity:", totalQuantity);
+    
     $(".items-count").text(totalQuantity);
     $(".items-count-mh").text(totalQuantity + " mặt hàng");
     $("#cart-count").text(totalQuantity);
@@ -349,4 +366,3 @@ function calculateCartTotal() {
 function formatPrice(price) {
     return new Intl.NumberFormat("VND").format(price);
 }
-
