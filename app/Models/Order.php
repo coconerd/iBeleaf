@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Order
@@ -69,7 +70,7 @@ class Order extends Model
 
 	public function user()
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(User::class, 'user_id', 'user_id');
 	}
 
 	public function voucher()
@@ -77,7 +78,7 @@ class Order extends Model
 		return $this->belongsTo(Voucher::class , 'voucher_id', 'voucher_id');
 	}
 
-	public function order_items()
+	public function order_items(): HasMany
 	{
 		return $this->hasMany(OrderItem::class, 'order_id', 'order_id');
 	}
