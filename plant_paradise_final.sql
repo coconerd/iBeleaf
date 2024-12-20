@@ -14310,6 +14310,7 @@ CREATE TABLE `return_refund_items` (
   `quantity` int(11) DEFAULT 1,
   `reason_tag` varchar(100) DEFAULT NULL,
   `reason_description` longtext DEFAULT NULL,
+  `reject_reason` text DEFAULT NULL,
   `status` enum('pending','accepted','rejected','received') DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
