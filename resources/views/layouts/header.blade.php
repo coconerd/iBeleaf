@@ -94,7 +94,7 @@
 							<span class="cart-badge" id="cart-count"
 								data-cart-id="{{ Auth::user()->cart->cart_id ?? 0 }}">
 								{{
-									Auth::check() && Auth::user()->cart
+									Auth::check() && Auth::user()->role_type == 0 && Auth::user()->cart
 									? Auth::user()->cart->items()
 										->join('products', 'cart_items.product_id', '=', 'products.product_id')
 										->where('products.stock_quantity', '>', 0)
