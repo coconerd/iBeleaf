@@ -514,7 +514,7 @@ class ProfileController extends Controller
 	{
 		if ($request->ajax()) {
 			$returnRefundItems = ReturnRefundItem::where('user_id', auth()->id())
-				->with([
+				->with(relations: [
 						'order_item.product.product_images' => function ($query) {
 							$query->where('image_type', 1)
 								->select('product_image_url', 'product_id');
