@@ -19,10 +19,10 @@ $(document).ready(function () {
     // Populate provinces dropdown
     function populateProvinces() {
         const $provinceSelect = $("#province");
-		$provinceSelect.empty();
+        $provinceSelect.empty();
         $provinceSelect.append(
             "<option selected>Lựa chọn Tỉnh/Thành Phố</option>"
-		);
+        );
 		
         Object.keys(provinceData).forEach((key) => {
             $provinceSelect.append(
@@ -46,11 +46,15 @@ $(document).ready(function () {
         $districtSelect.append("<option selected>Lựa chọn Quận/Huyện</option>");
         $wardSelect.append("<option selected>Lựa chọn Phường/Xã</option>");
 
+        resetShippingCalculation();
+
         if (provinceId && provinceData[provinceId]) {
             const districts = provinceData[provinceId].Districts;
             Object.keys(districts).forEach((districtId) => {
                 $districtSelect.append(
-                    `<option value="${districtId}">${districts[districtId].DistrictName}</option>`
+                    $("<option></option>")
+                        .attr("value", districtId) // Store ID as value
+                        .text(districts[districtId].DistrictName) // Display name as text
                 );
             });
         }
@@ -66,6 +70,8 @@ $(document).ready(function () {
         $wardSelect.empty();
         $wardSelect.append("<option selected>Lựa chọn Phường/Xã</option>");
 
+        resetShippingCalculation();
+
         if (
             provinceId &&
             districtId &&
@@ -74,9 +80,63 @@ $(document).ready(function () {
             const wards = provinceData[provinceId].Districts[districtId].Wards;
             Object.keys(wards).forEach((wardId) => {
                 $wardSelect.append(
-                    `<option value="${wardId}">${wards[wardId].WardName}</option>`
+                    $("<option></option>")
+                        .attr("value", wardId) // Store ID as value
+                        .text(wards[wardId].WardName) // Display name as text
                 );
             });
         }
     });
+
+    // Hanlde ward change
+    $("#ward").change(function () {
+        const districtId = $("#district").val();
+        const wardCode = $(this).val();
+
+        if (districtId && wardCode) {
+            calculateShippingFee({
+                to_district_id: districtId,
+                to_ward_code: wardCode
+            });
+        }
+    })
 });
+
+function resetShippingCalculation() { 
+    $("#shipping-fee").text("---");
+}
+
+function calculateShippingFee(to_district_id, to_ward_code) { 
+    $.ajax({
+        method: "POST",
+        url: "/calculate-shipping",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        data: JSON.stringify({
+            to_district_id: to_district_id,
+            to_ward_code: to_ward_code
+        }),
+        contentType: "application/json",
+        success: function (response) {
+            if (response.success) {
+                $("#shipping-fee").text(
+                    new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                    }).format(response.shipping_fee)
+                );
+            } else {
+                console.error(
+                    "Failed to calculate shipping fee:",
+                    response.message
+                );
+                resetShippingCalculation();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Shipping calculation error:", error);
+            resetShippingCalculation();
+        },
+    });
+}

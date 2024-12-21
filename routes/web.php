@@ -158,7 +158,12 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 });
 
 // Voucher routes
-Route::middleware(['auth'])->group(function (): void {
+Route::middleware(['auth', 'role:0'])->group(function (): void {
 	Route::post('voucher/validate', [VoucherController::class, 'validateVoucher'])
 		->name('voucher.validate');
 });
+
+//Shipping route
+Route::post('/calculate-shipping', [CheckOutController::class, 'calculatingShippingFee'])
+    ->name('shipping.calculate')
+    ->middleware(['auth', 'role:0']);
