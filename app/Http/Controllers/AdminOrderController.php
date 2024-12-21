@@ -8,13 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Log;
 
-class AdminController extends Controller
+class AdminOrderController extends Controller
 {
-	public function showDashboardPage()
-	{
-		return view('admin.dashboard.index');
-	}
-
 	public function showOrdersPage(Request $request)
 	{
 		$query = Order::query();
@@ -79,23 +74,10 @@ class AdminController extends Controller
 		return view('admin.orders.index', compact('orders', 'newestOrders'));
 	}
 
-	public function show($id)
-	{
-		$order = Order::findOrFail($id);
-		return view('admin.orders.show', compact('order'));
-	}
-
 	public function edit($id)
 	{
 		$order = Order::findOrFail($id);
 		return view('admin.orders.edit', compact('order'));
-	}
-
-	public function update(Request $request, $id)
-	{
-		$order = Order::findOrFail($id);
-		$order->update($request->all());
-		return redirect()->route('admin.orders.index')->with('success', 'Order updated successfully');
 	}
 
 	public function updateOrderField(Request $request): JsonResponse

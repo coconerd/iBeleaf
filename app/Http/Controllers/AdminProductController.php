@@ -12,7 +12,7 @@ use Log;
 
 class AdminProductController extends Controller
 {
-	public function index(Request $request)
+	public function showProductsPage(Request $request)
 	{
 		// Get filter parameters
 		$category = $request->input('category');

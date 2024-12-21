@@ -32,7 +32,7 @@
 			<span class="nav-item-head">Danh mục</span>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="../index.html">
+			<a class="nav-link" href="{{ route('admin.dashboard.showDashboardPage') }}">
 				<i class="mdi mdi-compass-outline menu-icon"></i>
 				<span class="menu-title">Dashboard</span>
 			</a>

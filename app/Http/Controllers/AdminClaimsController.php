@@ -7,10 +7,10 @@ use App\Models\ReturnRefundItem;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 
-class ClaimsController extends Controller
+class AdminClaimsController extends Controller
 {
 	// Display the list of refund and return requests
-	public function index(Request $request)
+	public function showClaimsPage(Request $request)
 	{
 		$direction = $request->query('direction', 'desc');
 		$type = $request->query('type');

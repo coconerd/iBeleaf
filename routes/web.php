@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
@@ -10,9 +11,9 @@ use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VoucherController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
-use App\Http\Controllers\ClaimsController;
+use App\Http\Controllers\AdminClaimsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,29 +76,31 @@ Route::prefix('admin')->name('admin.')->group(function () {
 	Route::middleware(['auth', 'role:1'])->group(function () {
 		// Admin orders route
 		Route::prefix('orders')->name('orders.')->group(function () {
-			Route::get('/', [AdminController::class, 'showOrdersPage'])->name('showOrdersPage');
-			Route::get('/{order_id}/details', [AdminController::class, 'getOrderDetails'])->name('getOrdersDetails');
-			Route::get('/edit', [AdminController::class, 'edit'])->name('edit');
+			Route::get('/', [AdminOrderController::class, 'showOrdersPage'])->name('showOrdersPage');
+			Route::get('/{order_id}/details', [AdminOrderController::class, 'getOrderDetails'])->name('getOrdersDetails');
+			Route::get('/edit', [AdminOrderController::class, 'edit'])->name('edit');
 			// Route::get('/orders', [AdminController::class, 'index'])->name('.management');
-			Route::post('/update-field', [AdminController::class, 'updateOrderField'])
+			Route::post('/update-field', [AdminOrderController::class, 'updateOrderField'])
 				->name('updateField');
 		});
-		Route::get('/dashboard', [AdminController::class, 'showDashboardPage'])->name('showDashboardPage');
+		Route::prefix('dashboard')->name('dashboard.')->group(function () {
+			Route::get('/', [AdminDashboardController::class, 'showDashboardPage'])->name('showDashboardPage');
+		});
 
-		 // Admin claims routes
-        Route::prefix('claims')->name('claims.')->group(function () {
-            Route::get('/', [ClaimsController::class, 'index'])->name('index');
-            Route::get('/{requestId}/details', [ClaimsController::class, 'showDetails'])->name('details');
-            Route::post('/update-status', [ClaimsController::class, 'updateStatus'])->name('updateStatus');
-        });
+		// Admin claims routes
+		Route::prefix('claims')->name('claims.')->group(function () {
+			Route::get('/', [AdminClaimsController::class, 'showClaimsPage'])->name('index');
+			Route::get('/{requestId}/details', [AdminClaimsController::class, 'showDetails'])->name('details');
+			Route::post('/update-status', [AdminClaimsController::class, 'updateStatus'])->name('updateStatus');
+		});
 
-		 // Admin products management routes
-        Route::prefix('products')->name('products.')->group(function () {
-            Route::get('/', [AdminProductController::class, 'index'])->name('index');
-            Route::get('/{product_id}/details', [AdminProductController::class, 'getDetails'])->name('details');
-            Route::post('/{product_id}/update-field', [AdminProductController::class, 'updateField'])->name('updateField');
+		// Admin products management routes
+		Route::prefix('products')->name('products.')->group(function () {
+			Route::get('/', [AdminProductController::class, 'showProductsPage'])->name('index');
+			Route::get('/{product_id}/details', [AdminProductController::class, 'getDetails'])->name('details');
+			Route::post('/{product_id}/update-field', [AdminProductController::class, 'updateField'])->name('updateField');
 			Route::put('/{product_id}/update', [AdminProductController::class, 'update'])->name('update');
-        });
+		});
 
 
 		// Route to handle AJAX order updates
