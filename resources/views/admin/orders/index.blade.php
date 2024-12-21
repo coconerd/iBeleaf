@@ -35,9 +35,13 @@
                         @foreach($newestOrders as $order)
                             <div class="newest-order-item">
                                 <div class="d-flex align-items-center order-header" data-order-id="{{ $order->order_id }}">
-                                    <div class="order-info">
-                                        <span class="order-id clickable" data-order-id="{{ $order->order_id }}">Đơn hàng #{{ $order->order_id }}</span>
-                                        <span class="customer-name">&nbsp;|&nbsp;KH: {{ $order->user->full_name }}</span>
+									<div class="order-info row w-50">
+										<div class="col-3">
+											<span class="order-id clickable" data-order-id="{{ $order->order_id }}">Đơn hàng #{{ $order->order_id }}</span>
+										</div>
+										<div class="col-6">
+											<span class="customer-name">KH: {{ $order->user->full_name }}</span>
+										</div>
                                     </div>
                                     <span class="ms-auto me-3 order-time">{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</span>
                                     <span class="status-badge
@@ -76,7 +80,7 @@
                                 <div class="order-details" id="order-details-{{ $order->order_id }}" style="display: none;">
                                     <div class="order-summary mt-3">
                                         <p><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} ₫</p>
-                                        <p><strong>Phí vận chuyển:</strong> {{ number_format($order->shipping_fee, 0, ',', '.') }} ₫</p>
+                                        <p><strong>Phí vận chuyển:</strong> {{ number_format($order->deliver_cost, 0, ',', '.') }} ₫</p>
                                     </div>
                                     <div class="order-items">
                                         @foreach($order->order_items as $item)

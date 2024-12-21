@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						<p><strong>Khách hàng:</strong> ${order.user.full_name}</p>
 						<p><strong>Ngày đặt hàng:</strong> ${new Date(order.created_at).toLocaleString()}</p>
 						<p><strong>Tổng tiền:</strong> ${Number(order.total_price).toLocaleString()} ₫</p>
-						<p><strong>Phí vận chuyển:</strong> ${Number(order.shipping_fee).toLocaleString()} ₫</p>
+						<p><strong>Phí vận chuyển:</strong> ${Number(order.deliver_cost).toLocaleString()} ₫</p>
 					`;
 
 					// Check for voucher
