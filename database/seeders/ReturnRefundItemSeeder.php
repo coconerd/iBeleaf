@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\ReturnRefundItem;
 use App\Models\OrderItem;
+use App\Models\User;
 use App\Models\RefundReturnImage;
 
 class ReturnRefundItemSeeder extends Seeder
@@ -42,7 +43,7 @@ class ReturnRefundItemSeeder extends Seeder
 
 			$returnRefundItem = ReturnRefundItem::create([
 				'order_items_id' => $orderItem->order_items_id,
-				'user_id' => 1,
+				'user_id' => User::orderBy('user_id', 'asc')->first()->user_id,
 				'type' => rand(0, 1) ? 'return' : 'refund',
 				'quantity' => rand(1, $orderItem->quantity),
 				'reason_tag' => $reasonTag,
