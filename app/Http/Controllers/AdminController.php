@@ -136,7 +136,7 @@ class AdminController extends Controller
 
 	public function getOrderDetails($order_id): JsonResponse
 	{
-		$order = Order::with([
+		$order = Order::with(relations: [
 			'user',
 			'voucher',
 			'order_items.product.product_images',

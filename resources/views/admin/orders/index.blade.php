@@ -140,7 +140,7 @@
                         </div>
 						<div class="form-group">
 							<label for="status">Tình trạng đơn hàng</label>
-							<select class="form-control form-control-lg" id="status" name="status">
+							<select class="form-control form-control-lg form-select" id="status" name="status">
 								<option value="">Tất cả</option>
 								<option value="pending">Đang chờ xử lý</option>
 								<option value="delivering">Đang giao hàng</option>
