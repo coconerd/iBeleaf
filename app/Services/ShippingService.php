@@ -13,14 +13,15 @@ class ShippingService
 {
     private string $apiToken;
 	private string $shopId;
-    private const ITEM_WEIGHT = 3000;
+    private const ITEM_WEIGHT = 3000; // 3kg
     private const SERVICE_ID = 53321;
     private const SERVICE_TYPE_ID = 2;
     private const FROM_DISTRICT_ID = 3695;
     private const FROM_WARD_CODE = "90737";
 
-	private const MAX_RETRIES = 3;
-	private const BASE_TIMEOUT = 30;
+	private const MAX_RETRIES = 2;
+	private const BASE_TIMEOUT = 5;
+	private const RETRY_DELAY_MS = 50000; // 100ms in microseconds
 	private const API_ENDPOINT = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee';
 
     public function __construct()
@@ -35,8 +36,15 @@ class ShippingService
 
 	private function makeApiCall($payload, $attempt = 1)
 	{
+		Log::Debug('Go to makeApiCall function');
+		// Cache the response to reduce the number of API calls
+		$cacheKey = 'shipping_fee_' . md5(json_encode($payload));
+		if (Cache::has($cacheKey)) {
+			Log::Debug('Cache successfully');
+			return Cache::get($cacheKey);
+		}
 		try {
-			$timeout = self::BASE_TIMEOUT * pow(2, $attempt - 1);
+			$timeout = self::BASE_TIMEOUT * pow(1, $attempt - 1); // Exponential backoff
 			
 			return Http::timeout($timeout)
 				->withHeaders([
@@ -45,16 +53,16 @@ class ShippingService
 					'Content-Type' => 'application/json',
 				])
 				->post(self::API_ENDPOINT, $payload);
-				
 		} catch (Exception $e) {
+			// Retry if the request failed
 			if ($attempt < self::MAX_RETRIES) {
 				Log::warning("API call attempt {$attempt} failed, retrying...", [
 					'error' => $e->getMessage()
 				]);
-				sleep($attempt); // Exponential backoff
+				usleep(self::RETRY_DELAY_MS); // Pauses execution in microseconds
 				return $this->makeApiCall($payload, $attempt + 1);
 			}
-			throw $e;
+			throw new ShippingFeeCalculationException('Max retries exceeded');
 		}
 	}
     public function calculateFee($toDistrictId, $toWardCode, $cartId)
@@ -73,11 +81,17 @@ class ShippingService
                 ];
             })->toArray();
 
+			 Log::debug('Starting fee calculation', [
+				'district' => $toDistrictId,
+				'ward' => $toWardCode,
+				'cart' => $cartId
+			]);
+
             $requestPayload = [
                 'from_district_id' => self::FROM_DISTRICT_ID,
                 'from_ward_code' => self::FROM_WARD_CODE,
                 'service_id' => self::SERVICE_ID,
-                'service_type_id' => (int)self::SERVICE_TYPE_ID,
+                'service_type_id' => self::SERVICE_TYPE_ID,
                 'to_district_id' => (int)$toDistrictId,
                 'to_ward_code' => (string)$toWardCode,
                 'weight' => $totalWeight,
@@ -93,22 +107,15 @@ class ShippingService
 				'items' => $items
 			]);
 
-            try {
-				$response = $this->makeApiCall($requestPayload);
-				
-				if ($response->successful()) {
-					$data = $response->json();
-					return $data['data']['total'] ?? 0;
-				}
-				
-				throw new ShippingFeeCalculationException('Failed to calculate shipping fee: ' . $response->body());
-			} catch (Exception $e) {
-				Log::error('Shipping fee calculation failed', [
-					'error' => $e->getMessage(),
-					'cart_id' => $cartId
-				]);
-				throw new ShippingFeeCalculationException($e->getMessage());
+			$response = $this->makeApiCall($requestPayload);
+			
+			if ($response->status() === 200) {
+				$data = $response->json();
+				Log::debug('Calculate shipping fee succesfully');
+				return $data['data']['total'] ?? 0;
 			}
+			throw new ShippingFeeCalculationException('Failed to calculate shipping fee: ' . $response->body());
+			
         } catch (Exception $e) {
             Log::error('Shipping fee calculation failed', [
                 'error' => $e->getMessage(),
