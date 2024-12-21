@@ -44,7 +44,7 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="/admin/products">
+			<a class="nav-link" href="{{ route('admin.products.index') }}">
 				<i class="menu-icon mdi mdi-flower"></i>
 				<span class="menu-title">Quản lý sản phẩm</span>
 			</a>

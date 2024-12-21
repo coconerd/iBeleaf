@@ -11,6 +11,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\ClaimsController;
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{requestId}/details', [ClaimsController::class, 'showDetails'])->name('details');
             Route::post('/update-status', [ClaimsController::class, 'updateStatus'])->name('updateStatus');
         });
+
+		 // Admin products management routes
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::get('/', [AdminProductController::class, 'index'])->name('index');
+            Route::get('/{product_id}/details', [AdminProductController::class, 'getDetails'])->name('details');
+            Route::post('/{product_id}/update-field', [AdminProductController::class, 'updateField'])->name('updateField');
+			Route::put('/{product_id}/update', [AdminProductController::class, 'update'])->name('update');
+        });
+
 
 		// Route to handle AJAX order updates
 	});
