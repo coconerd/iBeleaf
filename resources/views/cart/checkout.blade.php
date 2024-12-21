@@ -105,7 +105,7 @@
 						</div>
 					</div>
 
-					<button class="btn btn-custom w-100">Thanh toán</button>
+					<button class="btn btn-custom w-100" id="pay-btn">Thanh toán</button>
 				</div>
 			</div>
 
