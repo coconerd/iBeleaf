@@ -97,6 +97,17 @@ select option:first-child {
 	padding-top: 10px;
 }
 
+.right-body {
+    position: relative;
+    margin-top: -50px;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .right-body {
+        margin-top: 0; /* Reset for mobile */
+    }
+}
 /*Shipping Privacy*/
 #shipping-privacy,
 #payment-body,
@@ -183,14 +194,11 @@ select option:first-child {
 
 /*Order Summary section*/
 /* Overall container */
-/* Overall container */
 #order-summary {
-	/* background-color: rgba(247, 244, 240, 0.9); */
-    background-color: #F7F4F0;
+    background-color: rgb(247, 244, 240, 0.8);
 	outline: 0.05px solid white;
 	border-radius: 30px; /* More rounded corners */
 	padding: 20px;
-	margin: 10px 0;
 	width: 100%;
 	/* box-shadow: 0 4px 10px white; */
 	overflow: hidden; /* Prevent content overflow */
