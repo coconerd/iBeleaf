@@ -11,6 +11,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClaimsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,7 +58,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 	// Public admin routes
 	Route::get('/', function () {
 		if (!Auth::check()) {
-			return redirect()->route('admin.showLoginForm');
+			return redirect()->route('admin.auth.showLoginForm');
 		}
 		return Auth::user()->role_type === 1
 			? redirect()->route('admin.showDashboardPage')
@@ -82,6 +83,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 		});
 		Route::get('/dashboard', [AdminController::class, 'showDashboardPage'])->name('showDashboardPage');
 
+		 // Admin claims routes
+        Route::prefix('claims')->name('claims.')->group(function () {
+            Route::get('/', [ClaimsController::class, 'index'])->name('index');
+            Route::get('/{requestId}/details', [ClaimsController::class, 'showDetails'])->name('details');
+            Route::post('/update-status', [ClaimsController::class, 'updateStatus'])->name('updateStatus');
+        });
+
 		// Route to handle AJAX order updates
 	});
 });
@@ -90,7 +98,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
  * End admin routes
  */
 // Profile: middleware auth để bắt buộc phải đăng nhập mới xem được các trang có route này
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::get('/profile', [ProfileController::class, 'showProfilePage'])->name('profile.homePage');
 	Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
 	Route::post('/profile/validate/{field}', [ProfileController::class, 'validateField'])->name('profile.validate');

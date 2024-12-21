@@ -40,6 +40,7 @@ class ReturnRefundItem extends Model
 		'user_id' => 'int',
 		'quantity' => 'int',
 		'status' => 'string',
+		'reject_reason' => 'string',
 	];
 
 	protected $fillable = [
@@ -49,7 +50,8 @@ class ReturnRefundItem extends Model
 		'quantity',
 		'reason_tag',
 		'reason_description',
-		'status' // one of these: 'pending','accepted','rejected','received'
+		'status', // one of these: 'pending','accepted','rejected','received'
+		'reject_reason', // Add this line
 	];
 
 	public function order_item()
@@ -59,7 +61,7 @@ class ReturnRefundItem extends Model
 
 	public function user()
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(User::class, 'user_id', 'user_id');
 	}
 
 	public function refund_return_images()

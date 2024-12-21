@@ -56,9 +56,9 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="/admin/returns">
+			<a class="nav-link" href="{{ route('admin.claims.index') }}">
 				<i class="menu-icon mdi mdi-backup-restore"></i>
-				<span class="menu-title">Quản lý đổi/trả hàng</span>
+				<span class="menu-title">Tiếp nhận đổi/trả hàng</span>
 			</a>
 		</li>
 		<li class="nav-item">
