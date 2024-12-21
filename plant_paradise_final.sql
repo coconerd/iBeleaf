@@ -12300,7 +12300,7 @@ CREATE TABLE `product_feedbacks` (
 --
 
 CREATE TABLE `product_images` (
-  `product_image_id` int(11) NOT NULL,
+  `product_image_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `product_id` varchar(10) DEFAULT NULL,
   `product_image_name` varchar(100) DEFAULT NULL,
   `product_image` longblob DEFAULT NULL,
@@ -14470,8 +14470,8 @@ ALTER TABLE `product_feedbacks`
 --
 -- Indexes for table `product_images`
 --
-ALTER TABLE `product_images`
-  ADD PRIMARY KEY (`product_image_id`);
+-- ALTER TABLE `product_images`
+--   ADD PRIMARY KEY (`product_image_id`);
 
 --
 -- Indexes for table `refund_return_images`
