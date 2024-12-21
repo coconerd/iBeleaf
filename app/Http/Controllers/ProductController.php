@@ -168,13 +168,19 @@ class ProductController extends Controller
 
 	public function submitFeedback(Request $request)
 	{
-		$request->validate([
-			'product_id' => 'required|exists:products,product_id',
-			'review' => 'required|string|min:10|max:255',
-			'rating' => 'required|integer|min:1|max:5',
-			'images' => 'nullable|array|max:5',
-			'images.*' => 'image|max:2048'
-		]);
+		try {
+
+			$request->validate([
+				'product_id' => 'required|exists:products,product_id',
+				'review' => 'required|string|min:10|max:255',
+				'rating' => 'required|integer|min:1|max:5',
+				'images' => 'nullable|array|max:5',
+				'images.*' => 'image|max:2048'
+			]);
+		} catch (\Exception $e) {
+			Log::error('ProductController@submitFeedback: validation error: ' . $e->getMessage());
+			return redirect()->back()->with('error', 'invalid_input');
+		}
 		
 		Log::info('Request data: ' . json_encode($request->all()));
 
@@ -192,6 +198,7 @@ class ProductController extends Controller
 		try {
 			$this->feedbackService->store($feedback, $user->user_id);
 		} catch (\Exception $e) {
+			Log::error('Error submitting feedback: ' . $e->getMessage());
 			return redirect()->back()->with('error', 'Có lỗi xảy ra khi gửi đánh giá!');
 		}
 		return redirect()->back()->with('success', 'Cảm ơn bạn đã gửi đánh giá!');
