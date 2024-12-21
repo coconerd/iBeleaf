@@ -21,7 +21,7 @@ class ShippingService
 
 	private const MAX_RETRIES = 2;
 	private const BASE_TIMEOUT = 5;
-	private const RETRY_DELAY_MS = 50000; // 100ms in microseconds
+	private const RETRY_DELAY_MS = 50000;
 	private const API_ENDPOINT = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee';
 
     public function __construct()
@@ -37,12 +37,14 @@ class ShippingService
 	private function makeApiCall($payload, $attempt = 1)
 	{
 		Log::Debug('Go to makeApiCall function');
+
 		// Cache the response to reduce the number of API calls
 		$cacheKey = 'shipping_fee_' . md5(json_encode($payload));
 		if (Cache::has($cacheKey)) {
 			Log::Debug('Cache successfully');
 			return Cache::get($cacheKey);
 		}
+
 		try {
 			$timeout = self::BASE_TIMEOUT * pow(1, $attempt - 1); // Exponential backoff
 			
@@ -74,14 +76,27 @@ class ShippingService
 
             $totalWeight = $cartItems->sum('quantity') * self::ITEM_WEIGHT;
 
-            $items = $cartItems->map(function ($item) {
-                return [
-                    'name' => $item->product->name,
-                    'quantity' => $item->quantity
-                ];
-            })->toArray();
+			$items = $cartItems->map(function ($item) {
+				return [
+					'name' => $item->product->name,
+					'quantity' => $item->quantity
+				];
+			})->toArray();
 
-			 Log::debug('Starting fee calculation', [
+			// Generate cache key based on shipping details
+			$cacheKey = 'shipping_fee_' . md5(json_encode([
+				'district_id' => $toDistrictId,
+				'ward_code' => $toWardCode,
+				'items' => $items
+			]));
+
+			// Try to get from cache first
+			if (Cache::has($cacheKey)) {
+                Log::debug('Retrieved shipping fee from cache', ['cache_key' => $cacheKey]);
+                return Cache::get($cacheKey);
+            }
+
+			Log::debug('Starting fee calculation', [
 				'district' => $toDistrictId,
 				'ward' => $toWardCode,
 				'cart' => $cartId
@@ -111,9 +126,13 @@ class ShippingService
 			
 			if ($response->status() === 200) {
 				$data = $response->json();
+				$shippingFee = $data['data']['total'] ?? 0;
+				// Cache the result for 24 hours
+                Cache::put($cacheKey, $shippingFee, now()->addHours(24));
 				Log::debug('Calculate shipping fee succesfully');
-				return $data['data']['total'] ?? 0;
+				return $shippingFee;
 			}
+
 			throw new ShippingFeeCalculationException('Failed to calculate shipping fee: ' . $response->body());
 			
         } catch (Exception $e) {
