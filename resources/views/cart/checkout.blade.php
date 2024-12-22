@@ -25,32 +25,38 @@
 					<div class="mb-3">
 						<label for="name" class="form-label">Họ và Tên <span class="required">*</span></label>
 						<input type="text" class="form-control" id="name" placeholder="Họ và tên">
+						<div class="invalid-feedback">Vui lòng nhập họ tên</div>
 					</div>
 					<div class="mb-3">
 						<label for="phone" class="form-label">Số Điện Thoại <span class="required">*</span></label>
 						<input type="text" class="form-control" id="phone" placeholder="Số điện thoại">
+						<div class="invalid-feedback">Vui lòng nhập số điện thoại</div>
 					</div>
 					<div class="mb-3">
 						<label for="province" class="form-label">Thành Phố/Tỉnh <span class="required">*</span></label>
 						<select class="form-select" id="province">
 							<option selected>Lựa chọn Tỉnh/Thành Phố</option>
 						</select>
+						<div class="invalid-feedback">Vui lòng chọn Tỉnh/Thành Phố</div>
 					</div>
 					<div class="mb-3">
 						<label for="district" class="form-label">Quận/Huyện <span class="required">*</span></label>
 						<select class="form-select" id="district">
 							<option selected>Lựa chọn Quận/Huyện</option>
 						</select>
+						<div class="invalid-feedback">Vui lòng chọn Quận/Huyện</div>
 					</div>
 					<div class="mb-3">
 						<label for="ward" class="form-label">Phường/Xã <span class="required">*</span></label>
 						<select class="form-select" id="ward">
 							<option selected>Lựa chọn Phường/Xã</option>
 						</select>
+						<div class="invalid-feedback">Vui lòng chọn Phường/Xã</div>
 					</div>
 					<div class="mb-3">
 						<label for="address" class="form-label">Địa Chỉ <span class="required">*</span></label>
 						<input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ giao hàng">
+						<div class="invalid-feedback">Vui lòng nhập địa chỉ</div>
 					</div>
 					<div class="mb-3">
 						<label for="address-note" class="form-label">Ghi chú</label>
@@ -133,7 +139,12 @@
 							</div>
 						</div>
 
-						<button class="btn btn-custom w-100" id="pay-btn" {{ !$allItemsTypeOne ? 'disabled' : '' }}>Thanh toán</button>
+						<button class="btn btn-custom w-100" id="pay-btn">
+							@if ($user->province_city != 'Hồ Chí Minh' && collect($cartItems)->contains(fn($item) => $item->product->type == 1))
+								<span id="wrong"></span>
+							@endif
+							Thanh toán
+						</button>
 					</div>
 				</div>
 				</div>

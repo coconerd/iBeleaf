@@ -20,6 +20,14 @@ $(document).ready(function () {
                 errorThrown
             );
         });
+    
+    // Add validation on input/change
+    $(".form-control, .form-select").on("input change", function () {
+        validateCheckoutForm();
+    });
+
+    // Initial validation
+    validateCheckoutForm();
 
     // Dropdown change handlers
     $("#province").change(function () {
@@ -34,9 +42,12 @@ $(document).ready(function () {
         if (to_province_id === "202") {
             innerCityShippingFee();
         }
-
-        if (to_province_id === "202") { 
+        
+        if (to_province_id === "202") {
             $(".alert-icon-container").hide();
+        } else {
+            $(".alert-icon-container").show();
+            showAlertMessage();
         }
     });
 
@@ -44,7 +55,7 @@ $(document).ready(function () {
         // const to_province_id = $("#province").val();
         to_district_id = $(this).val();
         populateWards(to_district_id, null, provinceData);
-        if (to_province_id === "202") { 
+        if (to_province_id === "202") {
             innerCityShippingFee();
         } else {
             resetShippingCalculation();
@@ -54,18 +65,21 @@ $(document).ready(function () {
     $("#ward").change(function () {
         to_ward_code = $(this).val();
         // const to_province_id = $("#province").val();
-        console.log("After changing location: ", { to_district_id, to_ward_code, to_province_id });
+        console.log("After changing location: ", {
+            to_district_id,
+            to_ward_code,
+            to_province_id,
+        });
 
         if (to_district_id && to_ward_code && to_province_id !== "202") {
             console.log("Ward changes");
 
-            calculateShippingFee(
-                to_district_id,
-                to_ward_code
-            );
+            calculateShippingFee(to_district_id, to_ward_code);
         }
     });
+});
 
+function showAlertMessage() {
     // Toggle popup on click
     $(".alert-icon-container").on("click", function (e) {
         e.stopPropagation();
@@ -78,9 +92,7 @@ $(document).ready(function () {
             $(".alert-icon-container").removeClass("active");
         }
     });
-
-});
-
+}
 function innerCityShippingFee() { 
     $("#shipping-fee").text(
         new Intl.NumberFormat("vi-VN", {
@@ -124,7 +136,7 @@ function initialLoadUserInfo(provinceData) {
                     response.ward,
                     provinceData
                 );
-
+                validateCheckoutForm();
                 console.log("User info loaded:", response);
             }
         },
@@ -289,4 +301,44 @@ function updateTotal() {
             currency: "VND",
         }).format(finalTotal)
     );
+}
+
+
+function validateCheckoutForm() {
+    let formValid = true;
+    let locationValid = true;
+
+    // Required fields validation
+    const requiredFields = [
+        "name",
+        "phone",
+        "province",
+        "district",
+        "ward",
+        "address",
+    ];
+
+    requiredFields.forEach((fieldId) => {
+        const field = $(`#${fieldId}`);
+        const value = field.val();
+
+        if (!value || value.includes("Lựa chọn")) {
+            field.addClass("is-invalid");
+            formValid = false;
+        } else {
+            field.removeClass("is-invalid");
+        }
+    });
+
+    // Location restriction check
+    const hasCheckElement = $("#wrong").length > 0;
+    if (hasCheckElement && $("#province").val() !== "202") {
+        locationValid = false;
+    }
+
+    // Enable button only when both conditions are met
+    $("#pay-btn").prop("disabled", !(formValid && locationValid));
+    console.log("Form validation:", { formValid, locationValid });
+
+    return formValid;
 }
