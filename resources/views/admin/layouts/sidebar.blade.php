@@ -62,6 +62,12 @@
 			</a>
 		</li>
 		<li class="nav-item">
+			<a class="nav-link" href="{{ route('admin.vouchers.showVouchersPage') }}">
+				<i class="menu-icon mdi mdi-tag-multiple"></i>
+				<span class="menu-title">Quản lý mã giảm giá</span>
+			</a>
+		</li>
+		<li class="nav-item">
 			<a class="nav-link" href="/admin/returns">
 				<i class="menu-icon mdi mdi-cogs"></i>
 				<span class="menu-title">Cài đặt</span>

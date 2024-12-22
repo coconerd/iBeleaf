@@ -14,6 +14,7 @@ use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminClaimsController;
+use App\Http\Controllers\AdminVoucherController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -102,8 +103,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 			Route::put('/{product_id}/update', [AdminProductController::class, 'update'])->name('update');
 		});
 
-
-		// Route to handle AJAX order updates
+		// Admin vouchers routes
+		Route::prefix('vouchers')->name('vouchers.')->group(function () {
+			Route::get('/', [AdminVoucherController::class, 'showVouchersPage'])->name('showVouchersPage');
+			Route::post('/store', [AdminVoucherController::class, 'store'])->name('store');
+			Route::get('/{voucher_id}/details', [AdminVoucherController::class, 'getDetails'])->name('details');
+			Route::post('/{voucher_id}/update', [AdminVoucherController::class, 'update'])->name('update');
+			Route::post('/{voucher_id}/delete', [AdminVoucherController::class, 'delete'])->name('delete');
+		});
 	});
 });
 
