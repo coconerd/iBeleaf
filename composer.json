@@ -9,6 +9,7 @@
         "firebase/php-jwt": "^6.10",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
+        "laravel/reverb": "^1.4",
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.8",
