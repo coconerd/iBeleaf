@@ -126,13 +126,14 @@
 								<span>Phí vận chuyển</span>
 								<span id="shipping-fee">Chưa Tính Toán</span>
 							</div>
+							<input type="hidden" id="total-discounted-price" value="{{ $totalDiscountedPrice }}">
 							<div class="summary-row total">
 								<span>Tổng tiền (Đã bao gồm VAT)</span>
-								<span class="total-amount">799.000 VNĐ</span>
+								<span class="total-amount">{{ number_format($totalDiscountedPrice) }} VNĐ</span>
 							</div>
 						</div>
 
-						<button class="btn btn-custom w-100" id="pay-btn">Thanh toán</button>
+						<button class="btn btn-custom w-100" id="pay-btn" {{ !$allItemsTypeOne ? 'disabled' : '' }}>Thanh toán</button>
 					</div>
 				</div>
 				</div>

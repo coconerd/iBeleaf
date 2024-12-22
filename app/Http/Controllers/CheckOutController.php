@@ -27,12 +27,17 @@ class CheckOutController extends Controller
         }
         $cartController = new CartController();
         $cartData = $cartController->getCartItems($user);
-        
+
+        $allItemsTypeOne = $cartData['instockCartItems']->every(function($item){
+            return $item->product->type == 1;
+        });
+
         return view('cart.checkout', [
             'cartItems' => $cartData['instockCartItems'],
             'totalQuantity' => $cartData['totalQuantity'],
             'totalDiscountedPrice' => $cartData['totalDiscountedPrice'],
-            'user' => $user
+            'user' => $user,
+            'allItemsTypeOne' => $allItemsTypeOne
         ]);
     }
 

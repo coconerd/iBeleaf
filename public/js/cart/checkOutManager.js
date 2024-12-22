@@ -88,6 +88,7 @@ function innerCityShippingFee() {
             currency: "VND",
         }).format(30000)
     );
+    updateTotal();
 }
 
 function initialLoadUserInfo(provinceData) {
@@ -254,6 +255,7 @@ function calculateShippingFee(district_id, ward_code) {
                         currency: "VND",
                     }).format(response.shipping_fee)
                 );
+                updateTotal();
             } else {
                 console.error(
                     "Failed to calculate shipping fee:",
@@ -267,4 +269,24 @@ function calculateShippingFee(district_id, ward_code) {
             resetShippingCalculation();
         },
     });
+}
+
+function updateTotal() {
+    // Get shipping fee from span element and convert to number
+    const shippingFeeText = $("#shipping-fee").text().replace(/[^\d]/g, "");
+    const shippingFee = parseInt(shippingFeeText) || 0;
+
+    // Get total discounted price from PHP
+    const totalDiscountedPrice = parseFloat($("#total-discounted-price").val());
+
+    // Calculate final total
+    const finalTotal = totalDiscountedPrice + shippingFee;
+
+    // Update total display
+    $(".total-amount").text(
+        new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        }).format(finalTotal)
+    );
 }
