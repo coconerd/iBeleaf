@@ -1,6 +1,25 @@
 .main-panel,
 .content-wrapper {
     background-color: #f2f3f4 !important;
+    position: relative;
+}
+
+.content-wrapper::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        -45deg,
+        rgba(255, 0, 0, 0.02) 0px,
+        rgba(255, 0, 0, 0.02) 2px,
+        transparent 2px,
+        transparent 6px
+    );
+    pointer-events: none;
+    z-index: 0;
 }
 
 .card {
@@ -10,6 +29,16 @@
     background: white;
     border-radius: 12px;
     margin-bottom: 1.5rem;
+    border-top: 3px solid #D42426;
+    position: relative;
+}
+
+.card::after {
+    content: "🎄";
+    position: absolute;
+    top: -12px;
+    right: 15px;
+    font-size: 20px;
 }
 
 .card:hover {
@@ -21,6 +50,7 @@
     background: white;
     border-bottom: 1px solid rgba(0,0,0,0.05);
     padding: 1rem 1.5rem;
+    background: linear-gradient(45deg, rgba(212, 36, 38, 0.05), rgba(0, 100, 0, 0.05));
 }
 
 .table th {
@@ -45,13 +75,13 @@
 }
 
 .badge-pending {
-    background-color: #fff3cd;
-    color: #856404;
+    background-color: #FFE4E1;
+    color: #D42426;
 }
 
 .badge-accepted {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: #E8F5E9;
+    color: #2E7D32;
 }
 
 .badge-rejected {
@@ -110,6 +140,10 @@
     transition: all 0.15s ease;
     border-radius: 6px;
     padding: 0.5rem 1rem;
+}
+
+.btn:hover {
+    box-shadow: 0 0 10px rgba(212, 36, 38, 0.3);
 }
 
 .btn-success {
@@ -442,4 +476,133 @@
 
 .edit-option:hover {
     background-color: #f5f5f5;
+}
+
+/* Snowfall Animation */
+@keyframes snowfall {
+    0% {
+        transform: translateY(-100%) rotate(0deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.snowflake {
+    position: fixed;
+    color: #fff;
+    font-size: 1em;
+    text-shadow: 0 0 5px #000;
+    animation: snowfall linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Christmas themed page header */
+.page-header h3 {
+    position: relative;
+    display: inline-block;
+}
+
+.page-header h3::before {
+    content: "🎅";
+    margin-right: 10px;
+}
+
+.page-header h3::after {
+    content: "🎄";
+    margin-left: 10px;
+}
+
+/* Vintage Modal Styling */
+.vintage-modal .modal-content {
+    background: #fafaf8;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.vintage-modal .modal-header {
+    background: #435E53;
+    color: white;
+    border-bottom: 2px solid #2d3f38;
+    padding: 1.5rem 2rem;
+}
+
+.vintage-modal .modal-body {
+    padding: 2rem !important;
+    background: #fafaf8;
+}
+
+.vintage-modal .modal-footer {
+    padding: 1.5rem 2rem;
+    background: #fafaf8;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.vintage-title {
+    font-family: "Playfair Display", serif;
+    letter-spacing: 0.5px;
+    color: white;
+    margin: 0;
+}
+
+.vintage-close {
+    color: white !important;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.vintage-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+.vintage-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+	color: grey;
+}
+
+.vintage-btn .mdi {
+	color: grey;
+}
+
+.vintage-btn-primary {
+    background: #435E53;
+    border: none;
+	color: #f2f3f4 !important;
+}
+
+.vintage-btn-primary:hover {
+    background: #2d3f38;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(67, 94, 83, 0.2);
+	color: white !important;
+}
+
+.vintage-btn-primary:hover .mdi  {
+	color: white !important;
+}
+
+/* Update modal content styling */
+.request-details .section-title {
+    font-family: "Playfair Display", serif;
+    color: #435E53;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.info-card {
+    background: #ffffff;
+    border: 1px solid #d3d3c7;
+    border-radius: 8px;
+    padding: 1.25rem;
 }

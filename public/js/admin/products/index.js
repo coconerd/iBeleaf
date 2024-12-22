@@ -1,4 +1,18 @@
 $(document).ready(function () {
+	// Add snow effect
+	const snowflakes = 50;
+	const snowContainer = $('.snow-overlay');
+	
+	for(let i = 0; i < snowflakes; i++) {
+		const snow = $('<div class="snowflake">❆</div>');
+		snow.css({
+			'left': `${Math.random() * 100}%`,
+			'animation-delay': `${Math.random() * 3}s`,
+			'animation-duration': `${Math.random() * 3 + 2}s`
+		});
+		snowContainer.append(snow);
+	}
+
 	// Show success alert on page load if any
 	if (sessionStorage.getItem('success')) {
 		showAlert('success', sessionStorage.getItem('success'));
