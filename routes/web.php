@@ -149,7 +149,7 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 		->name('cart.update');
 	Route::delete('/cart/{cartId}/{productId}', [CartController::class, 'removeCartItem'])
 		->name('cart.remove');
-	Route::get('/cart/checkout', [CheckOutController::class, 'showCheckoutForm'])
+	Route::get('/cart/checkout', [CheckOutController::class, 'getCartItems'])
 		->name('cart.checkout');
 	Route::post('/cart/insert', [CartController::class, 'insertItemToCart'])
 		->name('cart.insert');
@@ -163,7 +163,12 @@ Route::middleware(['auth', 'role:0'])->group(function (): void {
 		->name('voucher.validate');
 });
 
-//Shipping route
-Route::post('/calculate-shipping', [CheckOutController::class, 'calculatingShippingFee'])
-    ->name('shipping.calculate')
-    ->middleware(['auth', 'role:0']);
+//Checkout route
+Route::middleware(['auth', 'role:0'])->group(function () {
+	Route::post('/checkout/calculate-shipping', [CheckOutController::class, 'calculatingShippingFee'])
+		->name('checkout.calculateShippingFee');
+	Route::get('/checkout/user-info', [CheckOutController::class, 'getUserInfo'])
+		->name('checkout.userInfo');
+	Route::get('/checkout/initial-shipping-fee', [CheckOutController::class, 'getInitialShippingFee'])
+		->name('checkout.initialShippingFee');
+});
