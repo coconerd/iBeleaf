@@ -34,6 +34,10 @@ $(document).ready(function () {
         if (to_province_id === "202") {
             innerCityShippingFee();
         }
+
+        if (to_province_id === "202") { 
+            $(".alert-icon-container").hide();
+        }
     });
 
     $("#district").change(function () {
@@ -59,6 +63,19 @@ $(document).ready(function () {
                 to_district_id,
                 to_ward_code
             );
+        }
+    });
+
+    // Toggle popup on click
+    $(".alert-icon-container").on("click", function (e) {
+        e.stopPropagation();
+        $(this).toggleClass("active");
+    });
+
+    // Close when clicking outside
+    $(document).on("click", function (e) {
+        if (!$(e.target).closest(".alert-icon-container").length) {
+            $(".alert-icon-container").removeClass("active");
         }
     });
 

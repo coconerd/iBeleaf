@@ -31,7 +31,8 @@ class CheckOutController extends Controller
         return view('cart.checkout', [
             'cartItems' => $cartData['instockCartItems'],
             'totalQuantity' => $cartData['totalQuantity'],
-            'totalDiscountedPrice' => $cartData['totalDiscountedPrice']
+            'totalDiscountedPrice' => $cartData['totalDiscountedPrice'],
+            'user' => $user
         ]);
     }
 

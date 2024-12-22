@@ -67,6 +67,17 @@
 			</div>
 
 			<div class="col-md-6 col-12 right-body ps-md-5">
+				<div class="position-relative">
+					<!-- Alert Icon -->
+					@if($user->province_city != 'Hồ Chí Minh')
+						<div class="alert-icon-container">
+							<i class="fa-solid fa-bell alert-icon"></i>
+							<div class="popup-message">
+								Shop không nhận giao ngoại thành đối với các sản phẩm Cây bạn nhé!
+							</div>
+						</div>
+					@endif
+
 				<!--Order Summary-->
 				<div class="container mt-5" id="order-summary">
 					<div class="title-icon">
@@ -123,6 +134,7 @@
 
 						<button class="btn btn-custom w-100" id="pay-btn">Thanh toán</button>
 					</div>
+				</div>
 				</div>
 
 				<!--Shipping Privacy-->
