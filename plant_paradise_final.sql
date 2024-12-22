@@ -14369,6 +14369,7 @@ CREATE TABLE `vouchers` (
   `voucher_start_date` datetime DEFAULT NULL,
   `voucher_end_date` datetime DEFAULT NULL,
   `value` int(11) DEFAULT NULL,
+  `is_hidden` tinyint(3) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
