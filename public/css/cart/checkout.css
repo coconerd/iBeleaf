@@ -115,7 +115,7 @@ select option:first-child {
 {
     background-color: rgb(247,244,240, 0.3);
     outline: 2px solid rgb(242,240,235);
-    border-radius: 9px;
+    border-radius: 30px;
     padding: 20px;
     margin: 15px 0;
 	width: 100%;
@@ -200,7 +200,7 @@ select option:first-child {
 	border-radius: 30px; /* More rounded corners */
 	padding: 20px;
 	width: 100%;
-	/* box-shadow: 0 4px 10px white; */
+	/* box-shadow: 0 4px 10px #eee; */
 	overflow: hidden; /* Prevent content overflow */
 	position: relative;
 }
@@ -234,14 +234,9 @@ select option:first-child {
 /* Order Items Section */
 .order-items {
 	margin: 20px 0;
-}
-
-.order-item {
-	padding: 15px 0;
-	border-bottom: 1px solid #eee;
-	display: flex;
-	align-items: center;
-	gap: 20px;
+    border-bottom: 1px solid #e8e8e8;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .order-item:last-child {
@@ -249,17 +244,17 @@ select option:first-child {
 }
 
 /* Order Item Image */
-.order-item-image {
+/* .order-item-image {
 	position: relative;
-	width: 80px;
-}
+	width: 60px;
+} */
 
 .order-item-image img {
-	width: 80px;
-	height: 80px;
+	width: 72px;
+	height: 72px;
 	object-fit: cover;
 	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 2px 8px #6bbf59;
 }
 
 /* Quantity Badge */
@@ -268,10 +263,10 @@ select option:first-child {
 	top: -10px;
 	right: -10px;
 	background-color: white;
-	border: 1px solid #eee;
+	border: 1px solid #BED04E;
 	border-radius: 50%;
-	width: 26px;
-	height: 26px;
+	width: 22px;
+	height: 22px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -279,17 +274,18 @@ select option:first-child {
 	font-weight: 500;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	z-index: 1;
+    color: #106B32;
 }
 
 /* Details Section */
 .order-item-details {
 	flex: 1;
+    margin-left: 15px;
 }
-
 .item-title {
 	font-size: 1rem;
-	font-weight: 500;
-	margin-bottom: 4px;
+	font-weight: 400;
+	/* margin-bottom: 1px; */
 }
 
 .item-variant {
@@ -308,7 +304,6 @@ select option:first-child {
 .order-summary-details {
 	margin: 20px 0;
 	padding: 20px 0;
-	border-top: 1px solid #eee;
 }
 
 .summary-row {
@@ -355,7 +350,7 @@ select option:first-child {
     font-size: 1.1rem;
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 3px dashed #eee; /* Dashed line */
+    border-top: 3px dashed #e8e8e8; /* Dashed line */
     color: #333;
     position: relative; /* For positioning the endcaps */
 }
