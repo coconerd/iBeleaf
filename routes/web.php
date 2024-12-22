@@ -171,4 +171,8 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 		->name('checkout.userInfo');
 	Route::get('/checkout/initial-shipping-fee', [CheckOutController::class, 'getInitialShippingFee'])
 		->name('checkout.initialShippingFee');
+	Route::get('/checkout/items', [CheckOutController::class, 'getCartItems'])
+		->name('checkout.items');
+	Route::post('/checkout/update-default-address', [CheckOutController::class, 'updateDefaultAddress'])
+		->name('checkout.updateDefaultAddress');
 });

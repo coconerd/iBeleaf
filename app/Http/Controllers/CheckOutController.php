@@ -9,10 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class CheckOutController extends Controller
 {
+    private const REQUIRED_STRING_RULE = 'required|string';
     private $shippingService;
 
     public function __construct(ShippingService $shippingService){
@@ -251,6 +253,46 @@ class CheckOutController extends Controller
             return response()->json([
                 'success'=> false,
                 'message' => 'An error occurred while getting user shipping info',
+            ], 500);
+        }
+    }
+
+    public function updateDefaultAddress(Request $request)
+    {
+        try{
+            $validated = $request->validate([
+                'address' => self::REQUIRED_STRING_RULE
+            ]);
+
+            Log::debug('Validated data', $validated);
+
+            $userId = Auth()->user()->user_id;
+
+            DB::table('users')
+            ->where('user_id', $userId)
+            ->update([
+                'province_city' => request('province'),
+                'district' => request('district'),
+                'commune_ward' => request('ward'),
+                'address' => $validated['address']
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Địa chỉ đã được cập nhật thành công'
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid data',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update address',
+                'error' => $e->getMessage()
             ], 500);
         }
     }

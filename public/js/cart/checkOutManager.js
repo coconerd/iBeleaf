@@ -77,6 +77,49 @@ $(document).ready(function () {
             calculateShippingFee(to_district_id, to_ward_code);
         }
     });
+
+    // Set default address
+    $(".btn-custom").on("click", function () {
+        const addressData = {
+            province: $("#province option:selected").text(),
+            district: $("#district option:selected").text(),
+            ward: $("#ward option:selected").text(),
+            address: $("#address").val(),
+        };
+
+        // Validate fields
+        if (
+            !addressData.province ||
+            !addressData.district ||
+            !addressData.ward ||
+            !addressData.address
+        ) {
+            console.log("Vui lòng điền đầy đủ thông tin địa chỉ");
+            return;
+        }
+
+        // Check if default address toggle is checked
+        if ($("#defaultAddress").is(":checked")) {
+            $.ajax({
+                url: '/checkout/update-default-address',
+                method: "POST",
+                data: addressData,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                success: function (response) {
+                    if (response.status === "success") {
+                        console.log('Default address updated');
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Failed to update default address:", xhr);
+                },
+            });
+        }
+    });
 });
 
 function showAlertMessage() {
@@ -106,7 +149,7 @@ function innerCityShippingFee() {
 function initialLoadUserInfo(provinceData) {
     $.ajax({
         url: "/checkout/user-info",
-        type: "GET",
+        method: "GET",
         success: function (response) {
             if (response.success) {
                 $("#name").val(response.fullname);
