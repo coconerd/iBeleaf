@@ -183,7 +183,10 @@
                             <table class="table vintage-table">
                                 <thead>
                                     <tr>
-                                        <th>Mã đơn hàng</th>
+                                        <th class="sortable" data-sort="order_id">
+											Mã đơn hàng &nbsp;
+											<i class="sort-icon mdi {{ request('sort') == 'order_id' ? (request('direction', 'desc') == 'asc' ? 'mdi-arrow-up' : 'mdi-arrow-down') : 'mdi-swap-vertical' }}"></i>
+										</th>
                                         <th>Tên khách hàng</th>
                                         <th class="sortable" data-sort="total_price">
                                             Tổng tiền
@@ -191,7 +194,11 @@
                                         </th>
                                         <th class="sortable" data-sort="created_at">
                                             Ngày đặt
-                                            <i class="sort-icon mdi {{ request('sort', 'created_at') == 'created_at' ? (request('direction', 'desc') == 'asc' ? 'mdi-arrow-up' : 'mdi-arrow-down') : 'mdi-arrow-down' }}"></i>
+											@if (!request('sort'))
+												<i class="sort-icon mdi mdi-arrow-down"></i>
+											@else
+                                            	<i class="sort-icon mdi {{ request('sort') == 'created_at' ? (request('direction', 'desc') == 'asc' ? 'mdi-arrow-up' : 'mdi-arrow-down') : 'mdi-swap-vertical' }}"></i>
+											@endif
                                         </th>
                                         <th class="sortable" data-sort="deliver_time">
                                             Ngày giao
@@ -308,26 +315,7 @@
 
 @section('body-script')
 <script src="{{ asset('js/admin/orders/index.js') }}"></script>
-<script>
-    // Create snowflakes
-    function createSnowflakes() {
-        const snowflakesCount = 30;
-        const symbols = ['❄', '❅', '❆'];
-        const container = document.querySelector('.orders-container');
-        
-        for(let i = 0; i < snowflakesCount; i++) {
-            const snowflake = document.createElement('div');
-            snowflake.className = 'snowflake';
-            snowflake.style.left = `${Math.random() * 100}%`;
-            snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            snowflake.style.opacity = Math.random();
-            snowflake.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-            container.appendChild(snowflake);
-        }
-    }
-
-    createSnowflakes();
-</script>
+<script></script>
 <script>
 	const statusOptions = {
 		'pending': 'Đang chờ xử lý',

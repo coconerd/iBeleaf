@@ -47,7 +47,7 @@ class AdminOrderController extends Controller
 		$sortColumn = $request->input('sort', 'created_at');
 		$direction = $request->input('direction', 'desc');
 
-		if (in_array($sortColumn, ['total_price', 'created_at', 'deliver_date'])) {
+		if (in_array($sortColumn, ['order_id', 'total_price', 'created_at', 'deliver_date'])) {
 			$query->orderBy($sortColumn, $direction);
 		}
 
