@@ -435,8 +435,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	})();
 
-	createSnowflakes();
-
 	function rejectRequest(requestId) {
 		// Close the details modal first
 		const detailsModal = bootstrap.Modal.getInstance(document.getElementById('requestDetailsModal'));
