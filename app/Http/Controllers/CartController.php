@@ -16,7 +16,7 @@ use DB;
 
 class CartController extends Controller
 {
-	private function getCartItems(User $user): array
+	public function getCartItems(User $user): array
 	{
 		try {
 			$cartId = $user->getAttribute('cart_id');
@@ -35,6 +35,7 @@ class CartController extends Controller
 
 			return [
 				'cartItems' => $cartItems,
+				'instockCartItems' => $inStockItems,
 				'totalPrice' => $totalPrice,
 				'totalDiscountAmount' => $totalDiscountAmount,
 				'totalDiscountedPrice' => $totalDiscountedPrice,

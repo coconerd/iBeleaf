@@ -146,7 +146,7 @@
 
                             <div id="voucher-error" class="text-danger mb-2" style="display: none;"></div>
                             <div class="voucher-box" style="display: none;" id="valid-voucher-box">
-                                <div class="voucher-details">
+                                <div class="voucher-details" data-voucher-id="">
                                     <div class="voucher-icon">
                                         <i class="fa-regular fa-circle-check" style="color: #c78b5e;"></i>
                                     </div>
@@ -155,10 +155,10 @@
                                             <span id="voucher-description"></span>
                                         </p>
                                         <span id="voucher-discount"></span>
+                                        <input type="hidden" id="voucher-id" name="voucher_id" value="">
                                     </div>
                                 </div>
                             </div>
-            
                         </div>
 
                         <hr id="cart-summary-line">
