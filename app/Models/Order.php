@@ -51,7 +51,8 @@ class Order extends Model
 		'payment_date' => 'datetime',
 		'deliver_time' => 'datetime',
 		'is_paid' => 'int',
-		'status' => 'string'
+		'status' => 'string',
+		'deliver_address' => 'string',
 	];
 
 	protected $fillable = [
@@ -66,6 +67,7 @@ class Order extends Model
 		'status',
 		'additional_note',
 		'deliver_time',
+		'deliver_address'
 	];
 
 	public function user()
