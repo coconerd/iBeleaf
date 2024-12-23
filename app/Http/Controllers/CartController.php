@@ -24,14 +24,17 @@ class CartController extends Controller
 				->where('cart_id', $cartId) // Condition to ensure only cart items of the user are fetched
 				->get();
 
-			$inStockItems = $cartItems->filter(function($item) {
-            	return $item->product->stock_quantity > 0;
-        	});
+			$inStockItems = CartItem::with(['product'])
+				->whereHas('product', function($query) {
+					$query->where('stock_quantity', '>', 0);
+				})
+				->where('cart_id', $cartId)
+				->get();
 
+			$totalDiscountedPrice = $inStockItems->sum('discounted_price');
+			$totalQuantity = $inStockItems->sum('quantity');
 			$totalPrice = $inStockItems->sum('original_price');
 			$totalDiscountAmount = $inStockItems->sum('discount_amount');
-			$totalDiscountedPrice = $totalPrice - $totalDiscountAmount;
-			$totalQuantity = $inStockItems->sum('quantity');
 
 			return [
 				'cartItems' => $cartItems,
@@ -59,7 +62,9 @@ class CartController extends Controller
 			$user = Auth::user();
 			$cartId = $user->cart_id;
 
-			$cartItem = CartItem::where([
+			$cartItem = CartItem::whereHas('product', function($query) {
+				$query->where('stock_quantity', '>', 0);
+			})->where([
 				'cart_id' => $cartId,
 				'product_id' => $request->product_id
 			])->first();
