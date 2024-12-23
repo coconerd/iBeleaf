@@ -1,0 +1,620 @@
+.main-panel,
+.content-wrapper {
+	background-color: #f2f3f4 !important;
+}
+
+.navbar-brand-wrapper {
+	display: none !important;
+}
+
+.product-thumbnail {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.description-cell {
+	max-width: 250px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: pointer;
+}
+
+.description-cell:hover {
+	background-color: rgba(67, 94, 83, 0.05);
+}
+
+/* Rest of styling similar to claims.css */
+.main-panel,
+.content-wrapper {
+	background-color: #f2f3f4 !important;
+}
+
+.card {
+	border: none;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+	background: white;
+	border-radius: 12px;
+	margin-bottom: 1.5rem;
+}
+
+.card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+	background: white;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	padding: 1rem 1.5rem;
+}
+
+.table th {
+	background-color: #f8f9fa;
+	border-bottom: 2px solid #dee2e6;
+	color: #495057;
+	font-weight: 600;
+	background-color: #f1f7f3 !important;
+	border-bottom: 2px solid #C41E3A !important;
+}
+
+.table td {
+	vertical-align: middle;
+	padding: 1rem;
+	border-bottom: 1px solid #dee2e6;
+}
+
+/* Status badges */
+.badge {
+	padding: 0.4rem 0.8rem;
+	border-radius: 50px;
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+.badge-pending {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.badge-accepted {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.badge-rejected {
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+.badge-received {
+	background-color: #cce5ff;
+	color: #004085;
+}
+
+/* Modal styling */
+.modal-content {
+	border: none;
+	border-radius: 12px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	padding: 1.5rem;
+}
+
+.modal-body {
+	padding: 1.5rem;
+}
+
+.modal-footer {
+	border-top: 1px solid rgba(0, 0, 0, 0.05);
+	padding: 1.5rem;
+}
+
+#editProductModal .form-control {
+	border-radius: 11px;
+	font-size: 1.0rem !important;
+}
+
+.refund-images {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 1rem;
+}
+
+.refund-image {
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	transition: transform 0.2s ease;
+	cursor: pointer;
+}
+
+.refund-image:hover {
+	transform: scale(1.1);
+}
+
+.btn {
+	transition: all 0.15s ease;
+	border-radius: 6px;
+	padding: 0.5rem 1rem;
+}
+
+.btn-success {
+	background-color: #435E53;
+	border: none;
+}
+
+.btn-success:hover {
+	background-color: #2d3f38;
+	transform: translateY(-1px);
+}
+
+/* Modal styling improvements */
+.modal-content {
+	border: none;
+	border-radius: 12px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+	background-color: #f8f9fa;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	padding: 1.5rem;
+}
+
+.modal-body {
+	padding: 1.5rem;
+}
+
+.product-short-desc:hover {
+	text-decoration: underline;
+}
+
+.info-card {
+	background-color: #f8f9fa;
+	border-radius: 8px;
+	padding: 1rem;
+	margin-bottom: 1rem;
+}
+
+.product-card {
+	background-color: white;
+	border: 1px solid #e9ecef;
+}
+
+.product-thumbnail {
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.image-gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+	gap: 10px;
+	margin-top: 1rem;
+}
+
+.image-item {
+	position: relative;
+	padding-bottom: 100%;
+	overflow: hidden;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: transform 0.2s ease;
+}
+
+.image-item:hover {
+	transform: scale(1.05);
+}
+
+.image-item img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.modal-footer {
+	border-top: 1px solid rgba(0, 0, 0, 0.05);
+	padding: 1rem 1.5rem;
+	background-color: #f8f9fa;
+}
+
+.modal-footer .btn {
+	padding: 0.5rem 1.5rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	font-size: 0.875rem;
+}
+
+/* Material Design Icons styling */
+.mdi {
+	font-size: 1.2rem;
+	vertical-align: middle;
+	/* color: #435E53; */
+}
+
+/* Image preview animation */
+.swal2-popup.swal2-modal {
+	padding: 0;
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+.swal2-popup img {
+	max-height: 80vh;
+	object-fit: contain;
+}
+
+/* SweetAlert2 z-index fix */
+.swal2-container {
+	z-index: 9997 !important;
+}
+
+.swal2-popup {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	z-index: 9998 !important;
+}
+
+.swal2-input-label {
+	margin-left: 40px;
+	margin-right: 40px;
+}
+
+.swal2-confirm {
+	padding: 8px 20px !important;
+	font-size: 0.9rem !important;
+	margin-bottom: 15px;
+}
+
+.swal2-cancel {
+	padding: 8px 20px !important;
+	font-size: 0.9rem !important;
+	margin-bottom: 15px;
+}
+
+.order-id {
+	cursor: pointer;
+}
+
+.order-details {
+	margin-top: 1rem;
+	padding-left: 1rem;
+	border-left: 2px solid #e9ecef;
+}
+
+.order-summary p {
+	margin-bottom: 0.5rem;
+}
+
+.order-items {
+	margin-top: 1rem;
+}
+
+.order-item {
+	display: flex;
+	align-items: center;
+}
+
+.product-image {
+	width: 45px;
+	height: 45px;
+	object-fit: cover;
+	border-radius: 15px;
+	min-width: 45px;
+	/* Add minimum width to prevent squishing */
+}
+
+.product-name {
+	font-weight: 500;
+}
+
+.product-quantity-price {
+	font-size: 0.9rem;
+	color: #6c757d;
+}
+
+.card-body {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.table {
+	min-width: 800px;
+	/* Minimum width before scrolling starts */
+	width: 100%;
+}
+
+.table-responsive {
+	margin-bottom: 0;
+}
+
+/* Ensure images and content don't break the layout */
+.d-flex.align-items-center {
+	flex-wrap: nowrap;
+	min-width: 250px;
+	/* Minimum width for product info column */
+}
+
+/* Processed claims section spacing */
+.col-lg-6.grid-margin {
+	padding-right: 8px;
+	padding-left: 8px;
+}
+
+/* Parent row negative margin to compensate for reduced padding */
+.row.processed-claims {
+	margin-right: -8px;
+	margin-left: -8px;
+}
+
+/* Processed claims table styling */
+.processed-row {
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.processed-row:hover {
+	background-color: rgba(67, 94, 83, 0.05) !important;
+}
+
+.processed-row .badge {
+	font-size: 0.75rem;
+	padding: 0.35rem 0.65rem;
+}
+
+/* Processed claims specific table styling */
+.processed-claims .table {
+	min-width: 100%;
+	width: 100%;
+	table-layout: fixed;
+}
+
+.processed-claims .table th:first-child {
+	width: 80px;
+}
+
+.processed-claims .table td:first-child {
+	white-space: nowrap;
+}
+
+.processed-claims .card-body {
+	padding: 0.75rem;
+}
+
+.processed-claims .d-flex.align-items-center {
+	min-width: unset;
+}
+
+/* Sort icon styling */
+.sort-icon {
+	cursor: pointer;
+	transition: transform 0.2s ease;
+	color: #435E53;
+	opacity: 0.7;
+}
+
+.sort-icon:hover {
+	opacity: 1;
+}
+
+.btn-outline-success.quick-accept-btn {
+	border-color: #18A04A;
+	/* Outline color */
+	color: black;
+}
+
+
+.btn-outline-success.quick-accept-btn:hover {
+	background-color: #18A04A;
+	/* Background color on hover */
+	color: #ffffff !important;
+	/* Text color on hover */
+	border-color: #18A04A;
+	/* Border color on hover */
+}
+
+/* Editable cell styling */
+.editable-cell {
+	cursor: pointer;
+	position: relative;
+}
+
+.editable-cell:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+}
+
+.edit-popup {
+	position: absolute;
+	background: white;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	min-width: 150px;
+}
+
+.edit-popup-content {
+	padding: 4px 0;
+}
+
+.edit-option {
+	padding: 8px 16px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.edit-option:hover {
+	background-color: #f5f5f5;
+}
+
+/* End of styles copied from claims page */
+
+.search-box {
+	position: relative;
+}
+
+#searchInput {
+	border-radius: 12px !important;
+	font-size: 1rem;
+}
+
+#searchInput:focus {
+	border-color: transparent;
+}
+
+.search-box input {
+	padding-right: 40px;
+}
+
+.search-box input:focus {
+	border-color: #435E53;
+	box-shadow: 0 0 0 0.2rem rgba(67, 94, 83, 0.25);
+}
+
+#searchButton {
+	background-color: #435E53;
+	border: none;
+}
+
+#searchButton:hover {
+	background-color: #2d3f38;
+	transform: translateY(-1px);
+}
+
+.edit-description-popup {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	padding: 1.5rem;
+	border-radius: 12px !important;
+}
+
+.rating {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.rating .mdi-star {
+	color: #ffc107;
+	font-size: 16px;
+}
+
+.rule-item {
+	background: white;
+	border-radius: 8px;
+	padding: 0.5rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Christmas Theme Styles */
+.christmas-decorations {
+    position: relative;
+    width: 100%;
+    height: 0;
+    z-index: 1;
+}
+
+.holly-left, .holly-right {
+    position: absolute;
+    width: 60px;
+    height: auto;
+    top: -20px;
+    opacity: 0.8;
+    animation: sway 3s infinite ease-in-out;
+}
+
+.holly-left {
+    left: 20px;
+    transform-origin: top left;
+}
+
+.holly-right {
+    right: 20px;
+    transform-origin: top right;
+}
+
+.christmas-icon {
+    color: #C41E3A;
+    margin: 0 10px;
+    animation: twinkle 2s infinite ease-in-out;
+}
+
+.festive-header {
+    position: relative;
+    padding: 20px 0;
+}
+
+.christmas-card {
+    border: 2px solid #f8f9fa !important;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+}
+
+.snow-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="1" fill="%23fff"/></svg>') repeat;
+    opacity: 0.1;
+    animation: snowfall 20s linear infinite;
+    z-index: 0;
+}
+
+/* Update existing components */
+.btn-primary {
+    background: #C41E3A !important;
+    border-color: #C41E3A !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #a01830 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.2);
+}
+
+/* Add animations */
+@keyframes sway {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+@keyframes snowfall {
+    from { background-position: 0 0; }
+    to { background-position: 100% 100vh; }
+}
+
+/* Update existing styles */
+.table th {
+    /* // ...existing code... */
+    background-color: #f1f7f3 !important;
+    border-bottom: 2px solid #C41E3A !important;
+}
+
+.card:hover {
+    /* // ...existing code... */
+    box-shadow: 0 8px 20px rgba(196, 30, 58, 0.1) !important;
+}

@@ -69,7 +69,7 @@ class Product extends Model
 
 	public function order_items()
 	{
-		return $this->hasMany(OrderItem::class);
+		return $this->hasMany(OrderItem::class, 'product_id', 'product_id');
 	}
 
 	public function attributes()
@@ -101,12 +101,16 @@ class Product extends Model
 
 	public function product_images()
 	{
-		return $this->hasMany(ProductImage::class, 'product_id');
+		return $this->hasMany(ProductImage::class, 'product_id', 'product_id');
 	}
 
 	public function productImages()
 	{
 		return $this->hasMany(ProductImage::class, 'product_id', 'product_id');
+	}
+
+	public function getSoldQuantityAttribute() {
+		return $this->order_items->sum('quantity');
 	}
 
 	public function getClaimsDurationDays()

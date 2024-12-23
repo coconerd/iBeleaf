@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Ho_Chi_Minh',
 
     /*
     |--------------------------------------------------------------------------
@@ -171,7 +171,7 @@ return [
 		App\Providers\DBConnServiceProvider::class,
 		App\Providers\OrderServiceProvider::class,
 		App\Providers\FeedbackServiceProvider::class,
-		Reliese\Coders\CodersServiceProvider::class
+		// Reliese\Coders\CodersServiceProvider::class
     ])->toArray(),
 
     /*

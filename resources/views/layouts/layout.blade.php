@@ -1,11 +1,18 @@
 <!DOCTYPE HTML>
 <html>
-
+	
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="author" content= "@yield('author', 'CocoNerd')">
+    <meta name="description" content= "@yield('description', 'This is the best place to ...')">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<title>@yield('title')</title>
+	<title>@yield('title', "Plant Ecommerce")</title>
+	<link rel="shortcut icon" href="{{asset('images/favicon/plantEcommerce.png')}}" type="image/x-icon">
+
+	<!-- Import Jquery Jquery --->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
 	<!-- CSRF Token khi gửi yêu cầu AJAX-->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
@@ -31,7 +38,10 @@
 	@yield('head-script')
 
 	<!-- View-specific stylings -->
-	@yield(section: 'style')
+	@yield(section: "style")
+
+	<!-- JavaScript files -->	
+	@stack('scripts')
 
 </head>
 

@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PagesController;
+use App\Http\Controllers\FunctionController;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
@@ -10,8 +14,11 @@ use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VoucherController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ClaimsController;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\AdminProductController;
+use App\Http\Controllers\AdminClaimsController;
+use App\Http\Controllers\AdminVoucherController;
+use App\Http\Controllers\AdminNotificationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,10 +33,31 @@ use App\Http\Controllers\ClaimsController;
 /**
  * @notice Landing page
  */
-Route::get('/', function () {
-	return view('tmp');
-});
+Route::get('/', [
+	PagesController::class,
+	"indexMain"
+])->name('products');
 
+Route::get('/get-products', [PagesController::class, 'increment']);
+
+// search product cession
+Route::get("/search-products", [FunctionController::class, 'searchProducts']);
+// end search cession
+
+Route::get('/{category}/page/{page}', [
+    PagesController::class,
+    "categoryMain"
+])->where([
+    'category' => '^(cay\-.*|chau\-.*|co\-canh|kieu\-.*|uncategorized|search)$',
+    'page' => '[0-9]+'
+])->name('products.page');
+
+Route::get('/{category}', [
+    PagesController::class,
+    "categoryMain"
+])->where('category', '^(cay\-.*|chau\-.*|co\-canh|kieu\-.*|uncategorized|search)$')->name('products');
+
+Route::get("/get-product", [PagesController::class, 'getCategories']);
 
 /**
  * @notice Auth routes
@@ -54,45 +82,64 @@ Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocia
 /**
  * @notice Admin routes
  */
-Route::prefix('admin')->name('admin.')->group(function () {
-	// Public admin routes
-	Route::get('/', function () {
-		if (!Auth::check()) {
-			return redirect()->route('admin.auth.showLoginForm');
-		}
-		return Auth::user()->role_type === 1
-			? redirect()->route('admin.showDashboardPage')
-			: redirect()->back()->with('error', 'Bạn không có quyền truy cập trang này');
-	})->name('index');
+// Route::prefix('admin')->name('admin.')->group(function () {
+// 	// Public admin routes
+// 	Route::get('/', function () {
+// 		if (!Auth::check()) {
+// 			return redirect()->route('admin.auth.showLoginForm');
+// 		}
+// 		return Auth::user()->role_type === 1
+// 			? redirect()->route('admin.showDashboardPage')
+// 			: redirect()->back()->with('error', 'Bạn không có quyền truy cập trang này');
+// 	})->name('index');
 
-	Route::prefix('auth')->name('auth.')->group(function () {
-		Route::get('/login', [AuthController::class, 'showAdminLoginForm'])->name('showLoginForm');
-		Route::post('/login', [AuthController::class, 'handleAdminLogin'])->name('handleLogin');
-	});
+// 	Route::prefix('auth')->name('auth.')->group(function () {
+// 		Route::get('/login', [AuthController::class, 'showAdminLoginForm'])->name('showLoginForm');
+// 		Route::post('/login', [AuthController::class, 'handleAdminLogin'])->name('handleLogin');
+// 	});
 
 	// Admin protected routes
 	Route::middleware(['auth', 'role:1'])->group(function () {
+// Unread notifications
+		Route::get('/unread-notifications', [AdminNotificationController::class, 'getUnreadNotifications'])->name('getUnreadNotifications');
 		// Admin orders route
 		Route::prefix('orders')->name('orders.')->group(function () {
-			Route::get('/', [AdminController::class, 'showOrdersPage'])->name('showOrdersPage');
-			Route::get('/{order_id}/details', [AdminController::class, 'getOrderDetails'])->name('getOrdersDetails');
-			Route::get('/edit', [AdminController::class, 'edit'])->name('edit');
+			Route::get('/', [AdminOrderController::class, 'showOrdersPage'])->name('showOrdersPage');
+			Route::get('/{order_id}/details', [AdminOrderController::class, 'getOrderDetails'])->name('getOrdersDetails');
+			Route::get('/edit', [AdminOrderController::class, 'edit'])->name('edit');
 			// Route::get('/orders', [AdminController::class, 'index'])->name('.management');
-			Route::post('/update-field', [AdminController::class, 'updateOrderField'])
+			Route::post('/update-field', [AdminOrderController::class, 'updateOrderField'])
 				->name('updateField');
 		});
-		Route::get('/dashboard', [AdminController::class, 'showDashboardPage'])->name('showDashboardPage');
+		Route::prefix('dashboard')->name('dashboard.')->group(function () {
+			Route::get('/', [AdminDashboardController::class, 'showDashboardPage'])->name('showDashboardPage');
+		});
 
-		 // Admin claims routes
-        Route::prefix('claims')->name('claims.')->group(function () {
-            Route::get('/', [ClaimsController::class, 'index'])->name('index');
-            Route::get('/{requestId}/details', [ClaimsController::class, 'showDetails'])->name('details');
-            Route::post('/update-status', [ClaimsController::class, 'updateStatus'])->name('updateStatus');
-        });
+		// Admin claims routes
+		Route::prefix('claims')->name('claims.')->group(function () {
+			Route::get('/', [AdminClaimsController::class, 'showClaimsPage'])->name('index');
+			Route::get('/{requestId}/details', [AdminClaimsController::class, 'showDetails'])->name('details');
+			Route::post('/update-status', [AdminClaimsController::class, 'updateStatus'])->name('updateStatus');
+		});
 
-		// Route to handle AJAX order updates
+		// Admin products management routes
+		Route::prefix('products')->name('products.')->group(function () {
+			Route::get('/', [AdminProductController::class, 'showProductsPage'])->name('index');
+			Route::get('/{product_id}/details', [AdminProductController::class, 'getDetails'])->name('details');
+			Route::post('/{product_id}/update-field', [AdminProductController::class, 'updateField'])->name('updateField');
+			Route::put('/{product_id}/update', [AdminProductController::class, 'update'])->name('update');
+		});
+
+		// Admin vouchers routes
+		Route::prefix('vouchers')->name('vouchers.')->group(function () {
+			Route::get('/', [AdminVoucherController::class, 'showVouchersPage'])->name('showVouchersPage');
+			Route::post('/store', [AdminVoucherController::class, 'store'])->name('store');
+			Route::get('/{voucher_id}/details', [AdminVoucherController::class, 'getDetails'])->name('details');
+			Route::post('/{voucher_id}/update', [AdminVoucherController::class, 'update'])->name('update');
+			Route::post('/{voucher_id}/delete', [AdminVoucherController::class, 'delete'])->name('delete');
+		});
 	});
-});
+
 
 /**
  * End admin routes
@@ -106,6 +153,28 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::get('/profile/current-password', [ProfileController::class, 'showCurrentPasswordForm'])->name('profile.currentPassword');
 	Route::post('/profile/currentPassword-verify', [ProfileController::class, 'handleCurrentPasswordVerification'])->name('profile.verifyCurrentPassword');
 	Route::post('/profile/verify-newpassword', [ProfileController::class, 'handleVerifyNewPassword'])->name('profile.verifyNewPassword');
+
+// OAuth2 social login
+Route::get('/auth/login/{social}', action: [AuthController::class, 'showConsentScreen']);
+Route::get('/auth/login/{social}/callback', [AuthController::class, 'handleSocialCallback']);
+
+
+// ------------------ learn ------------------
+// Route::get("/test1", function() {
+// 	return ["name1", "name2", "name3"];
+// });
+
+// Route::get("/test", function() {
+// 	return response()->json([
+// 		"name" => "Tran vu bao",
+// 		"email" => "tranvubao@gmail.com"
+// 	]); // response()
+// });
+
+// // redirect
+// Route::get("redirect", function() {	
+// 	return redirect("/test1");
+// });
 
 	Route::middleware(['role:0'])->get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
 	Route::middleware(['role:0'])->get('/profile/returns', [ProfileController::class, 'showReturnsForm'])->name('profile.returns');

@@ -1,0 +1,133 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Order;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
+use Log;
+
+class AdminOrderController extends Controller
+{
+	public function showOrdersPage(Request $request)
+	{
+		$query = Order::query();
+		$query->with('user:user_id,full_name');
+
+		if ($request->has('dateFilterType')) {
+			if (
+				$request->input('dateFilterType') == 'single'
+				&& $request->has('single_date')
+				&& $request->input('single_date') != ''
+			) {
+				$query->whereDate('created_at', $request->input('single_date'));
+			} elseif (
+				$request->input('dateFilterType') == 'range'
+				&& $request->has('date_start') && $request->input('date_start') != ''
+				&& $request->has('date_end') && $request->input('date_end') != ''
+			) {
+				$query->whereBetween('created_at', [$request->input('date_start'), $request->input('date_end')]);
+			}
+		}
+
+		if ($request->has('status') && $request->input('status') != '') {
+			$query->where('status', $request->input('status'));
+		}
+
+		if ($request->has('is_paid') && $request->input('is_paid') != '') {
+			$query->where('is_paid', (int) $request->input('is_paid'));
+		}
+
+		if ($request->has('payment_method') && $request->input('payment_method') != '') {
+			$query->where('payment_method', $request->input('payment_method'));
+		}
+
+		// Add sorting logic with default sort
+		$sortColumn = $request->input('sort', 'created_at');
+		$direction = $request->input('direction', 'desc');
+
+		if (in_array($sortColumn, ['order_id', 'total_price', 'created_at', 'deliver_date'])) {
+			$query->orderBy($sortColumn, $direction);
+		}
+
+		$orders = $query->orderBy('created_at', 'desc')->paginate(25)->withQueryString();
+
+		// Update newestOrders to include order_items and products
+		$newestOrders = Order::where('status', 'pending')
+			->where(function ($query) {
+				$query->where('payment_method', 'COD')
+					->orWhere(function ($query) {
+						$query->where('payment_method', 'Banking')
+							->where('is_paid', 1);
+					});
+			})
+			->with([
+				'user:user_id,full_name',
+				'order_items.product.product_images:product_id,product_image_url',
+			])
+			->orderBy('created_at', 'desc')
+			->take(5)
+			->get();
+		Log::debug('Newest orders: ', ['newestOrders' => $newestOrders]);
+
+		return view('admin.orders.index', compact('orders', 'newestOrders'));
+	}
+
+	public function edit($id)
+	{
+		$order = Order::findOrFail($id);
+		return view('admin.orders.edit', compact('order'));
+	}
+
+	public function updateOrderField(Request $request): JsonResponse
+	{
+		$validator = Validator::make($request->all(), [
+			'order_id' => 'required|integer|exists:orders,order_id',
+			'field' => 'required|string|in:status,is_paid',
+			'value' => 'required'
+		]);
+
+		if ($validator->fails()) {
+			return response()->json(['success' => false, 'message' => 'Invalid data provided.'], 400);
+		}
+
+		$order = Order::findOrFail($request->input('order_id'));
+
+		if ($request->input('field') === 'status') {
+			$allowedStatusValues = ['pending', 'delivering', 'delivered', 'cancelled'];
+			if (!in_array($request->input('value'), $allowedStatusValues)) {
+				return response()->json(['success' => false, 'message' => 'Invalid status value.'], 400);
+			}
+			$order->status = $request->input('value');
+			if ($request->input('value') === 'delivered') {
+				$order->deliver_time = now();
+			}
+		} elseif ($request->input('field') === 'is_paid') {
+			$value = $request->input('value');
+			if (!in_array($value, ['0', '1'])) {
+				return response()->json(['success' => false, 'message' => 'Invalid is_paid value.'], 400);
+			}
+			$order->is_paid = $value;
+		}
+
+		$order->save();
+
+		return response()->json(['success' => true, 'message' => 'Order updated successfully.']);
+	}
+
+	public function getOrderDetails($order_id): JsonResponse
+	{
+		$order = Order::with(relations: [
+			'user',
+			'voucher',
+			'order_items.product.product_images',
+		])->find($order_id);
+
+		if (!$order) {
+			return response()->json(['success' => false, 'message' => 'Order not found.'], 404);
+		}
+
+		return response()->json(['success' => true, 'order' => $order]);
+	}
+}

@@ -25499,3 +25499,16 @@ select.form-select.border-dark:focus {
   flex-grow: 1;
 }
 /*# sourceMappingURL=maps/style.css.map */
+
+
+/* .form-select:focus { */
+	/* outline-color: #C78B5E !important; Change to your desired color */
+/* } */
+
+.form-select:focus {
+	box-shadow: 0px 0px 5px #C78B5E !important;
+}
+
+.form-select {
+	border-radius: 8px;
+}

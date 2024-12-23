@@ -1,0 +1,358 @@
+.vintage-card {
+    background: #fafaf8;
+    border: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    border-radius: 12px;
+}
+
+.vintage-title {
+    color: #435E53;
+    font-family: "Playfair Display", serif;
+    font-weight: 600;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background: #435E53;
+    color: white;
+    border: none;
+    padding: 15px;
+}
+
+.table tbody td {
+    vertical-align: middle;
+    padding: 12px 15px;
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+	width: 100%;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+/* Modal styles inherited from edit.css */
+
+/* Modal specific styles */
+.vintage-modal .modal-content {
+    border-radius: 15px;
+    border: none;
+}
+
+.vintage-modal .modal-header {
+    padding: 1.5rem 2rem;
+    background: #435E53;
+}
+
+.vintage-modal .modal-title {
+    color: white;
+    font-size: 1.25rem;
+    letter-spacing: 0.5px;
+}
+
+.vintage-modal .modal-body {
+    padding: 2rem;
+    background: #fafaf8;
+}
+
+.vintage-input,
+.vintage-textarea,
+.vintage-select {
+    border: 1px solid #d3d3c7;
+    border-radius: 8px;
+    padding: 0.75rem;
+    background: white;
+    transition: all 0.3s;
+}
+
+.vintage-input:focus,
+.vintage-textarea:focus,
+.vintage-select:focus {
+    border-color: #435E53;
+    box-shadow: 0 0 0 0.2rem rgba(67, 94, 83, 0.15);
+}
+
+.vintage-label {
+    color: #435E53;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.vintage-btn-outline {
+    border: 1px solid #435E53;
+    color: #435E53;
+    background: transparent;
+    transition: all 0.3s;
+}
+
+.vintage-btn-outline:hover {
+    background: #435E53;
+    color: white;
+}
+
+.vintage-btn-danger {
+    background: #dc3545;
+    color: white;
+    border: none;
+}
+
+.vintage-btn-danger:hover {
+    background: #bb2d3b;
+}
+
+.vintage-close {
+    /* background: none; */
+    color: white !important;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.vintage-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+.rule-item {
+    background: white;
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.vintage-addon {
+    background: #435E53;
+    color: white;
+    border: none;
+}
+
+.inactive-muted-text {
+	color: #6c757d; /* Muted text color */
+}
+
+.inactive-muted-text:focus {
+	color: black; /* Default text color when focused */
+}
+
+/* New modern styles with Christmas theme */
+.vouchers-container {
+    position: relative;
+    padding: 2rem;
+}
+
+.dashboard-header {
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.modern-title {
+    font-size: 2rem;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.christmas-decoration {
+    position: relative;
+    display: inline-block;
+    animation: swing 2s infinite ease-in-out;
+}
+
+.modern-btn {
+    background: #435E53;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(67, 94, 83, 0.2);
+}
+
+.modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(67, 94, 83, 0.3);
+    background: #374d44;
+    color: white;
+}
+
+.modern-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.modern-table {
+    margin: 0;
+}
+
+.modern-table thead th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+    padding: 1.2rem 1rem;
+    border: none;
+}
+
+.voucher-row {
+    transition: all 0.2s ease;
+}
+
+.voucher-row:hover {
+    background: rgba(67, 94, 83, 0.05);
+}
+
+.voucher-code {
+    font-weight: 500;
+    color: #435E53;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-icon {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.snow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="%23FFFFFF" d="M 100 100 L 110 90 L 100 80 L 90 90 Z"/></svg>') repeat;
+    opacity: 0.1;
+    animation: snow 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes snow {
+    from { background-position: 0 0; }
+    to { background-position: 100% 100%; }
+}
+
+@keyframes swing {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+/* Badge styling */
+.bg-success {
+    background: #dcf5e7 !important;
+    color: #0f5132;
+}
+
+.bg-neutral {
+	background: #f8f9fa;
+	color: #6c757d;
+}
+
+.bg-danger {
+    background: #ffe4e4 !important;
+    color: #dc3545;
+}
+
+/* Sort icon styling */
+.sort-icon {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    color: #435E53;
+    opacity: 0.7;
+    margin-left: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.sort-icon:hover {
+    opacity: 1;
+}
+
+.modern-table th {
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+/* Search box styling */
+.search-box {
+    position: relative;
+    min-width: 400px;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.search-box select {
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    min-width: 150px;
+}
+
+#searchInput {
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+}
+
+#searchButton {
+    border-radius: 12px;
+    background: #435E53;
+    border: none;
+    width: 70px;
+    height: 38px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#searchButton:hover {
+    background: #374d44;
+}
+
+#searchType:focus {
+	border-color: transparent;
+}
+
+/* Status filter styling */
+#statusFilter {
+    border-radius: 12px;
+    /* border: 1px solid #dee2e6; */
+    min-width: 150px;
+    height: 38px;
+    color: #435E53;
+    font-weight: 500;
+}
+
+#statusFilter:focus {
+	border-color: transparent;
+    /* box-shadow: 0 0 0 0.2rem rgba(67, 94, 83, 0.15); */
+}

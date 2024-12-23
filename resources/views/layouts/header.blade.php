@@ -81,9 +81,21 @@
 						<li><a class="dropdown-item" href="#">Phụ kiện 2</a></li>
 					</ul>
 				</li>
-				<form class="nav-item d-flex ms-5" role="search">
-					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-					<a href="#" class="search mt-2"><i class="bi bi-search"></i></a>
+				<form class="nav-item d-flex ms-5" role="search" action="/search">
+					<input class="form-control me-2" id="input-search" type="search" placeholder="Search" aria-label="Search" name="name">
+					<a href="#" class="search mt-2" id="but-input-search"><i class="bi bi-search"></i></a>
+
+					<div id="out-search"></div>
+					<div id="search-list-products" >
+						<div id="search-popular" class="box-search" style="display: none;">
+						</div>
+						<div class="box-search-product box-search">
+							<div id="search-product" class="box-search"></div>	
+							<div class="div-more-search">
+								<a id="more-search" href="#">Xem thêm</a>
+							</div>
+						</div>
+					</div>
 				</form>
 
 				<!-- Cart icon -->
@@ -108,6 +120,12 @@
 		</div>
 	</div>
 </nav>
+
+{{-- search bar --}}
+<script src="{{ asset('js/engine/searchEngine.js')}}"></script>
+<link rel="stylesheet" href="{{asset('css/engine/searchEngine.css')}}">
+{{-- end seach bar --}}
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Cart's style -->

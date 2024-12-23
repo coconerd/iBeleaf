@@ -1,0 +1,8 @@
+.notifications-count {
+	font-size: 0.6rem;
+	transform: translate(25%, -25%) !important;
+}
+
+.notifications-count:empty {
+	display: none;
+}

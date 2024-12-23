@@ -36,7 +36,7 @@ class Authenticate extends BaseAuthenticate
 			}
 			return
 				str_contains($request->fullUrl(), '/admin')
-				? route('admin.showLoginForm')
+				? route('admin.auth.showLoginForm')
 				: route('auth.showLoginForm');
 		} catch (\Exception $e) {
 			Log::error('Authenticate middleware failed', ['error' => $e->getMessage()]);

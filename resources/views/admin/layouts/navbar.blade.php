@@ -50,49 +50,18 @@
 				</div>
 			</li>
 			<li class="nav-item dropdown ms-3">
-				<a class="nav-link" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+				<a class="nav-link position-relative" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
 					<i class="mdi mdi-bell-outline"></i>
+					<span class="position-absolute top-1 ms-2 translate-middle badge rounded-pill bg-danger notifications-count">
+						0
+					</span>
 				</a>
 				<div class="dropdown-menu dropdown-menu-left navbar-dropdown preview-list"
 					aria-labelledby="notificationDropdown">
 					<h6 class="px-3 py-3 fw-semibold mb-0">Notifications</h6>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item preview-item">
-						<div class="preview-thumbnail">
-							<div class="preview-icon bg-success">
-								<i class="mdi mdi-calendar"></i>
-							</div>
-						</div>
-						<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-							<h6 class="preview-subject fw-normal mb-0">New order recieved</h6>
-							<p class="text-gray ellipsis mb-0"> 45 sec ago </p>
-						</div>
-					</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item preview-item">
-						<div class="preview-thumbnail">
-							<div class="preview-icon bg-warning">
-								<i class="mdi mdi-image-filter-vintage"></i>
-							</div>
-						</div>
-						<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-							<h6 class="preview-subject fw-normal mb-0">Server limit reached</h6>
-							<p class="text-gray ellipsis mb-0"> 55 sec ago </p>
-						</div>
-					</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item preview-item">
-						<div class="preview-thumbnail">
-							<div class="preview-icon bg-info">
-								<i class="mdi mdi-link-variant"></i>
-							</div>
-						</div>
-						<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-							<h6 class="preview-subject fw-normal mb-0">Kevin karvelle</h6>
-							<p class="text-gray ellipsis mb-0"> 11:09 PM </p>
-						</div>
-					</a>
-					<div class="dropdown-divider"></div>
+					<div id="notifications">
+					</div>
 					<h6 class="p-3 font-13 mb-0 text-primary text-center">View all notifications</h6>
 				</div>
 			</li>
@@ -132,3 +101,8 @@
 		</button>
 	</div>
 </nav>
+
+<link rel="stylesheet" href="{{ asset('css/admin/layouts/navbar.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/pusher-js@7.0.3/dist/web/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.min.js"></script>
+<script src="{{ asset('js/admin/layouts/navbar.js') }}"></script>

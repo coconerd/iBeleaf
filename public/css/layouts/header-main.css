@@ -1,0 +1,50 @@
+.navbar-main {
+	position: absolute;
+	background-color: #ffffff00;
+	/* Light cream background */
+	width: 100%;
+	z-index: 10;
+}
+
+.nav-item {
+	display: flex;
+	align-items: center;
+}
+.cart.me-3, .bi-search {
+	color: #ffffff;
+	font-weight: bold;
+	/* background:#b1bcc5 */
+}
+
+.navbar .container{
+	background:#0d686bb8;
+	/* padding: 0px 20px; */
+	/* margin: 10px; */
+	border-radius: 15px;
+}
+
+.cart.me-3 {
+	/* background:#5890b1a6; */
+	margin: 0px;
+	display: flex;
+	gap: 8px;
+}
+
+.navbar-brand {
+	display: flex;
+	align-items: center;
+}
+.navbar-brand {
+	color: white;
+	font-weight: bold;
+	font-size: 22px;
+}
+.navbar-brand label{
+	padding-left: 10px;
+}
+.nav-link.dropdown-toggle {
+	color: white;
+	font-weight: bold;
+	-webkit-text-stroke: 0.1px #000000;
+	font-size: 17px;
+}

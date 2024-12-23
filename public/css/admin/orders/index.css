@@ -4,15 +4,22 @@
 }
 
 .status-badge {
-    padding: 0.4rem 0.8rem;
+    padding: 0.5rem 1rem;
     border-radius: 50px;
     font-size: 0.875rem;
     font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-badge .mdi {
+    font-size: 1.1rem;
 }
 
 .badge-pending {
-    background-color: #fff3cd;
-    color: #856404;
+	background-color: #fff3cd;
+	color: #856404;
 }
 
 .badge-delivering {
@@ -47,6 +54,8 @@
     background: white;
     border-radius: 12px;
     margin-bottom: 1.5rem;
+    border-top: 3px solid #D42426;
+    position: relative;
 }
 
 .card:hover {
@@ -54,11 +63,97 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
+.card::after {
+    content: "🎄";
+    position: absolute;
+    top: -12px;
+    right: 15px;
+    font-size: 20px;
+}
+
 .filter-section {
-    background: white;
-    padding: 1.5rem;
+    background: #fafaf8;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #d3d3c7;
+    margin-bottom: 2rem;
+}
+
+.filter-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.filter-group-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.vintage-label {
+    font-family: "Playfair Display", serif;
+    color: #435E53;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.vintage-select {
+    background-color: #ffffff;
+    border: 1px solid #d3d3c7;
     border-radius: 8px;
-    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.vintage-select:focus {
+    border-color: #435E53;
+    box-shadow: 0 0 0 0.2rem rgba(67, 94, 83, 0.15);
+}
+
+.filter-submit {
+    justify-self: start;
+    padding: 0.75rem 1.5rem;
+}
+
+.table-container {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #d3d3c7;
+    overflow: hidden;
+}
+
+.vintage-table {
+    margin: 0;
+}
+
+.vintage-table th {
+    background: #435E53;
+    color: white;
+    font-family: "Playfair Display", serif;
+    font-weight: 500;
+    padding: 1rem;
+    border: none;
+}
+
+.vintage-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #d3d3c7;
+    vertical-align: middle;
+}
+
+.vintage-table tbody tr:hover {
+    background-color: rgba(67, 94, 83, 0.05);
+}
+
+.sortable i {
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+}
+
+.sortable:hover i {
+    color: white;
 }
 
 .flatpickr-input {
@@ -90,6 +185,14 @@
     max-height: 90vh;
     overflow-y: auto;
     width: 100%;
+    position: relative;
+    background: repeating-linear-gradient(
+        -45deg,
+        rgba(255, 0, 0, 0.02) 0px,
+        rgba(255, 0, 0, 0.02) 2px,
+        transparent 2px,
+        transparent 6px
+    );
 }
 
 .newest-orders-card .newest-order-item {
@@ -178,13 +281,14 @@
 }
 
 .btn-primary {
-    background-color: #435E53;
-    border: none;
+    background-color: #2E7D32;
+    border-color: #2E7D32;
 }
 
 .btn-primary:hover {
-    background-color: #2d3f38;
-    transform: translateY(-1px);
+    background-color: #1B5E20;
+    border-color: #1B5E20;
+    box-shadow: 0 0 10px rgba(46, 125, 50, 0.3);
 }
 
 .pagination-wrapper {
@@ -212,25 +316,24 @@
     right: 8px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 16px;
-    transition: transform 0.2s;
+    font-size: 18px !important;
+    /* color: #ffffff !important; Force white color */
+	color: black !important;
+    opacity: 0.7;
+    transition: all 0.2s ease;
 }
 
 .sort-icon.hidden {
-    opacity: 0.3;
+    opacity: 0.4;
 }
 
-.sortable:hover .sort-icon.hidden {
+.sortable:hover .sort-icon {
     opacity: 1;
+    transform: translateY(-50%) scale(1.1);
 }
 
 .sort-icon.mdi-swap-vertical {
-    opacity: 0.3;
-    font-size: 14px;
-}
-
-.sortable:hover .sort-icon.mdi-swap-vertical {
-    opacity: 0.8;
+    font-size: 16px !important;
 }
 
 .popup-menu {
@@ -338,4 +441,117 @@
 .swal2-cancel {
     padding: 8px 20px !important;
     font-size: 0.9rem !important;
+}
+
+/* Christmas Theme */
+.card-header {
+    background: linear-gradient(45deg, rgba(212, 36, 38, 0.05), rgba(0, 100, 0, 0.05));
+}
+
+/* Snowfall Animation */
+@keyframes snowfall {
+    0% {
+        transform: translateY(-100%) rotate(0deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.snowflake {
+    position: fixed;
+    color: #fff;
+    font-size: 1em;
+    text-shadow: 0 0 5px #000;
+    animation: snowfall linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.christmas-icon {
+    margin-left: 10px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Vintage Modal Styling */
+.vintage-modal .modal-content {
+    background: #fafaf8;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.vintage-modal .modal-header {
+    background: #435E53;
+    color: white;
+    border-bottom: 2px solid #2d3f38;
+    padding: 1.5rem 2rem;
+}
+
+.vintage-modal .modal-body {
+    padding: 2rem !important;
+    background: #fafaf8;
+}
+
+.vintage-modal .modal-footer {
+    padding: 1.5rem 2rem;
+    background: #fafaf8;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.vintage-title {
+    font-family: "Playfair Display", serif;
+    letter-spacing: 0.5px;
+    color: white;
+    margin: 0;
+}
+
+.vintage-close {
+    color: white !important;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.vintage-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+/* Update modal content styling */
+#order-details-content {
+    font-family: "Playfair Display", serif;
+}
+
+#order-details-content strong {
+    color: #435E53;
+    font-weight: 600;
+}
+
+#order-details-content .order-items {
+    border-left: 2px solid #d3d3c7;
+    padding-left: 1.5rem;
+    margin-top: 2rem;
+}
+
+#order-details-content h5 {
+    color: #435E53;
+    font-family: "Playfair Display", serif;
+    margin-bottom: 1.5rem;
+}
+
+.modal .product-image {
+    border: 1px solid #d3d3c7;
 }

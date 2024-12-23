@@ -1,0 +1,132 @@
+/* Vintage modal style */
+.inactive-muted-text {
+	color: #6c757d; /* Muted text color */
+}
+
+.inactive-muted-text:focus {
+	color: black; /* Default text color when focused */
+}
+
+.vintage-modal .modal-content {
+    background: #fafaf8;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.vintage-modal .modal-header {
+    background: #435E53;
+    color: white;
+    border-bottom: 2px solid #2d3f38;
+}
+
+.vintage-modal .modal-body {
+	padding: 40px !important;
+}
+
+.vintage-modal .modal-footer {
+	padding: 40px;
+}
+
+.vintage-title {
+    font-family: "Playfair Display", serif;
+    letter-spacing: 0.5px;
+}
+
+.vintage-label {
+    font-weight: 600;
+    color: #435E53;
+    margin-bottom: 0.5rem;
+	font-size: 0.8rem;
+}
+
+.vintage-input, .vintage-textarea {
+    background: #ffffff;
+    border: 1px solid #d3d3c7;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.vintage-input:focus, .vintage-textarea:focus {
+    border-color: #435E53;
+    box-shadow: 0 0 0 0.2rem rgba(67, 94, 83, 0.15);
+    background: #ffffff;
+}
+
+.vintage-addon {
+    background: #435E53;
+    color: white;
+    border: none;
+}
+
+.vintage-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.vintage-btn-primary {
+    background: #435E53;
+    border: none;
+    color: white;
+}
+
+.vintage-btn-primary:hover {
+    background: #2d3f38;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(67, 94, 83, 0.2);
+}
+
+.vintage-close {
+    /* background: none; */
+    color: white !important;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.vintage-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.input-group {
+    border-radius: 8px;
+    overflow: hidden;
+}
+/* End of vintage modal style */
+
+/* Image preview styles */
+.preview-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #d3d3c7;
+    border-radius: 8px;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+    border-width: 2px !important;
+    border-color: #d3d3c7 !important;
+}
+
+#preview-image-container {
+    gap: 20px;
+	padding: 30px;
+	border-radius: 5px;
+}
+
+/* End of image preview styles */
+
+/* Category items style */
+.category-item {
+	cursor: pointer;
+}
+/* End category item styles */
