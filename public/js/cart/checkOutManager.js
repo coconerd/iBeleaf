@@ -437,8 +437,10 @@ function validateCheckoutForm() {
         if (!value || value.includes("Lựa chọn")) {
             field.addClass("is-invalid");
             formValid = false;
+            $("#address-warning").show();
         } else {
             field.removeClass("is-invalid");
+            $("#address-warning").hide();
         }
     });
 
