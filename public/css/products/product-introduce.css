@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&family=Pinyon+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&family=Pinyon+Script&family=Rowdies:wght@300;400;700&display=swap');
+
+.cate-container {
+    position: relative;
+    width: 90%;
+    height: 80px;
+    font-family: "Rowdies", sans-serif;
+    font-size: 30px;
+    color:#3c8519
+}
+
+.cate-container span{
+    position:absolute;
+    top: 25%;
+    border-top: 3px solid #47a917;
+    padding: 0px 10px;
+    margin-bottom: 10px;
+    margin-left: 15%;
+    margin-right: 0px;
+    /* left: 0px; */
+}
+
+.cate-container:nth-child(odd) span{
+    right: 0px;
+    margin-right: 15%;
+    margin-left: 0px;
+}
+
+.product-container {
+    width: 87%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 10px;
+}
+
+.nav-product {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 425px;
+    align-items: center;
+    position: relative;
+    font-family: "Rowdies", sans-serif;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.nav-product-img {
+    width: 97%;
+    /* height: 358px; */
+    height: 70%;
+    margin-top: 5px;
+    position:relative;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.nav-product img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+}
+
+.nav-product-category {
+    font-weight: 50;
+    margin: 10px 0px 3px;
+    font-size: 13px;
+    color:#b9b9b9;
+}
+
+.nav-product-discount {
+    position: absolute;
+    color: #ffffff !important;
+    background: #4caf28;
+    font-size: 20px;
+    padding: 9px 30px;
+    top: 20px;
+    left: -10px;
+    border-top-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 4px;
+}
+.nav-product-discount:before {
+    position: absolute;
+    content: "";
+    background: #25670e;
+    width: 20px;
+    height: 20px;
+    transform: rotate(35deg);
+    border-radius: 2px;
+    z-index: -1;
+    left: 5px;
+    bottom: -7px;
+}
+
+.nav-product-name {
+    font-size: 18px;
+    font-weight: 100;
+    height: 58px;
+    align-content: center;
+    text-align: center;
+    padding: 0px 20px;
+
+    /* Thêm ... */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;      
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.nav-product-price {
+    font-size: 20px;
+    margin-top: 3px;
+    margin-bottom: 7px;
+    color: #3eaf15;
+}
+
+.nav-product-price-discount {
+    margin-left: 12px;
+    color: #bab8b8ba;
+    font-size: 19px;
+    position: relative;
+}
+
+.nav-product-price-discount::before{
+    background: #304f2f63;
+    content: "";
+    width: 105%;
+    height: 2px;
+    position: absolute;
+    top: 52%;
+    left: -2px;
+}
+
+.more-product {
+    font-size: 20px;
+    padding: 15px 25px;
+    margin: 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #67b75b;
+}
+
+.more-product:hover{
+    color: #519047;
+}
+
+/* animation */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to { 
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+@keyframes discount_animation {
+    to { 
+        background: #39ac10;
+        padding: 10px 33px;
+        top: 18px;
+        left: -11px;
+        box-shadow: 5px 5px 10px rgb(20 68 10 / 42%);
+    }
+}
+/* hover  */
+
+.nav-product:hover {
+    background-color:#0b5a5d;
+    color: white;
+    box-shadow: 0px 0px 10px rgb(17 74 84 / 72%);
+}
+
+.nav-product:hover .nav-product-price{
+    color: #63e932;
+}
+
+.nav-product:hover .nav-product-price-discount{
+    color: #d5d5d5ba;
+}
+
+.nav-product:hover .nav-product-price-discount::before{
+    background: #60bf5de6;
+}
+
+.nav-product:hover .nav-product-category{
+    color:#b5e3ff;
+}
+
+.nav-product:hover .nav-product-discount{
+    animation: discount_animation 0.1s forwards;
+}
+
+.nav-product:hover .enable_image {
+    animation: fadeOut 1s forwards;
+}
+
+.nav-product:hover .disable_image{
+    animation: fadeIn 0.5s forwards;
+    /* animation: fadeOut 0.4s reverse forwards !important; */
+}
+
+
