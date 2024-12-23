@@ -20,7 +20,7 @@ $(document).ready(function () {
                 errorThrown
             );
         });
-    
+
     // Add validation on input/change
     $(".form-control, .form-select").on("input change", function () {
         validateCheckoutForm();
@@ -42,7 +42,7 @@ $(document).ready(function () {
         if (to_province_id === "202") {
             innerCityShippingFee();
         }
-        
+
         if (to_province_id === "202") {
             $(".alert-icon-container").hide();
         } else {
@@ -79,7 +79,7 @@ $(document).ready(function () {
     });
 
     // Set default address
-    $(".btn-custom").on("click", function () {
+    $("#pay-btn").on("click", function () {
         const addressData = {
             province: $("#province option:selected").text(),
             district: $("#district option:selected").text(),
@@ -101,7 +101,7 @@ $(document).ready(function () {
         // Check if default address toggle is checked
         if ($("#defaultAddress").is(":checked")) {
             $.ajax({
-                url: '/checkout/update-default-address',
+                url: "/checkout/update-default-address",
                 method: "POST",
                 data: addressData,
                 headers: {
@@ -111,7 +111,7 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     if (response.status === "success") {
-                        console.log('Default address updated');
+                        console.log("Default address updated");
                     }
                 },
                 error: function (xhr) {
@@ -120,8 +120,87 @@ $(document).ready(function () {
             });
         }
     });
+
+    // Order submit
+    $("#pay-btn").on("click", function () {
+        if (validateCheckoutForm()) {
+            submitOrder();
+        }
+    });
 });
 
+function applyVoucher(voucherId, description, discount) {
+    const $voucherBox = $("#valid-voucher-box");
+    const $voucherDetails = $voucherBox.find(".voucher-details");
+
+    $voucherDetails.attr("data-voucher-id", voucherId);
+    $("#voucher-id").val(voucherId);
+    $("#voucher-description").text(description);
+    $("#voucher-discount").text(discount);
+
+    $voucherBox.show();
+}
+
+function getAppliedVoucherId() {
+    return (
+        $("#valid-voucher-box .voucher-details").attr("data-voucher-id") || null
+    );
+}
+
+function submitOrder() {
+    // Get address values
+    const address = {
+        province_city: $("#province option:selected").text(),
+        district: $("#district option:selected").text(),
+        commune_ward: $("#ward option:selected").text(),
+        address: $("#address").val(),
+    };
+
+    const orderData = {
+        voucher_id: getAppliedVoucherId(),
+        provisional_price: parseFloat(
+            $("#provisional-price")
+                .text()
+                .replace(/[^0-9.-]+/g, "")
+        ),
+        delivery_cost: parseFloat(
+            $("#shipping-fee")
+                .text()
+                .replace(/[^0-9.-]+/g, "")
+        ),
+        total_price: $(".total-amount")
+            .text()
+            .replace(/[.,₫\s]/g, ""),
+        address: address,
+        payment_method:
+            $('input[name="payment-method"]:checked').val() || "COD",
+        additional_note: $("#additional-note").val(),
+    };
+
+    console.log('Order info: ', {
+        total_price: orderData.total_price,
+        delivery_cost: orderData.delivery_cost,
+        provisional_price: orderData.provisional_price
+    });
+    
+    $.ajax({
+        url: '/checkout/submit-order',
+        method: "POST",
+        data: orderData,
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        success: function (response) {
+            if (response.success) {
+                // Redirect to order success page
+                // window.location.href = `/order-success/${response.order_id}`;
+            } else {
+                toastr.error(response.message || 'Failed to create order');
+            }
+        }
+    });
+    
+}
 function showAlertMessage() {
     // Toggle popup on click
     $(".alert-icon-container").on("click", function (e) {

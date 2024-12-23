@@ -217,7 +217,23 @@ function hanldeQuantityUpdate($input) {
     updateDiscountAmount();
     
 }
+function applyVoucher(voucherId, description, discount) {
+    const $voucherBox = $("#valid-voucher-box");
+    const $voucherDetails = $voucherBox.find(".voucher-details");
 
+    $voucherDetails.attr("data-voucher-id", voucherId);
+    $("#voucher-id").val(voucherId);
+    $("#voucher-description").text(description);
+    $("#voucher-discount").text(discount);
+
+    $voucherBox.show();
+}
+
+function getAppliedVoucherId() {
+    return (
+        $("#valid-voucher-box .voucher-details").attr("data-voucher-id") || null
+    );
+}
 function showMinQuantityAlert($input) {
     if (!$input || !($input instanceof jQuery)) {
         throw new TypeError("Invalid input parameter");

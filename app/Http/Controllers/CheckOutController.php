@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Exceptions\ShippingFeeCalculationException;
 use App\Services\ShippingService;
 use App\Models\CartItem;
+use App\Models\OrderItem;
+use App\Models\Order;
+use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Exception;
 
 class CheckOutController extends Controller
 {
@@ -161,6 +165,8 @@ class CheckOutController extends Controller
         try {
             // Access nested data
             // $data = $request->input('to_district_id');
+            Log::debug('See difference in address, calcuating new shipping fee');
+
             $districtId = $request['to_district_id'] ?? null;
             $wardCode = $request['to_ward_code'] ?? null;
 
@@ -295,5 +301,165 @@ class CheckOutController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function submitOrder(Request $request)
+    {
+        DB::beginTransaction();
+		try{
+			$user = Auth::user();
+			
+            // Validate request
+            $validated = $request->validate([
+                'address' => 'required|array'
+            ]);
+
+			$cartItems = CartItem::with(['product'])
+					->where('cart_id', $user->cart_id)
+					->get();
+            if ($cartItems->isEmpty()) {
+                throw new Exception('Cart is empty');
+            }
+
+			// 1. Create new Order
+            $order = $this->createNewOrder(
+                $request->voucher_id ?? null,
+                $request->provisional_price,
+                $request->delivery_cost,
+                $request->total_price,
+                $validated['address'],
+                $request->payment_method ?? 'COD',
+                $request->additional_note ?? null
+            );
+
+			// 2. Transfer Cart items to Order items
+			foreach ($cartItems as $item) {
+                OrderItem::create([
+                    'order_id' => $order->getAttribute('order_id'),
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'total_price' => $item->total_price,
+                    'discounted_amount' => $item->discounted_amount ?? 0
+                ]);
+
+                // Update product stock quantity
+                $product = Product::find($item->product_id);
+                $product->decrement('stock_quantity', $item->quantity);
+            }
+            
+			// 3. Clear Cart items and update Cart items_count
+			CartItem::where('cart_id', $user->cart_id)->delete();
+			Cart::where('cart_id', $user->cart_id)->update(['items_count' => 0]);
+            DB::commit();
+
+			return response()->json([
+                'success' => true,
+                'order_id' => $order->getAttribute('order_id'),
+                'message' => 'Order created successfully'
+            ]);
+		}
+		catch (Exception $e){
+			DB::rollBack();
+            Log::error('Order creation failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $user->id ?? null
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+	}
+    private function isAddressChanged($newProvince, $newDistrict, $newCity)
+    {
+        $user = Auth::user();
+        
+        Log::debug('Comparing addresses', [
+            'current' => [
+                'province' => $user->province_city,
+                'district' => $user->district,
+                'city' => $user->commune_ward
+            ],
+            'new' => [
+                'province' => $newProvince,
+                'district' => $newDistrict,
+                'city' => $newCity
+            ]
+        ]);
+        return $user->province_city !== $newProvince ||
+            $user->district !== $newDistrict ||
+            $user->commune_ward !== $newCity;
+    }
+
+    private function createNewOrder(
+        $voucherId,
+        $provisionalPrice,
+        $deliveryCost,
+        $totalPrice,
+        $address,
+        $paymentMethod,
+        $additionalNote)
+    {
+        try{
+            if (!isset($address['province_city']) || !isset($address['district']) || !isset($address['commune_ward'])) {
+                throw new Exception('Invalid address format');
+            }
+            
+            $userId = Auth::id();
+            
+            $addressChanged = $this->isAddressChanged(
+                $address['province_city'],
+                $address['district'],
+                $address['commune_ward']
+            );
+
+            Log::debug('Creating new order', [
+                'address_changed' => $addressChanged,
+                'delivery_cost' => $deliveryCost
+            ]);
+
+            $finalDeliveryCost = $addressChanged ?
+                $this->calculatingShippingFee($address) :
+                $deliveryCost;
+            
+            Log::debug('Compare delivery cost', [
+                'The same address: ' => $finalDeliveryCost === $deliveryCost
+            ]);
+
+            $order = Order::create([
+                'user_id' => $userId,
+                'voucher_id' => $voucherId,
+                'total_price' => $totalPrice,
+                'provisional_price' => $provisionalPrice,
+                'deliver_cost' => $finalDeliveryCost,
+                'payment_method' => $paymentMethod,
+                'addtion_note' => $additionalNote
+            ]);
+            
+            Log::debug('Order created', [
+                'order_id' => $order->getAttribute('order_id'),
+                'final_delivery_cost' => $finalDeliveryCost
+            ]);
+
+            return $order;
+        } catch (Exception $e) {
+            Log::error('Order creation failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $userId,
+                'address' => $address
+            ]);
+            return response()->json([
+                'success'=> false,
+                'message'=> $e->getMessage()
+            ]);
+        }
+	}
+
+    public function showSuccessPage($orderId){
+        $order = Order::findOrFail($orderId);
+        return view('orders.success', [
+            'order' => $order
+        ]);
     }
 }

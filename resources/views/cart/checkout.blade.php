@@ -59,13 +59,13 @@
 						<div class="invalid-feedback">Vui lòng nhập địa chỉ</div>
 					</div>
 					<div class="mb-3">
-						<label for="address-note" class="form-label">Ghi chú</label>
-						<input type="text" class="form-control" id="address-note" placeholder="Nhà có cây xoài to, gọi trước khi giao hàng">
+						<label for="additional-note" class="form-label">Ghi chú</label>
+						<input type="text" class="form-control" id="additional-note" placeholder="Nhà có cây xoài to, gọi trước khi giao hàng">
 					</div>
 					<div class="mb-3">
 						<div class="form-check form-switch mb-3">
 							<input type="checkbox" class="form-check-input" id="defaultAddress" role="switch" aria-checked="false">
-							<label class="form-check-label" for="defaultAddress">Đặt làm thông tin mặc định</label>
+							<label class="form-check-label" for="defaultAddress">Đặt làm địa chỉ mặc định</label>
 						</div>
 						<button type="button" class="btn btn-custom mb-3">XÁC NHẬN ĐỊA CHỈ</button>
 					</div>
@@ -126,7 +126,7 @@
 						<div class="order-summary-details">
 							<div class="summary-row">
 								<span>Tạm tính ({{ $totalQuantity }} mặt hàng)</span>
-								<span>{{ number_format($totalDiscountedPrice) }} VND</span>
+								<span id="provisional-price">{{ number_format($totalDiscountedPrice) }} VND</span>
 							</div>
 							<div class="summary-row">
 								<span>Phí vận chuyển</span>
@@ -180,23 +180,27 @@
 					</div>
 					<hr class="line">
 					<p class="text-danger" id="address-warning">Vui lòng nhập địa chỉ giao hàng</p>
-						<div class="payment-method d-flex align-items-center justify-content-between disabled" class="type">
-							<div class="d-flex align-items-center">
-								<img src="https://www.muji.com.vn/_next/static/media/payment_online.20c772c1.svg" alt="BANKING">
-								<span>
-									<span class="payment-type">BANKING</span><br>
-									<small>Chuyển khoản ngân hàng, MOMO, VNPAY, Apple Pay</small>
-								</span>
-							</div>
-							<input type="radio" name="payment" class="form-check-input">
+						<div class="payment-method">
+							<label class="payment-label d-flex align-items-center justify-content-between disabled" id="banking">
+								<div class="d-flex align-items-center">
+									<img src="https://www.muji.com.vn/_next/static/media/payment_online.20c772c1.svg" alt="BANKING" class="payment-icon">
+									<span>
+										<span class="payment-type">BANKING (Coming soon...)</span><br>
+										<small class="payment-description">Chuyển khoản ngân hàng, MOMO, VNPAY, Apple Pay</small>
+									</span>
+								</div>
+								<input type="radio" name="payment" class="form-check-input" disabled>
+							</label>
 						</div>
 
-						<div class="payment-method d-flex align-items-center justify-content-between disabled" class="type">
-							<div class="d-flex align-items-center">
-								<img src="https://www.muji.com.vn/_next/static/media/cod.6f018bcd.svg" alt="Cash">
-								<span class="payment-type">Thanh Toán Khi Nhận Hàng</span>
-							</div>
-							<input type="radio" name="payment" class="form-check-input">
+						<div class="payment-method">
+							<label class="payment-label d-flex align-items-center justify-content-between">
+								<div class="d-flex align-items-center">
+									<img src="https://www.muji.com.vn/_next/static/media/cod.6f018bcd.svg" alt="Cash" class="payment-icon">
+									<span class="payment-type" id="cod">Thanh Toán Khi Nhận Hàng</span>
+								</div>
+								<input type="radio" name="payment" class="form-check-input" checked>
+							</label>
 						</div>
 				</div>
 			</div>

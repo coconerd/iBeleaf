@@ -175,4 +175,8 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 		->name('checkout.items');
 	Route::post('/checkout/update-default-address', [CheckOutController::class, 'updateDefaultAddress'])
 		->name('checkout.updateDefaultAddress');
+	Route::post('/checkout/submit-order', [CheckOutController::class, 'submitOrder'])
+		->name('checkout.submitOrder');
+	Route::get('/checkout/success', [CheckOutController::class, 'showSuccessPage'])
+		->name('checkout.success');
 });
