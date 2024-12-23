@@ -208,7 +208,7 @@ CREATE TABLE `orders` (
   `additional_note` longtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
-  'deliver_address' varchar(255) NOT NULL  
+  `deliver_address` varchar(255) NOT NULL  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -14311,7 +14311,7 @@ CREATE TABLE `return_refund_items` (
   `reason_tag` varchar(100) DEFAULT NULL,
   `reason_description` longtext DEFAULT NULL,
   `reject_reason` text DEFAULT NULL,
-  `status` enum('pending','accepted','rejected','received') DEFAULT 'pending',
+  `status` enum('pending','accepted','rejected','received', 'refunded', 'renewed') DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
