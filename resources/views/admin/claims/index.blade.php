@@ -13,6 +13,9 @@
 
 @section('content')
 <div class="content-wrapper">
+    <!-- Add Snowflakes -->
+    <div id="snowflakes"></div>
+    
     <!-- Page Header -->
     <div class="page-header">
         <h3 class="page-title">Quản lý yêu cầu đổi/trả hàng</h3>
@@ -110,7 +113,8 @@
                             </tbody>
                         </table>
                         <!-- Pagination -->
-                        {{ $refundRequests->links() }}
+                        <!-- {{ $refundRequests->links() }} -->
+						@include('admin.layouts.pagination', ['paginator' => $refundRequests, 'itemName' => 'Yêu cầu trả hàng'])
                     </div>
                 </div>
             </div>
@@ -203,7 +207,8 @@
                             </tbody>
                         </table>
                         <!-- Pagination -->
-                        {{ $returnRequests->links() }}
+                        <!-- {{ $returnRequests->links() }} -->
+						@include('admin.layouts.pagination', ['paginator' => $returnRequests, 'itemName' => 'Yêu cầu đổi hàng'])
                     </div>
                 </div>
             </div>
@@ -298,33 +303,33 @@
 </div>
 
 <!-- Request Details Modal -->
-<div class="modal fade" id="requestDetailsModal" tabindex="-1" aria-labelledby="requestDetailsModalLabel" aria-hidden="true">
+<div class="modal fade vintage-modal" id="requestDetailsModal" tabindex="-1" aria-labelledby="requestDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Chi tiết yêu cầu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title vintage-title">Chi tiết yêu cầu</h5>
+                <button type="button" class="btn-close vintage-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="request-details-content">
+            <div class="modal-body vintage-body" id="request-details-content">
                 <!-- Request details will be loaded here via AJAX -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn reject-btn text-muted" style="font-size: 0.9rem;" data-request-id="">Từ chối <span class="mdi mdi-account-alert text-muted"></span></button>
-                <button type="button" class="btn btn-outline accept-btn fw-bold" style="font-size: 0.9rem;" data-request-id="">Chấp nhận <span class="mdi mdi-check-all"></span></button>
+                <button type="button" class="btn reject-btn text-muted vintage-btn" data-request-id="">Từ chối <span class="mdi mdi-account-alert text-muted"></span></button>
+                <button type="button" class="btn btn-outline accept-btn fw-bold vintage-btn vintage-btn-primary" style="font-size: 0.9rem;" data-request-id="">Chấp nhận <span class="mdi mdi-check-all"></span></button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Order details modal -->
-<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+<div class="modal fade vintage-modal" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Chi tiết đơn hàng</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                <h5 class="modal-title vintage-title">Chi tiết đơn hàng</h5>
+                <button type="button" class="btn-close vintage-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body vintage-body">
                 <!-- Order details will be loaded here via AJAX -->
                 <div id="order-details-content">
                     <!-- Loading indicator -->

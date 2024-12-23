@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Handle accept button click
 	document.querySelector('.accept-btn').addEventListener('click', function () {
 		const requestId = this.dataset.requestId;
-		
+
 		updateRequestStatus(requestId, 'accepted');
 	});
 
@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	})
 
 	// Handle processed row clicks
-	document.querySelectorAll('.processed-row').forEach(function(row) {
-		row.addEventListener('click', function() {
+	document.querySelectorAll('.processed-row').forEach(function (row) {
+		row.addEventListener('click', function () {
 			const requestId = this.dataset.requestId;
 			loadRequestDetails(requestId);
 		});
@@ -44,27 +44,27 @@ document.addEventListener('DOMContentLoaded', function () {
 		const urlParams = new URLSearchParams(window.location.search);
 		const currentType = urlParams.get('type');
 		const currentDirection = urlParams.get('direction');
-		
+
 		if (currentType === icon.dataset.type) {
 			icon.classList.remove('mdi-arrow-up', 'mdi-arrow-down');
 			icon.classList.add(currentDirection === 'asc' ? 'mdi-arrow-up' : 'mdi-arrow-down');
 		}
 
-		icon.addEventListener('click', function() {
+		icon.addEventListener('click', function () {
 			const type = this.dataset.type;
 			const isAsc = this.classList.contains('mdi-arrow-up');
 			const direction = isAsc ? 'desc' : 'asc';
-			
+
 			// Update icon
 			this.classList.remove(isAsc ? 'mdi-arrow-up' : 'mdi-arrow-down');
 			this.classList.add(isAsc ? 'mdi-arrow-down' : 'mdi-arrow-up');
-			
+
 			// Reload page with sort parameters
 			window.location.href = `${window.location.pathname}?type=${type}&sort=created_at&direction=${direction}`;
 		});
 	});
 
-	document.querySelector('.quick-accept-btn').addEventListener('click', function() {
+	document.querySelector('.quick-accept-btn').addEventListener('click', function () {
 		const requestId = this.dataset.requestId;
 		Swal.fire({
 			title: 'Xác nhận phê duyệt yêu cầu đổi trả hàng?',
@@ -86,57 +86,57 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	// Status options for editable cells
-    const statusOptions = {
-        'pending': 'Đang chờ xử lý',
-        'accepted': 'Đã chấp nhận',
-        'rejected': 'Đã từ chối',
-        'received': 'Đã nhận hàng'
-    };
+	const statusOptions = {
+		'pending': 'Đang chờ xử lý',
+		'accepted': 'Đã chấp nhận',
+		'rejected': 'Đã từ chối',
+		'received': 'Đã nhận hàng'
+	};
 
-    // Handle editable cell clicks
-    document.querySelectorAll('.editable-cell').forEach(cell => {
-        cell.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const requestId = this.dataset.requestId;
-            const field = this.dataset.field;
-            
-            // Create and show the popup
-            const popup = document.createElement('div');
-            popup.className = 'edit-popup';
-            
-            let popupContent = '<div class="edit-popup-content">';
-            Object.entries(statusOptions).forEach(([value, label]) => {
-                popupContent += `<div class="edit-option" data-value="${value}">${label}</div>`;
-            });
-            popupContent += '</div>';
-            popup.innerHTML = popupContent;
+	// Handle editable cell clicks
+	document.querySelectorAll('.editable-cell').forEach(cell => {
+		cell.addEventListener('click', function (e) {
+			e.stopPropagation();
+			const requestId = this.dataset.requestId;
+			const field = this.dataset.field;
 
-            // Position the popup
-            const rect = this.getBoundingClientRect();
-            popup.style.top = rect.bottom + window.scrollY + 5 + 'px';
-            popup.style.left = rect.left + window.scrollX + 'px';
+			// Create and show the popup
+			const popup = document.createElement('div');
+			popup.className = 'edit-popup';
 
-            // Add popup to document
-            document.body.appendChild(popup);
+			let popupContent = '<div class="edit-popup-content">';
+			Object.entries(statusOptions).forEach(([value, label]) => {
+				popupContent += `<div class="edit-option" data-value="${value}">${label}</div>`;
+			});
+			popupContent += '</div>';
+			popup.innerHTML = popupContent;
 
-            // Handle option selection
-            popup.querySelectorAll('.edit-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const newValue = this.dataset.value;
-                    updateRequestStatus(requestId, newValue);
-                    popup.remove();
-                });
-            });
+			// Position the popup
+			const rect = this.getBoundingClientRect();
+			popup.style.top = rect.bottom + window.scrollY + 5 + 'px';
+			popup.style.left = rect.left + window.scrollX + 'px';
 
-            // Close popup when clicking outside
-            document.addEventListener('click', function closePopup(e) {
-                if (!popup.contains(e.target) && !cell.contains(e.target)) {
-                    popup.remove();
-                    document.removeEventListener('click', closePopup);
-                }
-            });
-        });
-    });
+			// Add popup to document
+			document.body.appendChild(popup);
+
+			// Handle option selection
+			popup.querySelectorAll('.edit-option').forEach(option => {
+				option.addEventListener('click', function () {
+					const newValue = this.dataset.value;
+					updateRequestStatus(requestId, newValue);
+					popup.remove();
+				});
+			});
+
+			// Close popup when clicking outside
+			document.addEventListener('click', function closePopup(e) {
+				if (!popup.contains(e.target) && !cell.contains(e.target)) {
+					popup.remove();
+					document.removeEventListener('click', closePopup);
+				}
+			});
+		});
+	});
 
 	function loadRequestDetails(requestId) {
 		const modal = new bootstrap.Modal(document.getElementById('requestDetailsModal'));
@@ -418,11 +418,28 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 	}
 
+	// Create snowflakes
+	(function createSnowflakes() {
+		const snowflakesCount = 30;
+		const symbols = ['❄', '❅', '❆'];
+		const container = document.querySelector('.content-wrapper');
+
+		for (let i = 0; i < snowflakesCount; i++) {
+			const snowflake = document.createElement('div');
+			snowflake.className = 'snowflake';
+			snowflake.style.left = `${Math.random() * 100}%`;
+			snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+			snowflake.style.opacity = Math.random();
+			snowflake.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+			container.appendChild(snowflake);
+		}
+	})();
+
 	function rejectRequest(requestId) {
 		// Close the details modal first
 		const detailsModal = bootstrap.Modal.getInstance(document.getElementById('requestDetailsModal'));
 		detailsModal.hide();
-		
+
 		// Wait for modal to finish closing animation
 		setTimeout(() => {
 			Swal.fire({

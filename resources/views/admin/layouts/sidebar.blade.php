@@ -32,7 +32,7 @@
 			<span class="nav-item-head">Danh mục</span>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="../index.html">
+			<a class="nav-link" href="{{ route('admin.dashboard.showDashboardPage') }}">
 				<i class="mdi mdi-compass-outline menu-icon"></i>
 				<span class="menu-title">Dashboard</span>
 			</a>
@@ -44,7 +44,7 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="/admin/products">
+			<a class="nav-link" href="{{ route('admin.products.index') }}">
 				<i class="menu-icon mdi mdi-flower"></i>
 				<span class="menu-title">Quản lý sản phẩm</span>
 			</a>
@@ -59,6 +59,12 @@
 			<a class="nav-link" href="{{ route('admin.claims.index') }}">
 				<i class="menu-icon mdi mdi-backup-restore"></i>
 				<span class="menu-title">Tiếp nhận đổi/trả hàng</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ route('admin.vouchers.showVouchersPage') }}">
+				<i class="menu-icon mdi mdi-tag-multiple"></i>
+				<span class="menu-title">Quản lý mã giảm giá</span>
 			</a>
 		</li>
 		<li class="nav-item">

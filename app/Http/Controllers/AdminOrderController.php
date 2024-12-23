@@ -8,13 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Log;
 
-class AdminController extends Controller
+class AdminOrderController extends Controller
 {
-	public function showDashboardPage()
-	{
-		return view('admin.dashboard.index');
-	}
-
 	public function showOrdersPage(Request $request)
 	{
 		$query = Order::query();
@@ -52,7 +47,7 @@ class AdminController extends Controller
 		$sortColumn = $request->input('sort', 'created_at');
 		$direction = $request->input('direction', 'desc');
 
-		if (in_array($sortColumn, ['total_price', 'created_at', 'deliver_date'])) {
+		if (in_array($sortColumn, ['order_id', 'total_price', 'created_at', 'deliver_date'])) {
 			$query->orderBy($sortColumn, $direction);
 		}
 
@@ -79,23 +74,10 @@ class AdminController extends Controller
 		return view('admin.orders.index', compact('orders', 'newestOrders'));
 	}
 
-	public function show($id)
-	{
-		$order = Order::findOrFail($id);
-		return view('admin.orders.show', compact('order'));
-	}
-
 	public function edit($id)
 	{
 		$order = Order::findOrFail($id);
 		return view('admin.orders.edit', compact('order'));
-	}
-
-	public function update(Request $request, $id)
-	{
-		$order = Order::findOrFail($id);
-		$order->update($request->all());
-		return redirect()->route('admin.orders.index')->with('success', 'Order updated successfully');
 	}
 
 	public function updateOrderField(Request $request): JsonResponse
@@ -136,7 +118,7 @@ class AdminController extends Controller
 
 	public function getOrderDetails($order_id): JsonResponse
 	{
-		$order = Order::with([
+		$order = Order::with(relations: [
 			'user',
 			'voucher',
 			'order_items.product.product_images',

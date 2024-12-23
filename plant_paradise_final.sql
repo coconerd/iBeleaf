@@ -12300,7 +12300,7 @@ CREATE TABLE `product_feedbacks` (
 --
 
 CREATE TABLE `product_images` (
-  `product_image_id` int(11) NOT NULL,
+  `product_image_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `product_id` varchar(10) DEFAULT NULL,
   `product_image_name` varchar(100) DEFAULT NULL,
   `product_image` longblob DEFAULT NULL,
@@ -14369,11 +14369,26 @@ CREATE TABLE `vouchers` (
   `voucher_start_date` datetime DEFAULT NULL,
   `voucher_end_date` datetime DEFAULT NULL,
   `value` int(11) DEFAULT NULL,
+  `is_hidden` tinyint(3) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+-- --------------------------------------------------------
+--
+-- Table structure for table `notifications`
+--
+CREATE TABLE `notifications` (
+  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_id` bigint UNSIGNED NOT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `read_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 --
@@ -14470,8 +14485,8 @@ ALTER TABLE `product_feedbacks`
 --
 -- Indexes for table `product_images`
 --
-ALTER TABLE `product_images`
-  ADD PRIMARY KEY (`product_image_id`);
+-- ALTER TABLE `product_images`
+--   ADD PRIMARY KEY (`product_image_id`);
 
 --
 -- Indexes for table `refund_return_images`
@@ -14498,6 +14513,13 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `UQ__Users__AB6E616476CA447E` (`email`),
   ADD KEY `FK_Users_Carts` (`cart_id`);
 
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`);
 --
 -- Indexes for table `vouchers`
 --

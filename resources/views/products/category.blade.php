@@ -207,7 +207,7 @@
                 else
                     foreach ($list_product as $product) {
                         echo '<div class="nav-product">';
-                        echo "<a class='nav-product-img' href='".ProductData::getUrl('product/'.$product['product_id'])."' id='".$product['product_id']."'>";
+                        echo "<a class='nav-product-img' href='".ProductData::getUrl('/'.$product['product_id'])."' id='".$product['product_id']."'>";
                         $first = "nope";
                         $isTwo = false; 
                         foreach ($product['list_image'] as $img) {

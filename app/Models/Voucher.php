@@ -40,6 +40,7 @@ class Voucher extends Model
 		'voucher_name' => 'string',
 		'description' => 'string',
 		'voucher_id' => 'int',
+		'is_hidden' => 'int',
 	];
 
 	protected $fillable = [
@@ -48,8 +49,21 @@ class Voucher extends Model
 		'description',
 		'voucher_start_date',
 		'voucher_end_date',
-		'value'
+		'value',
+		'is_hidden',
 	];
+
+	// Timely status of the voucher (not_yet, active, expired)
+	public function getStatusAttribute() {
+		$now = Carbon::now();
+		if ($now->lt($this->voucher_start_date)) {
+			return 'not_yet';
+		}
+		if ($now->gt($this->voucher_end_date)) {
+			return 'expired';
+		}
+		return 'active';
+	}
 
 	public function orders()
 	{

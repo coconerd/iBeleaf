@@ -131,7 +131,7 @@
 			list_product.forEach(product => {
 				product_html += `
 				<div class="nav-product">
-					<a class="nav-product-img" href="${window.location.origin + "/product/" + product.product_id}" id="${product.product_id}"></a>
+					<a class="nav-product-img" href="${window.location.origin + "/" + product.product_id}" id="${product.product_id}"></a>
 					<div class="nav-product-category"> ${type} </div>`;
 
 				if(product.discount_percentage > 0 && product.discount_percentage <= 100)
