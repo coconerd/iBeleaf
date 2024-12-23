@@ -206,7 +206,8 @@ class CheckOutController extends Controller
                 'ward' => $user->commune_ward,
                 'district_id' => $locationCodes['district_id'],
                 'ward_code' => $locationCodes['ward_code'],
-                'province_id' => $locationCodes['province_id']
+                'province_id' => $locationCodes['province_id'],
+                'address' => $user->address
             ]);
 
         } catch (Exception $e) {
@@ -302,8 +303,6 @@ class CheckOutController extends Controller
                 $request->additional_note ?? null
             );
 
-            // Log::debug('Current Delivery Cost: ', ['cost' => $order->deliver_cost]);
-            
 			// 2. Transfer Cart items to Order items
 			foreach ($cartItems as $item) {
                 OrderItem::create([
@@ -364,7 +363,7 @@ class CheckOutController extends Controller
             $user->commune_ward !== $newCity;
     }
 
-    private function createNewOrder(
+    public function createNewOrder(
         $voucherId,
         $provisionalPrice,
         $deliveryCost,
@@ -373,48 +372,37 @@ class CheckOutController extends Controller
         $paymentMethod,
         $additionalNote)
     {
-        try{
-            if (!isset($address['province_city']) || !isset($address['district']) || !isset($address['commune_ward'])) {
-                throw new Exception('Invalid address format');
-            }
-            $userId = Auth::id();
-            Log::debug('User id: ', ['id' => $userId]);
-            
-            $addressChanged = $this->isAddressChanged(
-                $address['province_city'],
-                $address['district'],
-                $address['commune_ward']
-            );
-
-            $finalDeliverCost = $addressChanged ?
-                $this->calculatingShippingFee($address) :
-                $deliveryCost;
-            
-            Log::debug('Final delivery cost: ', ['cost' => $finalDeliverCost]);
-
-            $order = Order::create([
-                'user_id' => $userId,
-                'voucher_id' => $voucherId,
-                'total_price' => $totalPrice,
-                'provisional_price' => $provisionalPrice,
-                'deliver_cost' => $finalDeliverCost,
-                'payment_method' => $paymentMethod,
-                'addtion_note' => $additionalNote
-            ]);
-            
-            Log::debug('Order created', [
-                'order_id' => $order->getAttribute('order_id'),
-                'final_delivery_cost' => $finalDeliverCost
-            ]);
-
-            return $order;
-
-        } catch (Exception $e) {
-            return response()->json([
-                'success'=> false,
-                'message'=> $e->getMessage()
-            ]);
+        if (!isset($address['province_city']) || !isset($address['district']) || !isset($address['commune_ward'])) {
+            throw new Exception('Invalid address format');
         }
+        
+        $userId = Auth::id();
+        Log::debug('User id: ', ['id' => $userId]);
+        
+        $addressChanged = $this->isAddressChanged(
+            $address['province_city'],
+            $address['district'],
+            $address['commune_ward']
+        );
+
+        $finalDeliverCost = $addressChanged ?
+            $this->calculatingShippingFee($address) :
+            $deliveryCost;
+        
+        Log::debug('Order data: ', [
+            'additional_note' => $additionalNote,
+            'delivery_cost' => $finalDeliverCost
+        ]);
+
+        return Order::create([
+            'user_id' => $userId,
+            'voucher_id' => $voucherId,
+            'total_price' => $totalPrice,
+            'provisional_price' => $provisionalPrice,
+            'deliver_cost' => $finalDeliverCost,
+            'payment_method' => $paymentMethod,
+            'additional_note' => $additionalNote
+        ]);
 	}
 
     public function showSuccessPage($orderId){

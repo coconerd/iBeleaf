@@ -3,6 +3,18 @@ let to_district_id = null;
 let to_ward_code = null;
 let to_province_id = null;
 
+function applyVoucher(voucherId, description, discount) {
+    const $voucherBox = $("#valid-voucher-box");
+    const $voucherDetails = $voucherBox.find(".voucher-details");
+
+    $voucherDetails.attr("data-voucher-id", voucherId);
+    $("#voucher-id").val(voucherId);
+    $("#voucher-description").text(description);
+    $("#voucher-discount").text(discount);
+
+    $voucherBox.show();
+}
+
 $(document).ready(function () {
     // Load provinces data from JSON file
     $.getJSON("/data/provinces.json")
@@ -129,18 +141,6 @@ $(document).ready(function () {
     });
 });
 
-function applyVoucher(voucherId, description, discount) {
-    const $voucherBox = $("#valid-voucher-box");
-    const $voucherDetails = $voucherBox.find(".voucher-details");
-
-    $voucherDetails.attr("data-voucher-id", voucherId);
-    $("#voucher-id").val(voucherId);
-    $("#voucher-description").text(description);
-    $("#voucher-discount").text(discount);
-
-    $voucherBox.show();
-}
-
 function getAppliedVoucherId() {
     return (
         $("#valid-voucher-box .voucher-details").attr("data-voucher-id") || null
@@ -158,6 +158,8 @@ function submitOrder() {
 
     const orderData = {
         voucher_id: getAppliedVoucherId(),
+
+        // Not included voucher/coupon, just discount amount only
         provisional_price: parseFloat(
             $("#provisional-price")
                 .text()
@@ -180,7 +182,8 @@ function submitOrder() {
     console.log('Order info: ', {
         total_price: orderData.total_price,
         delivery_cost: orderData.delivery_cost,
-        provisional_price: orderData.provisional_price
+        provisional_price: orderData.provisional_price,
+        additional_note: orderData.additional_note,
     });
     
     $.ajax({
@@ -233,6 +236,7 @@ function initialLoadUserInfo(provinceData) {
             if (response.success) {
                 $("#name").val(response.fullname);
                 $("#phone").val(response.phone);
+                $("#address").val(response.address);
 
                 to_district_id = response.district_id;
                 to_ward_code = response.ward_code;
@@ -249,12 +253,12 @@ function initialLoadUserInfo(provinceData) {
                 populateProvinces(response.province, provinceData);
 
                 populateDistricts(
-                    findto_province_id(response.province),
+                    find_to_province_id(response.province),
                     response.district,
                     provinceData
                 );
                 populateWards(
-                    findto_district_id(response.province, response.district),
+                    find_to_district_id(response.province, response.district),
                     response.ward,
                     provinceData
                 );
@@ -267,20 +271,6 @@ function initialLoadUserInfo(provinceData) {
         },
     }).promise();
 }
-// function initializeCheckout() {
-//     const userInfoPromise = initialLoadUserInfo(provinceData);
-   
-//     const shippingFeePromise = calculateShippingFee(district_id, ward_code);
-//     Promise.all([userInfoPromise, shippingFeePromise])
-//         .then(() => {
-//             console.log(
-//                 "User info and initial shipping fee loaded successfully."
-//             );
-//         })
-//         .catch((error) => {
-//             console.error("Error initializing checkout:", error);
-//         });
-// }
 
 function populateProvinces(selectedProvince, data) {
     const $provinceSelect = $("#province");
@@ -348,14 +338,14 @@ function populateWards(to_district_id, selectedWard, data) {
 }
 
 // Helpers to find IDs by name
-function findto_province_id(provinceName) {
+function find_to_province_id(provinceName) {
     return Object.keys(provinceData).find(
         (id) => provinceData[id].ProvinceName.trim() === provinceName.trim()
     );
 }
 
-function findto_district_id(provinceName, districtName) {
-    const to_province_id = findto_province_id(provinceName);
+function find_to_district_id(provinceName, districtName) {
+    const to_province_id = find_to_province_id(provinceName);
     if (!to_province_id || !provinceData[to_province_id].Districts) return null;
 
     return Object.keys(provinceData[to_province_id].Districts).find(
