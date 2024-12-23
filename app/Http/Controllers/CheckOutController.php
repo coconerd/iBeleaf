@@ -377,11 +377,11 @@ class CheckOutController extends Controller
         if (!isset($address['province_city']) || !isset($address['district']) || !isset($address['commune_ward'])) {
             throw new Exception('Invalid address format');
         }
-        $formattedAddress = implode(' ', [
-            $address['province_city'] ?? '',
-            $address['district'] ?? '',
-            $address['commune_ward'] ?? '',
+        $formattedAddress = implode(', ', [
             $address['address'] ?? '',
+            $address['commune_ward'] ?? '',
+            $address['district'] ?? '',
+            $address['province_city'] ?? '',
         ]);
 
         $userId = Auth::id();
