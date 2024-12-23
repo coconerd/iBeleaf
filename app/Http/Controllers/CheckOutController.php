@@ -300,7 +300,9 @@ class CheckOutController extends Controller
                 $request->total_price,
                 $validated['address'],
                 $request->payment_method ?? 'COD',
-                $request->additional_note ?? null
+                $request->additional_note ?? null,
+
+                $request->deliver_address
             );
 
 			// 2. Transfer Cart items to Order items
@@ -375,7 +377,13 @@ class CheckOutController extends Controller
         if (!isset($address['province_city']) || !isset($address['district']) || !isset($address['commune_ward'])) {
             throw new Exception('Invalid address format');
         }
-        
+        $formattedAddress = implode(' ', [
+            $address['province_city'] ?? '',
+            $address['district'] ?? '',
+            $address['commune_ward'] ?? '',
+            $address['address'] ?? '',
+        ]);
+
         $userId = Auth::id();
         Log::debug('User id: ', ['id' => $userId]);
         
@@ -401,7 +409,8 @@ class CheckOutController extends Controller
             'provisional_price' => $provisionalPrice,
             'deliver_cost' => $finalDeliverCost,
             'payment_method' => $paymentMethod,
-            'additional_note' => $additionalNote
+            'additional_note' => $additionalNote,
+            'deliver_address' => trim($formattedAddress)
         ]);
 	}
 
