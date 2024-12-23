@@ -1,4 +1,3 @@
-
 .back-link {
     color: #435E53;
     text-decoration: none;
@@ -79,9 +78,34 @@
     font-size: 1.1rem;
 }
 
+.address-card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border-radius: 12px;
+}
+
+.address-card .card-header {
+    background: white;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 1rem 1.5rem;
+}
+
+.address-card .card-header h6 {
+    color: #435E53;
+    font-weight: 500;
+}
+
+.address-card .card-body {
+    color: #6c757d;
+}
+
 @media (max-width: 768px) {
     .summary-card {
         margin-top: 1rem;
         position: static;
+    }
+    .address-card {
+        margin-bottom: 1rem;
     }
 }
