@@ -6,12 +6,11 @@
 				<img src="{{'https://png.pngtree.com/png-clipart/20220823/original/pngtree-green-coconut-sticker-vector-illustration-png-image_8462536.png'}}"
 					alt="coconerd" class="footer-logo">
 				<p class="footer-text">
-					Plant paradise mong mang đến không gian sống xanh, như là một cách để khơi nguồn cảm hứng,
-					cải thiện chất lượng tinh thần tươi và đồng thời còn mang lại tính thẩm mỹ cho không gian nơi thật.
+					Plant Paradise mong muốn mang đến một không gian sống xanh, không chỉ là nơi khơi nguồn cảm hứng và cải thiện tinh thần, mà còn góp phần nâng tầm thẩm mỹ cho không gian sống của bạn
 				</p>
 				<p>
-					Nhóm thực hiện đồ án: <strong>COCONERD @ UIT</strong><br>
-					MSSV: 0123456789
+					Nhóm thực hiện đồ án: <strong>COCONERD</strong><br>
+					Lớp: IS207.P11
 				</p>
 			</div>
 
@@ -35,11 +34,11 @@
 				<div class="footer-contact">
 					<h5>LIÊN HỆ</h5>
 					<p>Hotline 1: 22520872@gm.uit.edu.vn</p>
-					<p>Hotline 2: 22520170@gm.uit.edu.vn</p>
-					<p>Hotline 3: 22520124@gm.uit.edu.vn</p>
+					<p>Hotline 2: 22520124@gm.uit.edu.vn</p>
+					<p>Hotline 3: 22520170@gm.uit.edu.vn</p>
 					<p>Hotline 4: 22520423@gm.uit.edu.vn</p>
-					<p>Email: coconerd@uit.com</p>
-					<p>Đường Hàn Thuyên, khu phố 6 P, Thủ Đức, Hồ Chí Minh</p>
+					<p>Email: uitcoconerd@gmail.com</p>
+					<p>Địa chỉ: Đường Hàn Thuyên, Khu phố 6, Phường Linh Trung, Quận Thủ Đức, TP.HCM</p>
 					<div class="social-icons">
 						<a href="#"><i class="fab fa-facebook-f"></i></a>
 						<a href="#"><i class="fab fa-twitter"></i></a>
