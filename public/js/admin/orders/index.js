@@ -281,17 +281,12 @@ function updateOrderField(orderId, field, value) {
 		.then(async (data) => {
 			if (data.success) {
 				// Reload the page or update the cell content
-				$('.alert-success').html('<strong>Cập nhật thành công</strong>');
-				$('.alert-success').removeClass('visually-hidden');
-				$('.alert-success').fadeIn().delay(2000).fadeOut();
+				showAlert('success', data.message);
 				await new Promise(r => setTimeout(r, 2000));
 				window.location.reload();
 			} else {
 				console.error('Error:', data.message);
-				$('.alert-danger').html('');
-				$('.alert-danger').html('<strong>Có lôi xảy ra khi cập nhật</strong>');
-				$('.alert-danger').removeClass('visually-hidden');
-				$('.alert-danger').fadeIn().delay(2000).fadeOut();
+				showAlert('error', data.message);
 			}
 		})
 		.catch(error => {
