@@ -16,7 +16,7 @@
 					<a class="text-white" href="{{ url('/auth/login') }}">Đăng nhập</a>
 				@endif
 			</span>
-			<i class="fa-solid fa-user" style="cursor: pointer;" onclick="window.location.href='{{ route('profile.homePage') }}'"></i>
+			<i class="fa-solid fa-user" onclick="window.location.href='{{ route('profile.homePage') }}'"></i>
 		</div>
 	</div>
 </div>
@@ -26,8 +26,7 @@
 	<div class="container">
 		<!-- Logo -->
 		<a class="navbar-brand" href="#">
-			<img src="https://png.pngtree.com/png-clipart/20220823/original/pngtree-green-coconut-sticker-vector-illustration-png-image_8462536.png"
-				alt="Logo">
+			<img src="{{ asset('images/logos/logo.png') }}" alt="LOGO">
 			<label>PLANT PARADISE</label>
 		</a>
 
