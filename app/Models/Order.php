@@ -52,7 +52,7 @@ class Order extends Model
 		'deliver_time' => 'datetime',
 		'is_paid' => 'int',
 		'status' => 'string',
-		'deliver_address' => 'string',
+		'deliver_address' => 'string'
 	];
 
 	protected $fillable = [

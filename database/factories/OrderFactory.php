@@ -44,7 +44,8 @@ class OrderFactory extends Factory
 			'is_paid' => fn(array $attributes) => in_array($attributes['status'], ['delivering', 'delivered'])
 				? true
 				: $this->faker->boolean(35),
-			'additional_note' => fn() => $this->faker->optional()->sentence()
+			'additional_note' => fn() => $this->faker->optional()->sentence(),
+			'deliver_address' => $this->faker->address(),
 		];
 	}
 
