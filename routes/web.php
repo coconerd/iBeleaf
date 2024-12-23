@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminClaimsController;
 use App\Http\Controllers\AdminVoucherController;
+use App\Http\Controllers\AdminNotificationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,6 +76,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 	// Admin protected routes
 	Route::middleware(['auth', 'role:1'])->group(function () {
+// Unread notifications
+		Route::get('/unread-notifications', [AdminNotificationController::class, 'getUnreadNotifications'])->name('getUnreadNotifications');
 		// Admin orders route
 		Route::prefix('orders')->name('orders.')->group(function () {
 			Route::get('/', [AdminOrderController::class, 'showOrdersPage'])->name('showOrdersPage');
