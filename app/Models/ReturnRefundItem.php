@@ -50,9 +50,17 @@ class ReturnRefundItem extends Model
 		'quantity',
 		'reason_tag',
 		'reason_description',
-		'status', // one of these: 'pending','accepted','rejected','received'
+		'status', // one of these: 'pending','accepted','rejected','received','refunded','renewed','completed'
 		'reject_reason', // Add this line
 	];
+
+	// Add helper constants
+	const STATUS_PENDING = 'pending';
+	const STATUS_ACCEPTED = 'accepted';
+	const STATUS_REJECTED = 'rejected';
+	const STATUS_RECEIVED = 'received';
+	const STATUS_REFUNDED = 'refunded';    // For completed refund requests
+	const STATUS_RENEWED = 'renewed';      // For completed return requests
 
 	public function order_item()
 	{

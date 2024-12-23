@@ -33,6 +33,10 @@
     position: relative;
 }
 
+.completed-claims .card {
+	border-top: 3px solid #2E7D32 !important;
+}
+
 .card::after {
     content: "🎄";
     position: absolute;
@@ -92,6 +96,10 @@
 .badge-received {
     background-color: #cce5ff;
     color: #004085;
+}
+
+td .badge {
+	width: 90%
 }
 
 /* Modal styling */
@@ -271,6 +279,17 @@
     padding: 0.5rem 1rem;
 }
 
+.request-header .order-id {
+    color: #435E53;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.request-header .order-id:hover {
+    color: #2d3f38;
+    text-decoration: underline !important;
+}
+
 /* Image preview animation */
 .swal2-popup.swal2-modal {
     padding: 0;
@@ -377,7 +396,7 @@
 }
 
 /* Parent row negative margin to compensate for reduced padding */
-.row.processed-claims {
+.row.processing-claims {
     margin-right: -8px;
     margin-left: -8px;
 }
@@ -398,25 +417,25 @@
 }
 
 /* Processed claims specific table styling */
-.processed-claims .table {
+.processing-claims .table {
     min-width: 100%;
     width: 100%;
-    table-layout: fixed;
+    /* table-layout: fixed; */
 }
 
-.processed-claims .table th:first-child {
+.processing-claims .table th:first-child {
     width: 80px;
 }
 
-.processed-claims .table td:first-child {
+.processing-claims .table td:first-child {
     white-space: nowrap;
 }
 
-.processed-claims .card-body {
-    padding: 0.75rem;
+.processing-claims .card-body {
+    padding: 0.75rem 1.25rem; /* Updated padding */
 }
 
-.processed-claims .d-flex.align-items-center {
+.processing-claims .d-flex.align-items-center {
     min-width: unset;
 }
 
@@ -605,4 +624,41 @@
     border: 1px solid #d3d3c7;
     border-radius: 8px;
     padding: 1.25rem;
+}
+
+/* Processed section pagination styling */
+.processing-claims .pagination-container {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.processing-claims .pagination {
+    margin: 0;
+    justify-content: center;
+}
+
+.processing-claims .pagination-info {
+    font-size: 0.85rem;
+    text-align: center;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+/* Adjust table height for pagination */
+.processing-claims .table-responsive {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Completed claims specific table styling */
+.completed-claims .card-body {
+    overflow-x: visible !important;
+}
+
+.completed-claims .table {
+    min-width: auto !important;
+    table-layout: auto !important;
+    width: 100% !important;
 }

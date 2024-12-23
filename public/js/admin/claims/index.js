@@ -10,8 +10,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Handle accept button click
 	document.querySelector('.accept-btn').addEventListener('click', function () {
 		const requestId = this.dataset.requestId;
-
-		updateRequestStatus(requestId, 'accepted');
+		confirmAcceptRequest(requestId, () => {
+			$('.accept-btn').prop('disabled', true);
+			$('.reject-btn').prop('disabled', true);
+			updateRequestStatus(requestId, 'accepted', () => {
+				$('.accept-btn').prop('disabled', false);
+				$('.reject-btn').prop('disabled', false);
+			});
+		});
 	});
 
 	// Handle reject button click
@@ -26,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.log('clicked');
 			event.stopPropagation();
 			const orderId = this.dataset.orderId;
-			loadOrderDetailsPopup(orderId, event);
+			loadOrderDetailsModal(orderId, event);
 		})
 	})
 
@@ -64,33 +70,37 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	});
 
-	document.querySelector('.quick-accept-btn').addEventListener('click', function () {
-		const requestId = this.dataset.requestId;
-		Swal.fire({
-			title: 'Xác nhận phê duyệt yêu cầu đổi trả hàng?',
-			text: "Phiếu đổi trả sẽ được chuyển sang trạng thái đã đồng ý và khách hàng sẽ được thông báo qua email.",
-			icon: 'question',
-			showCancelButton: true,
-			confirmButtonColor: '#435E53',
-			cancelButtonColor: '#6c757d',
-			confirmButtonText: 'Xác nhận',
-			cancelButtonText: 'Hủy',
-			customClass: {
-				popup: 'status-confirm-popup'
-			}
-		}).then((result) => {
-			if (result.isConfirmed) {
+	const quickAcceptBtn = document.querySelector('.quick-accept-btn');
+	if (quickAcceptBtn) {
+		quickAcceptBtn.addEventListener('click', function () {
+			const requestId = this.dataset.requestId;
+			confirmAcceptRequest(requestId, () => {
 				updateRequestStatus(requestId, 'accepted');
-			}
+			});
 		});
-	});
+	}
 
 	// Status options for editable cells
-	const statusOptions = {
-		'pending': 'Đang chờ xử lý',
-		'accepted': 'Đã chấp nhận',
-		'rejected': 'Đã từ chối',
-		'received': 'Đã nhận hàng'
+	const statusOptionLevels = {
+		1: {
+			'pending': 'Đang chờ xử lý',
+			'accepted': 'Đã chấp nhận',
+			'rejected': 'Đã từ chối',
+		},
+		2: {
+			'pending': 'Đang chờ xử lý',
+			'accepted': 'Đã chấp nhận',
+			'rejected': 'Đã từ chối',
+			'received': 'Đã nhận hàng'
+		},
+		3: {
+			'pending': 'Đang chờ xử lý',
+			'accepted': 'Đã chấp nhận',
+			'rejected': 'Đã từ chối',
+			'received': 'Đã nhận hàng từ khách',
+			'refunded': 'Đã hoàn tiền',
+			'renewed': 'Đã trả hàng',
+		}
 	};
 
 	// Handle editable cell clicks
@@ -105,11 +115,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			popup.className = 'edit-popup';
 
 			let popupContent = '<div class="edit-popup-content">';
-			Object.entries(statusOptions).forEach(([value, label]) => {
-				popupContent += `<div class="edit-option" data-value="${value}">${label}</div>`;
-			});
-			popupContent += '</div>';
-			popup.innerHTML = popupContent;
+			const statusLevel = this.dataset.statusLevel;
+
+			if (field == 'status') {
+				Object.entries(statusOptionLevels[statusLevel])
+					.forEach(([value, label]) => {
+						if (value == this.dataset.status) {
+							return;
+						}
+						popupContent += `<div class="edit-option" data-field=${field} data-value="${value}">${label}</div> `;
+					});
+				popupContent += '</div>';
+				popup.innerHTML = popupContent;
+			}
 
 			// Position the popup
 			const rect = this.getBoundingClientRect();
@@ -122,9 +140,20 @@ document.addEventListener('DOMContentLoaded', function () {
 			// Handle option selection
 			popup.querySelectorAll('.edit-option').forEach(option => {
 				option.addEventListener('click', function () {
-					const newValue = this.dataset.value;
-					updateRequestStatus(requestId, newValue);
-					popup.remove();
+					switch (this.dataset.field) {
+						case 'status':
+							const newValue = this.dataset.value;
+							if (newValue == 'accepted') {
+								confirmAcceptRequest(requestId, () => {
+									updateRequestStatus(requestId, newValue);
+								});
+							} else if (newValue == 'rejected') {
+								rejectRequest(requestId);
+							}
+							break;
+						default:
+							break;
+					}
 				});
 			});
 
@@ -178,7 +207,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="request-details">
                         <div class="request-header mb-4">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Mã yêu cầu #${request.return_refund_id}</h5>
+                                <div>
+                                    <h5 class="mb-0">Mã yêu cầu #${request.return_refund_id}</h5>
+                                    <small class="text-muted">Mã đơn: <span class="order-id text-decoration-underline" role="button" data-order-id="${request.order_item.order_id}">#${request.order_item.order_id}</span></small>
+                                </div>
                                 <span class="badge badge-${request.status}">
                                     ${request.status === 'pending' ? 'Đang xử lý' :
 							request.status === 'accepted' ? 'Đã chấp nhận' :
@@ -208,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <h6 class="mb-1">${request.order_item.product.short_description}</h6>
                                     </a>
                                     <p class="mb-0 text-muted">Số lượng yêu cầu đổi/trả: ${request.quantity}</p>
+                                    <p class="mb-0 text-muted">${request.quantity} x ${request.order_item.total_price / request.quantity} = ${request.order_item.total_price}₫</p>
                                 </div>
                             </div>
                         </div>
@@ -260,6 +293,31 @@ document.addEventListener('DOMContentLoaded', function () {
 								width: 'auto'
 							});
 						});
+						// Add click handler for the order ID in the request details modal
+						modalContent.addEventListener('click', async function(e) {
+							if (e.target.classList.contains('order-id')) {
+								const orderId = e.target.dataset.orderId;
+								const requestDetailsModal = bootstrap.Modal.getInstance(document.getElementById('requestDetailsModal'));
+								
+								// Hide modal and wait for animation
+								requestDetailsModal.hide();
+								await new Promise(resolve => setTimeout(resolve, 200));
+								
+								// Remove modal backdrop manually if it exists
+								const backdrop = document.querySelector('.modal-backdrop');
+								if (backdrop) {
+									backdrop.remove();
+								}
+								
+								// Reset body classes
+								document.body.classList.remove('modal-open');
+								document.body.style.overflow = '';
+								document.body.style.paddingRight = '';
+								
+								// Load order details modal
+								loadOrderDetailsModal(orderId, e);
+							}
+						});
 					});
 
 				} else {
@@ -272,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 	}
 
-	function loadOrderDetailsPopup(orderId, event) {
+	function loadOrderDetailsModal(orderId, event) {
 		event.stopPropagation();
 		const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
 		const modalContent = document.getElementById('order-details-content');
@@ -390,8 +448,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
-	function updateRequestStatus(requestId, status) {
+	function updateRequestStatus(requestId, status, callbackFn) {
 		// Send AJAX request to update status
+		console.log('Updating status to:', status);
 		fetch('/admin/claims/update-status', {
 			method: 'POST',
 			headers: {
@@ -407,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			.then(data => {
 				if (data.success) {
 					showAlert('success', 'Cập nhật trạng thái thành công.');
-					setTimeout(() => window.location.reload(), 1500);
+					setTimeout(() => window.location.reload(), 3000);
 				} else {
 					showAlert('error', 'Có lỗi xảy ra khi cập nhật trạng thái.');
 				}
@@ -415,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			.catch(error => {
 				console.error('Error:', error);
 				showAlert('error', 'Có lỗi xảy ra khi cập nhật trạng thái.');
-			});
+			}).then(callbackFn);
 	}
 
 	// Create snowflakes
@@ -435,7 +494,29 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	})();
 
-	function rejectRequest(requestId) {
+	function confirmAcceptRequest(requestId, onConfirm, onAbort) {
+		Swal.fire({
+			title: 'Xác nhận phê duyệt yêu cầu đổi trả hàng?',
+			text: "Phiếu đổi trả sẽ được chuyển sang trạng thái đã đồng ý và khách hàng sẽ được thông báo qua email.",
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonColor: '#435E53',
+			cancelButtonColor: '#6c757d',
+			confirmButtonText: 'Xác nhận',
+			cancelButtonText: 'Hủy',
+			customClass: {
+				popup: 'status-confirm-popup'
+			}
+		}).then((result) => {
+			if (result.isConfirmed) {
+				onConfirm(requestId);
+			} else {
+				onAbort(requestId);
+			}
+		});
+	}
+
+	function rejectRequest(requestId, callbackFn) {
 		// Close the details modal first
 		const detailsModal = bootstrap.Modal.getInstance(document.getElementById('requestDetailsModal'));
 		detailsModal.hide();
@@ -493,7 +574,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						.catch(error => {
 							console.error('Error:', error);
 							showAlert('error', 'Có lỗi xảy ra khi từ chối yêu cầu.');
-						});
+						}).then(callbackFn);
 				}
 			});
 		}, 200); // Wait for modal close animation

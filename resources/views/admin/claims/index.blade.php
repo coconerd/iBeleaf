@@ -23,7 +23,7 @@
     <div class="row">
         <!-- Pending Requests Section -->
         <div class="col-12 mb-4">
-            <h4 class="text-muted mb-4">Chưa xử lý</h4>
+            <h4 class="text-muted mb-4">Tiếp nhận yêu cầu (phê duyệt/từ chối)</h4>
             <!-- Refund Requests Table -->
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
@@ -52,9 +52,10 @@
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $request->order_item->product->product_images->first()->product_image_url ?? asset('images/placeholder-plant.jpg') }}" 
                                                 class="product-image me-3" alt="Product image">
-                                            <div>
+											<div class="d-flex flex-column">
                                                 <h6 class="mb-0">{{ $request->order_item->product->name }}</h6>
-                                                <small class="text-muted">Số lượng: {{ $request->quantity }}</small>
+                                                <small class="text-muted mt-1">Số lượng: {{ $request->quantity }}</small><br>
+                                                <small class="mt-2">Số tiền: {{ number_format($request->order_item->total_price, 0, ',', '.') }}₫</small>
                                             </div>
                                         </div>
                                     </td>
@@ -66,7 +67,7 @@
                                         </div>
                                     </td>
                                     <td>{{ $request->created_at->format('d/m/Y H:i') }}</td>
-									<td class="editable-cell" data-request-id="{{ $request->return_refund_id }}" data-field="status">
+									<td class="editable-cell" data-request-id="{{ $request->return_refund_id }}" data-field="status" data-status="{{ $request->status }}" data-status-level=1>
 										@switch ($request->status)
 											@case('pending')
 												<span class="badge badge-warning">Chờ xử lý</span>
@@ -160,7 +161,7 @@
                                         </div>
                                     </td>
                                     <td>{{ $request->created_at->format('d/m/Y H:i') }}</td>
-									<td class="editable-cell" data-request-id="{{ $request->return_refund_id }}" data-field="status">
+									<td class="editable-cell" data-request-id="{{ $request->return_refund_id }}" data-field="status" data-status="{{ $request->status }}" data-status-level="1">
 										@switch ($request->status)
 											@case('pending')
 												<span class="badge badge-warning">Chờ xử lý</span>
@@ -214,10 +215,10 @@
             </div>
         </div>
 
-        <!-- Processed Requests Section -->
+        <!-- Processing Requests Section -->
         <div class="col-12">
-            <h4 class="text-muted mb-4">Đã xử lý</h4>
-            <div class="row processed-claims">
+            <h4 class="text-muted mb-4">Đang xử lý</h4>
+            <div class="row processing-claims">
                 <!-- Processed Refund Requests -->
                 <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
@@ -230,30 +231,33 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Sản phẩm</th>
+										<th>Tình trạng</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($processedRefundRequests as $request)
                                     <tr class="processed-row" role="button" data-request-id="{{ $request->return_refund_id }}">
                                         <td>#{{ $request->return_refund_id }}</td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="{{ $request->order_item->product->product_images->first()->product_image_url ?? asset('images/placeholder-plant.jpg') }}" 
-                                                    class="product-image me-3" alt="Product image">
-                                                <div>
-                                                    <h6 class="mb-1">{{ $request->order_item->product->name }}</h6>
-                                                    <small class="text-muted d-block">{{ $request->created_at->format('d/m/Y H:i') }}</small>
-                                                    <span class="badge badge-{{ $request->status }} mt-1">
-                                                        {{ $request->status === 'rejected' ? 'Đã từ chối' : 'Đã nhận hàng' }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
+										<td>
+											<div class="d-flex align-items-center">
+												<img src="{{ $request->order_item->product->product_images->first()->product_image_url ?? asset('images/placeholder-plant.jpg') }}" 
+													class="product-image me-3" alt="Product image">
+												<div>
+													<h6 class="mb-1">{{ $request->order_item->product->name }}</h6>
+													<small class="text-muted d-block">{{ $request->created_at->format('d/m/Y H:i') }}</small>
+												</div>
+											</div>
+										</td>
+										<td class="editable-cell" style="padding-left: 20px;" data-request-id="{{ $request->return_refund_id }}" data-field="status" data-status-level=2 data-status="{{ $request->status }}">
+											<span class="badge badge-{{ $request->status }} mt-1">
+												{{ $request->status === 'rejected' ? 'Đã từ chối' : 'Đã nhận hàng' }}
+											</span>
+										</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                            {{ $processedRefundRequests->links() }}
+                            @include('admin.layouts.pagination', ['paginator' => $processedRefundRequests, 'itemName' => 'Yêu cầu đã xử lý'])
                         </div>
                     </div>
                 </div>
@@ -270,6 +274,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Sản phẩm</th>
+										<th>Tình trạng</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -283,17 +288,111 @@
                                                 <div>
                                                     <h6 class="mb-1">{{ $request->order_item->product->name }}</h6>
                                                     <small class="text-muted d-block">{{ $request->created_at->format('d/m/Y H:i') }}</small>
-                                                    <span class="badge badge-{{ $request->status }} mt-1">
-                                                        {{ $request->status === 'rejected' ? 'Đã từ chối' : 'Đã nhận hàng' }}
-                                                    </span>
                                                 </div>
                                             </div>
                                         </td>
+										<td class="editable-cell" data-field="status" data-request-id="{{ $request->return_refund_id }}" data-status-level=2 data-status="{{ $request->status }}">
+											<span class="badge badge-{{ $request->status }} mt-1">
+												{{ $request->status === 'rejected' ? 'Đã từ chối' : 'Đã nhận hàng' }}
+											</span>
+										</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                            {{ $processedReturnRequests->links() }}
+                            @include('admin.layouts.pagination', ['paginator' => $processedReturnRequests, 'itemName' => 'Yêu cầu đã xử lý'])
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Requests Section -->
+        <div class="col-12">
+            <h4 class="text-muted mb-4">Đã hoàn thành</h4>
+            <div class="row completed-claims">
+                <!-- Completed Refund Requests -->
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Đã hoàn tiền</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Sản phẩm</th>
+										<th>Tình trạng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($completedRefundRequests as $request)
+                                    <tr class="processed-row" role="button" data-request-id="{{ $request->return_refund_id }}">
+                                        <td>#{{ $request->return_refund_id }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ $request->order_item->product->product_images->first()->product_image_url ?? asset('images/placeholder-plant.jpg') }}" 
+                                                    class="product-image me-3" alt="Product image">
+                                                <div>
+                                                    <h6 class="mb-1">{{ $request->order_item->product->name }}</h6>
+                                                    <small class="text-muted d-block">{{ $request->created_at->format('d/m/Y H:i') }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+										<td class="editable-cell" data-field="status" data-request-id="{{ $request->return_refund_id }}" data-status-level=3 data-status="{{ $request->status }}">
+											<span class="badge badge-info mt-1">
+												Đã hoàn tiền
+											</span>
+										</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @include('admin.layouts.pagination', ['paginator' => $completedRefundRequests, 'itemName' => 'yêu cầu đã được hoàn tiền'])
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed Return Requests -->
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Đã đổi hàng</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Sản phẩm</th>
+										<th>Tình trạng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($completedReturnRequests as $request)
+                                    <tr class="processed-row" role="button" data-request-id="{{ $request->return_refund_id }}">
+                                        <td>#{{ $request->return_refund_id }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ $request->order_item->product->product_images->first()->product_image_url ?? asset('images/placeholder-plant.jpg') }}" 
+                                                    class="product-image me-3" alt="Product image">
+                                                <div>
+                                                    <h6 class="mb-1">{{ $request->order_item->product->name }}</h6>
+                                                    <small class="text-muted d-block">{{ $request->created_at->format('d/m/Y H:i') }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+										<td class="editable-cell" data-field="status" data-request-id="{{ $request->return_refund_id }}" data-status-level=3 data-status="{{ $request->status }}">
+                                            <span class="badge badge-info mt-1">
+                                                Đã đổi hàng
+                                            </span>
+										</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+							@include('admin.layouts.pagination', ['paginator' => $processedReturnRequests, 'itemName' => 'yêu cầu đã hoàn tất đổi hàng'])
                         </div>
                     </div>
                 </div>
