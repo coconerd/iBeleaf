@@ -36,9 +36,12 @@ class CartItem extends Model
 	];
 
 	protected $fillable = [
-		'quantity',
+		'cart_id',
 		'product_id',
-		'cart_id'
+		'quantity',
+		'original_price',
+		'discount_amount',
+		// 'final_price'
 	];
 
 	public function cart(): BelongsTo

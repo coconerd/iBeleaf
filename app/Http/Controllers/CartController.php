@@ -53,6 +53,44 @@ class CartController extends Controller
 		}
 	}
 
+	public function updatePrice(Request $request)
+	{
+		try {
+			$user = Auth::user();
+			$cartId = $user->cart_id;
+
+			$cartItem = CartItem::where([
+				'cart_id' => $cartId,
+				'product_id' => $request->product_id
+			])->first();
+
+			if ($cartItem) {
+				$cartItem->update([
+					'quantity' => $request->quantity,
+					'original_price' => $request->original_price,
+					'discount_amount' => $request->discount_amount,
+					// 'final_price' => $request->final_price
+				]);
+
+				return response()->json([
+					'success' => true,
+					'message' => 'Price updated successfully'
+				]);
+			}
+
+			return response()->json([
+				'success' => false,
+				'message' => 'Cart item not found'
+			], 404);
+
+		} catch (Exception $e) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Failed to update price'
+			], 500);
+		}
+	}
+
 	public function showCartItems(Request $request)
 	{
 		try {
@@ -94,11 +132,6 @@ class CartController extends Controller
 					['cart_id' => $user->cart_id],
 					['items_count' => 0]
 				);
-				
-				// if (!$user->cart_id) {
-				// 	$user->cart_id = $cart->cart_id;
-				// 	$user->save();
-				// }
 
 				$cartItem = CartItem::with(['product'])
 					->where('cart_id', $user->cart_id)
@@ -239,97 +272,6 @@ class CartController extends Controller
 			], 500);
 		}
 	}
-	// public function insertItemsToOrder(Request $request){
-	// 	try{
-	// 		$user = Auth::user();
-			
-	// 		$quantity = $request->input('quantity');
-	// 		$totalUnitPrice = $request->input('total_uprice');
-	// 		$discountedAmount = $request->input('discount_amount');
-
-	// 		$voucherId = Voucher::where('voucher_name', $request->input('voucher_name'))->first()->voucher_id;
-	// 		$cartItems = CartItem::with(['product'])
-	// 				->where('cart_id', $user->cart_id)
-	// 				->get();
-			
-	// 		// 1. Create new Order
-	// 		$order = Order::create([
-	// 			'user_id' => $user->id,
-	// 			'voucher_id' => $voucherId,
-	// 			'total_price' => 0,
-	// 			'provisional_price' => 0
-	// 		]);
-	// 		Log::debug('Order is created');
-
-	// 		// 2. Transfer Cart items to Order items
-	// 		$orderItems = [];
-	// 		foreach($cartItems as $item){
-	// 			$orderItems[] = OrderItem::create([
-	// 				'order_id' => $order->order_id,
-	// 				'product_id' => $item->product_id,
-	// 				'quantity' => $quantity,
-	// 				'total_price' => $totalUnitPrice,
-	// 				'discounted_amount'=> $discountedAmount
-	// 			]);
-	// 			Log::debug('Transfer cart items to order items: ', ['items' => $orderItems[count($orderItems) - 1]]);
-	// 		}
-
-	// 		// 3. Update Order table
-	// 		$order->total_price = OrderItem::sum('total_price');
-	// 		$order->provisional_price = $order->total_price; // Be updated after user's address is provided
-	// 		$order->save();
-	// 		Log::debug('Update Order table successfully!');
-			
-	// 		// 4. Clear Cart items nad update Cart items_count
-	// 		CartItem::where('cart_id', $user->cart_id)->delete();
-	// 		$cart = Cart::find('$user->cart_id');
-	// 		$cart->items_count = CartItem::where('cart_id', $user->cart_id)->sum('quantity');
-	// 		$cart->save();
-	// 		Log::debug('Cart updated: items_count set to ' . $cart->items_count);
-
-	// 		// Update Product stock
-	// 		foreach($orderItems as $item){
-	// 			$product = Product::find($item->product_id);
-
-	// 			$currentStock = $product->getAttribute('stock_quantity');
-	// 			$product->setAttribute('stock_quantity', $currentStock - $item->quantity);
-	// 			$product->save();
-
-	// 			Log::debug('Stock quantity updated', [
-	// 				'product_id' => $product->product_id,
-	// 				'old_quantity' => $currentStock,
-	// 				'new_quantity' => $currentStock - $item->quantity,
-	// 				'difference' => $item->quantity
-	// 			]);
-	// 		}
-	// 	}
-	// 	catch (Exception $e){
-	// 		Log::error('Order creation failed', [
-	// 			'error' => $e->getMessage(),
-	// 			'user_id' => $user->id
-	// 		]);
-			
-	// 		return response()->json([
-	// 			'success' => false,
-	// 			'message' => $e->getMessage()
-	// 		], 500);
-	// 	}
-	// }
-
-	// private function createOrder($user){
-	// 	$voucherId = Voucher::where('voucher_name', ['voucher_name'])
-    //     ->firstOrFail()
-    //     ->voucher_id;
-
-	// 	$order = Order::create([
-	// 		'user_id' => $user->id,
-	// 		'voucher_id' => $voucherId,
-	// 		'total_price' => 0,
-	// 		'provisional_price' => 0
-	// 	]);
-
-	// 	Log::debug('Order created', ['order_id' => $order->order_id]);
-	// 	return $order;
-	// }
 }
+
 

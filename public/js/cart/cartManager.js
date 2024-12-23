@@ -1,3 +1,38 @@
+window.addEventListener("popstate", function (event) {
+    if (event.state && event.state.page === "/cart/items") {
+        // Collect cart items
+        const cartItems = [];
+        $(".each-cart-item").each(function () {
+            cartItems.push({
+                product_id: $(this).data("product-id"),
+                quantity: $(this).find(".quantity-input").val(),
+            });
+        });
+
+        // Send AJAX request
+        $.ajax({
+            url: `/cart/items-update`,
+            type: "POST",
+            data: {
+                items: cartItems,
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    updateCartCount(response.items_counts);
+                    window.location.href = "/cart/checkout";
+                }
+            },
+            error: function (xhr) {
+                console.error("Error:", xhr.responseJSON);
+            },
+        });
+    }
+});
+
 $(document).ready(function () {
     const $quantityWrappers = $(".quantity-wrapper");
 
@@ -5,7 +40,7 @@ $(document).ready(function () {
         $minusBtn.prop("disabled", value < 1);
         $plusBtn.prop("disabled", value >= maxStock);
     }
-    
+
     // Quantity changes handling
     $quantityWrappers.each(function () {
         const $minusBtn = $(this).find(".minus");
@@ -170,13 +205,13 @@ $(document).ready(function () {
     });
 
     //Checkout Button (Thanh toan) handling
-    $('#checkout-btn').on('click', function () {
+    $("#checkout-btn").on("click", function () {
         // Collect all cart items data
         const cartItems = [];
-        $('.each-cart-item').each(function() {
+        $(".each-cart-item").each(function () {
             cartItems.push({
-                product_id: $(this).data('product-id'),
-                quantity: $(this).find('.quantity-input').val()
+                product_id: $(this).data("product-id"),
+                quantity: $(this).find(".quantity-input").val(),
             });
         });
 
@@ -185,24 +220,27 @@ $(document).ready(function () {
             url: `/cart/items-update`,
             type: "POST",
             data: {
-                items: cartItems
+                items: cartItems,
             },
             headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                    "content"
-                ),
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    updateCartCount(response.items_counts)
+                    updateCartCount(response.items_counts);
+                    history.pushState(
+                        { page: "/cart/items" },
+                        "",
+                        "/cart/checkout"
+                    );
                     // Redirect to address submisstion page
                     window.location.href = "/cart/checkout";
                 }
             },
             error: function (xhr) {
                 console.error("Error:", xhr.responseJSON);
-            }
+            },
         });
     });
 });
@@ -215,7 +253,6 @@ function hanldeQuantityUpdate($input) {
     calculatePrice($quantityInput);
     calculateCartTotal();
     updateDiscountAmount();
-    
 }
 function applyVoucher(voucherId, description, discount) {
     const $voucherBox = $("#valid-voucher-box");
@@ -279,20 +316,22 @@ function showMinQuantityAlert($input) {
                         "content"
                     ),
                 },
-                dataType: "json"
-            }).then((response) => {
-                console.log("Server response:", response);
-                if (response.success) {
-                    cartItem.remove();
-                    updateCartCount();
-                    calculateCartTotal();
-                }
-            }).catch((error) => {
-                console.error(
-                    "Server Error Details:",
-                    error.responseJSON || error
-                );
-            });
+                dataType: "json",
+            })
+                .then((response) => {
+                    console.log("Server response:", response);
+                    if (response.success) {
+                        cartItem.remove();
+                        updateCartCount();
+                        calculateCartTotal();
+                    }
+                })
+                .catch((error) => {
+                    console.error(
+                        "Server Error Details:",
+                        error.responseJSON || error
+                    );
+                });
         }
         return Promise.reject("User cancelled!");
     });
@@ -320,8 +359,10 @@ function preventInvalidChars(e) {
 
 function updateCartCount() {
     let totalQuantity = 0;
-    
-    $(".all-cart-items .each-cart-item:not(.out-of-stock) .quantity-input").each(function() {
+
+    $(
+        ".all-cart-items .each-cart-item:not(.out-of-stock) .quantity-input"
+    ).each(function () {
         totalQuantity += parseInt($(this).val() || 0);
     });
     console.log("Total In-Stock Quantity:", totalQuantity);
@@ -335,6 +376,7 @@ function calculatePrice($input) {
     try {
         const $item = $input.closest(".cart-control");
         const $price = $item.find(".price.total-uprice");
+        const productId = $item.data("product-id");
 
         const unitPrice = parseInt($price.data("unit-price"));
         const discountPercent = parseInt($price.data("discount-percent"));
@@ -349,15 +391,31 @@ function calculatePrice($input) {
 
         const subTotal = unitPrice * quantity;
         const subDiscountedTotal = subTotal * (1 - discountPercent / 100);
+        const discountAmount = subTotal - subDiscountedTotal;
 
         $price.text(formatPrice(subDiscountedTotal));
+
+        $.ajax({
+            url: "/cart/update-price",
+            method: "POST",
+            data: {
+                product_id: productId,
+                quantity: quantity,
+                original_price: subTotal,
+                discount_amount: discountAmount,
+                // final_price: subDiscountedTotal,
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
     } catch (error) {
         console.error("Price calculation error:", error);
     }
 }
 
 function updateDiscountAmount() {
-    const $input = $('.quantity-input');
+    const $input = $(".quantity-input");
     const $summary = $(".card-body");
     const $discount = $summary.find("#total-discount-amount");
     const quantity = $input.val();
@@ -365,8 +423,11 @@ function updateDiscountAmount() {
     console.log("Summary element:", $summary);
     console.log("Discount element:", $discount);
     console.log("Quantity:", quantity);
-    
-    const unitPrice = $input.closest(".cart-control").find(".total-uprice").data("unit-price");
+
+    const unitPrice = $input
+        .closest(".cart-control")
+        .find(".total-uprice")
+        .data("unit-price");
 
     const discountPercent = parseInt(
         $input

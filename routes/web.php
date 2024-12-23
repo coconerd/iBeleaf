@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PagesController;
@@ -224,6 +225,8 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 		->name('cart.insert');
 	Route::post('/cart/items-update', [CartController::class, 'updateCartItems'])
 		->name('cart.items.update');
+	Route::post('/cart/update-price', [CartController::class, 'updatePrice'])
+		->name('cart.updatePrice');
 });
 
 // Voucher routes
