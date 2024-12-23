@@ -3,10 +3,12 @@ window.addEventListener("popstate", function (event) {
         // Collect cart items
         const cartItems = [];
         $(".each-cart-item").each(function () {
-            cartItems.push({
-                product_id: $(this).data("product-id"),
-                quantity: $(this).find(".quantity-input").val(),
-            });
+            if (!$(this).hasClass("out-of-stock")) {
+                cartItems.push({
+                    product_id: $(this).data("product-id"),
+                    quantity: $(this).find(".quantity-input").val(),
+                });
+            }
         });
 
         // Send AJAX request
@@ -209,10 +211,12 @@ $(document).ready(function () {
         // Collect all cart items data
         const cartItems = [];
         $(".each-cart-item").each(function () {
-            cartItems.push({
-                product_id: $(this).data("product-id"),
-                quantity: $(this).find(".quantity-input").val(),
-            });
+            if (isInStock($(this))) {
+                cartItems.push({
+                    product_id: $(this).data("product-id"),
+                    quantity: $(this).find(".quantity-input").val(),
+                });
+            }
         });
 
         // Send AJAX request
@@ -245,12 +249,19 @@ $(document).ready(function () {
     });
 });
 
+function isInStock($item) {
+    return !$item.hasClass("out-of-stock");
+}
+
 function hanldeQuantityUpdate($input) {
+    const $cartItem = $input.closest(".each-cart-item");
+    if (!isInStock($cartItem)) return;
+
     updateCartCount();
     const $quantityInput = $input.is("input")
         ? $input
         : $input.siblings(".quantity-input");
-    calculatePrice($quantityInput);
+    calculateSubPrice($quantityInput);
     calculateCartTotal();
     updateDiscountAmount();
 }
@@ -372,9 +383,12 @@ function updateCartCount() {
     $("#cart-count").text(totalQuantity);
 }
 
-function calculatePrice($input) {
+function calculateSubPrice($input) {
     try {
         const $item = $input.closest(".cart-control");
+        if (!isInStock($item)) {
+            return; // Skip processing for out-of-stock items
+        }
         const $price = $item.find(".price.total-uprice");
         const productId = $item.data("product-id");
 
@@ -447,16 +461,18 @@ function calculateCartTotal() {
     let total = 0;
 
     $(".each-cart-item").each(function () {
-        const quantity = parseInt($(this).find(".quantity-input").val());
-        const price = parseFloat($(this).find(".price").data("price"));
-        const discount = parseFloat($(this).find(".price").data("discount"));
+        if (isInStock($(this))) {
+            const quantity = parseInt($(this).find(".quantity-input").val());
+            const price = parseFloat($(this).find(".price").data("price"));
+            const discount = parseFloat($(this).find(".price").data("discount"));
 
-        const discountedPrice = price * (1 - discount / 100);
-        const subTotal = discountedPrice * quantity;
+            const discountedPrice = price * (1 - discount / 100);
+            const subTotal = discountedPrice * quantity;
 
-        total += subTotal;
+            total += subTotal;
+        }
     });
-    // console.log('Final total Price: ', total);
+
     $("#first-total-price").text(formatPrice(total) + " VND");
     $("#final-price").text(formatPrice(total) + " VND");
 }

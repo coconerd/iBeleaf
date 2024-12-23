@@ -401,17 +401,17 @@ function updateTotal() {
     const shippingFee = parseInt(shippingFeeText) || 0;
 
     // Get total discounted price from PHP
-    const totalDiscountedPrice = parseFloat($("#total-discounted-price").val());
+    // const totalDiscountedPrice = parseFloat($("#total-discounted-price").val());
 
     // Calculate final total
-    const finalTotal = totalDiscountedPrice + shippingFee;
+    // const finalTotal = totalDiscountedPrice + shippingFee;
 
     // Update total display
     $(".total-amount").text(
         new Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
-        }).format(finalTotal)
+        }).format(0)
     );
 }
 

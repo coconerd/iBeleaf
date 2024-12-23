@@ -25,24 +25,6 @@ class CheckOutController extends Controller
         $this->shippingService = $shippingService;
     }
 
-    public function applyVoucher(Request $request)
-    {
-        // Validate and store voucher in session
-        $voucherData = [
-            'id' => $request->voucher_id,
-            'discount' => $request->discount,
-            'description' => $request->description
-        ];
-        
-        session(['active_voucher' => $voucherData]);
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Voucher applied',
-            'data' => session('active_voucher')
-        ]);
-    }
-
     public function getCartItems()
     {
         $user = Auth::user();
@@ -302,7 +284,7 @@ class CheckOutController extends Controller
                 $request->payment_method ?? 'COD',
                 $request->additional_note ?? null,
 
-                $request->deliver_address
+                // $request->deliver_address
             );
 
 			// 2. Transfer Cart items to Order items
