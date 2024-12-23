@@ -22,14 +22,14 @@ class PagesController extends Controller
         // gán lại giá trị khi background hoặc des nó bị không có dữ lịue
         if($type_product == "Uncategorized") {
             if($bg_url == "")
-                $bg_url = "https://mowgarden.com/wp-content/uploads/2021/07/danh-muc-canh-trong-trong-nha.jpg";
+            $bg_url = ProductData::getUrl("images/main/categories/uncategorized.jpg");
             if($des == "")
                 $des = "Những sản phẩm không được phân loại";
         }
         else
         if($type_product == "Sản Phẩm") {
             if($bg_url == "")
-                $bg_url = ProductData::getUrl("images/main/product-introduce/background-pot.png");
+                $bg_url = ProductData::getUrl("images/main/categories/plantSearching.jpg");
             if($des == "")
                 $des = "Những sản phẩm đã được tìm kiếm";
         }

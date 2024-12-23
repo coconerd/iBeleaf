@@ -1,0 +1,26 @@
+.swal2-popup.custom-alert-popup {
+    padding: 20px 10px;
+    border-radius: 12px;
+}
+
+.swal2-icon {
+    font-size: 15px;
+    margin: 0 auto 2px;
+}
+
+.swal2-confirm.custom-confirm-btn {
+    background-color: #3b3b3b !important;
+    color: #ffffff !important;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.swal2-cancel.custom-cancel-btn {
+    background-color: #ffffff !important;
+    color: #3b3b3b !important;
+    border: 1px solid #c7c7c7 !important;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+}

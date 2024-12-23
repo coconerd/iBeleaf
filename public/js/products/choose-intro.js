@@ -46,7 +46,7 @@ function add_choose_intro(list_choose, img_choose) {
     htmlIntroduce += `
     </div> `;
 
-    $(".choose-container").append(htmlIntroduce);
+    $(".choose-container").html(htmlIntroduce);
 }
 
 

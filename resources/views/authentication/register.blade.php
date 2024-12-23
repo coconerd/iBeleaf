@@ -133,15 +133,21 @@
 			<h2>Welcome Back!</h2>
 			<p>We source the healthiest and most beautiful plants to bring nature’s finest to your home. We provide
 				expert care advice to ensure your plants thrive.</p>
-			<button onclick="window.location.href='/auth/login/google'" type="submit"
-				class="btn btn-google d-flex align-items-center justify-content-center">
+			<button onclick="event.preventDefault(); document.getElementById('google-login-form').submit();"
+				type="submit" class="btn btn-google d-flex align-items-center justify-content-center">
 				<i class="bi bi-google"></i> Đăng nhập với Google
 			</button>
 			<span>or</span>
-			<button onclick="window.location.href='/auth/login/facebook'"
-				class="btn btn-email d-flex align-items-center justify-content-center">
+			<button onclick="event.preventDefault(); document.getElementById('facebook-login-form').submit();"
+				type="submit" class="btn btn-google d-flex align-items-center justify-content-center">
 				<i class="bi bi-facebook"></i> Đăng nhập với Facebook
 			</button>
+			<form id="google-login-form" action="/auth/login/google" method="POST" style="display: none;">
+				@csrf
+			</form>
+			<form id="facebook-login-form" action="/auth/login/facebook" method="POST" style="display: none;">
+				@csrf
+			</form>
 			<img src="{{asset('images/transparent-plant-pot.png')}}" alt="Plant" height="300" class="plant-image">
 		</div>
 
@@ -151,6 +157,7 @@
 			<div class="login-box">
 				<h4>Vui lòng nhập thông tin đăng ký</h4>
 				<form method="POST" action="/auth/register">
+					@csrf
 					<div class="mb-3">
 						<input type="text" class="form-control" placeholder="Họ và tên" name="name">
 					</div>
@@ -158,13 +165,23 @@
 						<input type="email" class="form-control" placeholder="Địa chỉ email" name="email">
 					</div>
 					<div class="mb-3">
-						<input type="password" class="form-control" placeholder="Mật khẩu" name="password">
+						<input type="password" class="form-control" placeholder="Mật khẩu" name="password"
+							id="password">
 					</div>
 					<button type="submit" class="btn btn-login">Đăng ký</button>
 					<div class="text-center mt-3">
 						<span class="register-link">Đã có tài khoản? <a class="text-teal-500" href="/auth/login">Đăng
 								nhập</a></span>
 					</div>
+					@if ($errors->any())
+						<div class="mt-2 alert alert-danger">
+							<ul>
+								@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+								@endforeach
+							</ul>
+						</div>
+					@endif
 				</form>
 			</div>
 		</div>

@@ -1,0 +1,421 @@
+/*quantity minus and plus button*/
+.quantity-input {
+	width: 42px;
+	height: 36px;
+	text-align: center;
+	border: 1px solid #EBEBEC;
+	border-radius: 6px;
+	margin: 0 0.5rem;
+	/* Add these properties */
+	line-height: 35px;
+	padding: 0;
+	vertical-align: middle;
+	outline: none;
+	/* Add text styling */
+	color: #1E4733;
+	font-weight: 500;
+	font-size: 15px;
+}
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+.quantity-btn:hover {
+	background: #f0e9d8;
+	cursor: pointer;
+}
+.quantity-btn:focus {
+	outline: none;
+	box-shadow: none;
+}
+.quantity-btn:active {
+	background: #e8e0cc;
+	transform: scale(0.98);
+}
+.quantity-btn {
+	background: rgba(247, 244, 240);
+	border: none;
+	padding: 6px 16px;
+	border-radius: 6px;
+	font-size: 15px;
+	
+}
+.quantity-btn.minus,
+.quantity-btn.plus {
+	color: #106B32;
+	font-weight: 600;
+}
+.remove-item-btn {
+    margin-left: 2rem !important;
+}
+.remove-item-btn {
+    margin-left: 2rem !important;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect - gentle bounce and color change */
+.remove-item-btn:hover {
+    transform: scale(1.4);
+    color: #b06b3e !important; /* Darker shade of the original color */
+    cursor: pointer;
+}
+
+/* Click effect - shrink */
+.remove-item-btn:active {
+    transform: scale(0.95);
+}
+
+/* Animation for Bin icon*/
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.remove-item-btn:hover {
+    animation: shake 0.5s ease;
+}
+
+.quantity-wrapper {
+	display: flex;
+	align-items: center;
+	margin-top: 0.5rem;
+	position: relative;
+}
+.stock-error {
+	font-size: 12px;
+	color: #dc3545;
+	margin-top: 5px;
+	display: none;
+	transition: opacity 0.3s ease;
+}
+/*product image and discount label*/
+@keyframes gentlePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+.product-image {
+    max-width: 184px;
+    max-height: 184px;
+    border-radius: 15px;
+    z-index: 0;
+    /* transition: all 0.3s ease; */
+    border: 2px solid #e8d5c4;  /* Add soft border color */
+}
+
+/* Default state with animation */
+.each-cart-item {
+    transition: transform 0.3s ease;
+}
+
+.each-cart-item:hover {
+    animation: gentlePulse 2s infinite;
+}
+
+.image-container {
+	position: relative;
+	width: 100%;
+	z-index: 1;
+}
+.discount-label {
+	background-color: #CD853F;
+	color: white;
+	padding: 3px 9px; /* Padding around the text */
+	border-radius: 17px 14px 28px 5px;
+	
+	position: absolute;
+	font-size: 12.25px;
+	display: inline-block; /* Inline block for better sizing */
+	font-weight: 500;
+	top: -5px;
+	left: -3px;
+	z-index: 1;
+	transition: all 0.9s ease;
+}
+.discount-label::after {
+	content: '';
+	position: absolute;
+	top: 6px;
+	left: -2.45px; /* Adjust to position the curve */
+	width: 6px;
+	height: 100%;
+	background-color: #CD853F;
+	border-top-left-radius: 24px; /* Curve */
+	border-bottom-left-radius: 30px; /* Curve */
+	z-index: -1;
+	transition: all 0.9s ease;
+}
+/**/
+.wishlist-btn {
+	border: 1px solid #ddd;
+	background: white;
+	padding: 5px 10px;
+	border-radius: 50%;
+}
+
+.item-detail{
+	color: #1E4733;
+	margin-bottom: 2%;
+	margin-left: 4px;
+}
+
+.cart-control {
+	margin-left: 1rem;
+}
+.unit-price{
+	margin-top: 5px;
+}
+.price {
+	font-size: 15px;
+	font-weight: 600;
+	color: #1E362D;
+}
+.total-uprice{
+	font-size: 18px;
+}
+.currency-label {
+	font-size: 12px;
+	font-weight: normal;
+	margin-top: 3px;
+}
+.each-cart-item {
+	border-top: 2px solid #EBEBEC;
+	padding-top: 1rem;
+	margin-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+	.temp-final-total-price-price {
+		position: relative;
+		right: -15px;
+	}
+}
+.cart-control {
+	margin-bottom: 0.5rem;
+}
+/*Cart summary section*/
+.card-title{
+	margin-left: -3px;
+}
+.card{
+	background-color: rgba(247, 244, 240, 0.5);
+	border: none;
+	box-shadow: none;
+	position: relative;
+	left: 20px;
+}
+.left-side{
+	text-align: left;
+	color: #7E7E7E;
+	font-weight: 400;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 15px;
+}
+.right-side{
+	text-align: right;
+}
+#final-total-discounted-price{
+	font-weight: 600;
+	color: #1E4733;
+}
+.form-control {
+	border: 0.5px solid #ced4da;
+	border-right: none;
+	border-radius: 4px 0 0 4px;
+}
+.apply-btn {
+	height: 100%;
+	background-color: #1E4733;
+	color: white;
+	height: 100%;
+	border: 0.5px solid #1E4733;
+	border-left: none;
+	border-radius: 0 5px 5px 0;
+}
+.apply-btn:hover {
+	background-color: #0f5a29;
+	color: white;
+}
+.apply-btn:active,
+.apply-btn:focus {
+	background-color: #1E4733 !important;
+	color: white !important;
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(30, 71, 51, 0.2);
+}
+#voucher-apply{
+	font-size: 16px;
+}
+#voucher-input::placeholder {
+	color: #A9A9A9;
+	opacity: 0.7;
+}
+#voucher-input {
+	color: #000; /* Normal text color for input value */
+}
+#voucher-input:focus {
+	outline: none;
+	box-shadow: none;
+	border-color: #ced4da;
+}
+#cart-summary-line{
+	border-top: 2px solid #949A90;
+	margin-top: 2rem;
+}
+.btn-primary{
+	background-color: #1E4733;
+	border-radius: 8px;
+	border: none;
+	font-size: 18px;
+	padding: 10px 20px;
+}
+.btn.btn-primary:hover{
+	background-color: #0f5a29;
+	transition: background-color 0.3s ease;
+}
+.d-flex.justify-content-between {
+	margin-bottom: 0.5rem !important; /* Reduced from mb-4 */
+}
+#ship {
+	font-size: 14px;
+	text-align: right;
+	opacity: 0.35;
+	margin-bottom: 1rem;
+	line-height: 1;
+}
+.final-total-price{
+	color: #435E53;
+	font-weight: 600;
+	font-size: 18px;
+}
+#shipping-href {
+	font-size: 16px;
+}
+
+/*Voucher Section*/
+.voucher-box {
+	border: 1px solid rgba(244, 240, 232);
+	background-color: rgba(244, 240, 232);
+	border-radius: 8px;
+	padding: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 15px 0;
+}
+.voucher-box .voucher-icon {
+	color: #28a745;
+	font-size: 1.5rem;
+	margin-right: 10px;
+}
+.voucher-box .voucher-details {
+	display: flex;
+	align-items: center;
+}
+.voucher-box .voucher-info {
+	font-weight: bold;
+	margin-bottom: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+}
+.voucher-box #voucher-discount {
+	font-size: 14px;
+	color: #6c757d;
+	font-style: italic;
+}
+#voucher-description{
+	font-weight: 400;
+	font-size: 16px;
+}
+#voucher-error{
+	font-size: 15px;
+}
+
+.testimonial-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background-color: rgba(247, 244, 240, 0.7);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(199, 139, 94, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+}
+
+.testimonial-content {
+    margin-bottom: 20px;
+}
+
+.testimonial-text {
+    color: #1E362D;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.testimonial-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #c78b5e;
+}
+
+.author-name {
+    margin: 0;
+    color: #1E362D;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/*Out of stock item*/
+.each-cart-item.out-of-stock {
+    opacity: 0.7;
+    position: relative;
+    filter: grayscale(50%);
+    pointer-events: none;
+    width: 100%;
+}
+
+.each-cart-item.out-of-stock::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+    border-radius: 8px;
+}
+.each-cart-item.out-of-stock .text-danger {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    opacity: 1;
+    color: red !important;
+}

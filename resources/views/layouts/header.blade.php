@@ -1,5 +1,5 @@
 <!-- Top Header with time and contact info -->
-<div class="header-top py-1">
+<div class="header-top py-2">
 	<div class="container d-flex justify-content-between align-items-center">
 		<div>
 			<i class="bi bi-clock me-1"></i> 08:30 - 22:00
@@ -7,15 +7,16 @@
 			<i class="bi bi-telephone me-1"></i> 0838 369 639 - 09 6688 9393
 		</div>
 		<div>
-			<i class="bi bi-heart me-3"></i>
+			<i class="fa-solid fa-heart me-3" role="button"
+				onclick="window.location.href='{{ route('wishlist.index') }}'"></i>
 			<span class="me-2">
 				@if (auth()->check())
-					{{auth()->user()->name}}
+					{{auth()->user()->full_name}}
 				@else
-					<a class="text-white" href="auth/login">Đăng nhập</a>
+					<a class="text-white" href="{{ url('/auth/login') }}">Đăng nhập</a>
 				@endif
 			</span>
-			<i class="bi bi-person"></i>
+			<i class="fa-solid fa-user" onclick="window.location.href='{{ route('profile.homePage') }}'"></i>
 		</div>
 	</div>
 </div>
@@ -96,8 +97,25 @@
 						</div>
 					</div>
 				</form>
+
+				<!-- Cart icon -->
 				<li class="nav-item ms-4 mt-1">
-					<a href="#" class="cart me-3"><i class="bi bi-cart"></i>&nbsp;0₫</a>
+					<div class="cart-container">
+						<a href="{{ route('cart.items') }}" class="cart me-3">
+							<i class="fa-solid fa-cart-shopping cart-icon" style="color: #1e362d;"></i>
+							<span class="cart-badge" id="cart-count"
+								data-cart-id="{{ Auth::user()->cart->cart_id ?? 0 }}">
+								{{
+									Auth::check() && Auth::user()->role_type == 0 && Auth::user()->cart
+									? Auth::user()->cart->items()
+										->join('products', 'cart_items.product_id', '=', 'products.product_id')
+										->where('products.stock_quantity', '>', 0)
+										->sum('cart_items.quantity')
+									: 0
+								}}
+							</span>
+						</a>
+					</div>
 				</li>
 		</div>
 	</div>
@@ -109,5 +127,37 @@
 {{-- end seach bar --}}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"></script>
+
+<!-- Cart's style -->
+<style>
+	.cart-container {
+		position: relative;
+		display: inline-block;
+	}
+
+	.cart-icon {
+		font-size: 22px;
+		position: absolute;
+		top: 4px;
+		left: 14px;
+	}
+
+	.cart-badge {
+		position: absolute;
+		top: -9px;
+		left: 28px;
+		background-color: #F72C5B;
+		color: white;
+		border-radius: 50%;
+		padding: 2px 4px;
+		font-size: 10px;
+		min-width: 18px;
+		text-align: center;
+	}
+
+	.cart:hover {
+		text-decoration: none;
+		color: inherit;
+	}
+</style>
 <!-- End of navbar -->

@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Models\Cart;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -24,11 +24,21 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            // 'role_type' => $this->faker->numberBetween(0, 1),
+            'role_type' => 0,
+            'email' => $this->faker->unique()->safeEmail(),
+            'full_name' => $this->faker->name(),
+            'user_name' => $this->faker->unique()->userName(),
             'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+			'phone_number' => substr($this->faker->phoneNumber(), 0, 10),
+            'province_city' => $this->faker->city(),
+            'district' => $this->faker->streetName(),
+            'commune_ward' => $this->faker->streetAddress(),
+            'address' => $this->faker->address(),
+            'gender' => $this->faker->randomElement(['Nam', 'Nữ', 'Khác']),
+            'date_of_birth' => $this->faker->date(),
+            'avatar' => $this->faker->imageUrl(200, 200, 'people'),
+            'cart_id' => null
         ];
     }
 
@@ -40,5 +50,20 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function configure(){ // Create a cart for each created user
+        return $this->afterCreating(function ($user) {
+            $userId = $user->getAttribute('user_id');
+            $cart = Cart::create([
+                'cart_id' => $userId,
+                'items_count' => 0
+            ]);
+
+            $user->update([
+                'cart_id' => $cart->cart_id
+            ]);
+            
+        });
     }
 }

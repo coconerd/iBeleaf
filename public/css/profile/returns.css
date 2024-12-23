@@ -1,0 +1,82 @@
+
+.returns-container {
+    padding: 20px;
+	max-height: 70vh;
+	overflow-y: auto;
+	width: 100%;
+}
+
+.filter-row .btn-group {
+    width: 100%;
+    gap: 10px;
+}
+
+.filter-row .btn {
+    border-radius: 20px;
+    padding: 8px 20px;
+    flex: 1;
+    transition: all 0.3s ease;
+    background-color: white;
+    border-color: #ddd;
+    color: #666;
+}
+
+.filter-row .btn.active {
+    background-color: #C78B5E;
+    border-color: #C78B5E;
+    color: white;
+}
+
+.filter-row .btn:hover:not(.active) {
+    background-color: #f5f5f5;
+    border-color: #C78B5E;
+    color: #C78B5E;
+}
+
+.return-item {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.return-item:hover {
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid #eee;
+}
+
+.badge {
+    font-weight: normal;
+    padding: 6px 12px;
+    margin-right: 8px;
+}
+
+.product-image-thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.images-preview img {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.images-preview img:hover {
+    transform: scale(1.1);
+}
+
+#imageModal .modal-content {
+    background-color: transparent;
+    border: none;
+}
+
+#fullImage {
+    max-height: 90vh;
+    object-fit: contain;
+}
