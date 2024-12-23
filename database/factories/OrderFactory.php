@@ -18,7 +18,7 @@ class OrderFactory extends Factory
 		return [
 			'created_at' => $createdAt,
 			'user_id' => fn() => User::query()->exists()
-				? User::query()->inRandomOrder()->first()->user_id
+				? User::query()->where('role_type', 1)->inRandomOrder()->first()->user_id
 				: User::factory()->create()->user_id,
 			'voucher_id' => fn() => $this->faker->boolean(25)
 				? Voucher::query()->inRandomOrder()->first()->voucher_id

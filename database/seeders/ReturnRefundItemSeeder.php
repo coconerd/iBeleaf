@@ -33,6 +33,8 @@ class ReturnRefundItemSeeder extends Seeder
 			'other' => 'Lý do cá nhân khó có thể giải thích. Mong shop thông cảm và hỗ trợ. 🙏',
 		];
 
+		$statuses = ['pending', 'accepted', 'rejected', 'received', 'refunded', 'renewed'];
+
 		// Create return/refund items only for delivered orders
 		foreach ($orderItems->take(5) as $orderItem) {
 			// Only create return/refund if order is within 7 days of delivery
@@ -48,7 +50,7 @@ class ReturnRefundItemSeeder extends Seeder
 				'quantity' => rand(1, $orderItem->quantity),
 				'reason_tag' => $reasonTag,
 				'reason_description' => $reasonDescription,
-				'status' => ['pending', 'accepted', 'rejected', 'received'][rand(0, 3)],
+				'status' => $statuses[rand(0, 5)],
 				'created_at' => $orderDeliveryDate->copy()->addDays($daysAfterDelivery),
 				'updated_at' => $orderDeliveryDate->copy()->addDays($daysAfterDelivery + rand(0, 2))
 			]);

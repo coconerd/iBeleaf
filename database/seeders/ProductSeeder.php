@@ -20,6 +20,15 @@ class ProductSeeder extends Seeder
             $product->save();
         }
 
+		// Fill empty product names
+		$productsWithEmptyValues = Product::whereNull('name')->orWhere('name', '')->get();
+		foreach ($productsWithEmptyValues as $product) {
+			$words = explode(' ', $product->short_description);
+			array_pop($words);
+			$product->name = implode(' ', $words);
+			$product->save();
+		}
+
         // Randomly set 'discount_percentage' for 1/4 of the products
         $products = Product::all();
         $productsToUpdate = $products->random(floor($products->count() / 4));
