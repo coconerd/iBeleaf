@@ -95,8 +95,7 @@
 				<div class="card-body">
 					<div class="d-flex justify-content-between">
 						<div class="card-title">
-							<span class="main-title">Hiệu suất bán hàng</span>
-							<small class="d-block text-muted" style="font-size: 15px">Trong vòng 2 tuần qua</small>
+							<small style="font-size: 18px; color: #2A6548;">Trong vòng 2 tuần qua</small>
 						</div>
 						<div class="d-flex text-muted font-20">
 							<i class="mdi mdi-printer mouse-pointer"></i>
@@ -140,6 +139,13 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="section-divider">
+	<h2 class="section-title">
+		<i class="fa-solid fa-lg fa-folder-open" style="color: #28a745;"></i>
+		Khách hàng quan trọng
+	</h2>
 </div>
 
 @endsection

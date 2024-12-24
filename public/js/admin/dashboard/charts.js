@@ -151,16 +151,21 @@ function updateStatCard(metric, options) {
         success: function (response) {
             const { valueId, indicatorId, growthId, prefix, suffix } = options;
 
-            // Update value with prefix/suffix
-            const formattedValue = [
-                prefix,
-                options.formatter
-                    ? options.formatter(response.todayTotal)
-                    : response.todayTotal,
-                suffix,
-            ]
-                .filter(Boolean)
-                .join(" ");
+            // Update value with prefix/suffix only if there's data
+            let formattedValue = '';
+            if (response.todayTotal === null || response.todayTotal === 0) {
+                formattedValue = "...";
+            } else {
+                formattedValue = [
+                    prefix,
+                    options.formatter
+                        ? options.formatter(response.todayTotal)
+                        : response.todayTotal,
+                    suffix,
+                ]
+                    .filter(Boolean)
+                    .join(" ");
+            }
 
             $(`#${valueId}`).text(formattedValue);
             
@@ -229,7 +234,7 @@ function loadTopSellingProducts() {
 
             products.forEach((product) => {
                 const row = $("<tr>");
-                const topIcon = product.rank <= 3 ? `<i class="fas fa-crown text-warning" title="Top ${product.rank}"></i>` : '';
+                const topIcon = product.rank <= 5 ? `<i class="fas fa-crown text-warning" title="Top ${product.rank}"></i>` : '';
                 row.html(`
                     <td class="text-center">
                         ${topIcon}
