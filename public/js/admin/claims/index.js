@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
 	// Initialize charts
-	initializeCharts();
+	updateCharts('week');
+
+	// Initialize default filter period btn
+	document.querySelector('[data-period="week"]').classList.add('active', 'btn-secondary');
 
 	// Handle period button clicks
 	document.querySelectorAll('[data-period]').forEach(button => {
@@ -600,14 +603,13 @@ function rejectRequest(requestId, callbackFn) {
 		});
 	}, 200); // Wait for modal close animation
 }
-function initializeCharts() {
-	updateCharts('week'); // Default to weekly view
-}
 
 function updateCharts(period) {
+	console.log('updated charts called');
 	fetch(`/admin/claims/statistics?period=${period}`)
 		.then(response => response.json())
 		.then(data => {
+			console.log('Statistics data:', data);
 			updateStatusChart(data.statusStats);
 			updateProductsChart(data.productStats);
 		})
