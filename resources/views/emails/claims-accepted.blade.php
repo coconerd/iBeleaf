@@ -283,7 +283,7 @@
 	</p>
 	<p class="footer-text"></p>
 	Hotline: <strong>18-1234-5678</strong><br>
-	Email: <a href="mailto:support@plantparadise.com">support@plantparadise.com</a>
+	Email: <a href="mailto:support@plantparadise.com">hotro@plantparadise.com</a>
 	</p>
 	</div>
 </body>
