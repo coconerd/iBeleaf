@@ -95,9 +95,9 @@ class AdminDashboardController extends Controller
     	// Get top selling products
 		$topSellingProducts = OrderItem::join('products', 'order_items.product_id', '=', 'products.product_id')
 			->where('order_items.created_at', '>=', $twoWeeksAgo)
-			->select('products.product_id', 'products.name')
+			->select('products.product_id', 'products.name', 'products.overall_stars')
 			->selectRaw('SUM(quantity) as total_quantity')
-			->groupBy('products.product_id', 'products.name')
+			->groupBy('products.product_id', 'products.name', 'products.overall_stars')
 			->orderByDesc('total_quantity')
 			->limit(15)
 			->get();
@@ -115,10 +115,13 @@ class AdminDashboardController extends Controller
 				'name' => $product->name,
 				'id' => $product->product_id,
 				'quantity' => $product->total_quantity,
-				'image' => $productImage?->product_image_url
+				'image' => $productImage?->product_image_url,
+				'rating' => $product->overall_stars
 			];
 		});
 
 		return response()->json($result);
 	}
+
+	public 
 }
