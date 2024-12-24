@@ -13,11 +13,14 @@
 @endsection
 
 @section('content')
-    <!-- <div class="snowfall-container">
-        @for ($i = 1; $i <= 50; $i++)
-            <div class="snowflake" style="left: {{ rand(0, 100) }}%; animation-delay: {{ $i * 0.1 }}s">❅</div>
+    <div class="snowflakes" aria-hidden="true">
+        @for ($i = 1; $i <= 12; $i++)
+            <div class="snowflake" style="left: {{ rand(0, 100) }}%; animation-delay: {{ $i * 0.2 }}s">
+                <div class="inner">❅</div>
+            </div>
         @endfor
-    </div> -->
+    </div>
+    
     <div class="container mt-4">
     @if(isset($cartItems) && $cartItems->count() > 0)
         <div class="row">
@@ -177,7 +180,7 @@
                         <button class="btn btn-primary w-100" id="checkout-btn">Thanh toán</button>
                         <div class="text-center mt-3">
                             <a id="shipping-href" class="text-center">
-                                <u>Tiếp tục mua hàng</u>
+                                <a href="/">Tiếp tục mua hàng</a>
                             </a>
                         </div>
                     </div>
