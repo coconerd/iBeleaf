@@ -177,6 +177,7 @@ class OrderController extends Controller
 				}
 			}
 
+$dbItems = [];
 			foreach ($items as $item) {
 				$returnRefundItem = ReturnRefundItem::create([
 					'order_items_id' => $item['order_items_id'],
@@ -187,6 +188,7 @@ class OrderController extends Controller
 					'reason_description' => $request->input('reason_description'),
 					'status' => 'pending',
 				]);
+array_push($dbItems, $returnRefundItem);
 
 				// Handle images
 				if ($request->hasFile('images')) {
@@ -200,7 +202,26 @@ class OrderController extends Controller
 				}
 			}
 			DB::commit();
-			return redirect()->back()->with('success', 'Yêu cầu của bạn đã được gửi thành công.');
+			
+			// Send notification to admins
+			$notifySuccess = true;
+			try {
+				$adminUsers = User::where('role_type', 1)->get();
+				foreach ($adminUsers as $admin) {
+					foreach ($dbItems as $dbItem)
+						$admin->notify(new NewClaimNotification($dbItem));
+				}
+			} catch (Exception $e) {
+				Log::error('AdminOrderController@updateOrderField: ' . $e->getMessage());
+				$notifySuccess = false;
+			}
+
+			return redirect()->back()->with(
+				$notifySuccess ? 'success': 'error',
+				$notifySuccess 
+					? 'Yêu cầu của bạn đã được gửi thành công.'
+					: 'Yêu cầu của bạn đã được gửi thành công, nhưng không thể gửi thông báo cho quản trị viên.'
+);
 		} catch (Exception $e) {
 			DB::rollBack();
 			Log::error('OrderController@submitRefundReturn: ' . $e);
