@@ -12,6 +12,8 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection
 
 @section('head-script')
@@ -45,6 +47,31 @@
 
 <div class="page-header">
     <h3 class="page-title fs-5">Quản lý/tiếp nhận các đơn hàng của khách hàng <span class="christmas-icon">🎄</span></h3>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="card-title fs-5">Thống kê doanh số</h4>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary active" data-period="week">7 ngày</button>
+                        <button class="btn btn-outline-secondary" data-period="month">30 ngày</button>
+                        <button class="btn btn-outline-secondary" data-period="year">365 ngày</button>
+                    </div>
+                </div
+                <div class="row">
+                    <div class="col-md-8">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="orderStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="orders-container">
