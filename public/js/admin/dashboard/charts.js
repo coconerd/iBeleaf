@@ -56,7 +56,6 @@ $(document).ready(function () {
                     borderWidth: 3,
                     pointRadius: 4,
                     pointHoverRadius: 6,
-                    pointBackgroundColor: orderStatusColors.cancelled,
                 },
             ],
         },
@@ -66,15 +65,33 @@ $(document).ready(function () {
             plugins: {
                 legend: {
                     position: "top",
-                    padding: 25,
+                    padding: 15,
                     labels: {
-                        padding: 20,
-                        boxWidth: 40,
+                        padding: 12,
+                        boxWidth: 30,
                         font: {
-                            size: 13,
+                            size: 15,
                         },
                     },
                 },
+                tooltip: {
+                    mode: "index",
+                    intersect: false,
+                    padding: 20,
+                    displayColors: true,
+                    titleFont: {
+                        size: 14
+                    },
+                    bodyFont: {
+                        size: 15
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            return '  ' + label + ': ' + context.parsed.y;
+                        }
+                    }
+                }
             },
             interaction: {
                 mode: "nearest",
@@ -93,19 +110,6 @@ $(document).ready(function () {
             scales: {
                 y: {
                     beginAtZero: true,
-                },
-            },
-            plugins: {
-                tooltip: {
-                    mode: "index",
-                    intersect: false,
-                },
-                legend: {
-                    onHover: (e) => {
-                        e.chart.data.datasets.forEach((dataset) => {
-                            dataset.borderWidth = 2;
-                        });
-                    },
                 },
             },
             datasetHoverStyle: {
@@ -137,6 +141,7 @@ $(document).ready(function () {
 
     fetchOrderData(); // Initial load
     showStatsCards();
+    loadTopSellingProducts();
 });
 
 function updateStatCard(metric, options) {
@@ -212,4 +217,37 @@ function formatPrice(price) {
         style: "currency",
         currency: "VND",
     }).format(price);
+}
+
+function loadTopSellingProducts() {
+    $.ajax({
+        url: "dashboard/top-selling",
+        method: "GET",
+        success: function (products) {
+            const tbody = $("#top-selling-table tbody");
+            tbody.empty();
+
+            products.forEach((product) => {
+                const row = $("<tr>");
+                const topIcon = product.rank <= 3 ? `<i class="fas fa-crown text-warning" title="Top ${product.rank}"></i>` : '';
+                row.html(`
+                    <td class="text-center">
+                        ${topIcon}
+                        ${product.rank}
+                    </td>
+                    <td>
+                        <img src="${product.image}" alt="${product.name}" 
+                            class="product-thumbnail">
+                    </td>
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td class="text-end quantity-cell">${product.quantity}</td>
+                `);
+                tbody.append(row);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error loading top selling products:", error);
+        },
+    });
 }
