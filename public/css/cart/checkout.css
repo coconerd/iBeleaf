@@ -292,7 +292,10 @@ select option:first-child {
 }
 /* Overall container */
 #order-summary {
-    background-color: rgb(247, 244, 240, 0.8);
+    /* background-color: rgb(247, 244, 240, 0.8); */
+
+    background: linear-gradient(to bottom right, #8BCB8B, #F8F3E7);
+    /* background: linear-gradient(to bottom right, #a8e6cf, #d5e1df); */
 	outline: 0.05px solid white;
 	border-radius: 30px; /* More rounded corners */
 	padding: 20px;
