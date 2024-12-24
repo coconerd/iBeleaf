@@ -2,19 +2,19 @@ let list_productHref = [
     {
         img: '/images/main/cay-trong-nha.jpg',
         title: "Cây trong nhà",
-        des: "Giúp cho ngôi nhà của bạn thêm tươi mới và xanh với những sản phẩm cây trong nhà cùng CocoNerd. Mang đến cho bạn những phút giây thư giãn cùng sản phẩm cây xanh chất lượng.",
+        des: "Cây trong nhà giúp không gian sống của bạn trở nên tươi mới, thư thái và đầy cảm hứng. Với sản phẩm từ Coconerd, bạn sẽ tận hưởng sự thoải mái trong một không gian xanh hoàn hảo.",
         href: "cay-trong-nha"
     },
     {
         img: '/images/main/cay-ngoai-troi.jpg',
         title: "Cây ngoài trời",
-        des: "Giúp cho ngôi nhà của bạn thêm tươi mới và xanh với những sản phẩm cây trong nhà cùng CocoNerd. Mang đến cho bạn những phút giây thư giãn cùng sản phẩm cây xanh chất lượng.",
+        des: "Cây ngoài trời làm đẹp không gian và mang lại không khí trong lành. Sản phẩm chất lượng từ Coconerd sẽ biến khu vườn của bạn thành nơi thư giãn tuyệt vời.",
         href: "cay-ngoai-troi"
     },
     {
         img: '/images/main/chau-cay.jpg',
         title: "Chậu cây",
-        des: "Giúp cho ngôi nhà của bạn thêm tươi mới và xanh với những sản phẩm cây trong nhà cùng CocoNerd. Mang đến cho bạn những phút giây thư giãn cùng sản phẩm cây xanh chất lượng.",
+        des: "Chậu cây là điểm nhấn tinh tế, nâng niu từng mầm xanh. Với thiết kế đa dạng từ Coconerd, không gian sống của bạn sẽ thêm phần hài hòa và cuốn hút.",
         href: "chau-cay"
     },
 ]

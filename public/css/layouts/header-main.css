@@ -6,6 +6,14 @@
 	z-index: 10;
 }
 
+#navbar-header {
+	background: #213f2247;
+}
+
+#but-input-search{
+	margin: 0px !important;
+}
+
 .nav-item {
 	display: flex;
 	align-items: center;
@@ -16,11 +24,22 @@
 	/* background:#b1bcc5 */
 }
 
-.navbar .container{
-	background:#0d686bb8;
-	/* padding: 0px 20px; */
-	/* margin: 10px; */
-	border-radius: 15px;
+.nav-item.dropdown a{
+	color: #e6e6e6;
+}
+
+.nav-item.dropdown .selected-nav-link {
+	color: #f8f8f8;
+}
+
+.cart-container {
+	/* background: red; */
+	width: 60px;
+	height: 80%;
+}
+
+.cart-container i{
+	color: #dadada !important;
 }
 
 .cart.me-3 {
@@ -33,15 +52,18 @@
 .navbar-brand {
 	display: flex;
 	align-items: center;
-}
-.navbar-brand {
 	color: white;
 	font-weight: bold;
 	font-size: 22px;
 }
+
 .navbar-brand label{
 	padding-left: 10px;
 }
+.navbar-brand:hover label {
+	color: #16be12;
+}
+
 .nav-link.dropdown-toggle {
 	color: white;
 	font-weight: bold;

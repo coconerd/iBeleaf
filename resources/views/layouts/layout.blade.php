@@ -29,6 +29,8 @@
 
 	<!-- Header/Footer stylings -->
 	<link rel="stylesheet" href="{{asset('css/layouts/header.css')}}">
+	<link rel="stylesheet" href="{{asset('css/ui/dropdown.css')}}">
+	<link rel="stylesheet" href="{{asset('css/ui/navbar.css')}}">
 	<link rel="stylesheet" href="{{asset('css/layouts/footer.css')}}">
 
 	<!-- SweetAlert2 Cart CSS -->

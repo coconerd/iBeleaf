@@ -1,6 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Parisienne&family=Pinyon+Script&family=Rowdies:wght@300;400;700&display=swap');
 @font-face{font-family:'Material Icons';font-style:normal;font-weight:normal;src:local('Material Icons'), local('MaterialIcons-Regular'), url(//fonts.gstatic.com/s/materialicons/v12/2fcrYFNaTjcS6g4U3t-Y5ewrjPiaoEww8AihgqWRJAo.woff) format('woff'), url(//fonts.gstatic.com/s/materialicons/v12/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2'), url(//fonts.gstatic.com/s/materialicons/v12/2fcrYFNaTjcS6g4U3t-Y5bbKic1PW3nceB3q24YFOMg.ttf) format('truetype')}
 
+/* animation */
+@keyframes turnRight {
+    from {
+        left: -100%;
+        opacity: 0;
+    }
+    to {
+        left: 0px;
+        opacity: 1;
+    }
+}
+
+/* detail sidebar */
+
 .background-sidebar {
     background: #00000059;
     position: fixed;
@@ -21,7 +35,6 @@
     position: fixed;
     width: 375px;
     height: 100vh;
-    left: -0px;
     top: 0px;
     z-index: 10;
     padding: 20px;
@@ -33,6 +46,7 @@
     border-right: 4px solid #317842;
     overflow-y: scroll;
     box-shadow: 0px 0px 12px #1e570d80;
+    animation: turnRight 0.35s forwards;
 }
 
 .sidebar-category::-webkit-scrollbar {

@@ -131,7 +131,7 @@
 .box-choose .box .box-ico{
     min-width: 76px;
     height: 76px;
-    background: #bfd730;
+    background: #6acf3b;
     display: flex;    
     justify-content: center;
     align-items: center;
@@ -161,7 +161,7 @@
 /* end-section */
 .end-section {
     width: 100%;
-    background: #bfd730;
+    background: #80e152;
 }
 
 /* resize */

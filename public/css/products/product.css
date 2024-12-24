@@ -20,6 +20,7 @@ body {
     /* height: 920px; */
     overflow: hidden;
     /* background: blue; */
+    box-shadow: 5px 5px 12px rgb(20 68 10 / 42%);
 }
 
 .nav-bg-main img{
@@ -63,7 +64,7 @@ body {
     align-items: center;
     position: relative;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
-    border: 1px solid #0c6370;
+    border: 1px solid #2f7c16;
     /* border-radius: 10px; */
     color: white !important;
 }
@@ -76,7 +77,7 @@ body {
 
 @keyframes changeBGColor {
     100%  {
-        background-color:#02383f;
+        background-color:#0d42128c;
     }
 }
 
@@ -124,7 +125,7 @@ body {
     position: absolute;
     bottom: 16px;
     padding: 10px 25px;
-    background-color: #0d6d71;
+    background-color:#098316;
     font-weight: bold;
     font-size: 15px;
     color: white;
@@ -132,7 +133,7 @@ body {
 }
 
 .content-href:hover {
-    background-color: #0d5f62;
+    background-color:#087214;
 }
 
 .nav-introduce {
@@ -160,7 +161,7 @@ body {
     position: relative;
     width: 100px;
     height: 100px;
-    border: 2px solid #0d6d71;
+    border: 2px solid #0da228;
     /* background: #ffffff; */
     border-radius: 100%;
     display: flex;
@@ -198,7 +199,7 @@ body {
 
 @keyframes changeInImgColor {
     100%  {
-        border-color: #06afb5;
+        border-color: #2f7c16;
         background: #e9fdfd;
     }
 }

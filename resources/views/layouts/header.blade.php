@@ -22,10 +22,10 @@
 </div>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light navbar-main">
+<nav class="navbar navbar-expand-lg navbar-light navbar-main" id="navbar-header">
 	<div class="container">
 		<!-- Logo -->
-		<a class="navbar-brand" href="#">
+		<a class="navbar-brand" href="/">
 			<img src="https://png.pngtree.com/png-clipart/20220823/original/pngtree-green-coconut-sticker-vector-illustration-png-image_8462536.png"
 				alt="Logo">
 			<label>Plant Paradise</label>
@@ -41,45 +41,23 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav mx-auto">
 				<!-- Dropdowns for different product categories -->
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="indoorPlantsDropdown" role="button"
+				<li class="nav-item dropdown a">
+					<a class="nav-link dropdown-toggle" href="/cay-trong-nha" id="indoorPlantsDropdown" role="button"
 						data-bs-toggle="dropdown" aria-expanded="false">
 						Cây trong nhà
 					</a>
-					<ul class="dropdown-menu" aria-labelledby="indoorPlantsDropdown">
-						<li><a class="dropdown-item" href="#">Loại cây 1</a></li>
-						<li><a class="dropdown-item" href="#">Loại cây 2</a></li>
-					</ul>
 				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="outdoorPlantsDropdown" role="button"
+				<li class="nav-item dropdown a">
+					<a class="nav-link dropdown-toggle" href="/cay-ngoai-troi" id="outdoorPlantsDropdown" role="button"
 						data-bs-toggle="dropdown" aria-expanded="false">
 						Cây ngoài trời
 					</a>
-					<ul class="dropdown-menu" aria-labelledby="outdoorPlantsDropdown">
-						<li><a class="dropdown-item" href="#">Loại cây 1</a></li>
-						<li><a class="dropdown-item" href="#">Loại cây 2</a></li>
-					</ul>
 				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="potDropdown" role="button"
+				<li class="nav-item dropdown a">
+					<a class="nav-link dropdown-toggle" href="/chau-cay" id="potDropdown" role="button"
 						data-bs-toggle="dropdown" aria-expanded="false">
 						Chậu cây
 					</a>
-					<ul class="dropdown-menu" aria-labelledby="potDropdown">
-						<li><a class="dropdown-item" href="#">Loại chậu 1</a></li>
-						<li><a class="dropdown-item" href="#">Loại chậu 2</a></li>
-					</ul>
-				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="accessoriesDropdown" role="button"
-						data-bs-toggle="dropdown" aria-expanded="false">
-						Phụ kiện
-					</a>
-					<ul class="dropdown-menu" aria-labelledby="accessoriesDropdown">
-						<li><a class="dropdown-item" href="#">Phụ kiện 1</a></li>
-						<li><a class="dropdown-item" href="#">Phụ kiện 2</a></li>
-					</ul>
 				</li>
 				<form class="nav-item d-flex ms-5" role="search" action="/search">
 					<input class="form-control me-2" id="input-search" type="search" placeholder="Search" aria-label="Search" name="name">
@@ -117,7 +95,12 @@
 						</a>
 					</div>
 				</li>
+			</ul>
 		</div>
+
+		<div class="dropdown-bar-close"></div>
+		<div class="dropdown-bar"></div>
+		<script src="{{ asset('js/engine/dropdown.js')}}"></script>
 	</div>
 </nav>
 

@@ -1,0 +1,9 @@
+.nav-item.dropdown a{
+    font-weight:500;
+    color: #545454;
+}
+
+.nav-item.dropdown .selected-nav-link {
+    font-weight:bold;
+    color:#324134;
+}

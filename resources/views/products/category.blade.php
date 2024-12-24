@@ -198,16 +198,19 @@
             <input type="text" style="display: none;" name="name" value="{{ $nameFilter }}">
         </form>
 
+        <?php
+            if($number_result == 0)
+                echo '<div class="empty-product"> Hiện tại không có sản phẩm nào </div>';
+        ?>
+
         <div class="product-container" id="cay-trong-nha-container">
             <?php
                 $error_img = 'onerror="this.onerror=null; this.src=\''.asset('images/main/error_plant.jpg').'\';"';
 
-                if($number_result == 0)
-                    echo '<div class="empty-product"> Hiện tại không có sản phẩm nào </div>';
-                else
+                if($number_result != 0)
                     foreach ($list_product as $product) {
                         echo '<div class="nav-product">';
-                        echo "<a class='nav-product-img' href='".ProductData::getUrl('/'.$product['product_id'])."' id='".$product['product_id']."'>";
+                        echo "<a class='nav-product-img' href='".ProductData::getUrl('product/'.$product['product_id'])."' id='".$product['product_id']."'>";
                         $first = "nope";
                         $isTwo = false; 
                         foreach ($product['list_image'] as $img) {
@@ -228,7 +231,7 @@
                         echo '<div class="nav-product-category">'.$product['type'].'</div>';
                         
                         if($product['discount_percentage'] > 0 && $product['discount_percentage'] <= 100)
-                            echo '<div class="nav-product-discount"> -'.$product['discount_percentage'].'% </div>';
+                            echo '<div class="nav-product-discount"> <span> -'.$product['discount_percentage'].'% </span></div>';
 
                         echo '<div class="nav-product-name">' . $product['short_description'] . '</div>';
 
@@ -246,7 +249,6 @@
 
         <div class="page_slider">
             <?php
-
                 if(isset($_SERVER['QUERY_STRING']))
                     $query_str = '?'.$_SERVER['QUERY_STRING'];
                 else    

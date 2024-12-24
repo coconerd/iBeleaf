@@ -23,7 +23,7 @@
 
 @section("content")
 	<div class="nav-bg-main" >
-		<img src="{{ asset('images/main/Background-main1.png')}}" alt="main-background">
+		<img src="{{ asset('images/main/bg2.png')}}" alt="main-background">
 		<div class="nav-container"></div>
 	</div>
 	<div class="nav-introduce"></div>
@@ -131,11 +131,11 @@
 			list_product.forEach(product => {
 				product_html += `
 				<div class="nav-product">
-					<a class="nav-product-img" href="${window.location.origin + "/" + product.product_id}" id="${product.product_id}"></a>
+					<a class="nav-product-img" href="${window.location.origin + "/product/" + product.product_id}" id="${product.product_id}"></a>
 					<div class="nav-product-category"> ${type} </div>`;
 
 				if(product.discount_percentage > 0 && product.discount_percentage <= 100)
-					product_html += `<div class="nav-product-discount"> -${product.discount_percentage}% </div>`;
+					product_html += `<div class="nav-product-discount"> <span>-${product.discount_percentage}%</span> </div>`;
 				
 				product_html += `
 					<div class="nav-product-name">

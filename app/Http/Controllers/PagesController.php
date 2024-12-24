@@ -10,7 +10,7 @@ use App\Providers\ProductData;
 
 class PagesController extends Controller
 {
-    private $title = "Plant Ecommerce";
+    private $title = "Plant Paradise";
     private $author = "CocoNerd";
 
     public function __construct(DBConnService $dbConnService)

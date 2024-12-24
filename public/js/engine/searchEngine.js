@@ -74,9 +74,13 @@ AjaxGetProductFilter();
 
 // turn on or off search-bar
 // off
-$("#out-search").on("click", ()=>{
+function turnOffSearchBar() {
     $("#search-list-products").css("display","none");
     $("#out-search").css("display","none");
+}
+
+$("#out-search").on("click", ()=>{
+    turnOffSearchBar();
 });
 
 // on
@@ -97,3 +101,4 @@ activeSearchPage("");
 // disable search
 $("#search-list-products").css("display","none");
 $("#out-search").css("display","none");
+

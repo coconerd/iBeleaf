@@ -249,3 +249,12 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::get('/checkout/success', [CheckOutController::class, 'showSuccessPage'])
 		->name('checkout.success');
 });
+
+// catch 404 not found
+Route::fallback(function () {
+    return redirect('/404');
+});
+
+Route::get('/404', function () {
+    return view('errors.404');
+});
