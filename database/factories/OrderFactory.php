@@ -5,6 +5,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Models\OrderItem;
+use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -13,12 +14,13 @@ class OrderFactory extends Factory
 
 	public function definition()
 	{
+		$faker = Faker::create('vi_VN');
 		$createdAt = $this->faker->dateTimeBetween('-2 week', 'now');
 
 		return [
 			'created_at' => $createdAt,
 			'user_id' => fn() => User::query()->exists()
-				? User::query()->where('role_type', 1)->inRandomOrder()->first()->user_id
+				? User::query()->where('role_type', 0)->inRandomOrder()->first()->user_id
 				: User::factory()->create()->user_id,
 			'voucher_id' => fn() => $this->faker->boolean(25)
 				? Voucher::query()->inRandomOrder()->first()->voucher_id

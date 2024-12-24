@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             VoucherRuleSeeder::class,
             ReturnRefundItemSeeder::class,
+			ProductFeedbackSeeder::class,
 			UserSeeder::class,
         ]);
     }
