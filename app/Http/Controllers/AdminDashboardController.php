@@ -16,37 +16,43 @@ class AdminDashboardController extends Controller
 
 	public function getSalesData()
 	{
-		// Get last 31 days of data
-		$salesData = Order::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+		// Get last 14 days of data
+		$salesData = Order::selectRaw('DATE(created_at) as date, status, COUNT(*) as count')
 			->whereBetween('created_at', [Carbon::now()->subDays(13)->startOfDay(), Carbon::now()->endOfDay()])
-			->groupBy('date')
+			->groupBy('date', 'status')
 			->orderBy('date')
 			->get();
 
-		// Prepare data array3
 		$labels = [];
-		$counts = [];
-		
-		// Fill missing dates
+		$data = [
+			'pending' => [],
+			'delivering' => [],
+			'delivered' => [],
+			'cancelled' => []
+		];
+
+		// Fill missing dates for each status
 		for ($i = 13; $i >= 0; $i--) {
 			$date = Carbon::now()->subDays($i)->format('Y-m-d');
-			$count = 13;
-			
-			$dayData = $salesData->firstWhere('date', $date);
-			if ($dayData) {
-				$count = $dayData->count;
-			}
-			
 			$labels[] = Carbon::parse($date)->format('M d');
-			$counts[] = $count;
+
+			foreach ($data as $status => &$counts) {
+				$dayData = $salesData->first(function($item) use ($date, $status) {
+					return $item->date === $date && $item->status === $status;
+				});
+				$counts[] = $dayData ? $dayData->count : 0;
+			}
 		}
 
 		return response()->json([
 			'labels' => $labels,
-			'data' => $counts
+			'pending' => $data['pending'],
+			'delivering' => $data['delivering'],
+			'delivered' => $data['delivered'],
+			'cancelled' => $data['cancelled']
 		]);
 	}
-
+	
 	public function analyzeMetric($metric = 'orders')
 	{
 		$metrics = [
