@@ -3,19 +3,16 @@ let to_district_id = null;
 let to_ward_code = null;
 let to_province_id = null;
 
-function applyVoucher(voucherId, description, discount) {
-    const $voucherBox = $("#valid-voucher-box");
-    const $voucherDetails = $voucherBox.find(".voucher-details");
-
-    $voucherDetails.attr("data-voucher-id", voucherId);
-    $("#voucher-id").val(voucherId);
-    $("#voucher-description").text(description);
-    $("#voucher-discount").text(discount);
-
-    $voucherBox.show();
-}
+// Allow backward button on Browser
+// window.addEventListener("popstate", function (event) {
+//     // Check if navigating away from checkout page
+//     if (!event.state || event.state.page !== "/cart/checkout") {
+//         this.window.location.href = "/cart/items";
+//     }
+// });
 
 $(document).ready(function () {
+    updateProvisionalPrice();
     // Load provinces data from JSON file
     $.getJSON("/data/provinces.json")
         .done(function (data) {
@@ -141,12 +138,6 @@ $(document).ready(function () {
     });
 });
 
-function getAppliedVoucherId() {
-    return (
-        $("#valid-voucher-box .voucher-details").attr("data-voucher-id") || null
-    );
-}
-
 function submitOrder() {
     // Get address values
     const address = {
@@ -204,6 +195,7 @@ function submitOrder() {
     });
     
 }
+
 function showAlertMessage() {
     // Toggle popup on click
     $(".alert-icon-container").on("click", function (e) {
@@ -218,6 +210,7 @@ function showAlertMessage() {
         }
     });
 }
+
 function innerCityShippingFee() { 
     $("#shipping-fee").text(
         new Intl.NumberFormat("vi-VN", {
@@ -331,7 +324,7 @@ function populateWards(to_district_id, selectedWard, data) {
                     }>${wards[to_ward_code].WardName}</option>`
                 );
             });
-            return true; // Exit loop once found
+            return true;
         }
         return false;
     });
@@ -394,24 +387,39 @@ function calculateShippingFee(district_id, ward_code) {
         },
     });
 }
+function updateProvisionalPrice() {
+    const voucherDiscount = $("#session-voucher-discount").val() || 0;
+    const voucherName = $("#session-voucher-name").val() || null;
+    console.log("Voucher discount in update price: ", voucherDiscount);
+    console.log("Voucher name in update price: ", voucherName);
 
+    const totalDiscountedPrice =
+        $("#total-discounted-price").val() || 0;
+    
+    const provisionalPrice = totalDiscountedPrice - voucherDiscount;
+
+    $("#provisional-price").text(
+        new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        }).format(provisionalPrice)
+    );
+
+    return provisionalPrice;
+
+}
 function updateTotal() {
-    // Get shipping fee from span element and convert to number
-    const shippingFeeText = $("#shipping-fee").text().replace(/[^\d]/g, "");
-    const shippingFee = parseInt(shippingFeeText) || 0;
+    const shippingFee =
+        parseInt($("#shipping-fee").text().replace(/[^\d]/g, "")) || 0;
+    const totalDiscountedPrice = updateProvisionalPrice();
 
-    // Get total discounted price from PHP
-    // const totalDiscountedPrice = parseFloat($("#total-discounted-price").val());
+    const finalTotal = totalDiscountedPrice + shippingFee;
 
-    // Calculate final total
-    // const finalTotal = totalDiscountedPrice + shippingFee;
-
-    // Update total display
     $(".total-amount").text(
         new Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
-        }).format(0)
+        }).format(finalTotal)
     );
 }
 

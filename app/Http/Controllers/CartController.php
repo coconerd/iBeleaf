@@ -8,9 +8,6 @@ use App\Models\CartItem;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\Voucher;
 use Illuminate\Support\Facades\Log;
 use DB;
 
@@ -35,7 +32,6 @@ class CartController extends Controller
 			$totalQuantity = $inStockItems->sum('quantity');
 			$totalPrice = $inStockItems->sum('original_price');
 			$totalDiscountAmount = $inStockItems->sum('discount_amount');
-
 			return [
 				'cartItems' => $cartItems,
 				'instockCartItems' => $inStockItems,
@@ -103,7 +99,21 @@ class CartController extends Controller
 				$user = Auth::user(); // Gets User model instance
 				if ($user instanceof User) {
 					$cartItems = $this->getCartItems($user);
-					return view('cart.items', $cartItems);
+
+					// Store voucher data in session if present
+					if ($request->has('voucher_id')) {
+						session([
+							'voucher_id' => $request->voucher_id
+						]);
+					}
+
+					 // Add voucher data to view data
+					$viewData = array_merge($cartItems, [
+						'voucher_id' => session('voucher_id'),
+						'voucher_value' => session('voucher_value')
+					]);
+
+					return view('cart.items', $viewData);
 				}
 			}
 		} catch (Exception $e) {
@@ -233,6 +243,13 @@ class CartController extends Controller
 			$cartId = $user->cart_id;
 			$items = $request->input('items');
 
+			// Store voucher information in session to use later in CheckOut page
+			session([
+				'voucher_id' => $request->input('voucher_id'),
+				'voucher_name' => $request->input('voucher_name'),
+				'voucher_discount' => $request->input('voucher_discount')
+			]);
+
 			// Validate input format
 			if (!is_array($items)) {
 				return response()->json([
@@ -274,6 +291,32 @@ class CartController extends Controller
 			return response()->json([
 				'success' => false,
 				'message' => 'Failed to update cart and cart items'
+			], 500);
+		}
+	}
+
+	public function showCheckout()
+	{
+		try {
+			if (Auth::check()) {
+				$user = Auth::user();
+				if ($user instanceof User) {
+					$cartItems = $this->getCartItems($user);
+					
+					// Add voucher data from session to view data
+					$viewData = array_merge($cartItems, [
+						'voucher_name' => session('voucher_name'),
+						'voucher_discount' => session('voucher_discount')
+					]);
+
+					return view('cart.checkout', $viewData);
+				}
+			}
+			return redirect()->route('login');
+		} catch (Exception $e) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Failed to load checkout page!'
 			], 500);
 		}
 	}

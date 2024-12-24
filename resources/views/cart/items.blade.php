@@ -13,6 +13,11 @@
 @endsection
 
 @section('content')
+    <!-- <div class="snowfall-container">
+        @for ($i = 1; $i <= 50; $i++)
+            <div class="snowflake" style="left: {{ rand(0, 100) }}%; animation-delay: {{ $i * 0.1 }}s">❅</div>
+        @endfor
+    </div> -->
     <div class="container mt-4">
     @if(isset($cartItems) && $cartItems->count() > 0)
         <div class="row">
@@ -145,7 +150,7 @@
                             <div id="voucher-amount"></div>
 
                             <div id="voucher-error" class="text-danger mb-2" style="display: none;"></div>
-                            <div class="voucher-box" style="display: none;" id="valid-voucher-box">
+                            <div class="voucher-box" style="display: none;" id="valid-voucher-box" data-voucher-type="">
                                 <div class="voucher-details" data-voucher-id="">
                                     <div class="voucher-icon">
                                         <i class="fa-regular fa-circle-check" style="color: #c78b5e;"></i>

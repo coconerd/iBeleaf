@@ -48,6 +48,7 @@ function validateVoucherName(name) {
             .replace(/[^0-9.-]+/g, "")
     );
     console.log("Sending cartTotal:", cartTotal);
+    
     $.ajax({
         url: "/voucher/validate",
         method: "POST",

@@ -1,39 +1,45 @@
-window.addEventListener("popstate", function (event) {
-    if (event.state && event.state.page === "/cart/items") {
-        // Collect cart items
-        const cartItems = [];
-        $(".each-cart-item").each(function () {
-            if (!$(this).hasClass("out-of-stock")) {
-                cartItems.push({
-                    product_id: $(this).data("product-id"),
-                    quantity: $(this).find(".quantity-input").val(),
-                });
-            }
-        });
-
-        // Send AJAX request
-        $.ajax({
-            url: `/cart/items-update`,
-            type: "POST",
-            data: {
-                items: cartItems,
-            },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    updateCartCount(response.items_counts);
-                    window.location.href = "/cart/checkout";
-                }
-            },
-            error: function (xhr) {
-                console.error("Error:", xhr.responseJSON);
-            },
-        });
-    }
-});
+// window.addEventListener("popstate", function (event) {
+//     if (event.state && event.state.page === "/cart/items") {
+//         // Collect cart items
+//         const cartItems = [];
+//         $(".each-cart-item").each(function () {
+//             if (!$(this).hasClass("out-of-stock")) {
+//                 cartItems.push({
+//                     product_id: $(this).data("product-id"),
+//                     quantity: $(this).find(".quantity-input").val(),
+//                 });
+//             }
+//         });
+//         const voucherId = $("#vali
+// d-voucher-box .voucher-details").attr(
+//             "data-voucher-id"
+//         );
+//         const totalPrice = $("#final-price").val();
+//         // Send AJAX request
+//         $.ajax({
+//             url: `/cart/items-update`,
+//             type: "POST",
+//             data: {
+//                 items: cartItems,
+//                 voucder_id: voucherId || null,
+//                 totalPrice
+//             },
+//             headers: {
+//                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+//             },
+//             dataType: "json",
+//             success: function (response) {
+//                 if (response.success) {
+//                     updateCartCount(response.items_counts);
+//                     window.location.href = "/cart/checkout";
+//                 }
+//             },
+//             error: function (xhr) {
+//                 console.error("Error:", xhr.responseJSON);
+//             },
+//         });
+//     }
+// });
 
 $(document).ready(function () {
     const $quantityWrappers = $(".quantity-wrapper");
@@ -208,7 +214,6 @@ $(document).ready(function () {
 
     //Checkout Button (Thanh toan) handling
     $("#checkout-btn").on("click", function () {
-        // Collect all cart items data
         const cartItems = [];
         $(".each-cart-item").each(function () {
             if (isInStock($(this))) {
@@ -219,12 +224,27 @@ $(document).ready(function () {
             }
         });
 
-        // Send AJAX request
+        let voucherName = null;
+        // Get voucher name if voucher box is visible
+        if ($("#valid-voucher-box").is(":visible")) {
+            voucherName = $("#voucher-input").val();
+        };
+        console.log("Voucher name: ", voucherName);
+
+        const voucherValue = $("#final-price").text()
+            ? parseInt($("#first-total-price").text().replace(/[^\d]/g, "")) -
+              parseInt($("#final-price").text().replace(/[^\d]/g, ""))
+            : 0;
+        console.log("Voucher value: ", voucherValue);
+        
+        // Proceed with checkout AJAX
         $.ajax({
             url: `/cart/items-update`,
             type: "POST",
             data: {
                 items: cartItems,
+                voucher_name: voucherName || null,
+                voucher_discount: voucherValue || 0,
             },
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -233,17 +253,21 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     updateCartCount(response.items_counts);
-                    history.pushState(
-                        { page: "/cart/items" },
-                        "",
-                        "/cart/checkout"
-                    );
-                    // Redirect to address submisstion page
+                    // history.pushState(
+                    //     { page: "/cart/items" },
+                    //     "",
+                    //     "/cart/checkout"
+                    // );
                     window.location.href = "/cart/checkout";
                 }
             },
-            error: function (xhr) {
-                console.error("Error:", xhr.responseJSON);
+            error: function (error) {
+                console.error("Error:", error);
+                Swal.fire({
+                    title: "Error",
+                    text: error.responseJSON?.message || "An error occurred",
+                    icon: "error",
+                });
             },
         });
     });
@@ -417,7 +441,6 @@ function calculateSubPrice($input) {
                 quantity: quantity,
                 original_price: subTotal,
                 discount_amount: discountAmount,
-                // final_price: subDiscountedTotal,
             },
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),

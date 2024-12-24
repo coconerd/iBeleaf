@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ValidateVoucherRequest;
+use Exception;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -72,7 +72,7 @@ class VoucherController extends Controller
             'voucher_type' => $voucher->voucher_type,
             'voucher_value' => $voucher->value,
             'voucher_description' => $voucher->description,
-            'cart_total' => $cartTotal
+            'cart_total' => $cartTotal,
         ]);
 	}
 }

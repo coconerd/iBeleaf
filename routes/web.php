@@ -227,6 +227,7 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 		->name('cart.items.update');
 	Route::post('/cart/update-price', [CartController::class, 'updatePrice'])
 		->name('cart.updatePrice');
+	Route::post('/cart/store-voucher', [CartController::class, 'storeVoucher'])->name('cart.store-voucher');
 });
 
 // Voucher routes

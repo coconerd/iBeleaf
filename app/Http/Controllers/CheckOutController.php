@@ -44,7 +44,8 @@ class CheckOutController extends Controller
             'totalDiscountedPrice' => $cartData['totalDiscountedPrice'],
             'user' => $user,
             'allItemsTypeOne' => $allItemsTypeOne,
-            // 'activeVoucher' =>
+            'voucher_id' => session('voucher_id', null),
+            'voucher_value' => session('voucher_value', 0)
         ]);
     }
 
