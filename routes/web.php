@@ -126,6 +126,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 			Route::get('/', [AdminClaimsController::class, 'showClaimsPage'])->name('index');
 			Route::get('/{requestId}/details', [AdminClaimsController::class, 'showDetails'])->name('details');
 			Route::post('/update-status', [AdminClaimsController::class, 'updateStatus'])->name('updateStatus');
+Route::get('/statistics', [AdminClaimsController::class, 'getStatistics'])->name('statistics');
 		});
 
 		// Admin products management routes
