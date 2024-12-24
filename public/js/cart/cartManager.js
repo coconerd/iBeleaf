@@ -317,11 +317,11 @@ function showMinQuantityAlert($input) {
 
     return Swal.fire({
         iconHtml:
-            '<i class="fa-solid fa-circle-exclamation" style="color: #1e4733;"></i>',
-        title: "<h4>Xóa sản phẩm từ giỏ hàng</h4>",
+            '<i class="fa-solid fa-circle-exclamation" style="color: #E03636;"></i>',
+        title: '<h4 style="color: #E03636">Xóa sản phẩm khỏi giỏ hàng</h4>',
         html: `
             <div style="color: #6c757d; font-size: 17px;">
-                Bạn có muốn xóa sản phẩm khỏi giỏ hàng không?
+                Bạn có chắc chắn muốn xóa sản phẩm khỏi giỏ hàng không?
             </div>
         `,
         customClass: {

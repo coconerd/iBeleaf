@@ -1,26 +1,58 @@
 .swal2-popup.custom-alert-popup {
-    padding: 20px 10px;
-    border-radius: 12px;
+    padding: 25px 15px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    animation: popup-scale 0.3s ease-out;
 }
 
 .swal2-icon {
-    font-size: 15px;
-    margin: 0 auto 2px;
+    font-size: 16px;
+    margin: 0 auto 12px;
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
 }
 
-.swal2-confirm.custom-confirm-btn {
-    background-color: #3b3b3b !important;
+.swal2-icon:hover {
+    transform: scale(1.15);
+}
+
+.swal2-confirm.custom-confirm-btn,
+.swal2-cancel.custom-cancel-btn {
+    width: 120px;
+    background-color: #E03636 !important;
     color: #ffffff !important;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 5px;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.swal2-confirm.custom-confirm-btn:hover {
+    background-color: #1a1a1a !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .swal2-cancel.custom-cancel-btn {
     background-color: #ffffff !important;
-    color: #3b3b3b !important;
-    border: 1px solid #c7c7c7 !important;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 5px;
+    color: #2d2d2d !important;
+    border: 1.5px solid #e0e0e0 !important;
+    box-shadow: none;
+}
+
+.swal2-cancel.custom-cancel-btn:hover {
+    background-color: #f5f5f5 !important;
+    border-color: #d0d0d0 !important;
+}
+
+@keyframes popup-scale {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
