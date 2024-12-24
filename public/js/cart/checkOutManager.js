@@ -3,7 +3,16 @@ let to_district_id = null;
 let to_ward_code = null;
 let to_province_id = null;
 
+// Allow backward button on Browser
+// window.addEventListener("popstate", function (event) {
+//     // Check if navigating away from checkout page
+//     if (!event.state || event.state.page !== "/cart/checkout") {
+//         this.window.location.href = "/cart/items";
+//     }
+// });
+
 $(document).ready(function () {
+    updateProvisionalPrice();
     // Load provinces data from JSON file
     $.getJSON("/data/provinces.json")
         .done(function (data) {
@@ -129,24 +138,6 @@ $(document).ready(function () {
     });
 });
 
-function applyVoucher(voucherId, description, discount) {
-    const $voucherBox = $("#valid-voucher-box");
-    const $voucherDetails = $voucherBox.find(".voucher-details");
-
-    $voucherDetails.attr("data-voucher-id", voucherId);
-    $("#voucher-id").val(voucherId);
-    $("#voucher-description").text(description);
-    $("#voucher-discount").text(discount);
-
-    $voucherBox.show();
-}
-
-function getAppliedVoucherId() {
-    return (
-        $("#valid-voucher-box .voucher-details").attr("data-voucher-id") || null
-    );
-}
-
 function submitOrder() {
     // Get address values
     const address = {
@@ -156,21 +147,29 @@ function submitOrder() {
         address: $("#address").val(),
     };
 
+    const voucherName = $("#session-voucher-name").val() || null;
+    const voucherValue = parseInt($("#session-voucher-discount").val()) || 0;
+    console.log("Test voucher value: ", voucherValue);
+
+    const shippingFee =
+        parseInt($("#shipping-fee").text().replace(/[^\d]/g, "")) || 0;
+    console.log("Test shipping fee: ", shippingFee);
+
+    const provisionalPrice =
+        parseInt($("#provisional-price").text().replace(/[^\d]/g, "")) || 0;
+        
+    console.log("Test provisional price: ", provisionalPrice);
+    
+    const realProvisionalPrice = provisionalPrice + voucherValue;
+    const totalPrice = realProvisionalPrice + shippingFee;
+    console.log("Test real provisional price: ", realProvisionalPrice);
+    console.log("Test total price: ", totalPrice);
+
     const orderData = {
-        voucher_id: getAppliedVoucherId(),
-        provisional_price: parseFloat(
-            $("#provisional-price")
-                .text()
-                .replace(/[^0-9.-]+/g, "")
-        ),
-        delivery_cost: parseFloat(
-            $("#shipping-fee")
-                .text()
-                .replace(/[^0-9.-]+/g, "")
-        ),
-        total_price: $(".total-amount")
-            .text()
-            .replace(/[.,₫\s]/g, ""),
+        voucher_name: voucherName,
+        real_provisional_price: realProvisionalPrice,
+        delivery_cost: shippingFee,
+        total_price: totalPrice,
         address: address,
         payment_method:
             $('input[name="payment-method"]:checked').val() || "COD",
@@ -180,7 +179,8 @@ function submitOrder() {
     console.log('Order info: ', {
         total_price: orderData.total_price,
         delivery_cost: orderData.delivery_cost,
-        provisional_price: orderData.provisional_price
+        provisional_price: orderData.real_provisional_price,
+        additional_note: orderData.additional_note,
     });
     
     $.ajax({
@@ -201,6 +201,7 @@ function submitOrder() {
     });
     
 }
+
 function showAlertMessage() {
     // Toggle popup on click
     $(".alert-icon-container").on("click", function (e) {
@@ -215,6 +216,7 @@ function showAlertMessage() {
         }
     });
 }
+
 function innerCityShippingFee() { 
     $("#shipping-fee").text(
         new Intl.NumberFormat("vi-VN", {
@@ -233,6 +235,7 @@ function initialLoadUserInfo(provinceData) {
             if (response.success) {
                 $("#name").val(response.fullname);
                 $("#phone").val(response.phone);
+                $("#address").val(response.address);
 
                 to_district_id = response.district_id;
                 to_ward_code = response.ward_code;
@@ -249,12 +252,12 @@ function initialLoadUserInfo(provinceData) {
                 populateProvinces(response.province, provinceData);
 
                 populateDistricts(
-                    findto_province_id(response.province),
+                    find_to_province_id(response.province),
                     response.district,
                     provinceData
                 );
                 populateWards(
-                    findto_district_id(response.province, response.district),
+                    find_to_district_id(response.province, response.district),
                     response.ward,
                     provinceData
                 );
@@ -267,20 +270,6 @@ function initialLoadUserInfo(provinceData) {
         },
     }).promise();
 }
-// function initializeCheckout() {
-//     const userInfoPromise = initialLoadUserInfo(provinceData);
-   
-//     const shippingFeePromise = calculateShippingFee(district_id, ward_code);
-//     Promise.all([userInfoPromise, shippingFeePromise])
-//         .then(() => {
-//             console.log(
-//                 "User info and initial shipping fee loaded successfully."
-//             );
-//         })
-//         .catch((error) => {
-//             console.error("Error initializing checkout:", error);
-//         });
-// }
 
 function populateProvinces(selectedProvince, data) {
     const $provinceSelect = $("#province");
@@ -341,21 +330,21 @@ function populateWards(to_district_id, selectedWard, data) {
                     }>${wards[to_ward_code].WardName}</option>`
                 );
             });
-            return true; // Exit loop once found
+            return true;
         }
         return false;
     });
 }
 
 // Helpers to find IDs by name
-function findto_province_id(provinceName) {
+function find_to_province_id(provinceName) {
     return Object.keys(provinceData).find(
         (id) => provinceData[id].ProvinceName.trim() === provinceName.trim()
     );
 }
 
-function findto_district_id(provinceName, districtName) {
-    const to_province_id = findto_province_id(provinceName);
+function find_to_district_id(provinceName, districtName) {
+    const to_province_id = find_to_province_id(provinceName);
     if (!to_province_id || !provinceData[to_province_id].Districts) return null;
 
     return Object.keys(provinceData[to_province_id].Districts).find(
@@ -404,19 +393,34 @@ function calculateShippingFee(district_id, ward_code) {
         },
     });
 }
+function updateProvisionalPrice() {
+    const voucherDiscount = $("#session-voucher-discount").val() || 0;
+    const voucherName = $("#session-voucher-name").val() || null;
+    console.log("Voucher discount in update price: ", voucherDiscount);
+    console.log("Voucher name in update price: ", voucherName);
 
+    const totalDiscountedPrice =
+        $("#total-discounted-price").val() || 0;
+    
+    const provisionalPrice = totalDiscountedPrice - voucherDiscount;
+
+    $("#provisional-price").text(
+        new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        }).format(provisionalPrice)
+    );
+
+    return provisionalPrice;
+
+}
 function updateTotal() {
-    // Get shipping fee from span element and convert to number
-    const shippingFeeText = $("#shipping-fee").text().replace(/[^\d]/g, "");
-    const shippingFee = parseInt(shippingFeeText) || 0;
+    const shippingFee =
+        parseInt($("#shipping-fee").text().replace(/[^\d]/g, "")) || 0;
+    const totalDiscountedPrice = updateProvisionalPrice();
 
-    // Get total discounted price from PHP
-    const totalDiscountedPrice = parseFloat($("#total-discounted-price").val());
-
-    // Calculate final total
     const finalTotal = totalDiscountedPrice + shippingFee;
 
-    // Update total display
     $(".total-amount").text(
         new Intl.NumberFormat("vi-VN", {
             style: "currency",
@@ -447,8 +451,10 @@ function validateCheckoutForm() {
         if (!value || value.includes("Lựa chọn")) {
             field.addClass("is-invalid");
             formValid = false;
+            $("#address-warning").show();
         } else {
             field.removeClass("is-invalid");
+            $("#address-warning").hide();
         }
     });
 

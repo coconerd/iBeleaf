@@ -13,6 +13,14 @@
 @endsection
 
 @section('content')
+    <div class="snowflakes" aria-hidden="true">
+        @for ($i = 1; $i <= 12; $i++)
+            <div class="snowflake" style="left: {{ rand(0, 100) }}%; animation-delay: {{ $i * 0.2 }}s">
+                <div class="inner">❅</div>
+            </div>
+        @endfor
+    </div>
+    
     <div class="container mt-4">
     @if(isset($cartItems) && $cartItems->count() > 0)
         <div class="row">
@@ -145,7 +153,7 @@
                             <div id="voucher-amount"></div>
 
                             <div id="voucher-error" class="text-danger mb-2" style="display: none;"></div>
-                            <div class="voucher-box" style="display: none;" id="valid-voucher-box">
+                            <div class="voucher-box" style="display: none;" id="valid-voucher-box" data-voucher-type="">
                                 <div class="voucher-details" data-voucher-id="">
                                     <div class="voucher-icon">
                                         <i class="fa-regular fa-circle-check" style="color: #c78b5e;"></i>
@@ -172,7 +180,7 @@
                         <button class="btn btn-primary w-100" id="checkout-btn">Thanh toán</button>
                         <div class="text-center mt-3">
                             <a id="shipping-href" class="text-center">
-                                <u>Tiếp tục mua hàng</u>
+                                <a href="/">Tiếp tục mua hàng</a>
                             </a>
                         </div>
                     </div>

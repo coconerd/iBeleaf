@@ -10,15 +10,15 @@ class UserSeeder extends Seeder
 	public function run()
 	{
 		// create a user admin
-		$user = User::where(['role_type' => 1])->first();
+		$hasAdminUser = User::where('role_type', 1)->exists();
 
-		if (!$user) {
+		if (!$hasAdminUser) {
 			User::create([
 				'full_name' => 'Nguyễn Văn Admin',
 				'email' => 'admin@example.com',
 				'user_name' => 'admin1',
 				'password' => bcrypt('password'),
-				'role_type' => '1',
+				'role_type' => 1,
 			]);
 		}
 	}

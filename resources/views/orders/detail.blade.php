@@ -94,6 +94,16 @@
                     @endforeach
                 </div>
             </div>
+
+            <!-- Delivery Address Card -->
+            <div class="card address-card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-geo-alt me-2"></i>Địa chỉ nhận hàng</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ $order->deliver_address }}</p>
+                </div>
+            </div>
         </div>
 
         <!-- Order Summary Card -->

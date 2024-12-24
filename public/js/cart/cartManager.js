@@ -1,3 +1,46 @@
+// window.addEventListener("popstate", function (event) {
+//     if (event.state && event.state.page === "/cart/items") {
+//         // Collect cart items
+//         const cartItems = [];
+//         $(".each-cart-item").each(function () {
+//             if (!$(this).hasClass("out-of-stock")) {
+//                 cartItems.push({
+//                     product_id: $(this).data("product-id"),
+//                     quantity: $(this).find(".quantity-input").val(),
+//                 });
+//             }
+//         });
+//         const voucherId = $("#vali
+// d-voucher-box .voucher-details").attr(
+//             "data-voucher-id"
+//         );
+//         const totalPrice = $("#final-price").val();
+//         // Send AJAX request
+//         $.ajax({
+//             url: `/cart/items-update`,
+//             type: "POST",
+//             data: {
+//                 items: cartItems,
+//                 voucder_id: voucherId || null,
+//                 totalPrice
+//             },
+//             headers: {
+//                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+//             },
+//             dataType: "json",
+//             success: function (response) {
+//                 if (response.success) {
+//                     updateCartCount(response.items_counts);
+//                     window.location.href = "/cart/checkout";
+//                 }
+//             },
+//             error: function (xhr) {
+//                 console.error("Error:", xhr.responseJSON);
+//             },
+//         });
+//     }
+// });
+
 $(document).ready(function () {
     const $quantityWrappers = $(".quantity-wrapper");
 
@@ -5,7 +48,7 @@ $(document).ready(function () {
         $minusBtn.prop("disabled", value < 1);
         $plusBtn.prop("disabled", value >= maxStock);
     }
-    
+
     // Quantity changes handling
     $quantityWrappers.each(function () {
         const $minusBtn = $(this).find(".minus");
@@ -170,52 +213,81 @@ $(document).ready(function () {
     });
 
     //Checkout Button (Thanh toan) handling
-    $('#checkout-btn').on('click', function () {
-        // Collect all cart items data
+    $("#checkout-btn").on("click", function () {
         const cartItems = [];
-        $('.each-cart-item').each(function() {
-            cartItems.push({
-                product_id: $(this).data('product-id'),
-                quantity: $(this).find('.quantity-input').val()
-            });
+        $(".each-cart-item").each(function () {
+            if (isInStock($(this))) {
+                cartItems.push({
+                    product_id: $(this).data("product-id"),
+                    quantity: $(this).find(".quantity-input").val(),
+                });
+            }
         });
 
-        // Send AJAX request
+        let voucherName = null;
+        // Get voucher name if voucher box is visible
+        if ($("#valid-voucher-box").is(":visible")) {
+            voucherName = $("#voucher-input").val();
+        };
+        console.log("Voucher name: ", voucherName);
+
+        const voucherValue = $("#final-price").text()
+            ? parseInt($("#first-total-price").text().replace(/[^\d]/g, "")) -
+              parseInt($("#final-price").text().replace(/[^\d]/g, ""))
+            : 0;
+        console.log("Voucher value: ", voucherValue);
+        
+        // Proceed with checkout AJAX
         $.ajax({
             url: `/cart/items-update`,
             type: "POST",
             data: {
-                items: cartItems
+                items: cartItems,
+                voucher_name: voucherName || null,
+                voucher_discount: voucherValue || 0,
             },
             headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                    "content"
-                ),
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    updateCartCount(response.items_counts)
-                    // Redirect to address submisstion page
+                    updateCartCount(response.items_counts);
+                    // history.pushState(
+                    //     { page: "/cart/items" },
+                    //     "",
+                    //     "/cart/checkout"
+                    // );
                     window.location.href = "/cart/checkout";
                 }
             },
-            error: function (xhr) {
-                console.error("Error:", xhr.responseJSON);
-            }
+            error: function (error) {
+                console.error("Error:", error);
+                Swal.fire({
+                    title: "Error",
+                    text: error.responseJSON?.message || "An error occurred",
+                    icon: "error",
+                });
+            },
         });
     });
 });
 
+function isInStock($item) {
+    return !$item.hasClass("out-of-stock");
+}
+
 function hanldeQuantityUpdate($input) {
+    const $cartItem = $input.closest(".each-cart-item");
+    if (!isInStock($cartItem)) return;
+
     updateCartCount();
     const $quantityInput = $input.is("input")
         ? $input
         : $input.siblings(".quantity-input");
-    calculatePrice($quantityInput);
+    calculateSubPrice($quantityInput);
     calculateCartTotal();
     updateDiscountAmount();
-    
 }
 function applyVoucher(voucherId, description, discount) {
     const $voucherBox = $("#valid-voucher-box");
@@ -279,20 +351,22 @@ function showMinQuantityAlert($input) {
                         "content"
                     ),
                 },
-                dataType: "json"
-            }).then((response) => {
-                console.log("Server response:", response);
-                if (response.success) {
-                    cartItem.remove();
-                    updateCartCount();
-                    calculateCartTotal();
-                }
-            }).catch((error) => {
-                console.error(
-                    "Server Error Details:",
-                    error.responseJSON || error
-                );
-            });
+                dataType: "json",
+            })
+                .then((response) => {
+                    console.log("Server response:", response);
+                    if (response.success) {
+                        cartItem.remove();
+                        updateCartCount();
+                        calculateCartTotal();
+                    }
+                })
+                .catch((error) => {
+                    console.error(
+                        "Server Error Details:",
+                        error.responseJSON || error
+                    );
+                });
         }
         return Promise.reject("User cancelled!");
     });
@@ -320,8 +394,10 @@ function preventInvalidChars(e) {
 
 function updateCartCount() {
     let totalQuantity = 0;
-    
-    $(".all-cart-items .each-cart-item:not(.out-of-stock) .quantity-input").each(function() {
+
+    $(
+        ".all-cart-items .each-cart-item:not(.out-of-stock) .quantity-input"
+    ).each(function () {
         totalQuantity += parseInt($(this).val() || 0);
     });
     console.log("Total In-Stock Quantity:", totalQuantity);
@@ -331,10 +407,14 @@ function updateCartCount() {
     $("#cart-count").text(totalQuantity);
 }
 
-function calculatePrice($input) {
+function calculateSubPrice($input) {
     try {
         const $item = $input.closest(".cart-control");
+        if (!isInStock($item)) {
+            return; // Skip processing for out-of-stock items
+        }
         const $price = $item.find(".price.total-uprice");
+        const productId = $item.data("product-id");
 
         const unitPrice = parseInt($price.data("unit-price"));
         const discountPercent = parseInt($price.data("discount-percent"));
@@ -349,15 +429,30 @@ function calculatePrice($input) {
 
         const subTotal = unitPrice * quantity;
         const subDiscountedTotal = subTotal * (1 - discountPercent / 100);
+        const discountAmount = subTotal - subDiscountedTotal;
 
         $price.text(formatPrice(subDiscountedTotal));
+
+        $.ajax({
+            url: "/cart/update-price",
+            method: "POST",
+            data: {
+                product_id: productId,
+                quantity: quantity,
+                original_price: subTotal,
+                discount_amount: discountAmount,
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
     } catch (error) {
         console.error("Price calculation error:", error);
     }
 }
 
 function updateDiscountAmount() {
-    const $input = $('.quantity-input');
+    const $input = $(".quantity-input");
     const $summary = $(".card-body");
     const $discount = $summary.find("#total-discount-amount");
     const quantity = $input.val();
@@ -365,8 +460,11 @@ function updateDiscountAmount() {
     console.log("Summary element:", $summary);
     console.log("Discount element:", $discount);
     console.log("Quantity:", quantity);
-    
-    const unitPrice = $input.closest(".cart-control").find(".total-uprice").data("unit-price");
+
+    const unitPrice = $input
+        .closest(".cart-control")
+        .find(".total-uprice")
+        .data("unit-price");
 
     const discountPercent = parseInt(
         $input
@@ -386,16 +484,18 @@ function calculateCartTotal() {
     let total = 0;
 
     $(".each-cart-item").each(function () {
-        const quantity = parseInt($(this).find(".quantity-input").val());
-        const price = parseFloat($(this).find(".price").data("price"));
-        const discount = parseFloat($(this).find(".price").data("discount"));
+        if (isInStock($(this))) {
+            const quantity = parseInt($(this).find(".quantity-input").val());
+            const price = parseFloat($(this).find(".price").data("price"));
+            const discount = parseFloat($(this).find(".price").data("discount"));
 
-        const discountedPrice = price * (1 - discount / 100);
-        const subTotal = discountedPrice * quantity;
+            const discountedPrice = price * (1 - discount / 100);
+            const subTotal = discountedPrice * quantity;
 
-        total += subTotal;
+            total += subTotal;
+        }
     });
-    // console.log('Final total Price: ', total);
+
     $("#first-total-price").text(formatPrice(total) + " VND");
     $("#final-price").text(formatPrice(total) + " VND");
 }

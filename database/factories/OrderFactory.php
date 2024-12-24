@@ -5,6 +5,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Models\OrderItem;
+use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -13,12 +14,13 @@ class OrderFactory extends Factory
 
 	public function definition()
 	{
+		$faker = Faker::create('vi_VN');
 		$createdAt = $this->faker->dateTimeBetween('-2 week', 'now');
 
 		return [
 			'created_at' => $createdAt,
 			'user_id' => fn() => User::query()->exists()
-				? User::query()->inRandomOrder()->first()->user_id
+				? User::query()->where('role_type', 0)->inRandomOrder()->first()->user_id
 				: User::factory()->create()->user_id,
 			'voucher_id' => fn() => $this->faker->boolean(25)
 				? Voucher::query()->inRandomOrder()->first()->voucher_id
@@ -44,7 +46,8 @@ class OrderFactory extends Factory
 			'is_paid' => fn(array $attributes) => in_array($attributes['status'], ['delivering', 'delivered'])
 				? true
 				: $this->faker->boolean(35),
-			'additional_note' => fn() => $this->faker->optional()->sentence()
+			'additional_note' => fn() => $this->faker->optional()->sentence(),
+			'deliver_address' => $this->faker->address(),
 		];
 	}
 
@@ -110,8 +113,3 @@ class OrderFactory extends Factory
 		});
 	}
 }
-
-// Usage example:
-// Order::factory()->count(10)->create(); // Create 10 random orders
-// Order::factory()->pending()->create(); // Create pending order
-// Order::factory()->delivered()->create(); // Create delivered order

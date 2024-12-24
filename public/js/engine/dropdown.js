@@ -46,7 +46,8 @@ list_id = {
           "Cây Thủy Sinh",
           "Cây Phong Thủy"
         ],
-        "image": "https://mowgarden.com/wp-content/uploads/2021/07/danh-muc-canh-trong-trong-nha.jpg"
+        "image": "https://mowgarden.com/wp-content/uploads/2021/07/danh-muc-canh-trong-trong-nha.jpg",
+        "url": "cay-trong-nha"
     },
     "#outdoorPlantsDropdown": {
         "Theo kiểu dáng": [
@@ -71,7 +72,8 @@ list_id = {
         //   "Cây Phủ Nền",
         //   "Cỏ Nền"
         ],
-        "image": "https://mowgarden.com/wp-content/uploads/2021/07/danh-muc-cay-ngoai-troi.jpg"
+        "image": "https://mowgarden.com/wp-content/uploads/2021/07/danh-muc-cay-ngoai-troi.jpg",
+        "url": "cay-ngoai-troi"
     },
     "#potDropdown": {
         "Theo kiểu dáng": [
@@ -95,7 +97,8 @@ list_id = {
           "Chậu Cỡ Lớn",
           "Chậu Cao"
         ],
-        "image": window.location.origin + "/images/main/product-introduce/background-pot.png"
+        "image": window.location.origin + "/images/main/product-introduce/background-pot.png",
+        "url": "chau-cay"
     }
 }
 
@@ -104,6 +107,9 @@ function addDropBar() {
     for(let id in list_id) {
         var dropBar_html = "";
         for(let title in list_id[id]) {
+            if(title == "url")
+              continue;
+            
             if(title == "image") {
               dropBar_html += `<div class="dropdown-content dropdown-content-img">`;
               dropBar_html += `   <img src="${list_id[id][title]}" alt="">`;
@@ -124,13 +130,20 @@ function addDropBar() {
         
 
         list_html[id] = dropBar_html;
-        $(id).on("click", ()=>{
+        $(id).on("click", function() {
             // searchEngine.js
             turnOffSearchBar();
-            $(".dropdown-bar").html(list_html[id]);
-            removeClassSelect();
-            $(id).addClass("selected-nav-link");
-            showDropDown();
+            
+            if($(this).hasClass("selected-nav-link")) {
+              window.location.replace(window.location.origin + "/" + list_id[id]["url"]);
+            }
+            else {
+              $(".dropdown-bar").html(list_html[id]);
+              removeClassSelect();
+              $(id).addClass("selected-nav-link");
+              showDropDown();
+            }
+            
         });
     }
 }
@@ -145,7 +158,7 @@ $(".dropdown-bar-close").on("click", ()=>{
 
 // init navbar
 hideDropDown();
-console.log("done");
+// console.log("done");
 
 function showDropDown() {
   $(".dropdown-bar").show();

@@ -1,4 +1,27 @@
 document.addEventListener('DOMContentLoaded', function () {
+	// Initialize charts
+	updateCharts('week');
+
+	// Initialize default filter period btn
+	document.querySelector('[data-period="week"]').classList.add('active', 'btn-secondary');
+
+	// Handle period button clicks
+	document.querySelectorAll('[data-period]').forEach(button => {
+		button.addEventListener('click', function () {
+			const period = this.dataset.period;
+			updateCharts(period);
+
+			// Update active button state
+			document.querySelectorAll('[data-period]').forEach(btn => {
+				btn.classList.remove('active', 'btn-secondary');
+				btn.classList.add('btn-outline-secondary');
+			});
+			this.classList.remove('btn-outline-secondary');
+			this.classList.add('active', 'btn-secondary');
+		});
+	});
+
+
 	// Handle view details button click
 	document.querySelectorAll('.view-details-btn').forEach(function (button) {
 		button.addEventListener('click', function () {
@@ -10,8 +33,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Handle accept button click
 	document.querySelector('.accept-btn').addEventListener('click', function () {
 		const requestId = this.dataset.requestId;
-
-		updateRequestStatus(requestId, 'accepted');
+		confirmAcceptRequest(requestId, () => {
+			$('.accept-btn').prop('disabled', true);
+			$('.reject-btn').prop('disabled', true);
+			updateRequestStatus(requestId, 'accepted', () => {
+				$('.accept-btn').prop('disabled', false);
+				$('.reject-btn').prop('disabled', false);
+			});
+		});
 	});
 
 	// Handle reject button click
@@ -26,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.log('clicked');
 			event.stopPropagation();
 			const orderId = this.dataset.orderId;
-			loadOrderDetailsPopup(orderId, event);
+			loadOrderDetailsModal(orderId, event);
 		})
 	})
 
@@ -64,33 +93,37 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	});
 
-	document.querySelector('.quick-accept-btn').addEventListener('click', function () {
-		const requestId = this.dataset.requestId;
-		Swal.fire({
-			title: 'Xác nhận phê duyệt yêu cầu đổi trả hàng?',
-			text: "Phiếu đổi trả sẽ được chuyển sang trạng thái đã đồng ý và khách hàng sẽ được thông báo qua email.",
-			icon: 'question',
-			showCancelButton: true,
-			confirmButtonColor: '#435E53',
-			cancelButtonColor: '#6c757d',
-			confirmButtonText: 'Xác nhận',
-			cancelButtonText: 'Hủy',
-			customClass: {
-				popup: 'status-confirm-popup'
-			}
-		}).then((result) => {
-			if (result.isConfirmed) {
+	const quickAcceptBtn = document.querySelector('.quick-accept-btn');
+	if (quickAcceptBtn) {
+		quickAcceptBtn.addEventListener('click', function () {
+			const requestId = this.dataset.requestId;
+			confirmAcceptRequest(requestId, () => {
 				updateRequestStatus(requestId, 'accepted');
-			}
+			});
 		});
-	});
+	}
 
 	// Status options for editable cells
-	const statusOptions = {
-		'pending': 'Đang chờ xử lý',
-		'accepted': 'Đã chấp nhận',
-		'rejected': 'Đã từ chối',
-		'received': 'Đã nhận hàng'
+	const statusOptionLevels = {
+		1: {
+			'pending': 'Đang chờ xử lý',
+			'accepted': 'Đã chấp nhận',
+			'rejected': 'Đã từ chối',
+		},
+		2: {
+			'pending': 'Đang chờ xử lý',
+			'accepted': 'Đã chấp nhận',
+			'rejected': 'Đã từ chối',
+			'received': 'Đã nhận hàng'
+		},
+		3: {
+			'pending': 'Đang chờ xử lý',
+			'accepted': 'Đã chấp nhận',
+			'rejected': 'Đã từ chối',
+			'received': 'Đã nhận hàng từ khách',
+			'refunded': 'Đã hoàn tiền',
+			'renewed': 'Đã trả hàng',
+		}
 	};
 
 	// Handle editable cell clicks
@@ -105,11 +138,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			popup.className = 'edit-popup';
 
 			let popupContent = '<div class="edit-popup-content">';
-			Object.entries(statusOptions).forEach(([value, label]) => {
-				popupContent += `<div class="edit-option" data-value="${value}">${label}</div>`;
-			});
-			popupContent += '</div>';
-			popup.innerHTML = popupContent;
+			const statusLevel = this.dataset.statusLevel;
+
+			if (field == 'status') {
+				Object.entries(statusOptionLevels[statusLevel])
+					.forEach(([value, label]) => {
+						if (value == this.dataset.status) {
+							return;
+						}
+						popupContent += `<div class="edit-option" data-field=${field} data-value="${value}">${label}</div> `;
+					});
+				popupContent += '</div>';
+				popup.innerHTML = popupContent;
+			}
 
 			// Position the popup
 			const rect = this.getBoundingClientRect();
@@ -122,9 +163,20 @@ document.addEventListener('DOMContentLoaded', function () {
 			// Handle option selection
 			popup.querySelectorAll('.edit-option').forEach(option => {
 				option.addEventListener('click', function () {
-					const newValue = this.dataset.value;
-					updateRequestStatus(requestId, newValue);
-					popup.remove();
+					switch (this.dataset.field) {
+						case 'status':
+							const newValue = this.dataset.value;
+							if (newValue == 'accepted') {
+								confirmAcceptRequest(requestId, () => {
+									updateRequestStatus(requestId, newValue);
+								});
+							} else if (newValue == 'rejected') {
+								rejectRequest(requestId);
+							}
+							break;
+						default:
+							break;
+					}
 				});
 			});
 
@@ -137,13 +189,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 		});
 	});
+});
 
-	function loadRequestDetails(requestId) {
-		const modal = new bootstrap.Modal(document.getElementById('requestDetailsModal'));
-		const modalContent = document.getElementById('request-details-content');
+function loadRequestDetails(requestId) {
+	const modal = new bootstrap.Modal(document.getElementById('requestDetailsModal'));
+	const modalContent = document.getElementById('request-details-content');
 
-		// Show loading indicator
-		modalContent.innerHTML = `
+	// Show loading indicator
+	modalContent.innerHTML = `
             <div class="text-center">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Đang tải...</span>
@@ -151,38 +204,41 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         `;
 
-		// Show the modal
-		modal.show();
+	// Show the modal
+	modal.show();
 
-		// Fetch request details via AJAX
-		fetch(`/admin/claims/${requestId}/details`, {
-			headers: {
-				'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-			}
-		})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					// Render request details
-					const request = data.request;
-					const reasonMap = {
-						'wrong_item': 'Giao sai sản phẩm',
-						'damaged': 'Sản phẩm bị hư hỏng',
-						'not_as_described': 'Sản phẩm không như mô tả',
-						'quality_issue': 'Vấn đề chất lượng',
-						'change_mind': 'Đổi ý',
-						'other': 'Lý do khác'
-					};
+	// Fetch request details via AJAX
+	fetch(`/admin/claims/${requestId}/details`, {
+		headers: {
+			'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+		}
+	})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				// Render request details
+				const request = data.request;
+				const reasonMap = {
+					'wrong_item': 'Giao sai sản phẩm',
+					'damaged': 'Sản phẩm bị hư hỏng',
+					'not_as_described': 'Sản phẩm không như mô tả',
+					'quality_issue': 'Vấn đề chất lượng',
+					'change_mind': 'Đổi ý',
+					'other': 'Lý do khác'
+				};
 
-					let detailsHtml = `
+				let detailsHtml = `
                     <div class="request-details">
                         <div class="request-header mb-4">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Mã yêu cầu #${request.return_refund_id}</h5>
+                                <div>
+                                    <h5 class="mb-0">Mã yêu cầu #${request.return_refund_id}</h5>
+                                    <small class="text-muted">Mã đơn: <span class="order-id text-decoration-underline" role="button" data-order-id="${request.order_item.order_id}">#${request.order_item.order_id}</span></small>
+                                </div>
                                 <span class="badge badge-${request.status}">
                                     ${request.status === 'pending' ? 'Đang xử lý' :
-							request.status === 'accepted' ? 'Đã chấp nhận' :
-								request.status === 'rejected' ? 'Đã từ chối' : 'Đã nhận hàng'}
+						request.status === 'accepted' ? 'Đã chấp nhận' :
+							request.status === 'rejected' ? 'Đã từ chối' : 'Đã nhận hàng'}
                                 </span>
                             </div>
                             <small class="text-muted">${new Date(request.created_at).toLocaleString()}</small>
@@ -208,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <h6 class="mb-1">${request.order_item.product.short_description}</h6>
                                     </a>
                                     <p class="mb-0 text-muted">Số lượng yêu cầu đổi/trả: ${request.quantity}</p>
+                                    <p class="mb-0 text-muted">${request.quantity} x ${request.order_item.total_price / request.quantity} = ${request.order_item.total_price}₫</p>
                                 </div>
                             </div>
                         </div>
@@ -228,57 +285,82 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="image-gallery">
                 `;
 
-					request.refund_return_images.forEach(image => {
-						detailsHtml += `
+				request.refund_return_images.forEach(image => {
+					detailsHtml += `
                         <div class="image-item">
 							<img src="data:image/jpeg;base64,${image.refund_return_image}" alt="Ảnh đính kèm" class="refund-image" alt="Refund Image">
                         </div>
                     `;
-					});
+				});
 
-					detailsHtml += `
+				detailsHtml += `
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
 
-					// Set modal content
-					modalContent.innerHTML = detailsHtml;
+				// Set modal content
+				modalContent.innerHTML = detailsHtml;
 
-					// Update accept and reject buttons' data-request-id
-					document.querySelector('.accept-btn').dataset.requestId = request.return_refund_id;
-					document.querySelector('.reject-btn').dataset.requestId = request.return_refund_id;
+				// Update accept and reject buttons' data-request-id
+				document.querySelector('.accept-btn').dataset.requestId = request.return_refund_id;
+				document.querySelector('.reject-btn').dataset.requestId = request.return_refund_id;
 
-					// Add image preview functionality
-					document.querySelectorAll('.refund-image').forEach(img => {
-						img.addEventListener('click', function () {
-							Swal.fire({
-								imageUrl: this.src,
-								imageAlt: 'Request Image',
-								showConfirmButton: false,
-								width: 'auto'
-							});
+				// Add image preview functionality
+				document.querySelectorAll('.refund-image').forEach(img => {
+					img.addEventListener('click', function () {
+						Swal.fire({
+							imageUrl: this.src,
+							imageAlt: 'Request Image',
+							showConfirmButton: false,
+							width: 'auto'
 						});
 					});
+					// Add click handler for the order ID in the request details modal
+					modalContent.addEventListener('click', async function (e) {
+						if (e.target.classList.contains('order-id')) {
+							const orderId = e.target.dataset.orderId;
+							const requestDetailsModal = bootstrap.Modal.getInstance(document.getElementById('requestDetailsModal'));
 
-				} else {
-					modalContent.innerHTML = `<p class="text-danger">Lỗi: ${data.message}</p>`;
-				}
-			})
-			.catch(error => {
-				console.error('Error:', error);
-				modalContent.innerHTML = `<p class="text-danger">Đã xảy ra lỗi khi tải chi tiết yêu cầu.</p>`;
-			});
-	}
+							// Hide modal and wait for animation
+							requestDetailsModal.hide();
+							await new Promise(resolve => setTimeout(resolve, 200));
 
-	function loadOrderDetailsPopup(orderId, event) {
-		event.stopPropagation();
-		const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
-		const modalContent = document.getElementById('order-details-content');
+							// Remove modal backdrop manually if it exists
+							const backdrop = document.querySelector('.modal-backdrop');
+							if (backdrop) {
+								backdrop.remove();
+							}
 
-		// Show loading indicator
-		modalContent.innerHTML = `
+							// Reset body classes
+							document.body.classList.remove('modal-open');
+							document.body.style.overflow = '';
+							document.body.style.paddingRight = '';
+
+							// Load order details modal
+							loadOrderDetailsModal(orderId, e);
+						}
+					});
+				});
+
+			} else {
+				modalContent.innerHTML = `<p class="text-danger">Lỗi: ${data.message}</p>`;
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+			modalContent.innerHTML = `<p class="text-danger">Đã xảy ra lỗi khi tải chi tiết yêu cầu.</p>`;
+		});
+}
+
+function loadOrderDetailsModal(orderId, event) {
+	event.stopPropagation();
+	const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+	const modalContent = document.getElementById('order-details-content');
+
+	// Show loading indicator
+	modalContent.innerHTML = `
 				<div class="text-center">
 					<div class="spinner-border text-primary" role="status">
 						<span class="visually-hidden">Đang tải...</span>
@@ -286,22 +368,22 @@ document.addEventListener('DOMContentLoaded', function () {
 				</div>
 			`;
 
-		// Show the modal
-		modal.show();
+	// Show the modal
+	modal.show();
 
-		// Fetch order details via AJAX
-		fetch(`/admin/orders/${orderId}/details`, {
-			headers: {
-				'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-			}
-		})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					// Render order details
-					const order = data.order;
+	// Fetch order details via AJAX
+	fetch(`/admin/orders/${orderId}/details`, {
+		headers: {
+			'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+		}
+	})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				// Render order details
+				const order = data.order;
 
-					let orderDetailsHtml = `
+				let orderDetailsHtml = `
 						<p><strong>Mã đơn hàng:</strong> #${order.order_id}</p>
 						<p><strong>Khách hàng:</strong> ${order.user.full_name}</p>
 						<p><strong>Ngày đặt hàng:</strong> ${new Date(order.created_at).toLocaleString()}</p>
@@ -309,47 +391,47 @@ document.addEventListener('DOMContentLoaded', function () {
 						<p><strong>Phí vận chuyển:</strong> ${Number(order.deliver_cost).toLocaleString()} ₫</p>
 					`;
 
-					// Check for voucher
-					if (order.voucher) {
-						orderDetailsHtml += `
+				// Check for voucher
+				if (order.voucher) {
+					orderDetailsHtml += `
 							<p><strong>Mã giảm giá:</strong> ${order.voucher.voucher_name || 'Không có'}&nbsp; - &nbsp;${order.voucher.description || ''}</p>
 						`;
-					} else {
-						orderDetailsHtml += `<p><strong>Mã giảm giá:</strong> Không có</p>`;
-					}
+				} else {
+					orderDetailsHtml += `<p><strong>Mã giảm giá:</strong> Không có</p>`;
+				}
 
-					orderDetailsHtml += `
+				orderDetailsHtml += `
 						<p><strong>Ghi chú:</strong> ${order.additional_note || 'Không có'}</p>
 						<hr style="opacity: 0.1; color: grey;">
 						<h5>Sản phẩm:</h5>
 						<div class="order-items">
 					`;
 
-					order.order_items.forEach(item => {
-						const product = item.product;
-						const imageUrl = product.product_images.length > 0 ? product.product_images[0].product_image_url : '/images/placeholder-plant.jpg';
-						const originalPrice = Number(product.price).toLocaleString();
-						const discountedAmount = Number(item.discounted_amount || 0);
-						let itemPriceHtml = '';
+				order.order_items.forEach(item => {
+					const product = item.product;
+					const imageUrl = product.product_images.length > 0 ? product.product_images[0].product_image_url : '/images/placeholder-plant.jpg';
+					const originalPrice = Number(product.price).toLocaleString();
+					const discountedAmount = Number(item.discounted_amount || 0);
+					let itemPriceHtml = '';
 
-						if (discountedAmount > 0) {
-							const discountedPrice = (product.price - discountedAmount).toLocaleString();
-							itemPriceHtml = `
+					if (discountedAmount > 0) {
+						const discountedPrice = (product.price - discountedAmount).toLocaleString();
+						itemPriceHtml = `
 								<p class="product-quantity-price mb-0">
 									Số lượng: ${item.quantity} x 
 									<span class="text-decoration-line-through text-muted">${originalPrice} ₫</span> 
 									<span class="text-danger">${discountedPrice} ₫</span>
 								</p>
 							`;
-						} else {
-							itemPriceHtml = `
+					} else {
+						itemPriceHtml = `
 								<p class="product-quantity-price mb-0">
 									Số lượng: ${item.quantity} x ${originalPrice} ₫
 								</p>
 							`;
-						}
+					}
 
-						orderDetailsHtml += `
+					orderDetailsHtml += `
 							<div class="order-item d-flex align-items-center mb-3">
 								<img src="${imageUrl}" alt="${product.name}" class="product-image me-3">
 								<div>
@@ -358,144 +440,251 @@ document.addEventListener('DOMContentLoaded', function () {
 								</div>
 							</div>
 						`;
-					});
+				});
 
-					orderDetailsHtml += `</div>`;
+				orderDetailsHtml += `</div>`;
 
-					modalContent.innerHTML = orderDetailsHtml;
-				} else {
-					modalContent.innerHTML = `<p class="text-danger">Lỗi: ${data.message}</p>`;
-				}
-			})
-			.catch(error => {
-				console.error('Error:', error);
-				modalContent.innerHTML = `<p class="text-danger">Đã xảy ra lỗi khi tải chi tiết đơn hàng.</p>`;
-			});
-	}
-
-
-	// Replace simple alerts with SweetAlert2
-	function showAlert(type, message) {
-		const Toast = Swal.mixin({
-			toast: true,
-			position: 'top-end',
-			showConfirmButton: false,
-			timer: 3000,
-			timerProgressBar: true
-		});
-
-		Toast.fire({
-			icon: type,
-			title: message
-		});
-	}
-
-	function updateRequestStatus(requestId, status) {
-		// Send AJAX request to update status
-		fetch('/admin/claims/update-status', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-			},
-			body: JSON.stringify({
-				request_id: requestId,
-				status: status
-			})
+				modalContent.innerHTML = orderDetailsHtml;
+			} else {
+				modalContent.innerHTML = `<p class="text-danger">Lỗi: ${data.message}</p>`;
+			}
 		})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					showAlert('success', 'Cập nhật trạng thái thành công.');
-					setTimeout(() => window.location.reload(), 1500);
-				} else {
-					showAlert('error', 'Có lỗi xảy ra khi cập nhật trạng thái.');
-				}
-			})
-			.catch(error => {
-				console.error('Error:', error);
+		.catch(error => {
+			console.error('Error:', error);
+			modalContent.innerHTML = `<p class="text-danger">Đã xảy ra lỗi khi tải chi tiết đơn hàng.</p>`;
+		});
+}
+
+
+// Replace simple alerts with SweetAlert2
+function showAlert(type, message) {
+	const Toast = Swal.mixin({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: 3000,
+		timerProgressBar: true
+	});
+
+	Toast.fire({
+		icon: type,
+		title: message
+	});
+}
+
+function updateRequestStatus(requestId, status, callbackFn) {
+	// Send AJAX request to update status
+	console.log('Updating status to:', status);
+	fetch('/admin/claims/update-status', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+		},
+		body: JSON.stringify({
+			request_id: requestId,
+			status: status
+		})
+	})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				showAlert('success', 'Cập nhật trạng thái thành công.');
+				setTimeout(() => window.location.reload(), 3000);
+			} else {
 				showAlert('error', 'Có lỗi xảy ra khi cập nhật trạng thái.');
-			});
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+			showAlert('error', 'Có lỗi xảy ra khi cập nhật trạng thái.');
+		}).then(callbackFn);
+}
+
+// Create snowflakes
+(function createSnowflakes() {
+	const snowflakesCount = 30;
+	const symbols = ['❄', '❅', '❆'];
+	const container = document.querySelector('.content-wrapper');
+
+	for (let i = 0; i < snowflakesCount; i++) {
+		const snowflake = document.createElement('div');
+		snowflake.className = 'snowflake';
+		snowflake.style.left = `${Math.random() * 100}%`;
+		snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+		snowflake.style.opacity = Math.random();
+		snowflake.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+		container.appendChild(snowflake);
 	}
+})();
 
-	// Create snowflakes
-	(function createSnowflakes() {
-		const snowflakesCount = 30;
-		const symbols = ['❄', '❅', '❆'];
-		const container = document.querySelector('.content-wrapper');
-
-		for (let i = 0; i < snowflakesCount; i++) {
-			const snowflake = document.createElement('div');
-			snowflake.className = 'snowflake';
-			snowflake.style.left = `${Math.random() * 100}%`;
-			snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
-			snowflake.style.opacity = Math.random();
-			snowflake.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-			container.appendChild(snowflake);
+function confirmAcceptRequest(requestId, onConfirm, onAbort) {
+	Swal.fire({
+		title: 'Xác nhận phê duyệt yêu cầu đổi trả hàng?',
+		text: "Phiếu đổi trả sẽ được chuyển sang trạng thái đã đồng ý và khách hàng sẽ được thông báo qua email.",
+		icon: 'question',
+		showCancelButton: true,
+		confirmButtonColor: '#435E53',
+		cancelButtonColor: '#6c757d',
+		confirmButtonText: 'Xác nhận',
+		cancelButtonText: 'Hủy',
+		customClass: {
+			popup: 'status-confirm-popup'
 		}
-	})();
+	}).then((result) => {
+		if (result.isConfirmed) {
+			onConfirm(requestId);
+		} else {
+			onAbort(requestId);
+		}
+	});
+}
 
-	function rejectRequest(requestId) {
-		// Close the details modal first
-		const detailsModal = bootstrap.Modal.getInstance(document.getElementById('requestDetailsModal'));
-		detailsModal.hide();
+function rejectRequest(requestId, callbackFn) {
+	// Close the details modal first
+	const detailsModal = bootstrap.Modal.getInstance(document.getElementById('requestDetailsModal'));
+	detailsModal.hide();
 
-		// Wait for modal to finish closing animation
-		setTimeout(() => {
-			Swal.fire({
-				title: 'Từ chối yêu cầu đổi/trả hàng',
-				input: 'textarea',
-				inputLabel: 'Thông báo kèm lý do từ chối yêu cầu sẽ được gửi đến khách hàng qua email',
-				inputPlaceholder: 'Nhập lý do từ chối...',
-				showCancelButton: true,
-				confirmButtonColor: '#435E53',
-				cancelButtonColor: '#6c757d',
-				confirmButtonText: 'Xác nhận',
-				cancelButtonText: 'Hủy',
-				allowOutsideClick: false,
-				allowEscapeKey: true,
-				inputAttributes: {
-					autocomplete: 'off'
+	// Wait for modal to finish closing animation
+	setTimeout(() => {
+		Swal.fire({
+			title: 'Từ chối yêu cầu đổi/trả hàng',
+			input: 'textarea',
+			inputLabel: 'Thông báo kèm lý do từ chối yêu cầu sẽ được gửi đến khách hàng qua email',
+			inputPlaceholder: 'Nhập lý do từ chối...',
+			showCancelButton: true,
+			confirmButtonColor: '#435E53',
+			cancelButtonColor: '#6c757d',
+			confirmButtonText: 'Xác nhận',
+			cancelButtonText: 'Hủy',
+			allowOutsideClick: false,
+			allowEscapeKey: true,
+			inputAttributes: {
+				autocomplete: 'off'
+			},
+			didOpen: () => {
+				const textarea = Swal.getInput();
+				textarea.focus();
+			},
+			inputValidator: (value) => {
+				if (!value) {
+					return 'Vui lòng nhập lý do từ chối!';
+				}
+			}
+		}).then((result) => {
+			if (result.isConfirmed) {
+				// Send AJAX request to update status and save reject reason
+				fetch('/admin/claims/update-status', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+					},
+					body: JSON.stringify({
+						request_id: requestId,
+						status: 'rejected',
+						reject_reason: result.value
+					})
+				})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							showAlert('success', 'Đã từ chối yêu cầu.');
+							setTimeout(() => window.location.reload(), 1500);
+						} else {
+							showAlert('error', 'Có lỗi xảy ra khi từ chối yêu cầu.');
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+						showAlert('error', 'Có lỗi xảy ra khi từ chối yêu cầu.');
+					}).then(callbackFn);
+			}
+		});
+	}, 200); // Wait for modal close animation
+}
+
+function updateCharts(period) {
+	console.log('updated charts called');
+	fetch(`/admin/claims/statistics?period=${period}`)
+		.then(response => response.json())
+		.then(data => {
+			console.log('Statistics data:', data);
+			updateStatusChart(data.statusStats);
+			updateProductsChart(data.productStats);
+		})
+		.catch(error => console.error('Error fetching statistics:', error));
+}
+
+function updateStatusChart(data) {
+	const ctx = document.getElementById('statusChart').getContext('2d');
+	if (window.statusChart && typeof window.statusChart.destroy === 'function')
+		window.statusChart.destroy();
+
+	window.statusChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: data.labels,
+			datasets: [
+				{
+					label: 'Đã chấp nhận',
+					data: data.accepted,
+					borderColor: '#18A04A',
+					tension: 0.4
 				},
-				didOpen: () => {
-					const textarea = Swal.getInput();
-					textarea.focus();
+				{
+					label: 'Đã từ chối',
+					data: data.rejected,
+					borderColor: '#D42426',
+					tension: 0.4
 				},
-				inputValidator: (value) => {
-					if (!value) {
-						return 'Vui lòng nhập lý do từ chối!';
+				{
+					label: 'Đã hoàn thành',
+					data: data.completed,
+					borderColor: '#435E53',
+					tension: 0.4
+				}
+			]
+		},
+		options: {
+			responsive: true,
+			scales: {
+				y: {
+					beginAtZero: true,
+					ticks: {
+						stepSize: 1
 					}
 				}
-			}).then((result) => {
-				if (result.isConfirmed) {
-					// Send AJAX request to update status and save reject reason
-					fetch('/admin/claims/update-status', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-							'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-						},
-						body: JSON.stringify({
-							request_id: requestId,
-							status: 'rejected',
-							reject_reason: result.value
-						})
-					})
-						.then(response => response.json())
-						.then(data => {
-							if (data.success) {
-								showAlert('success', 'Đã từ chối yêu cầu.');
-								setTimeout(() => window.location.reload(), 1500);
-							} else {
-								showAlert('error', 'Có lỗi xảy ra khi từ chối yêu cầu.');
-							}
-						})
-						.catch(error => {
-							console.error('Error:', error);
-							showAlert('error', 'Có lỗi xảy ra khi từ chối yêu cầu.');
-						});
+			}
+		}
+	});
+}
+
+function updateProductsChart(data) {
+	const ctx = document.getElementById('productsChart').getContext('2d');
+	if (window.productsChart && typeof window.productsChart.destroy === 'function')
+		window.productsChart.destroy();
+
+	window.productsChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: data.labels,
+			datasets: [{
+				label: 'Số lượt yêu cầu',
+				data: data.values,
+				backgroundColor: '#435E53',
+			}]
+		},
+		options: {
+			responsive: true,
+			scales: {
+				y: {
+					beginAtZero: true,
+					ticks: {
+						stepSize: 1
+					}
 				}
-			});
-		}, 200); // Wait for modal close animation
-	}
-});
+			}
+		}
+	});
+}

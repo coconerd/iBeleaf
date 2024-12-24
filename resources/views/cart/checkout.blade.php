@@ -12,6 +12,10 @@
 
 @section('content')
 <div class="container mt-4 checkout-container">
+
+	<input type="hidden" id="session-voucher-discount" value="{{ session('voucher_discount', 0) }}">
+	<input type="hidden" id="session-voucher-name" value="{{ session('voucher_name', default: null) }}">
+
 	@if(isset($cartItems) && $cartItems->count() > 0)
 		<div class="row">
 			<!-- Shipping Address Section -->
@@ -125,8 +129,8 @@
 						</div>
 						<div class="order-summary-details">
 							<div class="summary-row">
-								<span>Tạm tính ({{ $totalQuantity }} mặt hàng)</span>
-								<span id="provisional-price">{{ number_format($totalDiscountedPrice) }} VND</span>
+								<span>Tạm tính (Đã bao gồm các giảm giá)</span>
+								<span id="provisional-price"></span>
 							</div>
 							<div class="summary-row">
 								<span>Phí vận chuyển</span>

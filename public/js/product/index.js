@@ -262,7 +262,6 @@ $('.heart-button').click(function () {
 				showSuccessAlert('Đã xóa sản phẩm vào danh sách yêu thích');
 			},
 			error: function (xhr) {
-				alert('what the fuck');
 				if (xhr.status === 401) {
 					window.location.href = '/auth/login';
 				} else {
@@ -396,6 +395,10 @@ $('.hover-heart').click(function (e) {
 				showSuccessAlert('Đã xóa sản phẩm vào danh sách yêu thích');
 			},
 			error: function (xhr) {
+				if (xhr.status === 401) {
+					window.location.href = '/auth/login';
+					return;
+				}
 				showErrorAlert('Có lỗi xảy ra khi xóa sản phẩm vào danh sách yêu thích');
 			}
 		});
@@ -415,6 +418,10 @@ $('.hover-heart').click(function (e) {
 				showSuccessAlert('Đã thêm sản phẩm vào danh sách yêu thích');
 			},
 			error: function (xhr) {
+				if (xhr.status === 401) {
+					window.location.href = '/auth/login';
+					return;
+				}
 				showErrorAlert('Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích');
 			}
 		});
@@ -441,7 +448,11 @@ $('.addCartBtn').on('click', function () {
 			$('.counter').val(1);
 			showSuccessAlert('Đã thêm sản phẩm vào giỏ hàng');
 		},
-		error: function () {
+		error: function (xhr) {
+			if (xhr.status === 401) {
+				window.location.href = '/auth/login';
+				return;
+			}
 			showErrorAlert('Có lỗi khi thêm sản phẩm vào giỏ hàng');
 		}
 	});
