@@ -10,6 +10,28 @@ document.addEventListener('DOMContentLoaded', function () {
 		dateFormat: "Y-m-d"
 	});
 
+	// Initialize default filter period btn
+	document.querySelector('[data-period="week"]').classList.add('active', 'btn-secondary');
+
+	// Charts: initialize with default period
+	updateCharts('week');
+
+	// Charts: handle periods filter buttons clicks
+	document.querySelectorAll('[data-period]').forEach(button => {
+		button.addEventListener('click', function () {
+			const period = this.dataset.period;
+			updateCharts(period);
+
+			// Update active button state
+			document.querySelectorAll('[data-period]').forEach(btn => {
+				btn.classList.remove('active', 'btn-secondary');
+				btn.classList.add('btn-outline-secondary');
+			});
+			this.classList.remove('btn-outline-secondary');
+			this.classList.add('active', 'btn-secondary');
+		});
+	});
+
 	// Existing date filter type handling
 	document.querySelectorAll('input[name="dateFilterType"]').forEach(function (el) {
 		el.addEventListener('change', function () {
@@ -236,31 +258,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	});
 });
-
-// Initialize charts
-document.addEventListener('DOMContentLoaded', function () {
-	initializeCharts();
-
-	// Handle period button clicks
-	document.querySelectorAll('[data-period]').forEach(button => {
-		button.addEventListener('click', function () {
-			const period = this.dataset.period;
-			updateCharts(period);
-
-			// Update active button state
-			document.querySelectorAll('[data-period]').forEach(btn => {
-				btn.classList.remove('active', 'btn-secondary');
-				btn.classList.add('btn-outline-secondary');
-			});
-			this.classList.remove('btn-outline-secondary');
-			this.classList.add('active', 'btn-secondary');
-		});
-	});
-});
-
-function initializeCharts() {
-	updateCharts('week'); // Default to weekly view
-}
 
 function updateCharts(period) {
 	fetch(`/admin/orders/statistics?period=${period}`,
