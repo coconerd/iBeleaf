@@ -53,10 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
 				for (let i = 0; i < limit; i++) {
 					const noti = notifications[i];
 					const notiHtml = `
-					<a class="dropdown-item preview-item" data-type="${noti.type}">
+					<a class="dropdown-item preview-item" data-type="${noti.type}" data-subject-id=${getNotifcationSubjectID(noti)}>
 						<div class="preview-thumbnail">
 							<div class="preview-icon bg-success">
-								<i class="mdi mdi-cart-plus"></i>
+								${getNotificationIcon(noti.type)}
 							</div>
 						</div>
 						<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
@@ -75,22 +75,47 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	})();
 
-	// Listen for new notification events
-	echo.channel('orders')
-		.listen('.NewOrderNotification', (notification) => { // Note the leading dot
-			console.log('Received order notification:', notification);
+	// Listen for new notification events on the 'orders' channel
+	echo.channel('admin')
+		.listen('.NewOrderNotification', addNotiToDropdown)
+		.listen('.NewClaimNotification', addNotiToDropdown);
 
-			// Increment counter
-			unreadCount++;
-			$('.notifications-count').text(unreadCount.toString());
-			$('.notifications-count').css('display', 'block');
+	// Handle notifications dropdown item click
+	$(document).on('click', '#notifications > .dropdown-item', function (e) {
+		console.log($(this));
+		const type = $(this).data('type');
+		const notificationClass = type.split('\\').pop();
+		const subjectId = $(this).data('subject-id');
+		switch (notificationClass) {
+			case 'NewOrderNotification':
+				// Additional steps after redirecting to /admin/orders
+				sessionStorage.setItem('modal.orderId', subjectId);
+				window.location.href = '/admin/orders';
+				break;
+			case 'NewClaimNotification':
+				window.location.href = '/admin/claims';
+				sessionStorage.setItem('modal.return_refund_id', subjectId);
+				break;
+			default:
+				break;
+		}
+	});
+});
 
-			// Create notification HTML
-			const notiHtml = `
-					<a class="dropdown-item preview-item" data-type="${notification.db_link.type}">
+function addNotiToDropdown(notification) {
+	console.log('Received order notification:', notification);
+
+	// Increment counter
+	const unreadCount = parseInt($('.notifications-count').text());
+	$('.notifications-count').text(unreadCount + 1);
+	$('.notifications-count').css('display', 'block');
+
+	// Create notification HTML
+	const notiHtml = `
+					<a class="dropdown-item preview-item" drop-down-item data-type="${notification.db_link.type} data-subject-id="${getNotifcationSubjectID(notification)}">
 						<div class="preview-thumbnail">
 							<div class="preview-icon bg-success">
-								<i class="mdi mdi-cart-plus"></i>
+								${getNotificationIcon(notification.db_link.type)}
 							</div>
 						</div>
 						<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
@@ -101,34 +126,55 @@ document.addEventListener('DOMContentLoaded', function () {
 					<div class="dropdown-divider"></div>
 				`;
 
-			// Insert at top of notifications list
-			if ($('#notifications > .dropdown-item').length >= 6) {
-				$('#notifications > .dropdown-item').last().remove();
-			}
-			$('#notifications').prepend(notiHtml);
+	// Insert at top of notifications list
+	if ($('#notifications > .dropdown-item').length >= 6) {
+		$('#notifications > .dropdown-item').last().remove();
+	}
+	$('#notifications').prepend(notiHtml);
 
-			// Optional: Show toast notification
-			Swal.fire({
-				toast: true,
-				position: 'top-end',
-				icon: 'success',
-				title: notification.title,
-				showConfirmButton: false,
-				timer: 3000
-			});
-		});
-
-	// Handle notifications dropdown item click
-	$(document).on('click', '#notifications > .dropdown-item', function (e) {
-		console.log($(this));
-		const type = $(this).data('type');
-		const notificationClass = type.split('\\').pop();
-		switch (notificationClass) {
-			case 'NewOrderNotification':
-				window.location.href = '/admin/orders';
-				break;
-			default:
-				break;
-		}
+	// Optional: Show toast notification
+	Swal.fire({
+		toast: true,
+		position: 'top-end',
+		icon: 'success',
+		title: notification.title,
+		showConfirmButton: false,
+		timer: 3000
 	});
-});
+}
+
+function getNotificationIcon(notificationType) {
+	switch (notificationType) {
+		case 'App\\Notifications\\NewOrderNotification':
+			return '<i class="mdi mdi-cart-plus"></i>';
+		case 'App\\Notifications\\NewClaimNotification':
+			return '<i class="mdi mdi-alert-circle"></i>';
+		default:
+			return '<i class="mdi mdi-cart-plus"></i>';
+	}
+}
+
+function getNotifcationSubjectID(notification) {
+	const notiType = !!notification.db_link ? 'realtime' : 'static';
+	if (notiType === 'realtime') {
+		switch (notification.db_link.type) {
+			case 'App\\Notifications\\NewOrderNotification':
+				return notification.db_link.order_id;
+			case 'App\\Notifications\\NewClaimNotification':
+				return notification.db_link.return_refund_id;
+			default:
+				return null;
+		}
+	}
+	else {
+		switch (notification.type) {
+			case 'App\\Notifications\\NewOrderNotification':
+				return notification.data.order_id;
+			case 'App\\Notifications\\NewClaimNotification':
+				return notification.data.return_refund_id;
+			default:
+				return null;
+		}
+	}
+}
+
