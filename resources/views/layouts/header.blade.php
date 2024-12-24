@@ -28,7 +28,7 @@
 		<a class="navbar-brand" href="#">
 			<img src="https://png.pngtree.com/png-clipart/20220823/original/pngtree-green-coconut-sticker-vector-illustration-png-image_8462536.png"
 				alt="Logo">
-			<label>Plant Paradise</label>
+			<label>PLANT PARADISE</label>
 		</a>
 
 		<!-- Toggle button for mobile view -->

@@ -8,7 +8,7 @@
     <meta name="description" content= "@yield('description', 'This is the best place to ...')">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<title>@yield('title', "Plant Ecommerce")</title>
+	<title>@yield('title', "Plant Paradise")</title>
 	<link rel="shortcut icon" href="{{asset('images/favicon/plantEcommerce.png')}}" type="image/x-icon">
 
 	<!-- Import Jquery Jquery --->
