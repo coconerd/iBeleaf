@@ -80,18 +80,18 @@ $(document).ready(function () {
                     padding: 20,
                     displayColors: true,
                     titleFont: {
-                        size: 14
+                        size: 14,
                     },
                     bodyFont: {
-                        size: 15
+                        size: 15,
                     },
                     callbacks: {
-                        label: function(context) {
-                            const label = context.dataset.label || '';
-                            return '  ' + label + ': ' + context.parsed.y;
-                        }
-                    }
-                }
+                        label: function (context) {
+                            const label = context.dataset.label || "";
+                            return "  " + label + ": " + context.parsed.y;
+                        },
+                    },
+                },
             },
             interaction: {
                 mode: "nearest",
@@ -142,6 +142,8 @@ $(document).ready(function () {
     fetchOrderData(); // Initial load
     showStatsCards();
     loadTopSellingProducts();
+    // Call the initialization
+    initLocationChart();
 });
 
 function updateStatCard(metric, options) {
@@ -263,3 +265,4 @@ function loadTopSellingProducts() {
         },
     });
 }
+

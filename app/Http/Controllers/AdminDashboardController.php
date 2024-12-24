@@ -92,13 +92,17 @@ class AdminDashboardController extends Controller
 	public function topSellingProducts(){
 		$twoWeeksAgo = Carbon::now()->subWeeks(2);
 		
-    	// Get top selling products
+		// Get top selling products
 		$topSellingProducts = OrderItem::join('products', 'order_items.product_id', '=', 'products.product_id')
 			->where('order_items.created_at', '>=', $twoWeeksAgo)
-			->select('products.product_id', 'products.name', 'products.overall_stars')
-			->selectRaw('SUM(quantity) as total_quantity')
-			->groupBy('products.product_id', 'products.name', 'products.overall_stars')
-			->orderByDesc('total_quantity')
+			->select(
+				'products.product_id',
+				'products.name',
+				'products.overall_stars',
+				'products.total_orders'
+			)
+			->groupBy('products.product_id', 'products.name', 'products.overall_stars', 'products.total_orders')
+			->orderByDesc('products.total_orders')
 			->limit(15)
 			->get();
 
@@ -114,7 +118,7 @@ class AdminDashboardController extends Controller
 				'rank' => $index + 1,
 				'name' => $product->name,
 				'id' => $product->product_id,
-				'quantity' => $product->total_quantity,
+				'quantity' => $product->total_orders,
 				'image' => $productImage?->product_image_url,
 				'rating' => $product->overall_stars
 			];
@@ -122,6 +126,4 @@ class AdminDashboardController extends Controller
 
 		return response()->json($result);
 	}
-
-	public 
 }

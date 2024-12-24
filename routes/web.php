@@ -119,6 +119,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 			Route::get('/', [AdminDashboardController::class, 'showDashboardPage'])->name('showDashboardPage');
 			Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData'])->name('getSalesData');
 			Route::get('/analyze/{metric}', [AdminDashboardController::class, 'analyzeMetric']);
+			Route::get('/top-selling', [AdminDashboardController::class, 'topSellingProducts'])->name('topSelling');
 		});
 
 		// Admin claims routes

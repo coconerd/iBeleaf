@@ -7,7 +7,6 @@
 
 @section('body-script')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	
     <script src="{{ asset('js/admin/dashboard/charts.js') }}"></script>
 @endsection
 
@@ -16,7 +15,7 @@
 
 <div class="section-divider">
 	<h2 class="section-title">
-		<i class="fa-solid fa-lg fa-folder-open" style="color: #28a745;"></i>
+		<i class="fa-solid fa-lg fa-chart-line" style="color: #28a745;"></i>
 		Hiệu suất bán hàng
 	</h2>
 </div>
@@ -113,7 +112,7 @@
 
 <div class="section-divider">
 	<h2 class="section-title">
-		<i class="fa-solid fa-lg fa-folder-open" style="color: #28a745;"></i>
+		<i class="fa-solid fa-lg fa-crown" style="color: #28a745;"></i>
 		Sản phẩm bán chạy
 	</h2>
 </div>
@@ -129,6 +128,7 @@
 							<th>Hình ảnh</th>
 							<th>Mã sản phẩm</th>
 							<th>Tên sản phẩm</th>
+							<th class="text-end">Rating</th>
 							<th class="text-end">Số lượng đã bán</th>
 						</tr>
 					</thead>
@@ -140,12 +140,4 @@
 		</div>
 	</div>
 </div>
-
-<div class="section-divider">
-	<h2 class="section-title">
-		<i class="fa-solid fa-lg fa-folder-open" style="color: #28a745;"></i>
-		Khách hàng quan trọng
-	</h2>
-</div>
-
 @endsection
