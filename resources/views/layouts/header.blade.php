@@ -16,7 +16,7 @@
 					<a class="text-white" href="{{ url('/auth/login') }}">Đăng nhập</a>
 				@endif
 			</span>
-			<i class="fa-solid fa-user" onclick="window.location.href='{{ route('profile.homePage') }}'"></i>
+			<i class="fa-solid fa-user" style="cursor: pointer;" onclick="window.location.href='{{ route('profile.homePage') }}'"></i>
 		</div>
 	</div>
 </div>
