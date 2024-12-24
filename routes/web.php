@@ -112,11 +112,12 @@ Route::post('/login', [AuthController::class, 'handleAdminLogin'])->name('handle
 			Route::post('/update-field', [AdminOrderController::class, 'updateOrderField'])
 				->name('updateField');
 		});
-
+                       
 		// Admin Dashboard route
 		Route::prefix('dashboard')->name('dashboard.')->group(function () {
 			Route::get('/', [AdminDashboardController::class, 'showDashboardPage'])->name('showDashboardPage');
-			Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData']);
+			Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData'])->name('getSalesData');
+			Route::get('/analyze/{metric}', [AdminDashboardController::class, 'analyzeMetric']);
 		});
 
 		// Admin claims routes
