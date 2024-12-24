@@ -172,6 +172,8 @@ $(document).ready(function () {
                                 cartItem.fadeOut(300, function () {
                                     $(this).remove();
                                     updateCartCount();
+                                    clearVoucher(); // Clear any applied voucher
+                                    updateDiscountAmount();
                                     calculateCartTotal();
                                 });
 
@@ -194,6 +196,7 @@ $(document).ready(function () {
                                     }, 1000);
                                 }
                             }
+                            // hanldeQuantityUpdate($(this));
                         },
                         error: function (xhr) {
                             Swal.fire({
@@ -288,6 +291,7 @@ function hanldeQuantityUpdate($input) {
     calculateSubPrice($quantityInput);
     calculateCartTotal();
     updateDiscountAmount();
+
 }
 function applyVoucher(voucherId, description, discount) {
     const $voucherBox = $("#valid-voucher-box");
@@ -358,6 +362,7 @@ function showMinQuantityAlert($input) {
                     if (response.success) {
                         cartItem.remove();
                         updateCartCount();
+                        clearVoucher();
                         calculateCartTotal();
                     }
                 })
@@ -370,6 +375,13 @@ function showMinQuantityAlert($input) {
         }
         return Promise.reject("User cancelled!");
     });
+}
+
+function clearVoucher() {
+    $("#voucher-input").val(""); // Clear input
+    $("#valid-voucher-box").hide(); // Hide voucher box
+    $("#voucher-error").hide(); // Hide any error messages
+    $("#final-price").text($("#first-total-price").text()); // Reset final price to original price
 }
 
 /* Validate quantity input*/
@@ -416,14 +428,15 @@ function calculateSubPrice($input) {
         const $price = $item.find(".price.total-uprice");
         const productId = $item.data("product-id");
 
-        const unitPrice = parseInt($price.data("unit-price"));
-        const discountPercent = parseInt($price.data("discount-percent"));
-        const quantity = parseInt($input.val());
+        // Clean price values
+        const unitPrice = parseInt(cleanPriceString($price.data("unit-price"))) || 0;
+        const discountPercent = parseInt(
+            cleanPriceString($price.data("discount-percent"))
+        ) || 0;
+        const quantity = parseInt(cleanPriceString($input.val())) || 0;
 
-        if (isNaN(quantity)) {
-            console.error("Invalid inputs:", {
-                quantity,
-            });
+        if (quantity <= 0) {
+            console.error("Invalid quantity:", quantity);
             return;
         }
 
@@ -431,7 +444,7 @@ function calculateSubPrice($input) {
         const subDiscountedTotal = subTotal * (1 - discountPercent / 100);
         const discountAmount = subTotal - subDiscountedTotal;
 
-        $price.text(formatPrice(subDiscountedTotal));
+        $price.text(formatPrice(subDiscountedTotal) + " ₫");
 
         $.ajax({
             url: "/cart/update-price",
@@ -452,31 +465,44 @@ function calculateSubPrice($input) {
 }
 
 function updateDiscountAmount() {
-    const $input = $(".quantity-input");
-    const $summary = $(".card-body");
-    const $discount = $summary.find("#total-discount-amount");
-    const quantity = $input.val();
+    try {
+        const $summary = $(".card-body");
+        const $discount = $summary.find("#total-discount-amount");
+        let totalDiscount = 0;
 
-    console.log("Summary element:", $summary);
-    console.log("Discount element:", $discount);
-    console.log("Quantity:", quantity);
+        // Calculate discount for each cart item
+        $(".cart-control").each(function () {
+            const $item = $(this);
+            if (!isInStock($item)) {
+                return;
+            }
 
-    const unitPrice = $input
-        .closest(".cart-control")
-        .find(".total-uprice")
-        .data("unit-price");
+            const $input = $item.find(".quantity-input");
+            const $price = $item.find(".total-uprice");
 
-    const discountPercent = parseInt(
-        $input
-            .closest(".cart-control")
-            .find(".total-uprice")
-            .data("discount-percent")
-    );
+            if (!$input.length || !$price.length) {
+                console.warn("Missing required elements for discount calculation");
+                return;
+            }
 
-    if ($discount.length) {
-        const discountAmount = unitPrice * quantity * (discountPercent / 100);
-        console.log("Total discount amount: ", discountAmount);
-        $discount.text(formatPrice(discountAmount) + " VND");
+            const quantity = Math.max(0, parseInt(cleanPriceString($input.val())) || 0);
+            const unitPrice = Math.max(0, parseInt(cleanPriceString($price.data("unit-price"))) || 0);
+            const discountPercent = Math.min(100, Math.max(0, parseInt(cleanPriceString($price.data("discount-percent"))) || 0));
+
+            if (quantity && unitPrice) {
+                const itemDiscount = (unitPrice * quantity * discountPercent) / 100;
+                totalDiscount += itemDiscount;
+            }
+
+        });
+
+        // Update discount display if element exists
+        if ($discount.length && !isNaN(totalDiscount)) {
+            $discount.text(formatPrice(totalDiscount) + " ₫");
+        }
+    } catch (error) {
+        console.error("Error updating discount amount:", error);
+        return 0;
     }
 }
 
@@ -485,21 +511,26 @@ function calculateCartTotal() {
 
     $(".each-cart-item").each(function () {
         if (isInStock($(this))) {
-            const quantity = parseInt($(this).find(".quantity-input").val());
-            const price = parseFloat($(this).find(".price").data("price"));
-            const discount = parseFloat($(this).find(".price").data("discount"));
+            const quantity = parseInt(cleanPriceString($(this).find(".quantity-input").val())) || 0;
+            const price = parseFloat(cleanPriceString($(this).find(".price").data("price"))) || 0;
+            const discount = parseFloat(cleanPriceString($(this).find(".price").data("discount"))) || 0;
 
-            const discountedPrice = price * (1 - discount / 100);
-            const subTotal = discountedPrice * quantity;
-
-            total += subTotal;
+            if (quantity && price) {
+                const discountedPrice = price * (1 - discount / 100);
+                const subTotal = discountedPrice * quantity;
+                total += isNaN(subTotal) ? 0 : subTotal;
+            }
         }
     });
 
-    $("#first-total-price").text(formatPrice(total) + " VND");
-    $("#final-price").text(formatPrice(total) + " VND");
+    $("#first-total-price").text(formatPrice(total) + " ₫");
+    $("#final-price").text(formatPrice(total) + " ₫");
 }
 
 function formatPrice(price) {
     return new Intl.NumberFormat("VND").format(price);
+}
+
+function cleanPriceString(priceStr) {
+    return String(priceStr || '').replace(/[^\d]/g, "");
 }
