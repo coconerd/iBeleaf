@@ -246,11 +246,9 @@
 								từ
 								1 - 7 ngày</p>
 							<p class="mb-1"><i class="fas fa-check-circle text-success"></i> Các sản phẩm cây gốm, chậu:
-								Chị
-								giao hàng tại Tp.HCM</p>
+								Chỉ giao hàng tại TP.HCM</p>
 							<p class="mb-0"><i class="fas fa-check-circle text-success"></i> Các sản phẩm cây nhỏ, chậu,
-								phụ
-								kiện, vật tư: Giao hàng toàn quốc</p>
+								phụ kiện, vật tư: Giao hàng toàn quốc</p>
 						</div>
 						<div class="d-flex align-items-center mt-3">
 							<i class="fas fa-lock"></i>
@@ -261,7 +259,8 @@
 							<span class="ms-2">Phương thức thanh toán</span>
 						</div>
 						<div class="mt-3">
-							<p class="mb-0">MOW Garden hiểu rằng, tâm lý e ngại khi mua hàng Online, do đó chúng tôi sẽ
+							<p class="mb-0">Plant Paradise hiểu rằng, tâm lý e ngại khi mua hàng Online, do đó chúng tôi
+								sẽ
 								gửi
 								ảnh thực tế trước khi giao hàng. Nhằm đảm bảo lương dịch vụ và quyền lợi của khách hàng.
 							</p>
@@ -271,9 +270,7 @@
 			</div>
 		</div>
 		<!-- Custom styled HR -->
-		<hr class="border-dark opacity-25 my-4">
-
-		<!-- Related Products Section -->
+		<hr class="border-dark opacity-25 my-4" <!-- Related Products Section -->
 		<div class="related-products mt-5">
 			<h3 class="ms-4 mb-3 fw-light" style="color: #999999; font-size: 1.5rem">SẢN PHẨM TƯƠNG TỰ</h3>
 			<div id="relatedProductsCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -464,13 +461,12 @@
 		</div>
 		<div class="container my-5" style="padding: 0 13vw;">
 			<p style="text-align: justify;">
-				<b>Plant Paradise</b> mong muốn mang đến cho khách hàng trải nghiệm mua sắm tuyệt vời nhất. Vì vậy, tất
-				cả sản phẩm
-				tại <b>Plant Paradise</b> đều được <b>kiểm tra chất lượng kỹ lưỡng</b> trước khi đến tay bạn. Chúng tôi
-				hy vọng
-				bạn không
-				chỉ hài lòng với sản phẩm mà còn với chất lượng dịch vụ của chúng tôi. Nếu có bất kỳ vấn đề nào xảy ra,
-				đừng ngần ngại liên hệ ngay với <b>Plant Paradise</b> để được hỗ trợ kịp thời nhé!
+				Plant Paradise mong muốn mang đến cho khách hàng trải nghiệm mua sắm tuyệt vời nhất. Vì vậy, tất cả sản
+				phẩm
+				tại Plant Paradise đều được kiểm tra chất lượng kỹ lưỡng trước khi đến tay bạn. Chúng tôi hy vọng
+				bạn không chỉ hài lòng với sản phẩm mà còn với chất lượng dịch vụ của chúng tôi. Nếu có bất kỳ vấn đề
+				nào xảy ra,
+				đừng ngần ngại liên hệ ngay với chúng tôi để được hỗ trợ kịp thời nhé!
 			</p>
 			<div class="row">
 				<div class="col-md-6 pe-4">
@@ -489,7 +485,7 @@
 						<p style="text-align: justify;">
 							Đối với các sản phẩm cây xanh, nếu gặp tình trạng hư hại, héo úa hoặc suy
 							yếu khi được giao, quý khách có thể yêu cầu đổi trả cây mới hàng trong vòng <b>7 ngày</b>,
-							hoặc vui lòng liên hệ với <b>Plant Paradise</b>để được hỗ trợ.
+							hoặc vui lòng liên hệ với chúng tôi để được hỗ trợ.
 						</p>
 					</div>
 				</div>
@@ -497,8 +493,8 @@
 			<div class="row mt-5">
 				<p style="text-align: justify;">
 					Nếu có vấn đề cần hỗ trợ liên quan đến bảo hành vả đổi trả sản phẩm, quý khách có thể liên hệ với
-					<b>Plant Paradise</b> thông qua
-					hotline (0937 802 672 hoặc 097 123 82 25), fanpage, hoặc gửi email đến hotro@plantparadise.com.vn.
+					chúng tôi thông qua
+					hotline (0937 802 672 hoặc 097 123 82 25), fanpage, hoặc gửi email đến hotro@plantparadise.
 				</p>
 			</div>
 		</div>
