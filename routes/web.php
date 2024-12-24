@@ -112,8 +112,11 @@ Route::post('/login', [AuthController::class, 'handleAdminLogin'])->name('handle
 			Route::post('/update-field', [AdminOrderController::class, 'updateOrderField'])
 				->name('updateField');
 		});
+
+		// Admin Dashboard route
 		Route::prefix('dashboard')->name('dashboard.')->group(function () {
 			Route::get('/', [AdminDashboardController::class, 'showDashboardPage'])->name('showDashboardPage');
+			Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData']);
 		});
 
 		// Admin claims routes

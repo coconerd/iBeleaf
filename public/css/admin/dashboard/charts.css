@@ -1,0 +1,14 @@
+.line-chart-wrapper {
+	width: 100%;
+	height: 400px;
+	padding: 20px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.main-title{
+	font-size: 22px;
+	font-weight: 600;
+	color: #2A6548;
+}
