@@ -6,6 +6,7 @@ use App\Exceptions\ShippingFeeCalculationException;
 use App\Services\ShippingService;
 use App\Models\CartItem;
 use App\Models\OrderItem;
+use App\Models\Voucher;
 use App\Models\Order;
 use App\Models\Cart;
 use App\Models\Product;
@@ -265,11 +266,13 @@ class CheckOutController extends Controller
             ]);
 
 			$cartItems = CartItem::with(['product'])
-					->where('cart_id', $user->cart_id)
-					->get();
-            if ($cartItems->isEmpty()) {
-                throw new Exception('Cart is empty');
-            }
+                    ->where('cart_id', $user->cart_id)
+                    ->whereHas('product', function($query) {
+                        $query->where('stock_quantity', '>', 0);
+                    })
+                    ->get();
+
+            $voucherId = Voucher::where('voucher_name', $request->voucher_name)->first()?->voucher_id;
             
             $preDeliverCost = $this->getPreviousDeliveryCost();
 
@@ -277,14 +280,13 @@ class CheckOutController extends Controller
 
 			// 1. Create new Order
             $order = $this->createNewOrder(
-                $request->voucher_id ?? null,
-                $request->provisional_price,
+                $voucherId,
+                $request->real_provisional_price,
                 $preDeliverCost,
                 $request->total_price,
                 $validated['address'],
                 $request->payment_method ?? 'COD',
-                $request->additional_note ?? null,
-
+                $request->additional_note ?? null
                 // $request->deliver_address
             );
 
@@ -295,13 +297,13 @@ class CheckOutController extends Controller
                     'product_id' => $item->product_id,
                     'quantity' => $item->quantity,
                     'total_price' => $item->discounted_price,
-                    'discounted_amount' => $item->discounted_amount ?? 0
+                    'discounted_amount' => $item->discount_amount ?? 0
                 ]);
 
                 Log::debug('Check order items: ', [
                     'quantity', $item->quantity,
                     'total_price', $item->discounted_price,
-                    'discounted_amount' => $item->discounted_amount ?? 0
+                    'discounted_amount' => $item->discount_amount ?? 0
                 ]);
 
                 // Update product stock quantity

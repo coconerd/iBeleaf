@@ -147,23 +147,29 @@ function submitOrder() {
         address: $("#address").val(),
     };
 
-    const orderData = {
-        voucher_id: getAppliedVoucherId(),
+    const voucherName = $("#session-voucher-name").val() || null;
+    const voucherValue = parseInt($("#session-voucher-discount").val()) || 0;
+    console.log("Test voucher value: ", voucherValue);
 
-        // Not included voucher/coupon, just discount amount only
-        provisional_price: parseFloat(
-            $("#provisional-price")
-                .text()
-                .replace(/[^0-9.-]+/g, "")
-        ),
-        delivery_cost: parseFloat(
-            $("#shipping-fee")
-                .text()
-                .replace(/[^0-9.-]+/g, "")
-        ),
-        total_price: $(".total-amount")
-            .text()
-            .replace(/[.,₫\s]/g, ""),
+    const shippingFee =
+        parseInt($("#shipping-fee").text().replace(/[^\d]/g, "")) || 0;
+    console.log("Test shipping fee: ", shippingFee);
+
+    const provisionalPrice =
+        parseInt($("#provisional-price").text().replace(/[^\d]/g, "")) || 0;
+        
+    console.log("Test provisional price: ", provisionalPrice);
+    
+    const realProvisionalPrice = provisionalPrice + voucherValue;
+    const totalPrice = realProvisionalPrice + shippingFee;
+    console.log("Test real provisional price: ", realProvisionalPrice);
+    console.log("Test total price: ", totalPrice);
+
+    const orderData = {
+        voucher_name: voucherName,
+        real_provisional_price: realProvisionalPrice,
+        delivery_cost: shippingFee,
+        total_price: totalPrice,
         address: address,
         payment_method:
             $('input[name="payment-method"]:checked').val() || "COD",
@@ -173,7 +179,7 @@ function submitOrder() {
     console.log('Order info: ', {
         total_price: orderData.total_price,
         delivery_cost: orderData.delivery_cost,
-        provisional_price: orderData.provisional_price,
+        provisional_price: orderData.real_provisional_price,
         additional_note: orderData.additional_note,
     });
     
