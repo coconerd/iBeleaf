@@ -58,11 +58,11 @@
 				</a>
 				<div class="dropdown-menu dropdown-menu-left navbar-dropdown preview-list"
 					aria-labelledby="notificationDropdown">
-					<h6 class="px-3 py-3 fw-semibold mb-0">Notifications</h6>
+					<h6 class="px-3 py-3 fw-semibold mb-0">Thông báo</h6>
 					<div class="dropdown-divider"></div>
 					<div id="notifications">
 					</div>
-					<h6 class="p-3 font-13 mb-0 text-primary text-center">View all notifications</h6>
+					<h6 class="p-3 font-13 mb-0 text-primary text-center">Xem tất cả thông báo</h6>
 				</div>
 			</li>
 		</ul>

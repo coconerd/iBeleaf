@@ -113,8 +113,3 @@ class OrderFactory extends Factory
 		});
 	}
 }
-
-// Usage example:
-// Order::factory()->count(10)->create(); // Create 10 random orders
-// Order::factory()->pending()->create(); // Create pending order
-// Order::factory()->delivered()->create(); // Create delivered order

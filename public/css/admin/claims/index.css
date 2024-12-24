@@ -99,7 +99,7 @@
 }
 
 td .badge {
-	width: 90%
+	width: 100%;
 }
 
 /* Modal styling */
@@ -652,13 +652,32 @@ td .badge {
     overflow-y: auto;
 }
 
-/* Completed claims specific table styling */
-.completed-claims .card-body {
-    overflow-x: visible !important;
-}
-
 .completed-claims .table {
     min-width: auto !important;
     table-layout: auto !important;
     width: 100% !important;
+}
+
+/* Statistics cards styling */
+.card .btn-group .btn {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+}
+
+.card .btn-group .btn.active {
+    background-color: #435E53;
+    color: white;
+    border-color: #435E53;
+}
+
+/* Chart containers */
+canvas {
+    max-height: 300px;
+}
+
+.card-header h4 {
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #435E53;
 }

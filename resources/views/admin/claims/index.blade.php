@@ -9,6 +9,8 @@
 @section('lib')
 <!-- SweetAlert2 for modals -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection
 
 @section('content')
@@ -16,6 +18,35 @@
     <!-- Add Snowflakes -->
     <div id="snowflakes"></div>
     
+    <!-- Add Statistics Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>Thống kê yêu cầu theo trạng thái</h4>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-period="week">7 ngày</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-period="month">30 ngày</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-period="year">365 ngày</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Top 5 sản phẩm được yêu cầu đổi/trả nhiều nhất</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="productsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Page Header -->
     <div class="page-header">
         <h3 class="page-title">Quản lý yêu cầu đổi/trả hàng</h3>
@@ -51,7 +82,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $request->order_item->product->product_images->first()->product_image_url ?? asset('images/placeholder-plant.jpg') }}" 
-                                                class="product-image me-3" alt="Product image">
+                                                class="product-image me-3" alt="Image">
 											<div class="d-flex flex-column">
                                                 <h6 class="mb-0">{{ $request->order_item->product->name }}</h6>
                                                 <small class="text-muted mt-1">Số lượng: {{ $request->quantity }}</small><br>
@@ -208,8 +239,7 @@
                             </tbody>
                         </table>
                         <!-- Pagination -->
-                        <!-- {{ $returnRequests->links() }} -->
-						@include('admin.layouts.pagination', ['paginator' => $returnRequests, 'itemName' => 'Yêu cầu đổi hàng'])
+						@include('admin.layouts.pagination', ['paginator' => $returnRequests, 'itemName' => 'Yêu cầu đổi hàng', 'compact' => true])
                     </div>
                 </div>
             </div>
@@ -219,7 +249,7 @@
         <div class="col-12">
             <h4 class="text-muted mb-4">Đang xử lý</h4>
             <div class="row processing-claims">
-                <!-- Processed Refund Requests -->
+                <!-- Processing Refund Requests -->
                 <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-header">
@@ -257,12 +287,12 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            @include('admin.layouts.pagination', ['paginator' => $processedRefundRequests, 'itemName' => 'Yêu cầu đã xử lý'])
+                            @include('admin.layouts.pagination', ['paginator' => $processedRefundRequests, 'itemName' => 'Yêu cầu đã xử lý', 'compact' => true])
                         </div>
                     </div>
                 </div>
 
-                <!-- Processed Return Requests -->
+                <!-- Processing Return Requests -->
                 <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-header">
@@ -300,7 +330,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            @include('admin.layouts.pagination', ['paginator' => $processedReturnRequests, 'itemName' => 'Yêu cầu đã xử lý'])
+                            @include('admin.layouts.pagination', ['paginator' => $processedReturnRequests, 'itemName' => 'Yêu cầu đã xử lý', 'compact' => true])
                         </div>
                     </div>
                 </div>
@@ -349,7 +379,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            @include('admin.layouts.pagination', ['paginator' => $completedRefundRequests, 'itemName' => 'yêu cầu đã được hoàn tiền'])
+                            @include('admin.layouts.pagination', ['paginator' => $completedRefundRequests, 'itemName' => 'yêu cầu đã được hoàn tiền', 'compact' => true])
                         </div>
                     </div>
                 </div>
@@ -392,7 +422,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-							@include('admin.layouts.pagination', ['paginator' => $processedReturnRequests, 'itemName' => 'yêu cầu đã hoàn tất đổi hàng'])
+							@include('admin.layouts.pagination', ['paginator' => $processedReturnRequests, 'itemName' => 'yêu cầu đã hoàn tất đổi hàng', 'compact' => true])
                         </div>
                     </div>
                 </div>

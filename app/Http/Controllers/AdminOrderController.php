@@ -7,6 +7,8 @@ use App\Models\Order;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Log;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminOrderController extends Controller
 {
@@ -164,5 +166,74 @@ class AdminOrderController extends Controller
 		}
 
 		return response()->json(['success' => true, 'order' => $order]);
+	}
+
+	public function getStatistics(Request $request): JsonResponse
+	{
+		try {
+			$period = $request->input('period', 'week');
+			$now = Carbon::now();
+
+			switch ($period) {
+				case 'month':
+					$startDate = $now->copy()->subDays(30);
+					$groupBy = 'DATE(created_at)';
+					break;
+				case 'year':
+					$startDate = $now->copy()->subDays(365);
+					$groupBy = 'MONTH(created_at)';
+					break;
+				default: // week
+					$startDate = $now->copy()->subDays(7);
+					$groupBy = 'DATE(created_at)';
+					break;
+			}
+
+			// Get sales data
+			$salesData = Order::where('created_at', '>=', $startDate)
+				->where('status', '!=', 'cancelled')
+				->groupBy(DB::raw($groupBy))
+				->select(
+					DB::raw($groupBy . ' as date'),
+					DB::raw('SUM(total_price) as total')
+				)
+				->get();
+
+			// Get order status distribution
+			$statusData = Order::where('created_at', '>=', $startDate)
+				->groupBy('status')
+				->select('status', DB::raw('COUNT(*) as count'))
+				->pluck('count', 'status')
+				->toArray();
+
+			// Format sales data for Chart.js
+			$labels = [];
+			$values = [];
+			foreach ($salesData as $data) {
+				$labels[] = $period === 'year'
+					? Carbon::createFromFormat('m', $data->date)->format('M')
+					: Carbon::parse($data->date)->format('d/m');
+				$values[] = $data->total;
+			}
+
+			// Format status data for pie chart
+			$statusCounts = [
+				$statusData['pending'] ?? 0,
+				$statusData['delivering'] ?? 0,
+				$statusData['delivered'] ?? 0,
+				$statusData['cancelled'] ?? 0
+			];
+
+			return response()->json([
+				'salesData' => [
+					'labels' => $labels,
+					'values' => $values
+				],
+				'statusData' => $statusCounts
+			]);
+		} catch (\Exception $e) {
+			Log::error('AdminOrderController@getStatistics: ' . $e->getMessage());
+			return response()->json(['success' => false, 'message' => 'Có lỗi xảy ra khi lấy thống kê'], 500);
+		}
 	}
 }

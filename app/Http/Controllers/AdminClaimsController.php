@@ -8,6 +8,8 @@ use App\Models\ReturnRefundItem;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use App\Notifications\ClaimAcceptedNotification;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminClaimsController extends Controller
 {
@@ -176,4 +178,63 @@ class AdminClaimsController extends Controller
 			return response()->json(['success' => false, 'message' => 'Có lỗi xảy ra khi cập nhật yêu cầu'], 500);
 		}
 	}
+
+	public function getStatistics(Request $request): JsonResponse 
+    {
+        $period = $request->get('period', 'week');
+        $days = match($period) {
+            'week' => 7,
+            'month' => 30,
+            'year' => 365,
+            default => 7
+        };
+
+        $startDate = Carbon::now()->subDays($days);
+
+        // Get status statistics
+        $statusStats = [
+            'labels' => [],
+            'accepted' => [],
+            'rejected' => [],
+            'completed' => []
+        ];
+
+        // Generate date labels
+        for ($i = 0; $i < $days; $i++) {
+            $date = $startDate->copy()->addDays($i);
+            $statusStats['labels'][] = $date->format('d/m');
+            
+            // Get counts for each status using proper date comparison
+            $statusStats['accepted'][] = ReturnRefundItem::whereRaw('DATE(updated_at) = ?', [$date->format('Y-m-d')])
+                ->where('status', 'accepted')
+                ->count();
+            
+            $statusStats['rejected'][] = ReturnRefundItem::whereRaw('DATE(updated_at) = ?', [$date->format('Y-m-d')])
+                ->where('status', 'rejected')
+                ->count();
+            
+            $statusStats['completed'][] = ReturnRefundItem::whereRaw('DATE(updated_at) = ?', [$date->format('Y-m-d')])
+                ->whereIn('status', ['refunded', 'renewed'])
+                ->count();
+        }
+
+        // Get top 5 products with most return/refund requests
+        $productStats = DB::table('return_refund_items')
+            ->join('order_items', 'return_refund_items.order_items_id', '=', 'order_items.order_items_id')
+            ->join('products', 'order_items.product_id', '=', 'products.product_id')
+            ->select('products.name', DB::raw('count(*) as count'))
+            ->where('return_refund_items.created_at', '>=', $startDate)
+            ->groupBy('products.product_id', 'products.name')
+            ->orderByDesc('count')
+            ->limit(5)
+            ->get();
+
+        return response()->json([
+            'statusStats' => $statusStats,
+            'productStats' => [
+                'labels' => $productStats->pluck('name')->toArray(),
+                'values' => $productStats->pluck('count')->toArray()
+            ]
+        ]);
+    }
 }

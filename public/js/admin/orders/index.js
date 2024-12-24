@@ -10,6 +10,28 @@ document.addEventListener('DOMContentLoaded', function () {
 		dateFormat: "Y-m-d"
 	});
 
+	// Initialize default filter period btn
+	document.querySelector('[data-period="week"]').classList.add('active', 'btn-secondary');
+
+	// Charts: initialize with default period
+	updateCharts('week');
+
+	// Charts: handle periods filter buttons clicks
+	document.querySelectorAll('[data-period]').forEach(button => {
+		button.addEventListener('click', function () {
+			const period = this.dataset.period;
+			updateCharts(period);
+
+			// Update active button state
+			document.querySelectorAll('[data-period]').forEach(btn => {
+				btn.classList.remove('active', 'btn-secondary');
+				btn.classList.add('btn-outline-secondary');
+			});
+			this.classList.remove('btn-outline-secondary');
+			this.classList.add('active', 'btn-secondary');
+		});
+	});
+
 	// Existing date filter type handling
 	document.querySelectorAll('input[name="dateFilterType"]').forEach(function (el) {
 		el.addEventListener('change', function () {
@@ -236,6 +258,124 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	});
 });
+
+function updateCharts(period) {
+	fetch(`/admin/orders/statistics?period=${period}`,
+		{
+			headers: {
+				'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+			}
+		}
+	)
+		.then(response => response.json())
+		.then(data => {
+			console.log('sales data: ', data.salesData);
+			updateSalesChart(data.salesData);
+			updateOrderStatusChart(data.statusData);
+		})
+		.catch(error => console.error('Error fetching statistics:', error));
+}
+
+function updateSalesChart(data) {
+	const ctx = document.getElementById('salesChart').getContext('2d');
+	if (window.salesChart && typeof window.salesChart.destroy === 'function')
+		window.salesChart.destroy();
+
+	window.salesChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: data.labels,
+			datasets: [{
+				label: 'Doanh thu',
+				data: data.values,
+				borderColor: '#435E53',
+				backgroundColor: 'rgba(67, 94, 83, 0.1)',
+				fill: true,
+				tension: 0.4
+			}]
+		},
+		options: {
+			responsive: true,
+			plugins: {
+				legend: {
+					position: 'top',
+				},
+				title: {
+					display: false
+				},
+				tooltip: {
+					callbacks: {
+						label: function (context) {
+							let label = context.dataset.label || '';
+							if (label) {
+								label += ': ';
+							}
+							if (context.parsed.y !== null) {
+								label += context.parsed.y.toLocaleString('vi-VN') + '₫';
+							}
+							return label;
+						}
+					}
+				}
+			},
+			scales: {
+				y: {
+					beginAtZero: true,
+					ticks: {
+						callback: function (value) {
+							return value.toLocaleString('vi-VN') + '₫';
+						}
+					}
+				}
+			}
+		}
+	});
+}
+
+function updateOrderStatusChart(data) {
+	const ctx = document.getElementById('orderStatusChart').getContext('2d');
+	if (window.orderStatusChart && typeof window.orderStatusChart.destroy === 'function')
+		window.orderStatusChart.destroy();
+
+	window.orderStatusChart = new Chart(ctx, {
+		type: 'pie',
+		data: {
+			labels: ['Đang xử lý', 'Đang giao', 'Đã giao', 'Đã hủy'],
+			datasets: [{
+				data: data,
+				backgroundColor: [
+					'#ffc107', // pending - yellow
+					'#007bff', // delivering - blue
+					'#28a745', // delivered - green
+					'#dc3545'  // cancelled - red
+				],
+				borderColor: '#ffffff',
+				borderWidth: 2
+			}]
+		},
+		options: {
+			responsive: true,
+			plugins: {
+				legend: {
+					position: 'bottom'
+				}
+			},
+			onClick: (event, elements) => {
+				if (elements.length > 0) {
+					const index = elements[0].index;
+					const status = ['pending', 'delivering', 'delivered', 'cancelled'][index];
+					const value = data[index];
+
+					console.log(`Clicked ${status} segment with value ${value}`);
+
+					// Example: Navigate to filtered orders page
+					window.location.href = `/admin/orders?status=${status}`;
+				}
+			}
+
+		}
+	});
+}
 
 // Handle change status button click
 document.querySelectorAll('.change-status-btn').forEach(function (button) {
