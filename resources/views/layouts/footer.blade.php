@@ -3,7 +3,9 @@
 		<div class="row">
 			<!-- Team Info -->
 			<div class="col-md-3">
-				<img src="{{'https://png.pngtree.com/png-clipart/20220823/original/pngtree-green-coconut-sticker-vector-illustration-png-image_8462536.png'}}"
+				<!-- <img src="{{'https://png.pngtree.com/png-clipart/20220823/original/pngtree-green-coconut-sticker-vector-illustration-png-image_8462536.png'}}"
+					alt="coconerd" class="footer-logo"> -->
+				<img src="{{ asset('images/logos/tp-logo-with-text.png') }}"
 					alt="coconerd" class="footer-logo">
 				<p class="footer-text">
 					Plant Paradise mong muốn mang đến một không gian sống xanh, không chỉ là nơi khơi nguồn cảm hứng và cải thiện tinh thần, mà còn góp phần nâng tầm thẩm mỹ cho không gian sống của bạn
