@@ -50,7 +50,7 @@ let list_introduce = [
     },
     {
         img: '/images/main/introduce/intro3.svg',
-        title: "Sản phảm đạt tiêu chuẩn",
+        title: "Sản phẩm đạt tiêu chuẩn",
         des: "Các sản phẩm cây trồng tiêu chuẩn cao, đáng tin cậy, có đầy đủ loại. Chúng tôi chịu trách nhiệm tuyển chọn, đào tạo và quản lý."
     },
 ]

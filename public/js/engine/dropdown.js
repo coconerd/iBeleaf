@@ -25,7 +25,7 @@ function reverseToHref(name) {
 
 list_id = {
     "#indoorPlantsDropdown": {
-        "Theo kiểu dáng cây": [
+        "Theo kiểu dáng cây": [                                                                                                               
           "Cây Cao & Lớn Trong Nhà",
           "Cây Cảnh Mini",
           "Cây Treo Trong Nhà",
