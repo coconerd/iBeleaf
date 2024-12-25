@@ -27,11 +27,11 @@ function handleVoucherError(errorResponse) {
     if (
         errorCode === "MIN_PRICE" &&
         (voucherType === "cash" || voucherType === "percentage")) {
-        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} VND để sử dụng Voucher bạn nhé!`;
+        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} ₫ để sử dụng Voucher bạn nhé!`;
     } else if (
         errorCode === "MIN_PRICE" &&
         (voucherType === "free_shipping")) {
-        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} VND để  được miễn phí giao hàng!`;
+        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} ₫ để  được miễn phí giao hàng!`;
     } else {
         errorMessage = errorResponse.message
     }
@@ -104,14 +104,14 @@ function updateVoucherBoxDisplay(description, value, type) {
 
     // Adjust font size based on text length
     if (description.length > 40) {
-        $description.css("font-size", "0.85em");
+        $description.css("font-size", "0.75em");
     } else {
         $description.css("font-size", "1em");
     }
 
     if (type === "percentage") {
         $("#voucher-discount")
-            .text("(Giảm " + formatPrice(value) + " VND)")
+            .text("(Giảm " + formatPrice(value) + " ₫)")
             .show();
     } else {
         $("#voucher-discount").hide();

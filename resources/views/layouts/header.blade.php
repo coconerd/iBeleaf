@@ -26,7 +26,7 @@
 	<div class="container">
 		<!-- Logo -->
 		<a class="navbar-brand" href="/">
-			<img src="{{ asset('images/logos/logo.png') }}" alt="LOGO">
+			<img src="{{ asset('images/logos/tp-logo.png') }}" alt="LOGO">
 			<label>PLANT PARADISE</label>
 		</a>
 

@@ -229,23 +229,21 @@
 				<div class="card" style="background-color: #F9F7F3;">
 					<!-- Your existing card content -->
 					<div class="card-body">
-						<h5 class="card-title">Đặt hàng nhanh qua Hotline (8h - 21h)</h5>
+						<h5 class="card-title">Đặt hàng nhanh qua Hotline<br>(8h - 21h)</h5>
 						<ul class="list-unstyled">
-							<li>Hotline 1: <a href="tel:0838369639" class="text-decoration-none">0838 369 639
-									(Call/Zalo)</a></li>
-							<li>Hotline 2: <a href="tel:0966889393" class="text-decoration-none">0966 888 9393 (Call -
-									Zalo)</a></li>
-							<li>Hotline 3: <a href="tel:0975737494" class="text-decoration-none">0975 737 494 (Zalo)</a>
+							<li>Hotline 1: <a href="tel:0912345678" class="text-decoration-none">0912 345 678 (Call/Zalo)</a></li>
+							<li>Hotline 2: <a href="tel:0812345678" class="text-decoration-none">0976 215 903 (Call/Zalo)</a></li>
+							<li>Hotline 3: <a href="tel:0923456789" class="text-decoration-none">0937 494 749 (Call/Zalo)</a>
 							</li>
 						</ul>
 						<div class="mt-3">
 							<p class="mb-1"><i class="fas fa-check-circle text-success"></i> Miễn phí giao hàng các đơn
 								từ
-								1000k (tối đa 50k)</p>
+								1000K <br>(Miễn phí tối đa 50K)</p>
 							<p class="mb-1"><i class="fas fa-check-circle text-success"></i> Thời gian giao hàng dự kiến
 								từ
 								1 - 7 ngày</p>
-							<p class="mb-1"><i class="fas fa-check-circle text-success"></i> Các sản phẩm cây gốm, chậu:
+							<p class="mb-1"><i class="fas fa-check-circle text-success"></i> Các sản phẩm cây gồm chậu:
 								Chỉ giao hàng tại TP.HCM</p>
 							<p class="mb-0"><i class="fas fa-check-circle text-success"></i> Các sản phẩm cây nhỏ, chậu,
 								phụ kiện, vật tư: Giao hàng toàn quốc</p>
@@ -259,10 +257,10 @@
 							<span class="ms-2">Phương thức thanh toán</span>
 						</div>
 						<div class="mt-3">
-							<p class="mb-0">Plant Paradise hiểu rằng, tâm lý e ngại khi mua hàng Online, do đó chúng tôi
+							<p class="mb-0">Plant Paradise chúng tôi hiểu tâm lý e ngại của khách hàng khi mua hàng online. Do đó chúng tôi
 								sẽ
 								gửi
-								ảnh thực tế trước khi giao hàng. Nhằm đảm bảo lương dịch vụ và quyền lợi của khách hàng.
+								hình ảnh thực tế của sản phẩm trước khi giao hàng để xác thực nhằm đảm bảo lượng dịch vụ và quyền lợi của khách hàng.
 							</p>
 						</div>
 					</div>
@@ -494,7 +492,7 @@
 				<p style="text-align: justify;">
 					Nếu có vấn đề cần hỗ trợ liên quan đến bảo hành vả đổi trả sản phẩm, quý khách có thể liên hệ với
 					chúng tôi thông qua
-					hotline (0937 802 672 hoặc 097 123 82 25), fanpage, hoặc gửi email đến hotro@plantparadise.
+					hotline (0912 345 678 hoặc 0976 215 903), fanpage, hoặc gửi email đến hotroplantparadise@gmail.com
 				</p>
 			</div>
 		</div>

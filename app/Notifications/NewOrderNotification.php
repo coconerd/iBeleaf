@@ -28,10 +28,11 @@ class NewOrderNotification extends Notification
 	{
 		return [
 			'title' => 'Đơn hàng mới #' . $this->order->order_id,
-			'time' => now()->toDateTimeString(),
+			'time' => $this->order->created_at->toDateTimeString(),
 			'order_id' => $this->order->order_id
 		];
 	}
+
 	public function toBroadcast($notifiable)
 	{
 		return new BroadcastMessage([
@@ -41,14 +42,13 @@ class NewOrderNotification extends Notification
 			],
 			'title' => 'Đơn hàng mới #' . $this->order->order_id,
 			'order_id' => $this->order->order_id,
-			'status' => $this->order->status,
-			'time' => now()->toDateTimeString()
+			'time' => $this->order->created_at->toDateTimeString(),
 		]);
 	}
 
 	public function broadcastOn()
 	{
-		return new Channel('orders');
+		return new Channel('admin');
 	}
 
 	public function broadcastAs()

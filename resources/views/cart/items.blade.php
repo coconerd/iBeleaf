@@ -10,6 +10,7 @@
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('css/cart/items.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/cart/christmas.css') }}">
 @endsection
 
 @section('content')
@@ -20,13 +21,13 @@
             </div>
         @endfor
     </div>
-    
+
     <div class="container mt-4">
     @if(isset($cartItems) && $cartItems->count() > 0)
         <div class="row">
             <!--Cart Items Section-->
             <div class="col-lg-8 id="cart-header">
-                <h5 class="fw-bold mb-3">Giỏ hàng</h5>
+                <h4 class="fw-bold mb-3">🎄 Giỏ hàng</h4>
                 <div class="d-flex justify-content-between">
                     <p class="fw-semibold">Mặt hàng
                         (<span class="items-count">{{ $totalQuantity }}</span>)
@@ -62,13 +63,13 @@
                                 <div class="row item-detail">
                                     <h6 class="fw-semibold col-md-bg-danger">{{ $item->product->name }}</h6>
                                     <p class="col-md-bg-success unit-price">
-                                        <span class="font-normal">Đơn giá: </span>
+                                        <span class="font-normal fs-6">Đơn giá (giá gốc): </span>
                                         <span class="price"
                                             data-price="{{ $item->product->price }}"
                                             data-discount="{{ $item->product->discount_percentage }}">
                                             {{ number_format($item->product->price) }}
                                         </span>
-                                        <span class="currency-label">VND</span>
+                                        <span class="currency-label fs-6"><b>₫</b></span>
                                     </p>
                                 </div>
 
@@ -95,7 +96,7 @@
                                             <!-- Use text-start on mobile, text-end on larger screens -->
                                             <div class="row justify-content-start justify-content-md-end">
                                                 @if($item->product->stock_quantity > 0)
-                                                    <span class="temp-title text-start text-md-end">Tạm tính (Đã bao gồm khuyến mãi)</span>
+                                                    <span class="temp-title text-start text-md-end fs-5 fs-6">Tạm tính (Đã bao gồm khuyến mãi)</span>
                                                     <div class="d-flex align-items-center justify-content-md-end justify-content-start">
                                                         <span class="price total-uprice me-1"
                                                             data-cart-id="{{ $item->cart_id }}"
@@ -103,7 +104,7 @@
                                                             data-discount-percent="{{ $item->product->discount_percentage ?? 0}}">
                                                             {{ number_format($item->discounted_price) }}
                                                         </span>
-                                                        <span class="currency-label">VND</span>
+                                                        <span class="currency-label fs-6"><b>₫</b></span>
                                                     </div>
                                                 @else
                                                     <div class="d-flex align-items-center justify-content-md-end justify-content-start">
@@ -123,7 +124,7 @@
             </div>
 
             <!-- Cart Summary Section -->
-            <div class="col-lg-4 mb-5">
+            <div class="col-12 col-lg-4 mb-5">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title mb-4">Thông tin đơn hàng
@@ -131,17 +132,17 @@
                         </h5>
                         <div id ="container">
                             <div class="row">
-                                <p class="info col-6 left-side">Thành tiền
+                                <p class="info col-6 left-side fs-6">Thành tiền
                                     (<span class="items-count-mh">{{ $totalQuantity }} mặt hàng</span>)
                                 </p>
                                 <p class="info col-6 right-side" id="final-total-discounted-price">
-                                    <span id="first-total-price">{{ number_format($totalDiscountedPrice) }} VND</span>
+                                    <span id="first-total-price">{{ number_format($totalDiscountedPrice) }} ₫</span>
                                 </p>
                             </div>
 
                             <div class="row">
-                                <p class="info col-6 left-side">Tổng khuyến mãi</p>
-                                <p class="info col-6 right-side"><span id="total-discount-amount">{{ number_format($totalDiscountAmount) }} VND</span></p>
+                                <p class="info col-6 left-side fs-6">Tổng khuyến mãi</p>
+                                <p class="info col-6 right-side"><span id="total-discount-amount">{{ number_format($totalDiscountAmount) }} ₫</span></p>
                             </div>
                         </div>
 
@@ -172,16 +173,14 @@
                         <hr id="cart-summary-line">
                         <div class="d-flex justify-content-between mb-4">
                             <strong class="final-total-price">Tổng tiền:</strong>
-                            <strong class="final-total-price"><span id="final-price">{{number_format($totalDiscountedPrice)}} VND</span></strong>
+                            <strong class="final-total-price"><span id="final-price">{{number_format($totalDiscountedPrice)}} ₫</span></strong>
                         </div>
                         <div id="ship">
                             <i>(Chưa bao gồm phí vận chuyển)</i>
                         </div>
                         <button class="btn btn-primary w-100" id="checkout-btn">Thanh toán</button>
                         <div class="text-center mt-3">
-                            <a id="shipping-href" class="text-center">
-                                <a href="/">Tiếp tục mua hàng</a>
-                            </a>
+                            <a href="/" class="continue-shopping">Tiếp tục mua hàng</a>
                         </div>
                     </div>
                 </div>

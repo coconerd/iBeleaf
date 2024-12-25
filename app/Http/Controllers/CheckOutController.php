@@ -399,10 +399,7 @@ class CheckOutController extends Controller
         ]);
 	}
 
-    public function showSuccessPage($orderId){
-        $order = Order::findOrFail($orderId);
-        return view('orders.success', [
-            'order' => $order
-        ]);
+    public function showSuccessPage(){
+        return view('cart.success');
     }
 }

@@ -9,7 +9,12 @@ class UserSeeder extends Seeder
 {
 	public function run()
 	{
-		// create a user admin
+		$this->seedAdminUser();
+		$this->seedNormalUsers(5);
+	}
+
+	protected function seedAdminUser()
+	{
 		$hasAdminUser = User::where('role_type', 1)->exists();
 
 		if (!$hasAdminUser) {
@@ -21,5 +26,10 @@ class UserSeeder extends Seeder
 				'role_type' => 1,
 			]);
 		}
+	}
+
+	protected function seedNormalUsers($count)
+	{
+		User::factory()->count($count)->create();
 	}
 }

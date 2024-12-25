@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\OrderItem;
+use App\Models\ProductImage;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class AdminDashboardController extends Controller
 {
@@ -52,7 +52,7 @@ class AdminDashboardController extends Controller
 			'cancelled' => $data['cancelled']
 		]);
 	}
-	
+
 	public function analyzeMetric($metric = 'orders')
 	{
 		$metrics = [
@@ -87,5 +87,43 @@ class AdminDashboardController extends Controller
 			'growth' => $formattedGrowth,
 			'trend' => $trend
 		]);
+	}
+
+	public function topSellingProducts(){
+		$twoWeeksAgo = Carbon::now()->subWeeks(2);
+		
+		// Get top selling products
+		$topSellingProducts = OrderItem::join('products', 'order_items.product_id', '=', 'products.product_id')
+			->where('order_items.created_at', '>=', $twoWeeksAgo)
+			->select(
+				'products.product_id',
+				'products.name',
+				'products.overall_stars',
+				'products.total_orders'
+			)
+			->groupBy('products.product_id', 'products.name', 'products.overall_stars', 'products.total_orders')
+			->orderByDesc('products.total_orders')
+			->limit(15)
+			->get();
+
+		$productIds = $topSellingProducts->pluck('product_id')->toArray();
+		$productImages = ProductImage::whereIn('product_id', $productIds)
+			->where('image_type', 1)
+			->get();
+
+		// Combine results
+		$result = $topSellingProducts->map(function($product, $index) use ($productImages) {
+			$productImage = $productImages->firstWhere('product_id', $product->product_id);
+			return [
+				'rank' => $index + 1,
+				'name' => $product->name,
+				'id' => $product->product_id,
+				'quantity' => $product->total_orders,
+				'image' => $productImage?->product_image_url,
+				'rating' => $product->overall_stars
+			];
+		});
+
+		return response()->json($result);
 	}
 }

@@ -456,4 +456,8 @@ $('.addCartBtn').on('click', function () {
 			showErrorAlert('Có lỗi khi thêm sản phẩm vào giỏ hàng');
 		}
 	});
+
+	// Update cart icon
+	const cartCount = Number($('#cart-count').text());
+	$('#cart-count').text(cartCount + Number(quantity));
 });

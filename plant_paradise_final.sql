@@ -14351,8 +14351,8 @@ CREATE TABLE `users` (
 CREATE TABLE `wishlists` (
     user_id INTEGER NOT NULL,
     product_id VARCHAR(10) NOT NULL,
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP
+    created_at TIMESTAMP DEFAULT current_timestamp(),
+    updated_at TIMESTAMP DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

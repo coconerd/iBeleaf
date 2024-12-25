@@ -61,9 +61,14 @@ class OrderFactory extends Factory
 				->forOrder($order)
 				->create();
 
+			// Update total_orders of Products
+			foreach($orderItems as $orderItem) {
+				$orderItem->product->total_orders += $orderItem->quantity;
+				$orderItem->product->save();
+			}
+
 			// Calculate provisional_price by summing total_price of OrderItems
 			$provisionalPrice = $orderItems->sum('total_price');
-
 
 			// Update the Order with the calculated prices
 			$order->provisional_price = $provisionalPrice;

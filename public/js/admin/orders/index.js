@@ -16,6 +16,16 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Charts: initialize with default period
 	updateCharts('week');
 
+	// Open order modal if delegated by other page
+	(function openIntendedModal() {
+		const orderId = sessionStorage.getItem('modal.orderId');
+		if (!orderId) {
+			return;
+		}
+		loadOrderDetailsPopup(orderId, new Event('click'));
+		sessionStorage.removeItem('modal.orderId');
+	})();
+
 	// Charts: handle periods filter buttons clicks
 	document.querySelectorAll('[data-period]').forEach(button => {
 		button.addEventListener('click', function () {
@@ -44,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		});
 	});
-
 
 	// Add sorting functionality
 	document.querySelectorAll('.sortable').forEach(function (header) {
@@ -152,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// Ensure the click handler on '.order-id.clickable' stops propagation
 	function loadOrderDetailsPopup(orderId, event) {
-		event.stopPropagation();
+		if (event) event.stopPropagation();
 		const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
 		const modalContent = document.getElementById('order-details-content');
 

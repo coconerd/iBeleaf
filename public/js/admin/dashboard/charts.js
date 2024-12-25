@@ -56,7 +56,6 @@ $(document).ready(function () {
                     borderWidth: 3,
                     pointRadius: 4,
                     pointHoverRadius: 6,
-                    pointBackgroundColor: orderStatusColors.cancelled,
                 },
             ],
         },
@@ -66,12 +65,30 @@ $(document).ready(function () {
             plugins: {
                 legend: {
                     position: "top",
-                    padding: 25,
+                    padding: 15,
                     labels: {
-                        padding: 20,
-                        boxWidth: 40,
+                        padding: 12,
+                        boxWidth: 30,
                         font: {
-                            size: 13,
+                            size: 15,
+                        },
+                    },
+                },
+                tooltip: {
+                    mode: "index",
+                    intersect: false,
+                    padding: 20,
+                    displayColors: true,
+                    titleFont: {
+                        size: 14,
+                    },
+                    bodyFont: {
+                        size: 15,
+                    },
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.dataset.label || "";
+                            return "  " + label + ": " + context.parsed.y;
                         },
                     },
                 },
@@ -93,19 +110,6 @@ $(document).ready(function () {
             scales: {
                 y: {
                     beginAtZero: true,
-                },
-            },
-            plugins: {
-                tooltip: {
-                    mode: "index",
-                    intersect: false,
-                },
-                legend: {
-                    onHover: (e) => {
-                        e.chart.data.datasets.forEach((dataset) => {
-                            dataset.borderWidth = 2;
-                        });
-                    },
                 },
             },
             datasetHoverStyle: {
@@ -137,6 +141,9 @@ $(document).ready(function () {
 
     fetchOrderData(); // Initial load
     showStatsCards();
+    loadTopSellingProducts();
+    // Call the initialization
+    initLocationChart();
 });
 
 function updateStatCard(metric, options) {
@@ -146,16 +153,21 @@ function updateStatCard(metric, options) {
         success: function (response) {
             const { valueId, indicatorId, growthId, prefix, suffix } = options;
 
-            // Update value with prefix/suffix
-            const formattedValue = [
-                prefix,
-                options.formatter
-                    ? options.formatter(response.todayTotal)
-                    : response.todayTotal,
-                suffix,
-            ]
-                .filter(Boolean)
-                .join(" ");
+            // Update value with prefix/suffix only if there's data
+            let formattedValue = '';
+            if (response.todayTotal === null || response.todayTotal === 0) {
+                formattedValue = "...";
+            } else {
+                formattedValue = [
+                    prefix,
+                    options.formatter
+                        ? options.formatter(response.todayTotal)
+                        : response.todayTotal,
+                    suffix,
+                ]
+                    .filter(Boolean)
+                    .join(" ");
+            }
 
             $(`#${valueId}`).text(formattedValue);
             
@@ -174,11 +186,16 @@ function updateStatCard(metric, options) {
             
             // Update growth
             $(`#${growthId}`)
-            .text(`${Math.abs(response.growth)}%`)
+            .text(`${parseLocalizedNumber(response.growth).toFixed(2)}%`)
                 .removeClass("growth-positive growth-negative")
                 .addClass(growthClass);
             },
     });
+}
+
+function parseLocalizedNumber(str) {
+    // Remove thousand separators and convert decimal separator
+    return parseFloat(str.replace(/\,/g, ''));
 }
     
 function showStatsCards() {
@@ -213,3 +230,44 @@ function formatPrice(price) {
         currency: "VND",
     }).format(price);
 }
+
+function loadTopSellingProducts() {
+    $.ajax({
+        url: "dashboard/top-selling",
+        method: "GET",
+        success: function (products) {
+            const tbody = $("#top-selling-table tbody");
+            tbody.empty();
+
+            products.forEach((product) => {
+                const row = $("<tr>");
+                const topIcon = product.rank <= 5 ? `<i class="fas fa-crown text-warning" title="Top ${product.rank}"></i>` : '';
+				row.html(`
+					<td class="text-center">
+						${topIcon}
+						${product.rank}
+					</td>
+					<td>
+						<img src="${product.image}" alt="${product.name}" 
+							class="product-thumbnail">
+					</td>
+					<td>${product.id}</td>
+					<td>${product.name}</td>
+					<td class="text-end overall-star">
+						<span class="text-warning">
+							${'<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating))}
+							${product.rating % 1 !== 0 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+						</span>
+						<span class="rating-number">${Number(product.rating).toFixed(1)}</span>
+					</td>
+					<td class="text-end quantity-cell">${product.quantity}</td>
+				`);
+                tbody.append(row);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error loading top selling products:", error);
+        },
+    });
+}
+

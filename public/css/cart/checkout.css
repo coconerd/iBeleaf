@@ -354,7 +354,7 @@ select option:first-child {
 	height: 72px;
 	object-fit: cover;
 	border-radius: 8px;
-	box-shadow: 0 2px 8px #6bbf59;
+	box-shadow: 0 2px 8px #D3DF7A;
 }
 
 /* Quantity Badge */

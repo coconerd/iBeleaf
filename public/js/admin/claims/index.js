@@ -5,6 +5,18 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Initialize default filter period btn
 	document.querySelector('[data-period="week"]').classList.add('active', 'btn-secondary');
 
+	// Open claim details modal if delegated by other pages
+	(function openIntendedModal() {
+		const requestId = sessionStorage.getItem('modal.return_refund_id');
+		console.log('Intended request ID:', requestId);
+		if (!requestId) {
+			return;
+		}
+
+		loadRequestDetails(requestId);
+		sessionStorage.removeItem('modal.return_refund_id');
+	})();
+
 	// Handle period button clicks
 	document.querySelectorAll('[data-period]').forEach(button => {
 		button.addEventListener('click', function () {

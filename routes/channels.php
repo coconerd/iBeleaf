@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('orders', function ($user) {
+Broadcast::channel('admin', function ($user) {
 	return $user->role_type == 1; // admin-only
 });
+
+// Broadcast::channel('claims', function ($user) {
+// 	return $user->role_type == 1; // admin-only
+// });
