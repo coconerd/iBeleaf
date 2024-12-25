@@ -85,7 +85,7 @@ $(document).ready(function () {
             let value = parseInt($input.val());
 
             if (value === 1) {
-                await showMinQuantityAlert($input);
+                showMinQuantityAlert($input);
                 return;
             }
 
@@ -314,28 +314,39 @@ function showMinQuantityAlert($input) {
     if (!$input || !($input instanceof jQuery)) {
         throw new TypeError("Invalid input parameter");
     }
+    
+    const cartItem = $input.closest(".each-cart-item");
+    const productName = cartItem.find(".product-name").text();
 
-    return Swal.fire({
-        iconHtml:
-            '<i class="fa-solid fa-circle-exclamation" style="color: #E03636;"></i>',
-        title: '<h4 style="color: #E03636">Xóa sản phẩm khỏi giỏ hàng</h4>',
+    Swal.fire({
+        title: '<h4 style="color: #1E362D; font-size: 24px;">Xác nhận xóa</h4>',
         html: `
-            <div style="color: #6c757d; font-size: 17px;">
-                Bạn có chắc chắn muốn xóa sản phẩm khỏi giỏ hàng không?
+            <div style="color: #666; font-size: 16px; margin: 15px 0;">
+                Bạn có chắc chắn muốn xóa <span style="color: #1E362D; font-weight: 600;">${productName}</span> khỏi giỏ hàng?
             </div>
         `,
-        customClass: {
-            popup: "custom-alert-popup",
-            title: "custom-alert-title",
-            confirmButton: "custom-confirm-btn",
-            cancelButton: "custom-cancel-btn",
-        },
-        showConfirmButton: true,
+        icon: null,
         showCancelButton: true,
-        confirmButtonText: "Xác nhận",
+        confirmButtonColor: "#c78b5e",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: '<i class="fas fa-trash-alt"></i> Xóa',
         cancelButtonText: "Hủy",
-        focusConfirm: false, // Removes focus from the confirm button
-        allowOutsideClick: false,
+        customClass: {
+            popup: "custom-swal-popup",
+            confirmButton: "custom-confirm-button",
+            cancelButton: "custom-cancel-button",
+        },
+        buttonsStyling: true,
+        reverseButtons: true,
+        padding: "2em",
+        background: "#fff",
+        borderRadius: "15px",
+        showClass: {
+            popup: "animate__animated animate__fadeInDown",
+        },
+        hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+        },
     }).then((result) => {
         if (result.isConfirmed) {
             const cartItem = $input.closest(".each-cart-item");
@@ -364,8 +375,29 @@ function showMinQuantityAlert($input) {
                         updateCartCount();
                         clearVoucher();
                         calculateCartTotal();
+                    
+
+                        // Success notification
+                        Swal.fire({
+                            title: '<h4 style="color: #1E362D;">Đã xóa thành công!</h4>',
+                            html: '<div style="color: #666;">Sản phẩm đã được xóa khỏi giỏ hàng</div>',
+                            icon: "success",
+                            timer: 1500,
+                            showConfirmButton: false,
+                            customClass: {
+                                popup: "custom-swal-popup",
+                            },
+                        });
+
+                        // If cart is empty after removal, reload the page
+                        if ($(".each-cart-item").length === 1) {
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        }
                     }
                 })
+                
                 .catch((error) => {
                     console.error(
                         "Server Error Details:",
