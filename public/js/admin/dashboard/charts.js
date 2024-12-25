@@ -242,26 +242,26 @@ function loadTopSellingProducts() {
             products.forEach((product) => {
                 const row = $("<tr>");
                 const topIcon = product.rank <= 5 ? `<i class="fas fa-crown text-warning" title="Top ${product.rank}"></i>` : '';
-                row.html(`
-                    <td class="text-center">
-                        ${topIcon}
-                        ${product.rank}
-                    </td>
-                    <td>
-                        <img src="${product.image}" alt="${product.name}" 
-                            class="product-thumbnail">
-                    </td>
-                    <td>${product.id}</td>
-                    <td>${product.name}</td>
-                    <td class="text-end overall-star">
-                        <span class="text-warning">
-                            ${'<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating))}
-                            ${product.rating % 1 !== 0 ? '<i class="fas fa-star-half-alt"></i>' : ''}
-                        </span>
-                        <span class="rating-number">${product.rating}</span>
-                    </td>
-                    <td class="text-end quantity-cell">${product.quantity}</td>
-                `);
+				row.html(`
+					<td class="text-center">
+						${topIcon}
+						${product.rank}
+					</td>
+					<td>
+						<img src="${product.image}" alt="${product.name}" 
+							class="product-thumbnail">
+					</td>
+					<td>${product.id}</td>
+					<td>${product.name}</td>
+					<td class="text-end overall-star">
+						<span class="text-warning">
+							${'<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating))}
+							${product.rating % 1 !== 0 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+						</span>
+						<span class="rating-number">${Number(product.rating).toFixed(1)}</span>
+					</td>
+					<td class="text-end quantity-cell">${product.quantity}</td>
+				`);
                 tbody.append(row);
             });
         },
