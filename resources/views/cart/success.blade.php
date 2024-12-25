@@ -7,6 +7,7 @@
 
 @section('content')
 <div class="container">
+    <div class="container py-5">
     <div class="row min-vh-80 d-flex align-items-center justify-content-center" id="success-container">
         <div class="col-md-8 text-center">
             <!-- Success Animation -->
@@ -19,7 +20,7 @@
             <!-- Success Message -->
             <h1 class="display-4 mb-3 title">Mua sắm thành công!</h1>
             <p class="text-muted lead mb-4">
-                Cảm ơn bạn vì đã tin tưởng <span class="h5 d-inline" id="website-name">Plant Paradise 🌱</span>. Chúc bạn có những trải nghiệm mua sắm tuyệt vời!
+                Cảm ơn bạn vì đã tin tưởng <span class="h6 d-inline" id="website-name">Plant Paradise 🌱</span>. Chúc bạn có những trải nghiệm mua sắm tuyệt vời!
             </p>
 
             <!-- Action Buttons -->
@@ -29,6 +30,7 @@
                 </a>
             </div>
         </div>
+    </div>
     </div>
 </div>
 @endsection
