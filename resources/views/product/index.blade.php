@@ -231,11 +231,9 @@
 					<div class="card-body">
 						<h5 class="card-title">Đặt hàng nhanh qua Hotline (8h - 21h)</h5>
 						<ul class="list-unstyled">
-							<li>Hotline 1: <a href="tel:0838369639" class="text-decoration-none">0838 369 639
-									(Call/Zalo)</a></li>
-							<li>Hotline 2: <a href="tel:0966889393" class="text-decoration-none">0966 888 9393 (Call -
-									Zalo)</a></li>
-							<li>Hotline 3: <a href="tel:0975737494" class="text-decoration-none">0975 737 494 (Zalo)</a>
+							<li>Hotline 1: <a href="tel:0912345678" class="text-decoration-none">0912 345 678 (Call/ Zalo)</a></li>
+							<li>Hotline 2: <a href="tel:0812345678" class="text-decoration-none">0812 345 678 (Call / Zalo)</a></li>
+							<li>Hotline 3: <a href="tel:0923456789" class="text-decoration-none">0975 737 494 (Call / Zalo)</a>
 							</li>
 						</ul>
 						<div class="mt-3">
@@ -494,7 +492,7 @@
 				<p style="text-align: justify;">
 					Nếu có vấn đề cần hỗ trợ liên quan đến bảo hành vả đổi trả sản phẩm, quý khách có thể liên hệ với
 					chúng tôi thông qua
-					hotline (0937 802 672 hoặc 097 123 82 25), fanpage, hoặc gửi email đến hotro@plantparadise.
+					hotline (0912 345 678 hoặc 0923 456 789), fanpage, hoặc gửi email đến hotro@plantparadise.com
 				</p>
 			</div>
 		</div>

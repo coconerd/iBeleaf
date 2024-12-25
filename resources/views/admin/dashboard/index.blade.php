@@ -2,12 +2,12 @@
 @section("title", "Admin dashboard")
 
 @section('style')
-	<link rel="stylesheet" href="{{ asset('css/admin/dashboard/charts.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/dashboard/charts.css') }}">
 @endsection
 
 @section('body-script')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/admin/dashboard/charts.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('js/admin/dashboard/charts.js') }}"></script>
 @endsection
 
 @section('content')
@@ -110,11 +110,16 @@
 	</div>
 </div>
 
-<div class="section-divider">
+<div class="section-divider position-relative">
 	<h2 class="section-title">
 		<i class="fa-solid fa-lg fa-crown" style="color: #28a745;"></i>
 		Sản phẩm bán chạy
 	</h2>
+	<a href="/admin/products" class="d-flex position-absolute text-secondary" 
+		style="right: 20px; bottom: 17px; font-size: 1rem; opacity: 0.65;">
+		<h class="" style="text-decoration: none !important;">Sản phẩm</h4>
+		<i class="bi bi-caret-right"></i>
+	</a>
 </div>
 
 <div class="container-fluid">

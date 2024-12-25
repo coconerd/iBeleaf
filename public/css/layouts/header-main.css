@@ -55,6 +55,13 @@
 	color: white;
 	font-weight: bold;
 	font-size: 22px;
+	transition: filter 0.3s ease;
+}
+
+.navbar-brand img {
+	filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
+	background-color: rgba(255, 255, 220, 0.9);
+	border-radius: 11px;
 }
 
 .navbar-brand label{
