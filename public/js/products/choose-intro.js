@@ -58,27 +58,27 @@ $(document).ready(function(){
             type: "left",
             img: "/images/main/choose-info/icon_why_1.webp",
             title: "Sứ mệnh “Vì không gian xanh”",
-            des: `Lấy khách hàng làm trung tâm và sự hài lòng của khách hàng làm kim chỉ nam để hoạt động, ${title} luôn nỗ lực không ngừng để mang đến những sản phẩm cây cảnh và chậu trồng chất lượng, góp phần kiến tạo không gian sống xanh, sạch và đầy sức sống cho mọi gia đình.`
+            des: `${title} lấy khách hàng làm trung tâm, xem sự hài lòng của khách hàng là kim chỉ nam trong mọi hoạt động. Chúng tôi không ngừng nỗ lực mang đến những sản phẩm cây cảnh và chậu trồng chất lượng, góp phần tạo nên không gian sống xanh, sạch và tràn đầy sức sống cho mọi gia đình.`
         }, {
             type: "left",
             img: "/images/main/choose-info/icon_why_2.webp",
             title: "Nguồn gốc xuất xứ rõ ràng",
-            des: `Đây là tiêu chí quan trọng hàng đầu trong việc hợp tác với các đơn vị cung cấp cây trồng và chậu. Các nhà vườn và nhà sản xuất chậu của ${title} đều là những đối tác uy tín, đảm bảo cây và sản phẩm có nguồn gốc rõ ràng, tuân thủ các tiêu chuẩn về chất lượng và bảo vệ môi trường.`
+            des: `Đây là tiêu chí quan trọng hàng đầu trong việc hợp tác với các đơn vị cung cấp cây trồng và chậu cây. Các nhà vườn và nhà sản xuất chậu cây của ${title} đều là những đối tác uy tín, đảm bảo cây và sản phẩm có nguồn gốc rõ ràng, tuân thủ các tiêu chuẩn về chất lượng và bảo vệ môi trường.`
         }, {
             type: "left",
             img: "/images/main/choose-info/icon_why_3.webp",
             title: "Quy trình kiểm soát chất lượng chặt chẽ",
-            des: `Chúng tôi xây dựng một quy trình kiểm soát chất lượng kỹ lưỡng để đảm bảo cây cảnh luôn khỏe mạnh, xanh tốt và chậu trồng đạt tiêu chuẩn cao. Từ việc lựa chọn giống cây, chăm sóc, đến bảo quản và vận chuyển, mọi khâu đều được thực hiện một cách chuyên nghiệp để mang lại sản phẩm hoàn hảo nhất.`
+            des: `Chúng tôi xây dựng một quy trình kiểm soát chất lượng kỹ lưỡng để đảm bảo cây cảnh luôn khỏe mạnh, xanh tốt và chậu cây đạt tiêu chuẩn cao. Từ việc lựa chọn giống cây, chăm sóc, đến bảo quản và vận chuyển, mọi khâu đều được thực hiện một cách chuyên nghiệp để mang lại sản phẩm hoàn hảo nhất.`
         }, {
             type: "right",
             img: "/images/main/choose-info/icon_why_4.webp",
             title: "Chính sách giá ưu đãi",
-            des: `Chính sách giá luôn là một yếu tố quan trọng khi khách hàng lựa chọn sản phẩm. Hiểu được điều đó, ${title} cam kết mang đến những sản phẩm cây và chậu với mức giá cạnh tranh nhất trên thị trường, đồng thời thường xuyên triển khai các chương trình ưu đãi hấp dẫn để tri ân khách hàng.`
+            des: `Chính sách giá ưu đãi luôn là một yếu tố quan trọng khi khách hàng lựa chọn sản phẩm. Hiểu được điều đó, ${title} cam kết mang đến những sản phẩm và chậu cây với các mức giá phải chăng, đồng thời thường xuyên triển khai các chương trình ưu đãi hấp dẫn để tri ân khách hàng.`
         }, {
             type: "right",
             img: "/images/main/choose-info/icon_why_5.webp",
             title: "Nguồn hàng phong phú, ổn định",
-            des: `Sự đa dạng về chủng loại cây và chậu là một điểm nổi bật của ${title}. Chúng tôi không ngừng mở rộng danh mục sản phẩm, từ cây trang trí trong nhà, cây ngoài trời, đến các loại chậu thiết kế độc đáo, phù hợp với mọi không gian và phong cách của khách hàng.`
+            des: `Sự đa dạng về các loại cây và chậu cây là một điểm nổi bật của ${title}. Chúng tôi không ngừng mở rộng danh mục sản phẩm, từ cây trang trí trong nhà, cây ngoài trời, đến các chậu cây có thiết kế độc đáo, phù hợp với mọi không gian và phong cách của khách hàng.`
         }, {
             type: "right",
             img: "/images/main/choose-info/icon_why_6.webp",
