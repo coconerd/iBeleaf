@@ -21,25 +21,6 @@
             </div>
         @endfor
     </div>
-    
-    <!--Santa-->
-    <div class="santa-wrapper">
-        <div class="santa">
-            <div class="hand-l"></div>
-            <div class="hand-r"></div>
-            <div class="hat"></div>
-            <div class="face">
-                <div class="beard"></div>
-                <div class="eyes"></div>
-            </div>
-            <div class="belt"></div>
-            <div class="shoes">
-                <div class="shoe-left"></div>
-                <div class="shoe-right"></div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="container mt-4">
     @if(isset($cartItems) && $cartItems->count() > 0)
