@@ -121,7 +121,7 @@
 											</div>
 										</div>
 										<div class="d-flex justify-content-between align-items-center">
-											<span class="item-price">Tổng tiền: {{ number_format($item->discounted_price) }} VNĐ</span>
+											<span class="item-price">Tổng tiền: {{ number_format($item->discounted_price) }} ₫</span>
 										</div>
 									</div>
 								</div>
@@ -139,7 +139,7 @@
 							<input type="hidden" id="total-discounted-price" value="{{ $totalDiscountedPrice }}">
 							<div class="summary-row total">
 								<span>Tổng tiền (Đã bao gồm VAT)</span>
-								<span class="total-amount">{{ number_format($totalDiscountedPrice) }} VNĐ</span>
+								<span class="total-amount">{{ number_format($totalDiscountedPrice) }} đ</span>
 							</div>
 						</div>
 
@@ -171,7 +171,7 @@
 						</p>
 						<p>
 							<i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i>
-							<span>Phí vận chuyển nội thành TP.HCM đồng giá 30,000 VNĐ</span>
+							<span>Phí vận chuyển nội thành TP.HCM đồng giá <b>30,000 ₫</b></span>
 						</p>
 					</div>
 				</div>

@@ -128,9 +128,9 @@ $(document).ready(function () {
             const productName = $(this).data("product-name");
 
             Swal.fire({
-                title: '<h4 style="color: #1E362D; font-size: 24px;">Xác nhận xóa</h4>',
+                title: '<h3 style="color: #1E362D; font-size: 24px;" > Xác nhận xóa!</h3> ',
                 html: `
-            <div style="color: #666; font-size: 16px; margin: 15px 0;">
+            <div style="color: #666; font-size: 19px; margin: 15px 0;">
                 Bạn có chắc chắn muốn xóa <span style="color: #1E362D; font-weight: 600;">${productName}</span> khỏi giỏ hàng?
             </div>
         `,
@@ -142,8 +142,8 @@ $(document).ready(function () {
                 cancelButtonText: "Hủy",
                 customClass: {
                     popup: "custom-swal-popup",
-                    confirmButton: "custom-confirm-button",
-                    cancelButton: "custom-cancel-button",
+                    confirmButton: "custom-confirm-button btn-equal-size",
+                    cancelButton: "custom-cancel-button btn-equal-size",
                 },
                 buttonsStyling: true,
                 reverseButtons: true,
@@ -179,10 +179,15 @@ $(document).ready(function () {
 
                                 // Success notification
                                 Swal.fire({
-                                    title: '<h4 style="color: #1E362D;">Đã xóa thành công!</h4>',
-                                    html: '<div style="color: #666;">Sản phẩm đã được xóa khỏi giỏ hàng</div>',
-                                    icon: "success",
-                                    timer: 1500,
+                                    title: `
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-left: -20px;">
+                                                <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px;"></i>
+                                                <h4 style="color: #1E362D; margin: 0;">Đã xóa thành công!</h4>
+                                            </div>
+                                        </div>`,
+                                    html: '<div style="color: #666; font-size: 20px;">Sản phẩm đã được xóa khỏi giỏ hàng</div>',
+                                    timer: 1700,
                                     showConfirmButton: false,
                                     customClass: {
                                         popup: "custom-swal-popup",
@@ -231,7 +236,7 @@ $(document).ready(function () {
         // Get voucher name if voucher box is visible
         if ($("#valid-voucher-box").is(":visible")) {
             voucherName = $("#voucher-input").val();
-        };
+        }
         console.log("Voucher name: ", voucherName);
 
         const voucherValue = $("#final-price").text()
@@ -239,7 +244,7 @@ $(document).ready(function () {
               parseInt($("#final-price").text().replace(/[^\d]/g, ""))
             : 0;
         console.log("Voucher value: ", voucherValue);
-        
+
         // Proceed with checkout AJAX
         $.ajax({
             url: `/cart/items-update`,
@@ -291,7 +296,6 @@ function hanldeQuantityUpdate($input) {
     calculateSubPrice($quantityInput);
     calculateCartTotal();
     updateDiscountAmount();
-
 }
 function applyVoucher(voucherId, description, discount) {
     const $voucherBox = $("#valid-voucher-box");
@@ -314,14 +318,14 @@ function showMinQuantityAlert($input) {
     if (!$input || !($input instanceof jQuery)) {
         throw new TypeError("Invalid input parameter");
     }
-    
+
     const cartItem = $input.closest(".each-cart-item");
     const productName = cartItem.find(".product-name").text();
 
     Swal.fire({
-        title: '<h4 style="color: #1E362D; font-size: 24px;">Xác nhận xóa</h4>',
+        title: '<h3 style="color: #1E362D; font-size: 24px;" > Xác nhận xóa!</h3> ',
         html: `
-            <div style="color: #666; font-size: 16px; margin: 15px 0;">
+            <div style="color: #666; font-size: 19px; margin: 15px 0;">
                 Bạn có chắc chắn muốn xóa <span style="color: #1E362D; font-weight: 600;">${productName}</span> khỏi giỏ hàng?
             </div>
         `,
@@ -333,8 +337,8 @@ function showMinQuantityAlert($input) {
         cancelButtonText: "Hủy",
         customClass: {
             popup: "custom-swal-popup",
-            confirmButton: "custom-confirm-button",
-            cancelButton: "custom-cancel-button",
+            confirmButton: "custom-confirm-button btn-equal-size",
+            cancelButton: "custom-cancel-button btn-equal-size",
         },
         buttonsStyling: true,
         reverseButtons: true,
@@ -375,14 +379,18 @@ function showMinQuantityAlert($input) {
                         updateCartCount();
                         clearVoucher();
                         calculateCartTotal();
-                    
 
                         // Success notification
                         Swal.fire({
-                            title: '<h4 style="color: #1E362D;">Đã xóa thành công!</h4>',
-                            html: '<div style="color: #666;">Sản phẩm đã được xóa khỏi giỏ hàng</div>',
-                            icon: "success",
-                            timer: 1500,
+                            title: `
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-left: -20px;">
+                                                <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px;"></i>
+                                                <h4 style="color: #1E362D; margin: 0;">Đã xóa thành công!</h4>
+                                            </div>
+                                        </div>`,
+                            html: '<div style="color: #666; font-size: 20px;">Sản phẩm đã được xóa khỏi giỏ hàng</div>',
+                            timer: 1700,
                             showConfirmButton: false,
                             customClass: {
                                 popup: "custom-swal-popup",
@@ -397,7 +405,7 @@ function showMinQuantityAlert($input) {
                         }
                     }
                 })
-                
+
                 .catch((error) => {
                     console.error(
                         "Server Error Details:",
@@ -461,10 +469,10 @@ function calculateSubPrice($input) {
         const productId = $item.data("product-id");
 
         // Clean price values
-        const unitPrice = parseInt(cleanPriceString($price.data("unit-price"))) || 0;
-        const discountPercent = parseInt(
-            cleanPriceString($price.data("discount-percent"))
-        ) || 0;
+        const unitPrice =
+            parseInt(cleanPriceString($price.data("unit-price"))) || 0;
+        const discountPercent =
+            parseInt(cleanPriceString($price.data("discount-percent"))) || 0;
         const quantity = parseInt(cleanPriceString($input.val())) || 0;
 
         if (quantity <= 0) {
@@ -513,19 +521,35 @@ function updateDiscountAmount() {
             const $price = $item.find(".total-uprice");
 
             if (!$input.length || !$price.length) {
-                console.warn("Missing required elements for discount calculation");
+                console.warn(
+                    "Missing required elements for discount calculation"
+                );
                 return;
             }
 
-            const quantity = Math.max(0, parseInt(cleanPriceString($input.val())) || 0);
-            const unitPrice = Math.max(0, parseInt(cleanPriceString($price.data("unit-price"))) || 0);
-            const discountPercent = Math.min(100, Math.max(0, parseInt(cleanPriceString($price.data("discount-percent"))) || 0));
+            const quantity = Math.max(
+                0,
+                parseInt(cleanPriceString($input.val())) || 0
+            );
+            const unitPrice = Math.max(
+                0,
+                parseInt(cleanPriceString($price.data("unit-price"))) || 0
+            );
+            const discountPercent = Math.min(
+                100,
+                Math.max(
+                    0,
+                    parseInt(
+                        cleanPriceString($price.data("discount-percent"))
+                    ) || 0
+                )
+            );
 
             if (quantity && unitPrice) {
-                const itemDiscount = (unitPrice * quantity * discountPercent) / 100;
+                const itemDiscount =
+                    (unitPrice * quantity * discountPercent) / 100;
                 totalDiscount += itemDiscount;
             }
-
         });
 
         // Update discount display if element exists
@@ -543,9 +567,18 @@ function calculateCartTotal() {
 
     $(".each-cart-item").each(function () {
         if (isInStock($(this))) {
-            const quantity = parseInt(cleanPriceString($(this).find(".quantity-input").val())) || 0;
-            const price = parseFloat(cleanPriceString($(this).find(".price").data("price"))) || 0;
-            const discount = parseFloat(cleanPriceString($(this).find(".price").data("discount"))) || 0;
+            const quantity =
+                parseInt(
+                    cleanPriceString($(this).find(".quantity-input").val())
+                ) || 0;
+            const price =
+                parseFloat(
+                    cleanPriceString($(this).find(".price").data("price"))
+                ) || 0;
+            const discount =
+                parseFloat(
+                    cleanPriceString($(this).find(".price").data("discount"))
+                ) || 0;
 
             if (quantity && price) {
                 const discountedPrice = price * (1 - discount / 100);
@@ -564,5 +597,5 @@ function formatPrice(price) {
 }
 
 function cleanPriceString(priceStr) {
-    return String(priceStr || '').replace(/[^\d]/g, "");
+    return String(priceStr || "").replace(/[^\d]/g, "");
 }
