@@ -156,14 +156,14 @@
 				<!--Shipping Privacy-->
 				<div id="shipping-privacy">
 					<div class="title-icon">
-						<span class="section-title">Qui định về phí vận chuyển</span>
+						<span class="section-title">Quy định về phí vận chuyển</span>
 						<i class="fa-solid fa-seedling" style="color: #469636;"></i>
 					</div>
 					<hr class="line">
 					<div class="shipping-privacy-content">
 						<p>
 							<i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i>
-							<span>Chỉ nhận giao ngoại thành đối với các sản phẩm là CHẬU</span>
+							<span>Chỉ nhận giao ngoại thành đối với các sản phẩm là CHẬU CÂY</span>
 						</p>
 						<p>
 							<i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i>
@@ -171,7 +171,7 @@
 						</p>
 						<p>
 							<i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i>
-							<span>Phí vận chuyển nội thành TP.HCM đồng giá 30,000 VND</span>
+							<span>Phí vận chuyển nội thành TP.HCM đồng giá 30,000 VNĐ</span>
 						</p>
 					</div>
 				</div>
@@ -190,7 +190,7 @@
 									<img src="https://www.muji.com.vn/_next/static/media/payment_online.20c772c1.svg" alt="BANKING" class="payment-icon">
 									<span>
 										<span class="payment-type">BANKING (Coming soon...)</span><br>
-										<small class="payment-description">Chuyển khoản ngân hàng, MOMO, VNPAY, Apple Pay</small>
+										<small class="payment-description">Chuyển khoản ngân hàng, MOMO, VNPAY, Apple Pay, Zalo Pay</small>
 									</span>
 								</div>
 								<input type="radio" name="payment" class="form-check-input" disabled>
