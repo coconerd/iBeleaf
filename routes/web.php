@@ -113,11 +113,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 				->name('updateField');
 			Route::get('/statistics', [AdminOrderController::class, 'getStatistics'])->name('statistics');
 		});
-                       
-		// Admin Dashboard route
+
+// Admin Dashboard route
 		Route::prefix('dashboard')->name('dashboard.')->group(function () {
 			Route::get('/', [AdminDashboardController::class, 'showDashboardPage'])->name('showDashboardPage');
-			Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData'])->name('getSalesData');
+Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData'])->name('getSalesData');
 			Route::get('/analyze/{metric}', [AdminDashboardController::class, 'analyzeMetric']);
 			Route::get('/top-selling', [AdminDashboardController::class, 'topSellingProducts'])->name('topSelling');
 		});
@@ -127,7 +127,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 			Route::get('/', [AdminClaimsController::class, 'showClaimsPage'])->name('index');
 			Route::get('/{requestId}/details', [AdminClaimsController::class, 'showDetails'])->name('details');
 			Route::post('/update-status', [AdminClaimsController::class, 'updateStatus'])->name('updateStatus');
-Route::get('/statistics', [AdminClaimsController::class, 'getStatistics'])->name('statistics');
+			Route::get('/statistics', [AdminClaimsController::class, 'getStatistics'])->name('statistics');
 		});
 
 		// Admin products management routes
@@ -164,7 +164,7 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::post('/profile/verify-newpassword', [ProfileController::class, 'handleVerifyNewPassword'])->name('profile.verifyNewPassword');
 
 	// OAuth2 social login
-	Route::middleware(['role:0'])->get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
+		Route::middleware(['role:0'])->get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
 	Route::middleware(['role:0'])->get('/profile/returns', [ProfileController::class, 'showReturnsForm'])->name('profile.returns');
 });
 
@@ -182,6 +182,8 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 });
 
 // Product routes
+Route::get('/product/all-categories', [ProductController::class, 'getAllCategories'])
+	->name('product.allCategories');
 Route::get('/product/{product_id}', [ProductController::class, 'show'])
 	->name('product.show');
 Route::middleware(['auth', 'role:0'])
@@ -249,3 +251,5 @@ Route::fallback(function () {
 Route::get('/404', function () {
     return view('errors.404');
 });
+Route::post('/orders/testNotiDB', [OrderController::class, 'testNoti']);
+Route::post('/orders/testNotiEmail', [OrderController::class, 'testNotiEmail']);

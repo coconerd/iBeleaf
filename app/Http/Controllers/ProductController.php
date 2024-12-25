@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
@@ -202,5 +203,17 @@ class ProductController extends Controller
 			return redirect()->back()->with('error', 'Có lỗi xảy ra khi gửi đánh giá!');
 		}
 		return redirect()->back()->with('success', 'Cảm ơn bạn đã gửi đánh giá!');
+	}
+
+	public function getAllCategories()
+	{
+		$categories = Category::all()->map(function ($category) {
+			return (object) [
+				'category_id' => $category->category_id,
+				'name' => $category->name
+			];
+		});
+		Log::debug('Categories: ' . json_encode($categories));
+		return response()->json($categories);
 	}
 }

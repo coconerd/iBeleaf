@@ -87,7 +87,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="mb-0">Bộ lọc</h4>
-                        <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                        <button class="btn btn-light add-product">
                             <i class="mdi mdi-plus"></i> Thêm sản phẩm
                         </button>
                     </div>

@@ -98,14 +98,14 @@ class AdminProductController extends Controller
 		$product = Product::with(['product_images', 'categories'])
 			->findOrFail($product_id);
 
-		$allCategories = Category::all();
+		// $allCategories = Category::all();
 
 		Log::debug('Product details: ' . json_encode($product));
 
 		return response()->json([
 			'success' => true,
 			'product' => $product,
-			'allCategories' => $allCategories,
+			// 'allCategories' => $allCategories,
 		]);
 	}
 

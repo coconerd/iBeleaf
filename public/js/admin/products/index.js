@@ -2,8 +2,8 @@ $(document).ready(function () {
 	// Add snow effect
 	const snowflakes = 50;
 	const snowContainer = $('.snow-overlay');
-	
-	for(let i = 0; i < snowflakes; i++) {
+
+	for (let i = 0; i < snowflakes; i++) {
 		const snow = $('<div class="snowflake">❆</div>');
 		snow.css({
 			'left': `${Math.random() * 100}%`,
@@ -98,7 +98,33 @@ $(document).ready(function () {
 	$('.edit-product').click(function () {
 		const productId = $(this).data('productId');
 		console.log('Edit product clicked, id: ', productId);
+		showModal('editProductModal');
 		loadProductDetails(productId);
+	});
+
+	// Handle add product
+	$('.add-product').click(function () {
+		showModal('editProductModal');
+		getAllCategories()
+			.then(allCategories => {
+				console.log('All categories retrieved: ', allCategories);
+				loadCategories([], allCategories);
+				$('#editProductForm')
+				$('#editCode').val('');
+				$('#editName').val('');
+				$('#editShortDescription').val('');
+				$('#editDescription').val('');
+				$('#editPrice').val('');
+				$('#editStock').val('');
+				$('#editDiscount').val('');
+				$('#editStock').empty();
+				$('selected-categories').empty();
+				$('#preview-image-container').children(':not(:last-child)').remove();
+			})
+			.catch(error => {
+				console.error('Error loading categories:', error);
+				showAlert('error', 'Không thể tải danh mục sản phẩm');
+			});
 	});
 
 	// Handle save product changes after edit in modal
@@ -172,6 +198,28 @@ function updateProductField(productId, field, value) {
 	});
 }
 
+function showModal(modalHtmlId) {
+	const modal = new bootstrap.Modal(document.getElementById(`${modalHtmlId}`));
+	modal.show();
+}
+
+async function getAllCategories() {
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			url: '/product/all-categories',
+			method: 'GET',
+			success: function(response) {
+				console.log('All categories: ', response);
+				resolve(response);
+			},
+			error: function(error) {
+				console.error('Error fetching categories:', error);
+				reject(error);
+			}
+		});
+	});
+}
+
 function loadProductDetails(productId) {
 	$.ajax({
 		url: `/admin/products/${productId}/details`,
@@ -180,14 +228,12 @@ function loadProductDetails(productId) {
 			if (response.success) {
 				console.log('Product details: ', response.product);
 				// Initialize modal using Bootstrap's Modal constructor
-				const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
 				const jModal = $('#editProductModal');
 				const product = response.product;
 				if (!product) {
 					console.error('Product is empty');
 					return;
 				}
-				modal.show();
 
 				// Populate modal with basic product details
 				jModal.find('#editDescription').val(product.detailed_description);
@@ -200,8 +246,15 @@ function loadProductDetails(productId) {
 
 				// Populate product categories
 				const productCategoryIds = product.categories.map(cat => cat.category_id);
-				const allCategories = response.allCategories;
-				loadCategories(productCategoryIds, allCategories);
+				// const allCategories = response.allCategories;
+				getAllCategories()
+					.then(allCategories => {
+						loadCategories(productCategoryIds, allCategories);
+					})
+					.catch(error => {
+						console.error('Error loading categories:', error);
+						showAlert('error', 'Không thể tải danh mục sản phẩm');
+					});
 
 				// Populate modal's image containers
 				console.log('Populating images: ', product.product_images);
@@ -285,7 +338,6 @@ function loadCategories(productCategoryIds, allCategories) {
 			selectedContainer.append(`<div class="category-item p-1" data-id="${cat.category_id}">${cat.name}</div>`);
 		}
 	});
-	// updateSelectedCategoriesInput();
 }
 
 function performSearch() {
