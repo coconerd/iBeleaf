@@ -101,8 +101,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 	// Admin protected routes
 	Route::middleware(['auth', 'role:1'])->group(function () {
-		// Unread notifications
-		Route::get('/unread-notifications', [AdminNotificationController::class, 'getUnreadNotifications'])->name('getUnreadNotifications');
 		// Admin orders route
 		Route::prefix('orders')->name('orders.')->group(function () {
 			Route::get('/', [AdminOrderController::class, 'showOrdersPage'])->name('showOrdersPage');
@@ -114,10 +112,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 			Route::get('/statistics', [AdminOrderController::class, 'getStatistics'])->name('statistics');
 		});
 
-// Admin Dashboard route
+		// Admin Dashboard route
 		Route::prefix('dashboard')->name('dashboard.')->group(function () {
 			Route::get('/', [AdminDashboardController::class, 'showDashboardPage'])->name('showDashboardPage');
-Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData'])->name('getSalesData');
+			Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData'])->name('getSalesData');
 			Route::get('/analyze/{metric}', [AdminDashboardController::class, 'analyzeMetric']);
 			Route::get('/top-selling', [AdminDashboardController::class, 'topSellingProducts'])->name('topSelling');
 		});
@@ -146,6 +144,14 @@ Route::get('/sales-data', [AdminDashboardController::class, 'getSalesData'])->na
 			Route::post('/{voucher_id}/update', [AdminVoucherController::class, 'update'])->name('update');
 			Route::post('/{voucher_id}/delete', [AdminVoucherController::class, 'delete'])->name('delete');
 		});
+
+		// Admin notification routes
+		Route::prefix('notifications')->name('notifications.')->group(function () {
+			Route::get('/', [AdminNotificationController::class, 'getNotifications'])
+				->name('getNotifications');
+			Route::post('/{notification_id}/mark-as-read', [AdminNotificationController::class, 'markNotifcationAsRead'])
+				->name('markAsRead');
+		});
 	});
 });
 
@@ -164,7 +170,7 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 	Route::post('/profile/verify-newpassword', [ProfileController::class, 'handleVerifyNewPassword'])->name('profile.verifyNewPassword');
 
 	// OAuth2 social login
-		Route::middleware(['role:0'])->get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
+	Route::middleware(['role:0'])->get('/profile/orders', [ProfileController::class, 'showOrdersForm'])->name('profile.showOrdersForm');
 	Route::middleware(['role:0'])->get('/profile/returns', [ProfileController::class, 'showReturnsForm'])->name('profile.returns');
 });
 
@@ -245,11 +251,9 @@ Route::middleware(['auth', 'role:0'])->group(function () {
 
 // catch 404 not found
 Route::fallback(function () {
-    return redirect('/404');
+	return redirect('/404');
 });
 
 Route::get('/404', function () {
-    return view('errors.404');
+	return view('errors.404');
 });
-Route::post('/orders/testNotiDB', [OrderController::class, 'testNoti']);
-Route::post('/orders/testNotiEmail', [OrderController::class, 'testNotiEmail']);

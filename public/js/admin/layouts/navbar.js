@@ -30,8 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// fetch unread notificaitons from db
 	(function fetchUnreadNotifcations() {
+		const url = new URL('/admin/notifications', window.location.origin);
+		url.searchParams.append('status', 'unread');
 		$.ajax({
-			url: '/admin/unread-notifications',
+			url: url.toString(),
 			method: 'GET',
 			headers: {
 				"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
@@ -53,7 +55,11 @@ document.addEventListener('DOMContentLoaded', function () {
 				for (let i = 0; i < limit; i++) {
 					const noti = notifications[i];
 					const notiHtml = `
-					<a class="dropdown-item preview-item" data-type="${noti.type}" data-subject-id=${getNotifcationSubjectID(noti)}>
+					<a class="dropdown-item preview-item"
+						data-type="${noti.type}"
+						data-subject-id=${getNotifcationSubjectID(noti)}
+						data-notification-id=${getNotificationID(noti)}
+					>
 						<div class="preview-thumbnail">
 							<div class="preview-icon bg-success">
 								${getNotificationIcon(noti.type)}
@@ -81,11 +87,36 @@ document.addEventListener('DOMContentLoaded', function () {
 		.listen('.NewClaimNotification', addNotiToDropdown);
 
 	// Handle notifications dropdown item click
-	$(document).on('click', '#notifications > .dropdown-item', function (e) {
+	$(document).on('click', '#notifications > .dropdown-item', async function (e) {
 		console.log($(this));
 		const type = $(this).data('type');
 		const notificationClass = type.split('\\').pop();
 		const subjectId = $(this).data('subject-id');
+
+		// Mark notification as read
+		const notificationID = $(this).data('notification-id');
+		await new Promise((resolve) => {
+			$.ajax({
+				url: `/admin/notifications/${notificationID}/mark-as-read`,
+				method: 'POST',
+				headers: {
+					"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function (response) {
+					console.log('Notification marked as read:', response.message);
+					const unreadCount = parseInt($('.notifications-count').text());
+					$('.notifications-count').text((unreadCount - 1).toString());
+					$('.notifications-count').css('display', unreadCount > 0 ? 'block' : 'none');
+					resolve();
+				},
+				error: function (response) {
+					console.error('Error marking notification as read:', response.message);
+					resolve();
+				}
+			});
+		});
+
+		// Redirect to appropriate page
 		switch (notificationClass) {
 			case 'NewOrderNotification':
 				// Additional steps after redirecting to /admin/orders
@@ -112,7 +143,11 @@ function addNotiToDropdown(notification) {
 
 	// Create notification HTML
 	const notiHtml = `
-					<a class="dropdown-item preview-item" drop-down-item data-type="${notification.db_link.type} data-subject-id="${getNotifcationSubjectID(notification)}">
+					<a class="dropdown-item preview-item" drop-down-item 
+						data-type="${notification.db_link.type}
+						data-subject-id="${getNotifcationSubjectID(notification)}"
+						data-notification-id="${getNotificationID(notification)}"
+					>
 						<div class="preview-thumbnail">
 							<div class="preview-icon bg-success">
 								${getNotificationIcon(notification.db_link.type)}
@@ -178,3 +213,12 @@ function getNotifcationSubjectID(notification) {
 	}
 }
 
+function getNotificationID(notification) {
+	const notiType = !!notification.db_link ? 'realtime' : 'static';
+	if (notiType === 'realtime') {
+		return notification.db_link.id;
+	}
+	else {
+		return notification.id;
+	}
+}
