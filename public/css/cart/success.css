@@ -1,0 +1,39 @@
+.success-animation {
+    animation: scale-up 0.3s ease-in-out;
+}
+
+.checkmark-circle {
+    width: 100px;
+    height: 100px;
+    background: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px auto;
+    animation: circle-fill 0.4s ease-in-out 0.3s forwards;
+}
+
+.btn-primary {
+    background-color: #234234;
+    margin-left: 10px;
+    font-size: 22px;
+}
+
+.title 
+{
+  font-family: "Playwrite CO Guides", serif;
+  font-weight: 600;
+  font-style: italic;
+  color: #43723A;
+}
+
+@keyframes scale-up {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes circle-fill {
+    0% { background: #f8f9fa; }
+    100% { background: #d1e7dd; }
+}

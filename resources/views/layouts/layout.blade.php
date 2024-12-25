@@ -36,13 +36,16 @@
 	<!-- SweetAlert2 Cart CSS -->
 	<link href="{{ asset('css/cart/cartAlert.css') }}" rel="stylesheet">
 
+	<link href="{{ asset('css/cart/success.css') }}" rel="stylesheet">
+
+
 	<!-- Scripts that needs to execute quickly on page load -->
 	@yield('head-script')
 
 	<!-- View-specific stylings -->
 	@yield(section: "style")
 
-	<!-- JavaScript files -->	
+	<!-- JavaScript files -->
 	@stack('scripts')
 
 </head>

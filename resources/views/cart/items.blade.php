@@ -132,7 +132,7 @@
                         </h5>
                         <div id ="container">
                             <div class="row">
-                                <p class="info col-6 left-side fs-6">Thành tiền
+                                <p class="info col-6 left-side fs-7">Thành tiền
                                     (<span class="items-count-mh">{{ $totalQuantity }} mặt hàng</span>)
                                 </p>
                                 <p class="info col-6 right-side" id="final-total-discounted-price">
@@ -141,7 +141,7 @@
                             </div>
 
                             <div class="row">
-                                <p class="info col-6 left-side fs-6">Tổng khuyến mãi</p>
+                                <p class="info col-6 left-side fs-7">Tổng khuyến mãi</p>
                                 <p class="info col-6 right-side"><span id="total-discount-amount">{{ number_format($totalDiscountAmount) }} ₫</span></p>
                             </div>
                         </div>
