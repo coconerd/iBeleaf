@@ -1,45 +1,4 @@
-// window.addEventListener("popstate", function (event) {
-//     if (event.state && event.state.page === "/cart/items") {
-//         // Collect cart items
-//         const cartItems = [];
-//         $(".each-cart-item").each(function () {
-//             if (!$(this).hasClass("out-of-stock")) {
-//                 cartItems.push({
-//                     product_id: $(this).data("product-id"),
-//                     quantity: $(this).find(".quantity-input").val(),
-//                 });
-//             }
-//         });
-//         const voucherId = $("#vali
-// d-voucher-box .voucher-details").attr(
-//             "data-voucher-id"
-//         );
-//         const totalPrice = $("#final-price").val();
-//         // Send AJAX request
-//         $.ajax({
-//             url: `/cart/items-update`,
-//             type: "POST",
-//             data: {
-//                 items: cartItems,
-//                 voucder_id: voucherId || null,
-//                 totalPrice
-//             },
-//             headers: {
-//                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-//             },
-//             dataType: "json",
-//             success: function (response) {
-//                 if (response.success) {
-//                     updateCartCount(response.items_counts);
-//                     window.location.href = "/cart/checkout";
-//                 }
-//             },
-//             error: function (xhr) {
-//                 console.error("Error:", xhr.responseJSON);
-//             },
-//         });
-//     }
-// });
+
 
 $(document).ready(function () {
     const $quantityWrappers = $(".quantity-wrapper");
@@ -484,21 +443,7 @@ function calculateSubPrice($input) {
         const subDiscountedTotal = subTotal * (1 - discountPercent / 100);
         const discountAmount = subTotal - subDiscountedTotal;
 
-        $price.text(formatPrice(subDiscountedTotal) + " ₫");
-
-        $.ajax({
-            url: "/cart/update-price",
-            method: "POST",
-            data: {
-                product_id: productId,
-                quantity: quantity,
-                original_price: subTotal,
-                discount_amount: discountAmount,
-            },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-        });
+        $price.text(formatPrice(subDiscountedTotal));
     } catch (error) {
         console.error("Price calculation error:", error);
     }
