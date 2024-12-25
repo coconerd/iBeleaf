@@ -180,6 +180,11 @@ class CheckOutController extends Controller
 
             Log::debug('DistrictId: ', ['id'=> $locationCodes['district_id']]);
             Log::debug('Ward code: ', ['code' => $locationCodes['ward_code']]);
+            Log::debug('province_city', [
+                'province' => $user->province_city,
+                'full name' => $user->full_name,
+                'phone' => $user->phone_number
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -309,6 +314,8 @@ class CheckOutController extends Controller
                 // Update product stock quantity
                 $product = Product::find($item->product_id);
                 $product->decrement('stock_quantity', $item->quantity);
+                $product->total_orders += $item->quantity;
+                $product->save();
             }
             
 			// 3. Clear Cart items and update Cart items_count
