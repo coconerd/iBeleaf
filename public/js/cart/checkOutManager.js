@@ -193,7 +193,7 @@ function submitOrder() {
         success: function (response) {
             if (response.success) {
                 // Redirect to order success page
-                // window.location.href = `/order-success/${response.order_id}`;
+                window.location.href = `/checkout/success`;
             } else {
                 toastr.error(response.message || 'Failed to create order');
             }

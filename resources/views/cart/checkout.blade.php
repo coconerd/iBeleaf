@@ -121,7 +121,7 @@
 											</div>
 										</div>
 										<div class="d-flex justify-content-between align-items-center">
-											<span class="item-price">Tổng tiền: {{ number_format($item->discounted_price) }} đ</span>
+											<span class="item-price">Tổng tiền: {{ number_format($item->discounted_price) }} ₫</span>
 										</div>
 									</div>
 								</div>
@@ -154,7 +154,7 @@
 				</div>
 
 				<!--Shipping Privacy-->
-				<divđ id="shipping-privacy">
+				<div id="shipping-privacy">
 					<div class="title-icon">
 						<span class="section-title">Quy định về phí vận chuyển</span>
 						<i class="fa-solid fa-seedling" style="color: #469636;"></i>
@@ -171,10 +171,10 @@
 						</p>
 						<p>
 							<i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i>
-							<span>Phí vận chuyển nội thành TP.HCM đồng giá <b>30,000 đ</b></span>
+							<span>Phí vận chuyển nội thành TP.HCM đồng giá <b>30,000 ₫</b></span>
 						</p>
 					</div>
-				</divđ
+				</div>
 				
 				<!--Payment Method-->
 				<div id="payment-body">
