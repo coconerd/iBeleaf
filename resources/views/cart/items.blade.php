@@ -21,25 +21,6 @@
             </div>
         @endfor
     </div>
-    
-    <!--Santa-->
-    <div class="santa-wrapper">
-        <div class="santa">
-            <div class="hand-l"></div>
-            <div class="hand-r"></div>
-            <div class="hat"></div>
-            <div class="face">
-                <div class="beard"></div>
-                <div class="eyes"></div>
-            </div>
-            <div class="belt"></div>
-            <div class="shoes">
-                <div class="shoe-left"></div>
-                <div class="shoe-right"></div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="container mt-4">
     @if(isset($cartItems) && $cartItems->count() > 0)
@@ -151,7 +132,7 @@
                         </h5>
                         <div id ="container">
                             <div class="row">
-                                <p class="info col-6 left-side fs-6">Thành tiền
+                                <p class="info col-6 left-side fs-7">Thành tiền
                                     (<span class="items-count-mh">{{ $totalQuantity }} mặt hàng</span>)
                                 </p>
                                 <p class="info col-6 right-side" id="final-total-discounted-price">
@@ -160,7 +141,7 @@
                             </div>
 
                             <div class="row">
-                                <p class="info col-6 left-side fs-6">Tổng khuyến mãi</p>
+                                <p class="info col-6 left-side fs-7">Tổng khuyến mãi</p>
                                 <p class="info col-6 right-side"><span id="total-discount-amount">{{ number_format($totalDiscountAmount) }} ₫</span></p>
                             </div>
                         </div>

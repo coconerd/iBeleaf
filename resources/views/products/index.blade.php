@@ -19,11 +19,21 @@
 	<link rel="stylesheet" href="{{asset('css/products/product.css')}}">
 	<link rel="stylesheet" href="{{asset('css/products/product-container.css')}}">
 	<link rel="stylesheet" href="{{asset('css/products/product-introduce.css')}}">
+	<link rel="stylesheet" href="{{ asset('css/cart/christmas.css') }}">
+
 @endsection
 
 @section("content")
+	<div class="snowflakes" aria-hidden="true">
+        @for ($i = 1; $i <= 12; $i++)
+            <div class="snowflake" style="left: {{ rand(0, 100) }}%; animation-delay: {{ $i * 0.2 }}s">
+                <div class="inner">❅</div>
+            </div>
+        @endfor
+    </div>
+	
 	<div class="nav-bg-main" >
-		<img src="{{ asset('images/main/bg2.png')}}" alt="main-background">
+		<img src="{{ asset('images/main/bg_noel.png')}}" alt="main-background">
 		<div class="nav-container"></div>
 	</div>
 	<div class="nav-introduce"></div>
