@@ -23,7 +23,7 @@
 
 @section("content")
 	<div class="nav-bg-main" >
-		<img src="{{ asset('images/main/bg2.png')}}" alt="main-background">
+		<img src="{{ asset('images/main/bg_noel.png')}}" alt="main-background">
 		<div class="nav-container"></div>
 	</div>
 	<div class="nav-introduce"></div>
