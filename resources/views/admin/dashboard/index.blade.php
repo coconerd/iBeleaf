@@ -114,6 +114,9 @@
 	<h2 class="section-title">
 		<i class="fa-solid fa-lg fa-crown" style="color: #28a745;"></i>
 		Sản phẩm bán chạy
+		<a href="/admin/products" class="section-link">
+			<i class="fa-solid fa-arrow-right"></i>
+		</a>
 	</h2>
 </div>
 

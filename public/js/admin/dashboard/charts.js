@@ -186,11 +186,16 @@ function updateStatCard(metric, options) {
             
             // Update growth
             $(`#${growthId}`)
-            .text(`${Math.abs(response.growth)}%`)
+            .text(`${parseLocalizedNumber(response.growth).toFixed(2)}%`)
                 .removeClass("growth-positive growth-negative")
                 .addClass(growthClass);
             },
     });
+}
+
+function parseLocalizedNumber(str) {
+    // Remove thousand separators and convert decimal separator
+    return parseFloat(str.replace(/\,/g, ''));
 }
     
 function showStatsCards() {
