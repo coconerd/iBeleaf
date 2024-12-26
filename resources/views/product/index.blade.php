@@ -1,3 +1,7 @@
+<?php
+use App\Providers\ProductData;
+?>
+
 @extends("layouts.layout")
 @section("title", "Chi tiết sản phẩm")
 
@@ -31,7 +35,14 @@
 						<i class="bi bi-caret-right-fill" style="opacity: 0.8;"></i>
 					</a>
 					@foreach(array_slice($productCategories, 0, 2) as $category)
-						<a href="#" class="me-3 fw-bold product-category">
+						<a 
+							href="{{ 
+								route(
+									'products',
+									['category' => ProductData::convertCateHref($category)]
+								) }}" 
+							class="me-3 fw-bold product-category"
+						>
 							<i class="bi bi-arrow-90deg-right category-routing"></i>
 							{{ $category }}
 						</a>
