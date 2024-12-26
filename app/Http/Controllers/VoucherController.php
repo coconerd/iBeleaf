@@ -16,7 +16,8 @@ class VoucherController extends Controller
         'INVALID' => 'Voucher không hợp lệ!',
         'EXPIRED' => 'Voucher đã hết hạn sử dụng!',
         'FIRST_ORDER' => 'Voucher chỉ áp dụng cho khách hàng mới!',
-		'MIN_PRICE' => '' // Hanlde it in JS
+		'MIN_PRICE' => '', // Hanlde it in JS
+		'NOT_FOUND' => 'Voucher không tồn tại!'
     ];
 
 	private function formatResponse($valid, $data = [])
@@ -35,34 +36,31 @@ class VoucherController extends Controller
 			->where('voucher_end_date', '>=', Carbon::now())
 			->first();
 
+		Log::info('Voucher validation:', [
+			'code' => $code,
+			'found' => (bool)$voucher
+		]);
+
 		if (!$voucher || $voucher->voucher_end_date < Carbon::now()) {
             return $this->formatResponse(false, [
-                'ecode' => !$voucher ? 'INVALID' : 'EXPIRED',
-                'message' => !$voucher ? self::ERROR_CODES['INVALID'] : self::ERROR_CODES['EXPIRED']
+                'ecode' => !$voucher ? 'NOT_FOUND' : 'EXPIRED',
+                'message' => !$voucher ? self::ERROR_CODES['NOT_FOUND'] : self::ERROR_CODES['EXPIRED']
             ]);
         }
-		
+
 		// Validate voucher rules
 		foreach ($voucher->voucherRules as $rule) {
-			try {
-				$ruleController = new VoucherRuleController($rule->rule_type, $rule->rule_value);
-				$validationRule = $ruleController->validateRule($userId, $cartTotal);
+			$ruleController = new VoucherRuleController($rule->rule_type, $rule->rule_value);
+			$validationRule = $ruleController->validateRule($userId, $cartTotal);
 
-				if (!$validationRule['is_valid']) {
-					return $this->formatResponse(false, [
-						'ecode' => $validationRule['rule_type'],
-						'voucher_type' => $voucher->voucher_type,
-						'message' => self::ERROR_CODES[$validationRule['rule_type']],
-						'cart_total' => $cartTotal,
-						'min_price' => $validationRule['min_price'] ?? 0,
-						'order_count' => $validationRule['order_count'] ?? 0
-                    ]);
-				}
-			} catch (\Exception $e) {
-				Log::error('Invalid voucher code: ' . $e->getMessage());
+			if (!$validationRule['is_valid']) {
 				return $this->formatResponse(false, [
-					'ecode' => 'INVALID',
-					'message' => self::ERROR_CODES['INVALID']
+					'ecode' => $validationRule['rule_type'],
+					'voucher_type' => $voucher->voucher_type,
+					'message' => self::ERROR_CODES[$validationRule['rule_type']],
+					'cart_total' => $cartTotal,
+					'min_price' => $validationRule['min_price'] ?? 0,
+					'order_count' => $validationRule['order_count'] ?? 0
 				]);
 			}
 		}
