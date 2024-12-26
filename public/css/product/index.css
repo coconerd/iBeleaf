@@ -70,7 +70,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	background-color: #18A04A;
+	/* background-color: #18A04A; */
+	background-color: #1BB152;
 	/* Darker pigment green */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	border-radius: 5px;
@@ -150,6 +151,116 @@ body {
 	transition: transform 0.2s;
 }
 
+#relatedProductsCarousel {
+	padding: 2rem 4rem;
+	position: relative;
+}
+
+#relatedProductsCarousel .card {
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	border: none;
+	background: #fff;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+	height: 100%;
+}
+
+#relatedProductsCarousel .card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+#relatedProductsCarousel .card-body {
+	padding: 1.2rem;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(247, 244, 240, 0.8));
+}
+
+#relatedProductsCarousel:hover .carousel-control-prev,
+#relatedProductsCarousel:hover .carousel-control-next {
+	opacity: 1;
+}
+
+#relatedProductsCarousel .carousel-control-prev {
+	left: 1rem;
+}
+
+#relatedProductsCarousel .carousel-control-next {
+	right: 1rem;
+}
+
+#relatedProductsCarousel .card-img-wrapper {
+	aspect-ratio: 1;
+	overflow: hidden;
+	border-radius: 8px 8px 0 0;
+}
+
+#relatedProductsCarousel .discount-text {
+	background: #FF5349;
+	font-size: 0.9rem;
+	/* box-shadow: 0 4px 15px rgba(255, 71, 87, 0.2); */
+	box-shadow: 0 4px 15px rgba(176, 101, 0, 0.2);
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+#relatedProductsCarousel .card-text {
+	/* font-weight: 500; */
+	margin-bottom: 0.5rem;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	height: 2.8rem;
+}
+
+#relatedProductsCarousel .price-text {
+	/* color: #2ecc71; */
+	color: #3EAF15;
+	font-weight: bold;
+}
+
+#relatedProductsCarousel .discounted-price-text {
+	font-size: 0.9rem !important;
+	color: #95a5a6;
+}
+
+#relatedProductsCarousel .view-product {
+	transform: translateY(100%);
+	transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	background: linear-gradient(45deg, #137C39, #2ecc71);
+}
+
+#relatedProductsCarousel .card:hover .view-product {
+	transform: translateY(0);
+}
+
+#relatedProductsCarousel .carousel-control-next,
+#relatedProductsCarousel .carousel-control-prev {
+	z-index: 2000 !important;
+}
+
+#relatedProductsCarousel .carousel-control-next-icon,
+#relatedProductsCarousel .carousel-control-prev-icon {
+	width: 65px;
+	height: 65px;
+	/* background-color: #137C39;  Green background */
+	/* border: 2px solid #C78B5E; */
+	border-radius: 50%;
+	padding: 15px;
+	background-size: 50%;
+	filter: invert(1);
+}
+
 .reviews textarea {
 	resize: none;
 }
@@ -193,6 +304,10 @@ body {
 	padding-right: 2rem;
 }
 
+#mcol .price-text {
+	color: #3EAF15;
+}
+
 .table th {
 	font-weight: normal;
 	font-size: medium;
@@ -222,7 +337,6 @@ body {
 	margin: 0px;
 }
 
-/* Add these new styles */
 #carouselBadge .carousel-control-prev,
 #carouselBadge .carousel-control-next {
 	opacity: 0;
@@ -230,6 +344,7 @@ body {
 	border-radius: 50%;
 	width: 40px;
 	object-fit: contain;
+	filter: invert(1);
 }
 
 #carouselBadge:hover .carousel-control-prev,
@@ -289,7 +404,6 @@ body {
 	opacity: 1;
 	/* Instead of display:flex, use opacity */
 }
-
 
 .nav-arrows {
 	position: absolute;
@@ -401,14 +515,53 @@ body {
 .card {
 	overflow: hidden;
 	position: relative;
+	border-radius: 8px;
+}
+
+.card-img-wrapper {
+	position: relative;
+	overflow: hidden;
 }
 
 .card-img-top {
-	transition: transform 0.3s ease;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	transition: opacity 0.25s ease-in-out, transform 0.3s ease-out;
+	will-change: opacity, transform;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	transform-style: preserve-3d;
+}
+
+.card-img-top.current {
+	opacity: 1;
+	z-index: 2;
+}
+
+.card-img-top.next {
+	opacity: 0;
+	z-index: 1;
 }
 
 .card:hover .card-img-top {
 	transform: scale(1.1);
+}
+
+.card-img-top.fade-out {
+	opacity: 0.6;
+}
+
+.card-img-top.fade-in {
+	opacity: 1;
+}
+
+.card:hover .card-img-top {
+	transform: scale(1.1);
+	transition-delay: 0.15s;
+	/* Delay the zoom effect */
 }
 
 .hover-heart {
@@ -435,7 +588,10 @@ body {
 	bottom: -40px;
 	left: 0;
 	right: 0;
-	background: rgba(16, 107, 50, 0.7);
+	/* background: rgba(16, 107, 50, 0.7); */
+	/* background-color: #48AD7C; */
+	background-color: #48AD7C;
+	opacity: 0.9;
 	color: white;
 	text-align: center;
 	padding: 8px;
@@ -460,9 +616,221 @@ textarea:focus {
 }
 
 .preview-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.card-text {
+	color: #212529;
+}
+
+.price-text {
+	font-size: 1.3rem;
+	color: #497A3E;
+	/* Fern green */
+}
+
+.card:hover .price-text {
+	color: #59954B;
+}
+
+.discounted-price-text {
+	font-size: 1.1rem !important;
+	opacity: 0.8 !important;
+}
+
+#discounted-products .card {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-to-top {
+	border-color: grey !important;
+	opacity: 0.9 !important;
+	border-radius: 11px;
+}
+
+.scroll-to-top:hover {
+	background-color: #137C39;
+	color: white;
+	opacity: 1;
+}
+
+.addCartBtn {
+	background-color: #137C39;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 30px;
+	cursor: pointer;
+}
+
+.addCartBtn:hover {
+	background-color: #0D5F2D;
+	color: #f2f3f4;
+}
+
+.sticky-bottom {
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+	margin: 0px 8px;
+	box-shadow: -8px 0 10px -5px rgba(0, 0, 0, 0.1), 8px 0 10px -5px rgba(0, 0, 0, 0.1);
+	background-color: #EAE1E1;
+	transform: translateY(120%);
+	/* Increased to ensure complete hiding */
+	opacity: 0;
+	transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+		opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+		visibility 0.4s linear;
+	display: block !important;
+	visibility: hidden;
+	position: fixed;
+	/* Changed to fixed */
+	bottom: 0;
+	/* Position at bottom */
+	left: 0;
+	right: 0;
+	z-index: 1030;
+}
+
+.sticky-bottom.show {
+	transform: translateY(0);
+	opacity: 1;
+	visibility: visible;
+}
+
+.sticky-bottom .price-text {
+	font-size: 1.2rem;
+}
+
+.sticky-bottom img {
+	width: 70px !important;
+	height: 70px !important;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border: 1px solid rgba(72, 173, 124, 0.5);
+}
+
+#submitFeedbackBtn {
+	background-color: #2A6548;
+	color: #fcf9f3;
+	padding: 10px 20px;
+	font-size: 1rem !important;
+}
+
+.input-group {
+	border: 1px solid rgba(218, 179, 149, 0.5);
+	border-radius: 8px;
+}
+
+.incrementBtn:hover,
+.decrementBtn:hover {
+	background-color: #F8F3E7;
+}
+
+.incrementBtn:focus,
+.decrementBtn:focus {
+	background-color: #C78B5E;
+	border-color: transparent;
+}
+
+.form-control {
+	border-color: transparent;
+	border: rgba(0, 0, 0, 0)
+}
+
+.form-control:focus {
+	box-shadow: 0 0 0 0 !important;
+}
+
+#discountedProducts .card {
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transform-origin: center;
+}
+
+#discountedProducts .card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 
+        0 20px 30px rgba(0, 0, 0, 0.07),
+        0 0 20px rgba(62, 175, 21, 0.1);
+}
+
+#discountedProducts .card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    opacity: 0;
+    box-shadow: 
+        0 25px 35px rgba(0, 0, 0, 0.12),
+        0 0 25px rgba(62, 175, 21, 0.15);
+    transition: opacity 0.3s ease-in-out;
+}
+
+#discountedProducts .card:hover::after {
+    opacity: 1;
+}
+
+#discountedProducts .card-body {
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(247, 244, 240, 0.8)
+    );
+    transition: all 0.3s ease;
+}
+
+#discountedProducts .card:hover .card-body {
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(247, 244, 240, 0.95)
+    );
+}
+
+#discountedProducts .discount-text {
+    transform-origin: center;
+    transition: all 0.3s ease;
+}
+
+#discountedProducts .card:hover .discount-text {
+    transform: scale(1.1);
+    background-color: #FF5349;
+    box-shadow: 
+        0 4px 15px rgba(255, 59, 48, 0.3),
+        0 0 10px rgba(255, 59, 48, 0.2);
+    animation: wobble 1s ease-in-out;
+}
+
+@keyframes wobble {
+    0%, 100% { transform: scale(1.1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(-5deg); }
+    75% { transform: scale(1.1) rotate(5deg); }
+}
+
+#discountedProducts .view-product {
+    background: linear-gradient(45deg, #137C39, #52B786);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#discountedProducts .card:hover .view-product {
+    transform: translateY(0);
+}
+
+#discountedProducts .price-text {
+    transition: color 0.3s ease;
+}
+
+#discountedProducts .card:hover .price-text {
+    color: #2ECC71;
+}
+
+#discountedProducts .card:hover .discount-text {
+	animation: pulse 1.4s infinite;
 }

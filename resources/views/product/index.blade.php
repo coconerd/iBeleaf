@@ -79,17 +79,17 @@
 				<h2 class="product-title">{{ $product->short_description }}</h2>
 				@if ($product->discount_percentage > 0)
 					<p class="product-price">
-						<span class="text-muted text-decoration-line-through" style="font-size: 1.3rem;">
-							{{ number_format($product->price, 0, '.', ',') }}₫
+						<span class="text-muted text-decoration-line-through discounted-price-text">
+							{{ number_format($product->price, 0, ',', '.') }} ₫
 						</span>
 						<br>
-						<span class="text-success fw-bold" style="font-size: 1.4rem;">
-							{{ number_format($product->price * (1 - $product->discount_percentage / 100), 0, '.', ',') }}₫
+						<span class="fw-bold text price-text">
+							{{ number_format($product->price * (1 - $product->discount_percentage / 100), 0, ',', '.') }} ₫
 						</span>
 					</p>
 				@else
-					<p class="product-price text-success fw-bold" style="font-size: 1.4rem;">
-						{{ number_format($product->price, 0, '.', ',') }}₫
+					<p class="product-price fw-bold price-text">
+						{{ number_format($product->price, 0, ',', '.') }} ₫
 					</p>
 				@endif
 				<p class="product-description">{{ $product->detailed_description }}</p>
@@ -231,9 +231,12 @@
 					<div class="card-body">
 						<h5 class="card-title">Đặt hàng nhanh qua Hotline<br>(8h - 21h)</h5>
 						<ul class="list-unstyled">
-							<li>Hotline 1: <a href="tel:0912345678" class="text-decoration-none">0912 345 678 (Call/Zalo)</a></li>
-							<li>Hotline 2: <a href="tel:0812345678" class="text-decoration-none">0976 215 903 (Call/Zalo)</a></li>
-							<li>Hotline 3: <a href="tel:0923456789" class="text-decoration-none">0937 494 749 (Call/Zalo)</a>
+							<li>Hotline 1: <a href="tel:0912345678" class="text-decoration-none">0912 345 678
+									(Call/Zalo)</a></li>
+							<li>Hotline 2: <a href="tel:0812345678" class="text-decoration-none">0976 215 903
+									(Call/Zalo)</a></li>
+							<li>Hotline 3: <a href="tel:0923456789" class="text-decoration-none">0937 494 749
+									(Call/Zalo)</a>
 							</li>
 						</ul>
 						<div class="mt-3">
@@ -257,10 +260,12 @@
 							<span class="ms-2">Phương thức thanh toán</span>
 						</div>
 						<div class="mt-3">
-							<p class="mb-0">Plant Paradise chúng tôi hiểu tâm lý e ngại của khách hàng khi mua hàng online. Do đó chúng tôi
+							<p class="mb-0">Plant Paradise chúng tôi hiểu tâm lý e ngại của khách hàng khi mua hàng
+								online. Do đó chúng tôi
 								sẽ
 								gửi
-								hình ảnh thực tế của sản phẩm trước khi giao hàng để xác thực nhằm đảm bảo lượng dịch vụ và quyền lợi của khách hàng.
+								hình ảnh thực tế của sản phẩm trước khi giao hàng để xác thực nhằm đảm bảo lượng dịch vụ
+								và quyền lợi của khách hàng.
 							</p>
 						</div>
 					</div>
@@ -272,45 +277,50 @@
 		<div class="related-products mt-5">
 			<h3 class="ms-4 mb-3 fw-light" style="color: #999999; font-size: 1.5rem">SẢN PHẨM TƯƠNG TỰ</h3>
 			<div id="relatedProductsCarousel" class="carousel slide" data-bs-ride="carousel">
-				<div class="carousel-inner" style="padding: 0 100px;">
-					@foreach(array_chunk($relatedProducts->toArray(), 6) as $chunk)
+				<div class="carousel-inner">
+					<div class="p-4">
+					@foreach(array_chunk($relatedProducts->toArray(), 4) as $chunk)
 								<div class="carousel-item {{ $loop->first ? 'active' : '' }}">
 									<div class="d-flex justify-content-center">
 										@foreach($chunk as $r)
-															<div class="card me-4 mb-4 mt-4" style="width: 18rem;">
-																<div style="position: relative; overflow: hidden;">
-																	<p
-																		class="discount-text text-white fw-bold {{$r->discount_percentage <= 0 ? "visually-hidden" : ""}}">
-																		-{{ floor($r->discount_percentage) == $r->discount_percentage
+															<div class="card m-3" style="width: 18rem;">
+																<div class="position-relative">
+																	<div class="card-img-wrapper">
+																		<p
+																			class="discount-text text-white fw-bold {{$r->discount_percentage <= 0 ? "visually-hidden" : ""}}">
+																			-{{ floor($r->discount_percentage) == $r->discount_percentage
 											? number_format($r->discount_percentage, 0)
-											: number_format($r->discount_percentage, 2) }}%
-																	</p>
-																	<img src="{{ asset($r->img_url)}}" class="card-img-top" alt="Related Product">
-																	<button class="hover-heart {{$r->is_wishlisted ? "heart-button-active" : ""}}"
-																		data-product-id="{{ $r->product_id }}">
-																		<i class="fas fa-heart"></i>
-																	</button>
-																	<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
-																		class="view-product">
-																		Xem
-																	</a>
+											: number_format($r->discount_percentage, 2) }} %
+																		</p>
+																		<img src="{{ asset($r->img_url)}}" 
+																			class="card-img-top" 
+																			alt="Related Product"
+																			data-second-image="{{ $r->second_img_url ?? '' }}"
+																			data-original-image="{{ asset($r->img_url) }}">
+																		<button class="hover-heart {{$r->is_wishlisted ? "heart-button-active" : ""}}"
+																			data-product-id="{{ $r->product_id }}">
+																			<i class="fas fa-heart"></i>
+																		</button>
+																		<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
+																			class="view-product">
+																			<i class="fa-solid fa-leaf"></i>&nbsp;Xem chi tiết
+																		</a>
+																	</div>
 																</div>
 																<div class="card-body text-center">
 																	<p class="card-text">{{ $r->title }}</p>
 																	@if ($r->discount_percentage > 0)
-																		<h3>
-																			<span class="text-muted text-decoration-line-through"
-																				style="font-size: 1.4rem;">
-																				{{ number_format($r->price, 0, '.', ',') }}₫
+																		<div class="d-flex justify-content-center align-items-center gap-2">
+																			<span class="text-muted text-decoration-line-through discounted-price-text">
+																				{{ number_format($r->price, 0, ',', '.') }}₫
 																			</span>
-																			<br>
-																			<span class="text-success" style="font-size: 1.3rem">
-																				{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
+																			<span class="price-text">
+																				{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, ',', '.') }}₫
 																			</span>
-																		</h3>
+																		</div>
 																	@else
-																		<h3 class="text-success" style="font-size: 1.3rem">
-																			{{ number_format($r->price, 0, '.', ',') }}₫
+																		<h3 class="price-text mb-0">
+																			{{ number_format($r->price, 0, ',', '.') }}₫
 																		</h3>
 																	@endif
 																</div>
@@ -319,16 +329,15 @@
 									</div>
 								</div>
 					@endforeach
+					</div>
 				</div>
 				<button class="carousel-control-prev" type="button" data-bs-target="#relatedProductsCarousel"
 					data-bs-slide="prev">
 					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">Previous</span>
 				</button>
 				<button class="carousel-control-next" type="button" data-bs-target="#relatedProductsCarousel"
 					data-bs-slide="next">
 					<span class="carousel-control-next-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">Next</span>
 				</button>
 			</div>
 		</div>
@@ -383,7 +392,7 @@
 										</div>
 									</div>
 								</div>
-								<button type="submit" class="btn btn-primary mt-3">Gửi đánh giá</button>
+								<button type="submit" id='submitFeedbackBtn' class="btn btn-primary bnt-md mt-3">Gửi đánh giá</button>
 							</form>
 						</div>
 					</div>
@@ -392,7 +401,7 @@
 		</div>
 
 		<!-- Discounted products section -->
-		<div class="container my-5">
+		<div class="container my-5" id="discountedProducts">
 			<div class="row">
 				<div class="col-12 d-flex align-items-center">
 					<div class="flex-grow-1 border-bottom mb-2"></div>
@@ -412,31 +421,36 @@
 								? number_format($r->discount_percentage, 0)
 								: number_format($r->discount_percentage, 2) }}%
 												</p>
-												<img src="{{ asset($r->img_url)}}" class="card-img-top" alt="Related Product">
+												<img src="{{ asset($r->img_url)}}" 
+													class="card-img-top" 
+													alt="Related Product"
+													data-second-image="{{ $r->second_img_url ?? '' }}"
+													data-original-image="{{ asset($r->img_url) }}"
+													style="position: relative; width: 100%; height: auto;">
 												<button class="hover-heart {{ $r->is_wishlisted ? "heart-button-active" : "" }}"
 													data-product-id="{{ $r->product_id }}">
 													<i class="fas fa-heart"></i>
 												</button>
 												<a href="{{ route('product.show', ['product_id' => $r->product_id]) }}"
 													class="view-product">
-													Xem
+													<i class="fa-solid fa-leaf"></i>&nbsp;Xem chi tiết
 												</a>
 											</div>
 											<div class="card-body text-center">
 												<p class="card-text">{{ $r->title }}</p>
 												@if ($r->discount_percentage > 0)
 													<h3>
-														<span class="text-muted text-decoration-line-through" style="font-size: 1.4rem;">
-															{{ number_format($r->price, 0, '.', ',') }}₫
+														<span class="text-muted text-decoration-line-through discounted-price-text">
+															{{ number_format($r->price, 0, ',', '.') }} ₫
 														</span>
 														<br>
-														<span class="text-success" style="font-size: 1.3rem;">
-															{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, '.', ',') }}₫
+														<span class="price-text">
+															{{ number_format($r->price * (1 - $r->discount_percentage / 100), 0, ',', '.') }} ₫
 														</span>
 													</h3>
 												@else
-													<h3 class="text-success" style="font-size: 1.3rem;">
-														{{ number_format($r->price, 0, '.', ',') }}₫
+													<h3 class="price-text" style="font-size: 1.3rem;">
+														{{ number_format($r->price, 0, ',', '.') }} ₫
 													</h3>
 												@endif
 											</div>
@@ -516,34 +530,34 @@
 	<div class="container d-flex align-items-center justify-content-between">
 		<!-- Product Info -->
 		<div class="d-flex align-items-center">
-			<button class="btn btn-outline-primary btn-sm me-3" onclick="window.scrollTo(0, 0)">
+			<button class="btn btn-outline-primary btn-md me-3 scroll-to-top" onclick="window.scrollTo(0, 0)">
 				<i class="bi bi-chevron-up"></i>
 			</button>
 			<img src="{{ $productImgs[0] }}" alt="Product Image" class="img-fluid rounded me-3"
 				style="width: 50px; height: 50px;">
 			<div>
-				<p class="mb-0 fw-bold text-primary">{{ $product->short_description ?? 'Tên sản phẩm' }}</p>
-				<small class="text-muted">{{ $product->code ?? 'Mã sản phẩm' }}</small>
+				<p class="mb-0 fw-bold text-primary" style="font-size: 1.1rem;">{{ $product->short_description ?? 'Tên sản phẩm' }}</p>
+				<small class="text-muted">Mã sản phẩm: {{ $product->code ?? 'Mã sản phẩm' }}</small>
 			</div>
 		</div>
 
 		<!-- Price and Quantity -->
 		<div class="d-flex align-items-center">
-			<p class="mb-0 text-success fw-bold me-4 text-success total-price"
+			<p class="mb-0 price-text fw-bold me-4 total-price"
 				data-unit-price="{{ $product->price * (1 - $product->discount_percentage / 100) }}">
 				{{ number_format(
 	$product->discount_percentage > 0 ? $product->price * (1 - $product->discount_percentage / 100) : $product->price,
 	0,
-	'.',
-	','
-) }}₫
+	',',
+	'.'
+) }} ₫
 			</p>
-			<div class="input-group input-group-sm me-3" style="width: 120px;">
-				<button class="btn btn-outline-light border-1 decrementBtn">-</button>
-				<input type="text" class="counter form-control text-center border-0" value="1" min="1">
-				<button class="btn btn-outline-light border-1 incrementBtn">+</button>
+			<div class="input-group input-group-md me-3" style="width: 120px;">
+				<button class="btn border-1 decrementBtn">-</button>
+				<input type="text" class="counter form-control text-center border" value="1" min="1">
+				<button class="btn border-1 incrementBtn">+</button>
 			</div>
-			<button class="btn btn-success btn-sm addCartBtn" data-product-id="{{ $productId }} ">Thêm vào giỏ
+			<button class="btn btn-md addCartBtn" data-product-id="{{ $productId }} ">Thêm vào giỏ
 				hàng</button>
 		</div>
 	</div>

@@ -74,18 +74,20 @@ document.addEventListener('DOMContentLoaded', function () {
 	favorited = heartButton.classList.contains('heart-button-active');
 
 
-	// Only show sticky div when addCartBtn element is out of view
-	window.addEventListener("scroll", function () {
-		const stickyDiv = $('.sticky-bottom')[0];
+	// Only show sticky div when main addCartBtn element is out of view
+	window.addEventListener("scroll", function() {
+		const stickyDiv = $('.sticky-bottom');
 		const triggerElement = $('.addCartBtn');
 		const triggerPosition = triggerElement.offset().top - $(window).scrollTop();
 
-		// If the trigger element is out of view (below the viewport)
-		if (triggerPosition < 0) {
-			$(stickyDiv).slideDown(100); // Show sticky div with animation
-		} else {
-			$(stickyDiv).slideUp(100); // Hide sticky div with animation
-		}
+		requestAnimationFrame(() => {
+			// If the trigger element is out of view (below the viewport)
+			if (triggerPosition < 0) {
+				stickyDiv.addClass('show');
+			} else {
+				stickyDiv.removeClass('show');
+			}
+		});
 	});
 
 	// Global array to track uploaded files
@@ -460,4 +462,57 @@ $('.addCartBtn').on('click', function () {
 	// Update cart icon
 	const cartCount = Number($('#cart-count').text());
 	$('#cart-count').text(cartCount + Number(quantity));
+});
+
+$(document).ready(function() {
+    $('.card-img-top').each(function() {
+        const img = $(this);
+        const secondImage = img.data('second-image');
+        const originalImage = img.data('original-image');
+        let isAnimating = false;
+        
+        if (secondImage) {
+            // Create wrapper and second image element
+            img.wrap('<div class="card-img-wrapper"></div>');
+            const wrapper = img.parent();
+            const secondImg = $('<img>', {
+                src: secondImage,
+                class: 'card-img-top next',
+                alt: 'Product Image'
+            });
+            
+            // Add second image to wrapper
+            wrapper.append(secondImg);
+            img.addClass('current');
+            
+            // Preload second image
+            const preloadImg = new Image();
+            preloadImg.src = secondImage;
+            
+            wrapper.parent().hover(
+                function() {
+                    if (isAnimating) return;
+                    isAnimating = true;
+                    
+                    img.css('opacity', '0');
+                    secondImg.css('opacity', '1');
+                    
+                    setTimeout(() => {
+                        isAnimating = false;
+                    }, 200);
+                },
+                function() {
+                    if (isAnimating) return;
+                    isAnimating = true;
+                    
+                    img.css('opacity', '1');
+                    secondImg.css('opacity', '0');
+                    
+                    setTimeout(() => {
+                        isAnimating = false;
+                    }, 250);
+                }
+            );
+        }
+    });
 });

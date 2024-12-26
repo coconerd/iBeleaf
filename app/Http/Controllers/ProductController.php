@@ -116,43 +116,48 @@ class ProductController extends Controller
 		// Fetch related products based on same categories
 		$relatedProducts = Product::whereHas('categories', function ($query) use ($product) {
 			$query->whereIn('categories.category_id', $product->categories->pluck('category_id'));
-		})->where(
-				'product_id',
-				'!=',
-				$product->product_id
-			)->with([
-					'product_images' => function ($query) {
-						$query->where('image_type', '=', 1)->select('product_image_url', 'product_id');
-					}
-				])->take(18)->get()->map(function ($product) use ($wishlistedIds) {
-					return (object) [
-						'product_id' => $product->product_id,
-						'title' => $product->name,
-						'price' => $product->price,
-						'img_url' => $product->product_images->first()->product_image_url,
-						'discount_percentage' => $product->discount_percentage,
-						'is_wishlisted' => in_array($product->product_id, $wishlistedIds)
-					];
-				});
+		})
+		->where('product_id', '!=', $product->product_id)
+		->with(['product_images' => function ($query) {
+			$query->where('image_type', '=', 1)
+				  ->select('product_image_url', 'product_id')
+				  ->orderBy('product_image_id');  // Add ordering to ensure consistent image selection
+		}])
+		->take(24)
+		->get()
+		->map(function ($product) use ($wishlistedIds) {
+			$images = $product->product_images;
+			return (object) [
+				'product_id' => $product->product_id,
+				'title' => $product->name,
+				'price' => $product->price,
+				'img_url' => $images->isNotEmpty() ? asset($images->first()->product_image_url) : asset('images/placeholder.png'),
+				'second_img_url' => $images->count() > 1 ? asset($images[1]->product_image_url) : null,
+				'discount_percentage' => $product->discount_percentage,
+				'is_wishlisted' => in_array($product->product_id, $wishlistedIds)
+			];
+		});
 
 		$discountedProducts = Product::where('discount_percentage', '>', 0)
-			->with([
-				'product_images' => function ($query) {
-					$query->where('image_type', '=', 1)->select('product_image_url', 'product_id');
-				}
-			])
-			->take(10)
-			->get()
-			->map(function ($product) use ($wishlistedIds) {
-				return (object) [
-					'product_id' => $product->product_id,
-					'title' => $product->name,
-					'price' => $product->price,
-					'discount_percentage' => $product->discount_percentage,
-					'img_url' => $product->product_images->first()->product_image_url,
-					'is_wishlisted' => in_array($product->product_id, $wishlistedIds)
-				];
-			});
+		->with(['product_images' => function ($query) {
+			$query->where('image_type', '=', 1)
+				  ->select('product_image_url', 'product_id')
+				  ->orderBy('product_image_id');  // Add ordering to ensure consistent image selection
+		}])
+		->take(10)
+		->get()
+		->map(function ($product) use ($wishlistedIds) {
+			$images = $product->product_images;
+			return (object) [
+				'product_id' => $product->product_id,
+				'title' => $product->name,
+				'price' => $product->price,
+				'discount_percentage' => $product->discount_percentage,
+				'img_url' => $images->isNotEmpty() ? asset($images->first()->product_image_url) : asset('images/placeholder.png'),
+				'second_img_url' => $images->count() > 1 ? asset($images[1]->product_image_url) : null,
+				'is_wishlisted' => in_array($product->product_id, $wishlistedIds)
+			];
+		});
 
 		return view('product.index', compact(
 			'productId',
