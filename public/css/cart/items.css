@@ -164,7 +164,8 @@
 	margin-top: 5px;
 }
 .price {
-	color: #1E4733;
+	font-weight: 600;
+	color: #106B32;
 }
 .total-uprice{
 	font-size: 18px;
@@ -173,6 +174,7 @@
 	font-size: 12px;
 	font-weight: normal;
 	margin-top: 3px;
+	color: #106B32;
 }
 .each-cart-item {
 	border-top: 2px solid #EBEBEC;
