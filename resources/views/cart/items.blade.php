@@ -67,7 +67,7 @@
                                         <span class="price"
                                             data-price="{{ $item->product->price }}"
                                             data-discount="{{ $item->product->discount_percentage }}">
-                                            {{ number_format($item->product->price) }}
+                                            {{ $item->product->price }}
                                         </span>
                                         <span class="currency-label fs-6"><b>₫</b></span>
                                     </p>
@@ -102,7 +102,7 @@
                                                             data-cart-id="{{ $item->cart_id }}"
                                                             data-unit-price="{{ $item->unit_price }}"
                                                             data-discount-percent="{{ $item->product->discount_percentage ?? 0}}">
-                                                            {{ number_format($item->discounted_price) }}
+                                                            {{ $item->discounted_price }}
                                                         </span>
                                                         <span class="currency-label fs-6"><b>₫</b></span>
                                                     </div>
@@ -136,13 +136,17 @@
                                     (<span class="items-count-mh">{{ $totalQuantity }} mặt hàng</span>)
                                 </p>
                                 <p class="info col-6 right-side" id="final-total-discounted-price">
-                                    <span id="first-total-price">{{ number_format($totalDiscountedPrice) }} ₫</span>
+                                    <span class="price fs-6" id="first-total-price">{{ $totalDiscountedPrice }}</span>
+                                    <span class="currency-label fs-6"><b>₫</b></span>
                                 </p>
                             </div>
 
                             <div class="row">
                                 <p class="info col-6 left-side fs-7">Tổng khuyến mãi</p>
-                                <p class="info col-6 right-side"><span id="total-discount-amount">{{ number_format($totalDiscountAmount) }} ₫</span></p>
+                                <p class="info col-6 right-side">
+                                    <span class="price fs-6" id="total-discount-amount">{{ $totalDiscountAmount }}</span>
+                                    <span class="currency-label fs-6"><b>₫</b></span>
+                                </p>
                             </div>
                         </div>
 
@@ -173,7 +177,10 @@
                         <hr id="cart-summary-line">
                         <div class="d-flex justify-content-between mb-4">
                             <strong class="final-total-price">Tổng tiền:</strong>
-                            <strong class="final-total-price"><span id="final-price">{{number_format($totalDiscountedPrice)}} ₫</span></strong>
+                            <p class="info col-6 right-side">
+                                <strong class="final-total-price"><span class="price fs-6" id="final-price">{{$totalDiscountedPrice}}</span></strong>
+                                <span class="currency-label fs-6"><b>₫</b></span>
+                            </p>
                         </div>
                         <div id="ship">
                             <i>(Chưa bao gồm phí vận chuyển)</i>

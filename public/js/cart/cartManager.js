@@ -1,5 +1,30 @@
+// Add jQuery plugin method
+$.fn.formatPrice = function () {
+    return this.each(function () {
+        let $element = $(this);
+        let price = $element.text().trim();
+
+        // Remove any existing formatting
+        price = price.replace(/[,.]/g, "");
+
+        // Convert to number and validate
+        price = parseInt(price);
+        if (isNaN(price)) return;
+
+        // Format with thousand separators
+        const formattedPrice = price
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        // Update element text
+        $element.text(formattedPrice);
+    });
+};
+
 $(document).ready(function () {
     const $quantityWrappers = $(".quantity-wrapper");
+
+    $(".price").formatPrice();
 
     function updateButtonStates($minusBtn, $plusBtn, value, maxStock) {
         $minusBtn.prop("disabled", value < 1);
@@ -84,36 +109,7 @@ $(document).ready(function () {
             const productId = cartItem.data("product-id");
             const productName = $(this).data("product-name");
 
-            Swal.fire({
-                title: '<h3 style="color: #1E362D; font-size: 24px;" > Xác nhận xóa!</h3> ',
-                html: `
-            <div style="color: #666; font-size: 19px; margin: 15px 0;">
-                Bạn có chắc chắn muốn xóa <span style="color: #1E362D; font-weight: 600;">${productName}</span> khỏi giỏ hàng?
-            </div>
-        `,
-                icon: null,
-                showCancelButton: true,
-                confirmButtonColor: "#c78b5e",
-                cancelButtonColor: "#6c757d",
-                confirmButtonText: '<i class="fas fa-trash-alt"></i> Xóa',
-                cancelButtonText: "Hủy",
-                customClass: {
-                    popup: "custom-swal-popup",
-                    confirmButton: "custom-confirm-button btn-equal-size",
-                    cancelButton: "custom-cancel-button btn-equal-size",
-                },
-                buttonsStyling: true,
-                reverseButtons: true,
-                padding: "2em",
-                background: "#fff",
-                borderRadius: "15px",
-                showClass: {
-                    popup: "animate__animated animate__fadeInDown",
-                },
-                hideClass: {
-                    popup: "animate__animated animate__fadeOutUp",
-                },
-            }).then((result) => {
+            Swal.fire(deleteAlertConfig(productName)).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
                         url: `/cart/${cartId}/${productId}`,
@@ -134,21 +130,8 @@ $(document).ready(function () {
                                     calculateCartTotal();
                                 });
 
-                                // Success notification
-                                Swal.fire({
-                                    title: `
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-left: -20px;">
-                                                <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px;"></i>
-                                                <h4 style="color: #1E362D; margin: 0;">Đã xóa thành công!</h4>
-                                            </div>
-                                        </div>`,
-                                    html: '<div style="color: #666; font-size: 20px;">Sản phẩm đã được xóa khỏi giỏ hàng</div>',
-                                    timer: 1700,
-                                    showConfirmButton: false,
-                                    customClass: {
-                                        popup: "custom-swal-popup",
-                                    },
+                                Swal.fire(successAlertConfig()).then(() => {
+                                    window.location.reload();
                                 });
 
                                 // If cart is empty after removal, reload the page
@@ -218,11 +201,6 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     updateCartCount(response.items_counts);
-                    // history.pushState(
-                    //     { page: "/cart/items" },
-                    //     "",
-                    //     "/cart/checkout"
-                    // );
                     window.location.href = "/cart/checkout";
                 }
             },
@@ -238,6 +216,56 @@ $(document).ready(function () {
     });
 });
 
+function deleteAlertConfig(productName) {
+    return {
+        title: '<h3 style="color: #1E362D; font-size: 24px;" > Xác nhận xóa!</h3> ',
+        html: `
+            <div style="color: #666; font-size: 19px; margin: 15px 0;">
+                Bạn có chắc chắn muốn xóa <span style="color: #1E362D; font-weight: 600;">${productName}</span> khỏi giỏ hàng?
+            </div>
+        `,
+        icon: null,
+        showCancelButton: true,
+        confirmButtonColor: "#c78b5e",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: '<i class="fas fa-trash-alt"></i> Xóa',
+        cancelButtonText: "Hủy",
+        customClass: {
+            popup: "custom-swal-popup",
+            confirmButton: "custom-confirm-button btn-equal-size",
+            cancelButton: "custom-cancel-button btn-equal-size",
+        },
+        buttonsStyling: true,
+        reverseButtons: true,
+        padding: "2em",
+        background: "#fff",
+        borderRadius: "15px",
+        showClass: {
+            popup: "animate__animated animate__fadeInDown",
+        },
+        hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+        },
+    };
+}
+
+function successAlertConfig() {
+    return {
+        title: `
+            <div style="text-align: center;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-left: -20px;">
+                    <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px;"></i>
+                    <h4 style="color: #1E362D; margin: 0;">Đã xóa thành công!</h4>
+                </div>
+            </div>`,
+        html: '<div style="color: #666; font-size: 20px;">Sản phẩm đã được xóa khỏi giỏ hàng</div>',
+        timer: 1700,
+        showConfirmButton: false,
+        customClass: {
+            popup: "custom-swal-popup",
+        },
+    };
+}
 function isInStock($item) {
     return !$item.hasClass("out-of-stock");
 }
