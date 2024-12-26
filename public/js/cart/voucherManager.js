@@ -1,3 +1,24 @@
+$.fn.formatPrice = function () {
+    return this.each(function () {
+        let $element = $(this);
+        let price = $element.text().trim();
+
+        price = price.replace(/[,.]/g, "");
+
+        price = parseInt(price);
+        if (isNaN(price)) return;
+
+        // Format with thousand separators
+        const formattedPrice = price
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        // Update element text
+        $element.text(formattedPrice);
+        $(".currency-label").html("<b style='color: #1E4733'>₫</b>");
+    });
+};
+
 $(document).ready(function () {
     $("#voucher-apply").on("click", function (e) {
         e.preventDefault();
@@ -21,21 +42,30 @@ function handleVoucherError(errorResponse) {
     const $voucherError = $("#voucher-error");
     const errorCode = errorResponse.ecode;
     const voucherType = errorResponse.voucher_type;
-    const additionalPrice = errorResponse.min_price - errorResponse.cart_total;
+    const cartTotal = parseInt(
+        errorResponse.cart_total.toString().replace(/[,.]/g, "")
+    );
+    console.log("Cart total response:", cartTotal);
+    const additionalPrice = errorResponse.min_price - cartTotal;
     let errorMessage = "";
 
     if (
         errorCode === "MIN_PRICE" &&
-        (voucherType === "cash" || voucherType === "percentage")) {
-        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} ₫ để sử dụng Voucher bạn nhé!`;
-    } else if (
-        errorCode === "MIN_PRICE" &&
-        (voucherType === "free_shipping")) {
-        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} ₫ để  được miễn phí giao hàng!`;
+        (voucherType === "cash" || voucherType === "percentage")
+    ) {
+        errorMessage = `Mua thêm ${$("<span>")
+            .text(additionalPrice)
+            .formatPrice()
+            .text()} ₫ để sử dụng Voucher bạn nhé!`;
+    } else if (errorCode === "MIN_PRICE" && voucherType === "free_shipping") {
+        errorMessage = `Mua thêm ${$("<span>")
+            .text(additionalPrice)
+            .formatPrice()
+            .text()} ₫ để được miễn phí giao hàng!`;
     } else {
-        errorMessage = errorResponse.message
+        errorMessage = errorResponse.message;
     }
-    
+
     $("#voucher-error").text(errorMessage);
     $voucherBox.hide();
     $voucherError.show();
@@ -45,10 +75,11 @@ function validateVoucherName(name) {
     const cartTotal = parseInt(
         $("#first-total-price")
             .text()
-            .replace(/[^0-9.-]+/g, "")
+            .trim()
+            .replace(/[,.]/g, "")
     );
     console.log("Sending cartTotal:", cartTotal);
-    
+
     $.ajax({
         url: "/voucher/validate",
         method: "POST",
@@ -62,7 +93,7 @@ function validateVoucherName(name) {
         success: function (response) {
             if (response.valid) {
                 console.log("Voucher validation response:", response);
-                console.log('Order count: ', response.order_count)
+                console.log("Order count: ", response.order_count);
                 const voucherDiscount = calculateDiscount(
                     cartTotal,
                     response.voucher_type,
@@ -77,7 +108,9 @@ function validateVoucherName(name) {
                 $("#valid-voucher-box").slideDown(80);
                 $("#voucher-error").slideUp(80);
 
-                $("#final-price").text(formatPrice(cartTotal - voucherDiscount));
+                $("#final-price").text(
+                    formatPrice(cartTotal - voucherDiscount)
+                );
             } else {
                 handleVoucherError(response);
                 return;
@@ -116,8 +149,4 @@ function updateVoucherBoxDisplay(description, value, type) {
     } else {
         $("#voucher-discount").hide();
     }
-}
-
-function formatPrice(price) {
-    return new Intl.NumberFormat("VND").format(price);
 }
