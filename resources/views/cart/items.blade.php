@@ -64,7 +64,7 @@
                                     <h6 class="fw-semibold col-md-bg-danger">{{ $item->product->name }}</h6>
                                     <p class="col-md-bg-success unit-price">
                                         <span class="font-normal fs-6">Đơn giá (giá gốc): </span>
-                                        <span class="price"
+                                        <span class="price fs-7"
                                             data-price="{{ $item->product->price }}"
                                             data-discount="{{ $item->product->discount_percentage }}">
                                             {{ $item->product->price }}
@@ -96,9 +96,9 @@
                                             <!-- Use text-start on mobile, text-end on larger screens -->
                                             <div class="row justify-content-start justify-content-md-end">
                                                 @if($item->product->stock_quantity > 0)
-                                                    <span class="temp-title text-start text-md-end fs-5 fs-6">Tạm tính (Đã bao gồm khuyến mãi)</span>
+                                                    <span class="temp-title text-start text-md-end fs-6">Tạm tính (Đã bao gồm khuyến mãi)</span>
                                                     <div class="d-flex align-items-center justify-content-md-end justify-content-start">
-                                                        <span class="price total-uprice me-1"
+                                                        <span class="price fs-7 total-uprice me-1"
                                                             data-cart-id="{{ $item->cart_id }}"
                                                             data-unit-price="{{ $item->unit_price }}"
                                                             data-discount-percent="{{ $item->product->discount_percentage ?? 0}}">
@@ -187,7 +187,10 @@
                         </div>
                         <button class="btn btn-primary w-100" id="checkout-btn">Thanh toán</button>
                         <div class="text-center mt-3">
-                            <a href="/" class="continue-shopping">Tiếp tục mua hàng</a>
+                            <a href="/" class="continue-shopping">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                Tiếp tục mua hàng
+                            </a>
                         </div>
                     </div>
                 </div>
