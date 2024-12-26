@@ -18,7 +18,7 @@ $.fn.formatPrice = function () {
 
         // Update element text
         $element.text(formattedPrice);
-        $(".currency-label").html("<b style='color: #106B32'>₫</b>");
+        $(".currency-label").html(" ₫");
     });
 };
 
