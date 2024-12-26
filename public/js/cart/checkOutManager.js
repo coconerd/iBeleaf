@@ -3,16 +3,34 @@ let to_district_id = null;
 let to_ward_code = null;
 let to_province_id = null;
 
-// Allow backward button on Browser
-// window.addEventListener("popstate", function (event) {
-//     // Check if navigating away from checkout page
-//     if (!event.state || event.state.page !== "/cart/checkout") {
-//         this.window.location.href = "/cart/items";
-//     }
-// });
+$.fn.formatPrice = function () {
+    return this.each(function () {
+        let $element = $(this);
+        let price = $element.text().trim();
+
+        // Remove any existing formatting
+        price = price.replace(/[,.]/g, "");
+
+        // Convert to number and validate
+        price = parseInt(price);
+        if (isNaN(price)) return;
+
+        // Format with thousand separators
+        const formattedPrice = price
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        // Update element text
+        $element.text(formattedPrice);
+        $(".currency-label").html("<b style='color: #1E4733'>₫</b>");
+    });
+};
 
 $(document).ready(function () {
     updateProvisionalPrice();
+
+    $('#discounted-price').formatPrice();
+    
     // Load provinces data from JSON file
     $.getJSON("/data/provinces.json")
         .done(function (data) {
