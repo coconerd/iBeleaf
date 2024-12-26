@@ -1,3 +1,7 @@
+<?php
+use App\Providers\ProductData;
+?>
+
 @extends("layouts.layout")
 @section("title", "Chi tiết sản phẩm")
 
@@ -26,13 +30,27 @@
 			<div class="text-container">
 				<div class="navigation-links d-flex align-items-center nowrap">
 					<a href="{{ url('/') }}" class="me-3 fw-bold" style="font-size: 1rem">Trang chủ</a>
+					<a class="fw-bold select-none" style="user-select: none;">Danh mục</a>
+					<a>
+						<i class="bi bi-caret-right-fill" style="opacity: 0.8;"></i>
+					</a>
 					@foreach(array_slice($productCategories, 0, 2) as $category)
-						<a href="#" class="me-3 fw-bold" style="font-size: 1rem">{{ $category }}</a>
+						<a 
+							href="{{ 
+								route(
+									'products',
+									['category' => ProductData::convertCateHref($category)]
+								) }}" 
+							class="me-3 fw-bold product-category"
+						>
+							<i class="bi bi-arrow-90deg-right category-routing"></i>
+							{{ $category }}
+						</a>
 					@endforeach
-					<strong class="me-5">
+					<!-- <strong class="me-5">
 						<span style="font-size: 1.5rem; color: white;">{{ $product->name }}
 							{{ $product->code }}</span>
-					</strong>
+					</strong> -->
 				</div>
 			</div>
 		</div>
