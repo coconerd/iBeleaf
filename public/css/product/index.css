@@ -19,6 +19,8 @@
 	position: relative;
 	left: 50%;
 	transform: translateX(-50%);
+	filter: blur(2px) brightness(70%);
+	transition: filter 0.3s ease;
 }
 
 .banner .text-container {
@@ -41,7 +43,36 @@
 	margin: 0 1rem;
 }
 
+.product-category {
+	font-size: 1rem;
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.product-category:hover {
+	color: #6ACF3B !important;
+	text-decoration: underline !important;
+	/* font-size: 1.1rem; */
+	transform: scale(1.1);
+	transition: all 0.15s ease;
+}
+
+.category-routing {
+	position: absolute;
+	left: 92%;
+	top: 0px;
+	opacity: 0;
+	transition: all 0.15s ease;
+}
+
+.product-category:hover .category-routing {
+	opacity: 1;
+	top: -17px;
+}
 /* End of banner styles */
+
 body {
 	background-color: #fcf9f3;
 }
@@ -194,7 +225,9 @@ body {
 }
 
 #relatedProductsCarousel .discount-text {
-	background: #FF5349;
+	border: 1px solid #D24F45;
+	color: #634b3d !important;
+	background-color: #FCEDE5 !important;
 	font-size: 0.9rem;
 	/* box-shadow: 0 4px 15px rgba(255, 71, 87, 0.2); */
 	box-shadow: 0 4px 15px rgba(176, 101, 0, 0.2);
@@ -794,16 +827,24 @@ textarea:focus {
 }
 
 #discountedProducts .discount-text {
+	width: 50px;
+	height: 50px;
     transform-origin: center;
     transition: all 0.3s ease;
+	/* border: 1px solid #D24F45 !important; */
+	background-color: #FAF5F0 !important;
+	color: #634B3D !important;
+	box-shadow: 0 4px 7px rgba(176, 101, 0, 0.1);
 }
 
 #discountedProducts .card:hover .discount-text {
     transform: scale(1.1);
-    background-color: #FF5349;
-    box-shadow: 
-        0 4px 15px rgba(255, 59, 48, 0.3),
-        0 0 10px rgba(255, 59, 48, 0.2);
+	border: 1px solid #D24F45;
+    background-color: #FCEDE5 !important;
+	color: #502F2A !important; 
+	box-shadow: 
+		0 4px 8px rgba(255, 59, 48, 0.15),
+		0 0 4px rgba(255, 59, 48, 0.1);
     animation: wobble 1s ease-in-out;
 }
 
@@ -828,7 +869,7 @@ textarea:focus {
 }
 
 #discountedProducts .card:hover .price-text {
-    color: #2ECC71;
+    color: #3EAF15;
 }
 
 #discountedProducts .card:hover .discount-text {
