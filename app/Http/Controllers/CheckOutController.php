@@ -53,8 +53,7 @@ class CheckOutController extends Controller
     private function mappingLocationCodes($provinceName, $districtName, $wardName)
     {
         $data = json_decode(file_get_contents(storage_path('data/provinces.json')), true);
-        // Log::debug('HERE');
-        // Find province ID safely
+        
         $provinceId = null;
         foreach ($data as $id => $province) {
             if (strtolower($province['ProvinceName']) === strtolower($provinceName)) {
@@ -68,7 +67,6 @@ class CheckOutController extends Controller
             return null;
         }
 
-        // Find district safely
         $districts = $data[$provinceId]['Districts'];
         $districtId = null;
         foreach ($districts as $id => $district) {
@@ -171,7 +169,7 @@ class CheckOutController extends Controller
                 'phone' => $user->phone_number ?? null,
                 'address' => $user->address ?? null
             ];
-            
+
             if ($user->province_city && $user->district && $user->commune_ward) {
                 $locationCodes = $this->mappingLocationCodes(
                     $user->province_city,
@@ -183,9 +181,9 @@ class CheckOutController extends Controller
                     'province' => $user->province_city,
                     'district' => $user->district,
                     'ward' => $user->commune_ward,
-                    'district_id' => $locationCodes['district_id'],
-                    'ward_code' => $locationCodes['ward_code'],
-                    'province_id' => $locationCodes['province_id']
+                    'district_id' => $locationCodes['district_id'] ?? null,
+                    'ward_code' => $locationCodes['ward_code'] ?? null,
+                    'province_id' => $locationCodes['province_id'] ?? null
                 ]);
             }
 
