@@ -22,7 +22,7 @@ class VoucherSeeder extends Seeder
         Voucher::create([
             'voucher_name' => 'SAVE50K',
             'voucher_type' => 'cash',
-            'description' => 'Giảm 50,000 VND với đơn hàng trên 500,000 VND',
+            'description' => 'Giảm 50.000 ₫ với đơn hàng trên 500.000 ₫',
             'voucher_start_date' => now(),
             'voucher_end_date' => now()->addDays(15),
             'value' => 50000,
@@ -49,7 +49,7 @@ class VoucherSeeder extends Seeder
         Voucher::create([
             'voucher_name' => 'FREESHIP300',
             'voucher_type' => 'free_shipping',
-            'description' => 'Miễn phí vận chuyển cho đơn hàng từ 300,000 VND',
+            'description' => 'Miễn phí vận chuyển cho đơn hàng từ 300.000 ₫',
             'voucher_start_date' => now()->addDays(1),
             'voucher_end_date' => now()->addDays(45),
             'value' => 0

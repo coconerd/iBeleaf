@@ -82,8 +82,8 @@
 					@if($user->province_city != 'Hồ Chí Minh')
 						<div class="alert-icon-container">
 							<i class="fa-solid fa-bell alert-icon"></i>
-							<div class="popup-message">
-								Shop không nhận giao ngoại thành đối với các sản phẩm Cây bạn nhé!
+							<div class="popup-message fs-6">
+								<i>Plant Paradise chỉ nhận giao <b>CÂY</b> trong nội thành TP.HCM bạn nhé!</i>
 							</div>
 						</div>
 					@endif
@@ -111,17 +111,15 @@
 											<span class="item-title">{{ $item->product->name }}</span>
 											<div class="item-icons">
 												@if($item->product->is_returnable)
-													<i class="fa-solid fa-arrow-rotate-left rounded-circle"
-													style="color: #469636; background-color: rgba(70, 150, 54, 0.1); padding: 0.375rem;"></i>
+													<i class="fa-solid fa-arrow-rotate-left rounded-circle"></i>
 												@endif
 												@if($item->product->discount_percentage > 0)
-													<i class="fa-solid fa-percent ms-2 rounded-circle"
-													style="color: #469636; background-color: rgba(70, 150, 54, 0.1); padding: 0.375rem;"></i>
+													<i class="fa-solid fa-percent ms-2 rounded-circle"></i>
 												@endif
 											</div>
 										</div>
 										<div class="d-flex justify-content-between align-items-center">
-											<span class="item-price">Tổng tiền: {{ number_format($item->discounted_price) }} ₫</span>
+											<span class="item-price">Tổng tiền: <span id="discounted-price">{{ $item->discounted_price }}</span> ₫</span>
 										</div>
 									</div>
 								</div>
@@ -129,17 +127,17 @@
 						</div>
 						<div class="order-summary-details">
 							<div class="summary-row">
-								<span>Tạm tính (Đã bao gồm các giảm giá)</span>
-								<span id="provisional-price"></span>
+								<span class="fs-6">Tạm tính (Đã bao gồm các giảm giá)</span>
+								<span class="price fs-7" id="provisional-price"></span>
 							</div>
 							<div class="summary-row">
-								<span>Phí vận chuyển</span>
-								<span id="shipping-fee">Chưa Tính Toán</span>
+								<span class="fs-6">Phí vận chuyển</span>
+								<span class="price fs-7" id="shipping-fee">Chưa Tính Toán</span>
 							</div>
 							<input type="hidden" id="total-discounted-price" value="{{ $totalDiscountedPrice }}">
 							<div class="summary-row total">
 								<span>Tổng tiền (Đã bao gồm VAT)</span>
-								<span class="total-amount">{{ number_format($totalDiscountedPrice) }} đ</span>
+								<span class="price total-amount fs-5">{{ $totalDiscountedPrice }} đ</span>
 							</div>
 						</div>
 
@@ -171,7 +169,7 @@
 						</p>
 						<p>
 							<i class="fa-solid fa-circle-info" style="color: #c78b5e;"></i>
-							<span>Phí vận chuyển nội thành TP.HCM đồng giá <b>30,000 ₫</b></span>
+							<span>Phí vận chuyển nội thành TP.HCM đồng giá <b>30.000 ₫</b></span>
 						</p>
 					</div>
 				</div>

@@ -18,6 +18,7 @@ $.fn.formatPrice = function () {
 
         // Update element text
         $element.text(formattedPrice);
+        $(".currency-label").html(" ₫");
     });
 };
 
@@ -469,7 +470,7 @@ function calculateSubPrice($input) {
         const subDiscountedTotal = subTotal * (1 - discountPercent / 100);
         const discountAmount = subTotal - subDiscountedTotal;
 
-        $price.text(formatPrice(subDiscountedTotal));
+        $price.text(subDiscountedTotal).formatPrice();
     } catch (error) {
         console.error("Price calculation error:", error);
     }
@@ -525,7 +526,7 @@ function updateDiscountAmount() {
 
         // Update discount display if element exists
         if ($discount.length && !isNaN(totalDiscount)) {
-            $discount.text(formatPrice(totalDiscount) + " ₫");
+            $discount.text(totalDiscount).formatPrice();
         }
     } catch (error) {
         console.error("Error updating discount amount:", error);
@@ -559,12 +560,8 @@ function calculateCartTotal() {
         }
     });
 
-    $("#first-total-price").text(formatPrice(total) + " ₫");
-    $("#final-price").text(formatPrice(total) + " ₫");
-}
-
-function formatPrice(price) {
-    return new Intl.NumberFormat("VND").format(price);
+    $("#first-total-price").text(total).formatPrice();
+    $("#final-price").text(total).formatPrice();
 }
 
 function cleanPriceString(priceStr) {

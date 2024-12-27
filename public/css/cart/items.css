@@ -164,7 +164,8 @@
 	margin-top: 5px;
 }
 .price {
-	color: #1E4733;
+	font-weight: 600;
+	color: #106B32;
 }
 .total-uprice{
 	font-size: 18px;
@@ -173,6 +174,7 @@
 	font-size: 12px;
 	font-weight: normal;
 	margin-top: 3px;
+	color: #106B32;
 }
 .each-cart-item {
 	border-top: 2px solid #EBEBEC;
@@ -192,20 +194,42 @@
 /*Cart summary section*/
 .card-title{
 	margin-left: -3px;
+	color: #1E4733;
 }
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    .info.left-side, .info.right-side {
+        text-align: left;
+        flex: 0 0 100%; /* Each will take full width on smaller screens */
+    }
+    #voucher-apply {
+        width: 100%; /* Full width button on smaller screens */
+    }
+    .final-total-price {
+        text-align: center;
+    }
+    #checkout-btn {
+        font-size: 1rem;
+    }
+}
+
 .card {
-	/* background-color: rgba(247, 244, 240, 0.5); */
-	background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );
-	border: 1px solid #EBEBEC;
-	border-radius: 16px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	position: relative;
-	left: 20px;
-	/* Added width property */
-	width: 100%;
-	max-width: 1200px;
-	margin: 0 auto;
+    background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );
+    border: 1px solid #EBEBEC;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
 }
+
+@media (min-width: 992px) {
+    .card {
+        left: 20px;
+    }
+}
+
 .left-side{
 	text-align: left;
 	color: #7E7E7E;
@@ -310,7 +334,11 @@
 	transform-origin: center;
 	font-size: 19px;
 }
-
+#total-price-text {
+    color: #0f5a29;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
 @keyframes bounce {
 	0%, 100% { transform: scale(1); }
 	50% { transform: scale(1.1); }

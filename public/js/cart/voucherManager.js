@@ -1,3 +1,23 @@
+$.fn.formatPrice = function () {
+    return this.each(function () {
+        let $element = $(this);
+        let price = $element.text().trim();
+
+        price = price.replace(/[,.]/g, "");
+
+        price = parseInt(price);
+        if (isNaN(price)) return;
+
+        // Format with thousand separators
+        const formattedPrice = price
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        // Update element text
+        $element.text(formattedPrice);
+    });
+};
+
 $(document).ready(function () {
     $("#voucher-apply").on("click", function (e) {
         e.preventDefault();
@@ -20,22 +40,30 @@ function handleVoucherError(errorResponse) {
     const $voucherBox = $("#valid-voucher-box");
     const $voucherError = $("#voucher-error");
     const errorCode = errorResponse.ecode;
-    const voucherType = errorResponse.voucher_type;
-    const additionalPrice = errorResponse.min_price - errorResponse.cart_total;
     let errorMessage = "";
 
-    if (
-        errorCode === "MIN_PRICE" &&
-        (voucherType === "cash" || voucherType === "percentage")) {
-        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} ₫ để sử dụng Voucher bạn nhé!`;
-    } else if (
-        errorCode === "MIN_PRICE" &&
-        (voucherType === "free_shipping")) {
-        errorMessage = `Mua thêm ${formatPrice(additionalPrice)} ₫ để  được miễn phí giao hàng!`;
+    if (errorCode === "MIN_PRICE") {
+        const voucherType = errorResponse.voucher_type;
+        const cartTotal = parseInt(
+            errorResponse.cart_total.toString().replace(/[,.]/g, "")
+        );
+        const additionalPrice = errorResponse.min_price - cartTotal;
+
+        if (voucherType === "cash" || voucherType === "percentage") {
+            errorMessage = `Mua thêm ${$("<span>")
+                .text(additionalPrice)
+                .formatPrice()
+                .text()} ₫ để sử dụng Voucher bạn nhé!`;
+        } else if (voucherType === "free_shipping") {
+            errorMessage = `Mua thêm ${$("<span>")
+                .text(additionalPrice)
+                .formatPrice()
+                .text()} ₫ để được miễn phí giao hàng!`;
+        }
     } else {
-        errorMessage = errorResponse.message
+        errorMessage = errorResponse.message;
     }
-    
+
     $("#voucher-error").text(errorMessage);
     $voucherBox.hide();
     $voucherError.show();
@@ -45,10 +73,11 @@ function validateVoucherName(name) {
     const cartTotal = parseInt(
         $("#first-total-price")
             .text()
-            .replace(/[^0-9.-]+/g, "")
+            .trim()
+            .replace(/[,.]/g, "")
     );
     console.log("Sending cartTotal:", cartTotal);
-    
+
     $.ajax({
         url: "/voucher/validate",
         method: "POST",
@@ -62,7 +91,7 @@ function validateVoucherName(name) {
         success: function (response) {
             if (response.valid) {
                 console.log("Voucher validation response:", response);
-                console.log('Order count: ', response.order_count)
+                console.log("Order count: ", response.order_count);
                 const voucherDiscount = calculateDiscount(
                     cartTotal,
                     response.voucher_type,
@@ -77,7 +106,9 @@ function validateVoucherName(name) {
                 $("#valid-voucher-box").slideDown(80);
                 $("#voucher-error").slideUp(80);
 
-                $("#final-price").text(formatPrice(cartTotal - voucherDiscount));
+                $("#final-price").text(
+                    formatPrice(cartTotal - voucherDiscount)
+                );
             } else {
                 handleVoucherError(response);
                 return;
@@ -104,20 +135,18 @@ function updateVoucherBoxDisplay(description, value, type) {
 
     // Adjust font size based on text length
     if (description.length > 40) {
-        $description.css("font-size", "0.75em");
+        $description.css("font-size", "0.73em");
     } else {
         $description.css("font-size", "1em");
     }
 
     if (type === "percentage") {
         $("#voucher-discount")
-            .text("(Giảm " + formatPrice(value) + " ₫)")
+            .text(
+                "(Giảm " + $("<span>").text(value).formatPrice().text() + " ₫)"
+            )
             .show();
     } else {
         $("#voucher-discount").hide();
     }
-}
-
-function formatPrice(price) {
-    return new Intl.NumberFormat("VND").format(price);
 }
