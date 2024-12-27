@@ -17,7 +17,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 - **Tên đồ án**: Website thương mại điện tử cho cửa hàng bán cây cảnh **Plant Paradise**
 
 ## 2. Nhóm thực hiện
-**<span style="color:#43723A;">Tên nhóm Coconerd</span>** 🥥
+**Tên nhóm: Coconerd** 🥥
 
 | Họ và tên          | MSSV     | Vai trò     | Liên hệ                     |
 |--------------------|----------|-------------|-----------------------------|
