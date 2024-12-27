@@ -133,7 +133,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 > ✨ Filter sản phẩm
 > 
 
-##### Trang chi tiết sản phẩm
+#### Trang chi tiết sản phẩm
 
 ![image](https://github.com/user-attachments/assets/d7204d91-a51d-410c-8465-1eb6d6991cf0)
 > ✨ Danh sách các sản phẩm tương tự
