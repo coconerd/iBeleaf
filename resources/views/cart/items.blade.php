@@ -126,37 +126,42 @@
             <!-- Cart Summary Section -->
             <div class="col-12 col-lg-4 mb-5">
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title mb-4">Thông tin đơn hàng
-                            (<span class="items-count">{{ $totalQuantity }}</span>)
+                    <div class="card-body p-3 p-md-4">
+                        <h5 class="card-title mb-4 text-center text-lg-start">
+                            Thông tin đơn hàng (<span class="items-count">{{ $totalQuantity }}</span>)
                         </h5>
-                        <div id ="container">
-                            <div class="row">
-                                <p class="info col-6 left-side fs-7">Thành tiền
-                                    (<span class="items-count-mh">{{ $totalQuantity }} mặt hàng</span>)
-                                </p>
-                                <p class="info col-6 right-side" id="final-total-discounted-price">
-                                    <span class="price fs-6" id="first-total-price">{{ $totalDiscountedPrice }}</span>
-                                    <span class="currency-label fs-6"><b>₫</b></span>
-                                </p>
+                        <div id="container">
+                            <div class="row align-items-center mb-2">
+                                <div class="col-7 col-lg-6">
+                                    <p class="info left-side fs-7 mb-0">Thành tiền (<span class="items-count-mh">{{ $totalQuantity }} mặt hàng</span>)</p>
+                                </div>
+                                <div class="col-5 col-lg-6">
+                                    <p class="info right-side text-end mb-0">
+                                        <span class="price fs-6" id="first-total-price">{{ $totalDiscountedPrice }}</span>
+                                        <span class="currency-label fs-6"><b>₫</b></span>
+                                    </p>
+                                </div>
                             </div>
 
-                            <div class="row">
-                                <p class="info col-6 left-side fs-7">Tổng khuyến mãi</p>
-                                <p class="info col-6 right-side">
-                                    <span class="price fs-6" id="total-discount-amount">{{ $totalDiscountAmount }}</span>
-                                    <span class="currency-label fs-6"><b>₫</b></span>
-                                </p>
+                            <div class="row align-items-center mb-2">
+                                <div class="col-7 col-lg-6">
+                                    <p class="info left-side fs-7 mb-0">Tổng khuyến mãi</p>
+                                </div>
+                                <div class="col-5 col-lg-6">
+                                    <p class="info right-side text-end mb-0">
+                                        <span class="price fs-6" id="total-discount-amount">{{ $totalDiscountAmount }}</span>
+                                        <span class="currency-label fs-6"><b>₫</b></span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="voucher-section">
+                        <div class="voucher-section mt-3">
                             <div class="input-group mb-2">
                                 <input type="text" class="form-control" id="voucher-input" placeholder="Nhập mã voucher">
-                                <button class="btn apply-btn" id="voucher-apply" style="width: 25%;">ÁP DỤNG</button>
+                                <button class="btn apply-btn" id="voucher-apply">ÁP DỤNG</button>
                             </div>
                             <div id="voucher-amount"></div>
-
                             <div id="voucher-error" class="text-danger mb-2" style="display: none;"></div>
                             <div class="voucher-box" style="display: none;" id="valid-voucher-box" data-voucher-type="">
                                 <div class="voucher-details" data-voucher-id="">
@@ -164,9 +169,7 @@
                                         <i class="fa-regular fa-circle-check" style="color: #c78b5e;"></i>
                                     </div>
                                     <div>
-                                        <p class="voucher-info">
-                                            <span id="voucher-description"></span>
-                                        </p>
+                                        <p class="voucher-info"><span id="voucher-description"></span></p>
                                         <span id="voucher-discount"></span>
                                         <input type="hidden" id="voucher-id" name="voucher_id" value="">
                                     </div>
@@ -175,21 +178,25 @@
                         </div>
 
                         <hr id="cart-summary-line">
-                        <div class="d-flex justify-content-between mb-4">
-                            <strong class="final-total-price">Tổng tiền:</strong>
-                            <p class="info col-6 right-side">
-                                <strong class="final-total-price"><span class="price fs-6" id="final-price">{{$totalDiscountedPrice}}</span></strong>
-                                <span class="currency-label fs-6"><b>₫</b></span>
-                            </p>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-7 col-lg-6">
+                                <p class="info left-side fs-5 mb-0" id="total-price-text">Tổng tiền:</p>
+                            </div>
+                            <div class="col-5 col-lg-6">
+                                <p class="info right-side text-end mb-0">
+                                    <span class="price fs-5" id="final-price">{{ $totalDiscountedPrice }}</span>
+                                    <span class="currency-label fs-6"><b>₫</b></span>
+                                </p>
+                            </div>
                         </div>
+
                         <div id="ship">
                             <i>(Chưa bao gồm phí vận chuyển)</i>
                         </div>
                         <button class="btn btn-primary w-100" id="checkout-btn">Thanh toán</button>
                         <div class="text-center mt-3">
-                            <a href="/" class="continue-shopping">
-                                <i class="fas fa-shopping-cart me-2"></i>
-                                Tiếp tục mua hàng
+                            <a href="/" class="continue-shopping d-block">
+                                <i class="fas fa-shopping-cart me-2"></i> Tiếp tục mua hàng
                             </a>
                         </div>
                     </div>
