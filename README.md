@@ -17,7 +17,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 - **Tên đồ án**: Website thương mại điện tử cho cửa hàng bán cây cảnh **Plant Paradise**
 
 ## 2. Nhóm thực hiện
-<span style="color: #43723A; font-style:bold;">Tên nhóm Coconerd** 🥥</span>
+<div style="color: #43723A; font-weight:bold;">Tên nhóm Coconerd</div> 🥥
 
 | Họ và tên          | MSSV     | Vai trò     | Liên hệ                     |
 |--------------------|----------|-------------|-----------------------------|
@@ -40,13 +40,15 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
     - Các sản phẩm chậu: Giao hàng toàn quốc  
 - Về qui định phí giao hàng:
     - Giao hàng nội thành TP.HCM: Đồng giá 30.000đ
-    - Giao hàng ngoại thành: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng
+    - Giao hàng ngoại thành: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng (sử dụng API của GHN)
 ### 4.2 Chính sách trả hàng / hoàn tiền 
 
 ## 5. Cài đặt
 ### 5.1 Yêu cầu hệ thống 
 ### 5.2 Các bước cài đặt 
 ### 5.3 Cài đặt Database
+- Schema database (MySQL): `plant_paradise_final.sql`
+- Tạo mock data (Testing): `php artisan db:seed`
 
 ## 6. Giao diện 
 
