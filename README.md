@@ -53,8 +53,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 ## 6. Giao diện 
 
 <pre>
-<strong>Trang web chính</strong>
-
+<strong>Trang chính</strong>
 ├── <a href="#Trang-đăng-kí--đăng-nhập">Trang đăng kí / đăng nhập</a>
 │  
 ├── <a href="#Trang-chủ">Trang chủ</a>
@@ -74,7 +73,6 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
     └── <a href="#Trang-">Trang .....</a>
 
 <strong>Trang dành cho Admin</strong>
-
 ├── <a href="#Trang-đăng-nhập">Đăng kí / đăng nhập</a>
 │    
 ├── <a href="#Trang-Dashboard">Dashboard</a>
