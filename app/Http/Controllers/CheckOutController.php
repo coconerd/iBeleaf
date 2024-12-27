@@ -53,7 +53,7 @@ class CheckOutController extends Controller
     private function mappingLocationCodes($provinceName, $districtName, $wardName)
     {
         $data = json_decode(file_get_contents(storage_path('data/provinces.json')), true);
-        
+        // Log::debug('HERE');
         // Find province ID safely
         $provinceId = null;
         foreach ($data as $id => $province) {
@@ -165,39 +165,32 @@ class CheckOutController extends Controller
             $user = Auth::user();
             Log::debug('Getting user info', ['user' => $user->user_id]);
             
-            if (!$user) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User not authenticated'
-                ], 401);
-            }
-            
-            $locationCodes = $this->mappingLocationCodes(
-                $user->province_city,
-                $user->district,
-                $user->commune_ward,
-            );
-
-            Log::debug('DistrictId: ', ['id'=> $locationCodes['district_id']]);
-            Log::debug('Ward code: ', ['code' => $locationCodes['ward_code']]);
-            Log::debug('province_city', [
-                'province' => $user->province_city,
-                'full name' => $user->full_name,
-                'phone' => $user->phone_number
-            ]);
-
-            return response()->json([
+            $response = [
                 'success' => true,
-                'fullname' => $user->full_name,
-                'phone' => $user->phone_number,
-                'province' => $user->province_city,
-                'district' => $user->district,
-                'ward' => $user->commune_ward,
-                'district_id' => $locationCodes['district_id'],
-                'ward_code' => $locationCodes['ward_code'],
-                'province_id' => $locationCodes['province_id'],
-                'address' => $user->address
-            ]);
+                'fullname' => $user->full_name ?? null,
+                'phone' => $user->phone_number ?? null,
+                'address' => $user->address ?? null
+            ];
+            
+            if ($user->province_city && $user->district && $user->commune_ward) {
+                $locationCodes = $this->mappingLocationCodes(
+                    $user->province_city,
+                    $user->district,
+                    $user->commune_ward
+                );
+                
+                $response = array_merge($response, [
+                    'province' => $user->province_city,
+                    'district' => $user->district,
+                    'ward' => $user->commune_ward,
+                    'district_id' => $locationCodes['district_id'],
+                    'ward_code' => $locationCodes['ward_code'],
+                    'province_id' => $locationCodes['province_id']
+                ]);
+            }
+
+            Log::debug('Sending response:', $response);
+            return response()->json($response);
 
         } catch (Exception $e) {
             Log::error('Failed to load user info', [

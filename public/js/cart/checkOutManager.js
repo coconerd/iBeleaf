@@ -11,18 +11,15 @@ $.fn.formatPrice = function () {
         // Remove any existing formatting
         price = price.replace(/[,.]/g, "");
 
-        // Convert to number and validate
         price = parseInt(price);
         if (isNaN(price)) return;
 
-        // Format with thousand separators
         const formattedPrice = price
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-        // Update element text
         $element.text(formattedPrice);
-        $(".currency-label").html("<b style='color: #1E4733'>₫</b>");
+        $(".currency-label").html(" ₫");
     });
 };
 
@@ -30,7 +27,7 @@ $(document).ready(function () {
     updateProvisionalPrice();
 
     $('#discounted-price').formatPrice();
-    
+
     // Load provinces data from JSON file
     $.getJSON("/data/provinces.json")
         .done(function (data) {
@@ -246,29 +243,42 @@ function innerCityShippingFee() {
 }
 
 function initialLoadUserInfo(provinceData) {
-    $.ajax({
+    return $.ajax({
         url: "/checkout/user-info",
         method: "GET",
         success: function (response) {
             if (response.success) {
-                $("#name").val(response.fullname);
-                $("#phone").val(response.phone);
-                $("#address").val(response.address);
+                const fields = {
+                    'fullname': 'name',
+                    'phone': 'phone',
+                    'address': 'address'
+                };
 
+                for (const [responseKey, fieldId] of Object.entries(fields)) {
+                    if (response[responseKey]) {
+                        $(`#${fieldId}`)
+                            .val(response[responseKey])
+                            .removeClass('is-invalid')
+                            .trigger('change')
+                            .siblings(".invalid-feedback")
+                            .remove();
+                    }
+                }
+
+                // Set shipping variables
                 to_district_id = response.district_id;
                 to_ward_code = response.ward_code;
                 to_province_id = response.province_id;
-                console.log("Updated globals:", { district_id: to_district_id, ward_code: to_ward_code, province_id: to_province_id });
-                
-                if(to_province_id !== 202) {
+
+                // Calculate shipping fee
+                if (to_province_id !== 202) {
                     calculateShippingFee(to_district_id, to_ward_code);
                 } else {
                     innerCityShippingFee();
                 }
 
-                // Populate dropdowns with user's initial location data
+                // Populate location dropdowns
                 populateProvinces(response.province, provinceData);
-
                 populateDistricts(
                     find_to_province_id(response.province),
                     response.district,
@@ -279,14 +289,81 @@ function initialLoadUserInfo(provinceData) {
                     response.ward,
                     provinceData
                 );
-                validateCheckoutForm();
-                console.log("User info loaded:", response);
+
+                console.log("User info loaded successfully");
+            } else {
+                initializeEmptyForm(provinceData);
             }
         },
-        error: function (xhr) {
-            console.error("Failed to load user info:", xhr.responseJSON);
+        error: function (xhr, status, error) {
+            console.log("Error loading user info:", error);
+            initializeEmptyForm(provinceData);
         },
     }).promise();
+}
+
+function initializeEmptyForm(provinceData, userInfo) {
+    
+    to_district_id = "";
+    to_ward_code = "";
+    to_province_id = "";
+
+    // Initialize province dropdown
+    const $provinceSelect = $("#province");
+    $provinceSelect
+        .empty()
+        .append("<option selected>Lựa chọn Tỉnh/Thành Phố</option>");
+
+    // Populate provinces
+    Object.keys(provinceData).forEach((key) => {
+        $provinceSelect.append(
+            $("<option></option>")
+                .attr("value", key)
+                .text(provinceData[key].ProvinceName)
+        );
+    });
+
+    // Reset district and ward dropdowns
+    $("#district")
+        .empty()
+        .append("<option selected>Lựa chọn Quận/Huyện</option>");
+    $("#ward").empty().append("<option selected>Lựa chọn Phường/Xã</option>");
+
+    // Setup change handlers
+    setupDropdownHandlers(provinceData);
+    validateCheckoutForm();
+}
+
+function setupDropdownHandlers(provinceData) {
+    $("#province")
+        .off("change")
+        .on("change", function () {
+            const provinceId = $(this).val();
+            updateDistrictDropdown(provinceId, provinceData);
+            to_province_id = provinceId;
+        });
+
+    $("#district")
+        .off("change")
+        .on("change", function () {
+            const districtId = $(this).val();
+            updateWardDropdown(to_province_id, districtId, provinceData);
+            to_district_id = districtId;
+        });
+
+    $("#ward")
+        .off("change")
+        .on("change", function () {
+            const wardId = $(this).val();
+            if (wardId) {
+                to_ward_code = wardId;
+                if (to_province_id === "202") {
+                    innerCityShippingFee();
+                } else {
+                    calculateShippingFee(to_district_id, to_ward_code);
+                }
+            }
+        });
 }
 
 function populateProvinces(selectedProvince, data) {
