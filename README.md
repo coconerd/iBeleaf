@@ -8,12 +8,12 @@
 ## 2. Nhóm thực hiện
 - Tên nhóm: Coconerd 🥥
 - Danh sách thành viên: 
-Họ và tên | MSSV | Vai trò | Liên hệ |
-|-----------|-----------|---------|---------|
-🌱 Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead | example1@gmail.com |
-🌱 Phan Thị Thủy Hiền | 2252xxxx | Team member | thuyhienphanthi2004@gmail.com |
-🌱 Phan Thành Công | 2252xxxx | Team member | example3@gmail.com |
-🌱 Trần Vũ Bão | 2252xxxx | Team member | example4@gmail.com |
+| Họ và tên          | MSSV     | Vai trò     | Liên hệ                     |
+|--------------------|----------|-------------|-----------------------------|
+| 🌱 Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead   | example1@gmail.com          |
+| 🌱 Phan Thị Thủy Hiền | 2252xxxx | Team member | thuyhienphanthi2004@gmail.com |
+| 🌱 Phan Thành Công   | 2252xxxx | Team member | example3@gmail.com          |
+| 🌱 Trần Vũ Bão       | 2252xxxx | Team member | example4@gmail.com          |
 ## 3. Thiết kế Cơ sở Dữ Liệu 
 
 ## 4. Giao diện 
