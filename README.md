@@ -11,20 +11,22 @@ Họ và tên | MSSV | Vai trò | Liên hệ |
 ## 3. Thiết kế Cơ sở Dữ Liệu 
 
 ## 4. Giao diện 
+```
 Trang web chính
 ├── Trang chủ 
 │   ├── Trang danh mục sản phẩm
 │   │   ├── Trang chi tiết sản phẩm
 │   └── Trang giỏ hàng 
-│		├── Trang thanh toán 
+│       ├── Trang thanh toán 
 └── Trang hồ sơ
-    └── ...
-        └── ...
+	└── ...
+		└── ...
 
 Trang dành cho Admin
 ├── Dashboard
 └── Branch B
-    └── Sub-branch B.1
-        └── Leaf B.1.1
+	└── Sub-branch B.1
+		└── Leaf B.1.1
+```
 
 ### 4.1 Trang chủ
