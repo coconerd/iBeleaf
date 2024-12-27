@@ -86,11 +86,12 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 ## 🌱 Trang chính
 ### Trang đăng kí / đăng nhập
-Đăng kí với Email
-
+> ✨ Đăng kí với Email
+> 
 ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
 
-Đăng nhập
+> ✨ Đăng nhập
+> 
 - Đăng nhập với Email
 - Đăng nhập với Google
 - Đăng nhập với Facebook
