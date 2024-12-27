@@ -6,8 +6,8 @@
 - Giới thiệu:
   Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưởng cuộc sống? **Plant Paradise** chính là thiên đường mà bạn đang tìm kiếm! Với vô vàn giống cây xanh độc đáo, từ những chậu cây nhỏ xinh đến những cây cảnh    lớn, chúng tôi cam kết mang đến cho bạn một không gian sống xanh mát và tràn đầy sức sống. Hãy để **Plant Paradise** giúp bạn tạo nên một thiên đường xanh ngay tại ngôi nhà của mình!
 ## 2. Nhóm thực hiện
-- Tên nhóm: Coconerd 🥥
-- Danh sách thành viên: 
+Tên nhóm: Coconerd 🥥
+
 | Họ và tên          | MSSV     | Vai trò     | Liên hệ                     |
 |--------------------|----------|-------------|-----------------------------|
 | 🌱 Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead   | example1@gmail.com          |
