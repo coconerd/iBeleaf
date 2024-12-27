@@ -95,7 +95,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 - Đăng nhập với Google
 - Đăng nhập với Facebook
 
-![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
+![image](https://github.com/user-attachments/assets/0776478c-51e1-49bb-ad14-b22a0e380f83)
 
 ### Trang chủ
 
@@ -114,7 +114,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
  ![image](https://github.com/user-attachments/assets/9c989814-03b8-41f2-b279-bb025018e00a)
 
 
-#### Trang danh mục sản phẩm
+### Trang danh mục sản phẩm
 
 ![image](https://github.com/user-attachments/assets/d878a5b7-a929-45f9-baff-7c47f17351d2)
 
@@ -131,7 +131,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 > ✨ Filter sản phẩm
 > 
 
-#### Trang chi tiết sản phẩm
+### Trang chi tiết sản phẩm
 
 ![image](https://github.com/user-attachments/assets/d7204d91-a51d-410c-8465-1eb6d6991cf0)
 > ✨ Danh sách các sản phẩm tương tự
@@ -171,7 +171,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
  ![image](https://github.com/user-attachments/assets/8949796b-17f7-4ebb-8ca8-268692f6d25e)
 
 
-> ✨ Áp dụng Voucher
+> ✨ Áp dụng Voucher cho đơn hàng hiện tại 
 >
  ![image](https://github.com/user-attachments/assets/5fa2fab4-6626-4628-8003-a7c90819e0ac)
 
@@ -179,9 +179,9 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
  ![image](https://github.com/user-attachments/assets/cf59dc21-8c6b-43cd-b60e-041cdef3438b)
 
-#### Tranh thanh toán
+### Tranh thanh toán
 
-> ✨ Điền thông tin mua hàng > nhận thông tin về phí Ship
+> ✨ Điền đẩy đủ thông tin mua hàng > nhận thông tin về phí ship 
 >
  ![image](https://github.com/user-attachments/assets/1e73ab6a-40d3-494a-ab19-16a57c7aa2ab)
 
@@ -193,23 +193,29 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
  ![image](https://github.com/user-attachments/assets/35f541f9-b54f-4389-9e6c-3fdc59445e23)
 
 ### Trang hồ sơ
-#### Trang thông tin / đổi mật khẩu
 
-> ✨ Thông tin khách hàng 
+### Trang thông tin / đổi mật khẩu
+
+![image](https://github.com/user-attachments/assets/28e88b1d-d0b8-4ceb-a913-b02017d89cbb)
+
+> ✨ Chỉnh sửa thông tin cá nhân  
 >
- ![image](https://github.com/user-attachments/assets/ff4268ed-63df-49fe-96f4-4ee02d4be387)
+ ![image](https://github.com/user-attachments/assets/e65f2542-1a90-4478-92a5-9e97dab83aca)
 
  ![image](https://github.com/user-attachments/assets/6daae9da-759d-4daf-a7c0-54f0392b8e45)
 
-> ✨ Đổi mật khẩu 
+> ✨ Đổi mật khẩu cho tài khoản 
 >
  ![image](https://github.com/user-attachments/assets/8894052e-2552-468f-92fa-5d3b56f4421f)
 
 ## 🌱 Trang dành cho Admin
 ### Trang đăng nhập
 
-
- 
+## 7. Định hướng phát triển
+### 7.1 Chức năng giỏ hàng, thanh toán 
+- Hiển thị danh sách Voucher hiện có của Shop: Tạo một trang riêng biệt để hiển thị tất cả các voucher hiện có của cửa hàng, giúp người dùng dễ dàng tìm kiếm và sử dụng các ưu đãi phù hợp
+- Gợi ý Voucher: Gợi ý các voucher phù hợp cho người dùng dựa trên các sản phẩm trong giỏ hàng của họ
+- Tích hợp các phương thức thanh toán online (Banking): Hỗ trợ nhiều phương thức thanh toán trực tuyến như chuyển khoản ngân hàng, ví điện tử, và các cổng thanh toán khác
  
 
 
