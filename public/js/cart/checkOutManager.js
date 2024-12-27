@@ -167,6 +167,8 @@ function submitOrder() {
         province_city: $("#province option:selected").text(),
         district: $("#district option:selected").text(),
         commune_ward: $("#ward option:selected").text(),
+        to_district_id: to_district_id,
+        to_ward_code: to_ward_code,
         address: $("#address").val(),
     };
 
@@ -187,6 +189,7 @@ function submitOrder() {
     const totalPrice = realProvisionalPrice + shippingFee;
     console.log("Test real provisional price: ", realProvisionalPrice);
     console.log("Test total price: ", totalPrice);
+
 
     const orderData = {
         voucher_name: voucherName,

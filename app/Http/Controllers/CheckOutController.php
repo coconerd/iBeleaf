@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -104,38 +105,36 @@ class CheckOutController extends Controller
 
     public function calculatingShippingFee(Request $request){
         try {
-            // Access nested data
-            // $data = $request->input('to_district_id');
+
             Log::debug('See difference in address, calcuating new shipping fee');
-
-            $districtId = $request['to_district_id'] ?? null;
-            $wardCode = $request['to_ward_code'] ?? null;
-
-            if (!$districtId || !$wardCode) {
+            
+            $toDistrictId = $request->input('to_district_id');
+            $toWardCode = $request->input('to_ward_code');
+            if (!$toDistrictId || !$toWardCode) {
                 throw new ValidationException(validator([], []));
             }
-
+            
             // Convert to integers where needed
-            $districtId = (int) $districtId;
-            $wardCode = (string) $wardCode;
+            $toDistrictId = (int) $toDistrictId;
+            $toWardCode = (string) $toWardCode;
             $cartId = Auth::user()->cart_id;
 
             Log::debug('Data input for shipping calculation', [
-                'district_id' => $districtId,
-                'ward_code' => $wardCode,
+                'district_id' => $toDistrictId,
+                'ward_code' => $toWardCode,
                 'cart_id' => $cartId
             ]);
 
             $fee = $this->shippingService->calculateFee(
-                $districtId,
-                $wardCode,
+                $toDistrictId,
+                $toWardCode,
                 $cartId
             );
 
             Log::debug('Shipping fee calculated', [
                 'fee' => $fee,
-                'to_district_id' => $districtId,
-                'to_ward_code' => $wardCode,
+                'to_district_id' => $toDistrictId,
+                'to_ward_code' => $toWardCode,
                 'cart_id' => $cartId
             ]);
 
@@ -275,6 +274,8 @@ class CheckOutController extends Controller
             Log::debug('Previous Delivery Cost: ', ['cost' => $preDeliverCost]);
 
 			// 1. Create new Order
+            Log::debug('Pre Deliver Cost: ', ['cost' => $preDeliverCost]);
+
             $order = $this->createNewOrder(
                 $voucherId,
                 $request->real_provisional_price,
@@ -348,6 +349,15 @@ class CheckOutController extends Controller
             $user->commune_ward !== $newCity;
     }
 
+    protected function extractShippingFee($response)
+    {
+        if ($response instanceof JsonResponse) {
+            $content = json_decode($response->getContent(), true);
+            return isset($content['shipping_fee']) ? (int)$content['shipping_fee'] : 0;
+        }
+        return (int)$response;
+    }
+
     public function createNewOrder(
         $voucherId,
         $provisionalPrice,
@@ -357,44 +367,69 @@ class CheckOutController extends Controller
         $paymentMethod,
         $additionalNote)
     {
-        if (!isset($address['province_city']) || !isset($address['district']) || !isset($address['commune_ward'])) {
-            throw new Exception('Invalid address format');
+        try {
+            if (!isset($address['province_city']) || !isset($address['district']) || !isset($address['commune_ward'])) {
+                throw new Exception('Invalid address format');
+            }
+            $formattedAddress = implode(', ', [
+                $address['address'] ?? '',
+                $address['commune_ward'] ?? '',
+                $address['district'] ?? '',
+                $address['province_city'] ?? '',
+            ]);
+
+            $userId = Auth::id();
+            Log::debug('User id: ', ['id' => $userId]);
+            
+            $addressChanged = $this->isAddressChanged(
+                $address['province_city'],
+                $address['district'],
+                $address['commune_ward']
+            );
+
+            $finalDeliverCost = $addressChanged ?
+                $this->extractShippingFee($this->calculatingShippingFee(new Request($address))) :
+                (int)$deliveryCost;
+
+            if (!is_int($finalDeliverCost)) {
+                throw new Exception('Invalid delivery cost format');
+            }
+            
+            Log::debug('Order data: ', [
+                'additional_note' => $additionalNote,
+                'delivery_cost' => $finalDeliverCost
+            ]);
+
+            Log::debug('Creating new order step!');
+            Log::debug('Creating order with metrics:', [
+                'user_id' => $userId,
+                'voucher_id' => $voucherId,
+                'total_price' => $totalPrice,
+                'provisional_price' => $provisionalPrice,
+                'deliver_cost' => $finalDeliverCost,
+                'payment_method' => $paymentMethod,
+                'additional_note' => $additionalNote,
+                'deliver_address' => trim($formattedAddress)
+            ]);
+
+            return Order::create([
+                'user_id' => $userId,
+                'voucher_id' => $voucherId,
+                'total_price' => $totalPrice,
+                'provisional_price' => $provisionalPrice,
+                'deliver_cost' => $finalDeliverCost,
+                'payment_method' => $paymentMethod,
+                'additional_note' => $additionalNote,
+                'deliver_address' => trim($formattedAddress)
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Failed to create new order', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+            throw $e;
         }
-        $formattedAddress = implode(', ', [
-            $address['address'] ?? '',
-            $address['commune_ward'] ?? '',
-            $address['district'] ?? '',
-            $address['province_city'] ?? '',
-        ]);
-
-        $userId = Auth::id();
-        Log::debug('User id: ', ['id' => $userId]);
-        
-        $addressChanged = $this->isAddressChanged(
-            $address['province_city'],
-            $address['district'],
-            $address['commune_ward']
-        );
-
-        $finalDeliverCost = $addressChanged ?
-            $this->calculatingShippingFee($address) :
-            $deliveryCost;
-        
-        Log::debug('Order data: ', [
-            'additional_note' => $additionalNote,
-            'delivery_cost' => $finalDeliverCost
-        ]);
-
-        return Order::create([
-            'user_id' => $userId,
-            'voucher_id' => $voucherId,
-            'total_price' => $totalPrice,
-            'provisional_price' => $provisionalPrice,
-            'deliver_cost' => $finalDeliverCost,
-            'payment_method' => $paymentMethod,
-            'additional_note' => $additionalNote,
-            'deliver_address' => trim($formattedAddress)
-        ]);
 	}
 
     public function showSuccessPage(){
