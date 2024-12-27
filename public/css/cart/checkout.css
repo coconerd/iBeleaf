@@ -24,6 +24,10 @@
     width: 100%;
 }
 
+.currency-label{
+    color: #1E4733;
+}
+
 .title-icon .section-title {
     order: 1;
     font-weight: 500;
@@ -262,7 +266,7 @@ select option:first-child {
     background-color: white;
     border: 1px solid #469636;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     color: #333;
     font-size: 14px;
     opacity: 0;
@@ -271,7 +275,39 @@ select option:first-child {
     transition: all 0.3s ease;
     z-index: 1000;
 }
+.popup-message::before {
+    content: "";
+    position: absolute;
+    left: 15%;
+    top: -8px;
+    transform: translateX(-50%) rotate(45deg);
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border-left: 1px solid #469636;
+    border-top: 1px solid #469636;
+    box-shadow: -2px -2px 5px rgba(0,0,0,0.1);
+}
 
+.popup-message {
+    background: linear-gradient(to bottom, #ffffff, #f8f8f8);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    border: 1px solid #469636;
+    line-height: 1.4;
+    transform: translateY(10px);
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 .overlay {
     position: fixed;
     top: 0;
