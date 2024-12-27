@@ -34,13 +34,13 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 ## 4. Qui trình nghiệp vụ
 
 ### 4.1 Chính sách bán hàng
-- Về việc áp dụng Voucher / Coupon: Mỗi đơn mua hàng chỉ được áp dụng 1 loại Voucher / Coupon
+- Về việc áp dụng Voucher: Mỗi đơn mua hàng chỉ được áp dụng 1 loại Voucher
 - Về chính sách giao hàng:
-    - Các sản phẩm cây gồm chậu: Chỉ nhận giao nội thành TP.HCM
+    - Các sản phẩm cây đi kèm chậu: Chỉ nhận giao nội thành TP.HCM
     - Các sản phẩm chậu: Giao hàng toàn quốc  
 - Về qui định phí giao hàng:
     - Giao hàng nội thành TP.HCM: Đồng giá 30.000đ
-    - Giao hàng ngoại thành: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng (sử dụng API của GHN)
+    - Giao hàng ngoại thành TP.HCM: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng (sử dụng API của GHN - Giao hàng nhanh)
 ### 4.2 Chính sách trả hàng / hoàn tiền 
 
 ## 5. Cài đặt
