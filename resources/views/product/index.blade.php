@@ -35,14 +35,11 @@ use App\Providers\ProductData;
 						<i class="bi bi-caret-right-fill" style="opacity: 0.8;"></i>
 					</a>
 					@foreach(array_slice($productCategories, 0, 2) as $category)
-						<a 
-							href="{{ 
+									<a href="{{ 
 								route(
 									'products',
 									['category' => ProductData::convertCateHref($category)]
-								) }}" 
-							class="me-3 fw-bold product-category"
-						>
+						) }}" class="me-3 fw-bold product-category">
 							<i class="bi bi-arrow-90deg-right category-routing"></i>
 							{{ $category }}
 						</a>
@@ -90,7 +87,7 @@ use App\Providers\ProductData;
 
 			<!-- Middle column: Product Details -->
 			<div class="col-md-4" id="mcol">
-				<h2 class="product-title">{{ $product->short_description }}</h2>
+				<h2 class="product-title vintage-heading">{{ $product->short_description }}</h2>
 				@if ($product->discount_percentage > 0)
 					<p class="product-price">
 						<span class="text-muted text-decoration-line-through discounted-price-text">

@@ -366,7 +366,7 @@ body {
 }
 
 .table tr {
-	margin: 0;
+	margin: 2px;
 }
 
 .table td {
@@ -909,4 +909,15 @@ textarea:focus {
 
 #discountedProducts .card:hover .discount-text {
 	animation: pulse 1.4s infinite;
+}
+
+
+.vintage-heading {
+	font-family: "Lucida Handwriting", cursive;
+	color: #4E3D2D;
+	transition: transform 0.3s ease;
+}
+
+.vintage-heading:hover {
+	transform: scale(1.05);
 }
