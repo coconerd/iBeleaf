@@ -84,7 +84,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 <hr>
 
-## 🌱 Customers
+## 🌱 Trang chính
 ### Trang đăng kí / đăng nhập
 Đăng kí với Email
 
@@ -205,7 +205,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 >
  ![image](https://github.com/user-attachments/assets/8894052e-2552-468f-92fa-5d3b56f4421f)
 
-## 🌱 Admin - Only
+## 🌱 Trang dành cho Admin
 ### Trang đăng nhập
 
 
