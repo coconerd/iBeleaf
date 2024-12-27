@@ -47,10 +47,6 @@ use App\Providers\ProductData;
 							{{ $category }}
 						</a>
 					@endforeach
-					<!-- <strong class="me-5">
-						<span style="font-size: 1.5rem; color: white;">{{ $product->name }}
-							{{ $product->code }}</span>
-					</strong> -->
 				</div>
 			</div>
 		</div>
