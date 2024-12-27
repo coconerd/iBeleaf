@@ -38,7 +38,7 @@ Trang dành cho Admin
   - Đăng nhập với Google
   - Đăng nhập với Facebook
   
-    ![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
+  ![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
 ### 4.2 Trang chủ
 ![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
     
@@ -49,8 +49,10 @@ Trang dành cho Admin
 ![image](https://github.com/user-attachments/assets/b4780b9f-4e82-4ce0-9855-1e6833468e4b)
     
 ![image](https://github.com/user-attachments/assets/81fa7d78-162a-4d5d-8439-62060cb2e0a1)
-> Tìm kiếm với mã sản phẩm
-![image](https://github.com/user-attachments/assets/2f041985-604e-45d8-97ac-b6aba772d37b)
+
+> 👍 Tìm kiếm với mã sản phẩm
+> 
+> ![image](https://github.com/user-attachments/assets/2f041985-604e-45d8-97ac-b6aba772d37b)
 
 #### 4.2.1 Trang danh mục sản phẩm
 - 
