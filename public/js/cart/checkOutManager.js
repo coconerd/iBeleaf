@@ -151,6 +151,14 @@ $(document).ready(function () {
             submitOrder();
         }
     });
+
+    // Name, phone, address validation
+    ["name", "phone", "address"].forEach(fieldId => {
+        $(`#${fieldId}`).on("input", function() {
+            $(".invalid-feedback").remove();
+            validateCheckoutForm();
+        });
+    });
 });
 
 function submitOrder() {
@@ -533,12 +541,12 @@ function validateCheckoutForm() {
     const requiredFields = [
         "name",
         "phone",
-        "province",
+        "province", 
         "district",
         "ward",
         "address",
     ];
-
+    
     requiredFields.forEach((fieldId) => {
         const field = $(`#${fieldId}`);
         const value = field.val();
@@ -547,10 +555,44 @@ function validateCheckoutForm() {
             field.addClass("is-invalid");
             formValid = false;
             $("#address-warning").show();
-        } else {
+        } 
+
+        // Phone number validation
+        if (fieldId === "phone") {
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(value)) {
+                $("#phone-warning").hide();
+                formValid = false;
+            } else {
+                field.removeClass("is-invalid");
+                $("#phone-warning").hide();
+            }
+        }
+
+        // Name and address string validation
+        else if (fieldId === "name") {
+            if (typeof value !== 'string' || value.trim().length === 0 || /\d/.test(value)) {
+                field.addClass("is-invalid");
+                formValid = false;
+            } else if (value.trim().length > 10) {
+                field.removeClass("is-invalid"); 
+                $("#address-warning").hide();
+            }
+        }
+        else if (fieldId === "address") {
+            if (typeof value !== 'string' || value.trim().length === 0) {
+                field.addClass("is-invalid");
+                formValid = false;
+            } else {
+                field.removeClass("is-invalid");
+                $("#address-warning").hide();
+            }
+        }
+        else {
             field.removeClass("is-invalid");
             $("#address-warning").hide();
         }
+        
     });
 
     // Location restriction check
