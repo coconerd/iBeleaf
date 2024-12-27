@@ -27,22 +27,24 @@ Tên nhóm: Coconerd 🥥
 
 ## 6. Giao diện 
 
-# Trang web chính
-├── [Đăng kí / đăng nhập](#đăng-kí--đăng-nhập)
-├── [Trang chủ](#trang-chủ)
-│   ├── [Trang danh mục sản phẩm](#trang-danh-mục-sản-phẩm)
-│   │   └── [Trang chi tiết sản phẩm](#trang-chi-tiết-sản-phẩm)
-├── [Trang giỏ hàng](#trang-giỏ-hàng)
-│   └── [Trang thanh toán](#trang-thanh-toán)
-└── [Trang hồ sơ](#trang-hồ-sơ)
+<pre>
+Trang web chính
+├── <a href="#đăng-kí--đăng-nhập">Đăng kí / đăng nhập</a>
+├── <a href="#trang-chủ">Trang chủ</a>
+│   ├── <a href="#trang-danh-mục-sản-phẩm">Trang danh mục sản phẩm</a>
+│   │   └── <a href="#trang-chi-tiết-sản-phẩm">Trang chi tiết sản phẩm</a>
+├── <a href="#trang-giỏ-hàng">Trang giỏ hàng</a>
+│   └── <a href="#trang-thanh-toán">Trang thanh toán</a>
+└── <a href="#trang-hồ-sơ">Trang hồ sơ</a>
     └── ...
         └── ...
 
-# Trang dành cho Admin
-├── [Dashboard](#dashboard)
-└── [Branch B](#branch-b)
-    └── [Sub-branch B.1](#sub-branch-b1)
-        └── [Leaf B.1.1](#leaf-b11)
+Trang dành cho Admin
+├── <a href="#dashboard">Dashboard</a>
+└── <a href="#branch-b">Branch B</a>
+    └── <a href="#sub-branch-b1">Sub-branch B.1</a>
+        └── <a href="#leaf-b11">Leaf B.1.1</a>
+</pre>
 
 ### 6.1 Đăng kí / đăng nhập
 Đăng kí với Email
