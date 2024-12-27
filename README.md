@@ -30,3 +30,5 @@ Trang dành cho Admin
 ```
 
 ### 4.1 Trang chủ
+![alt text](github_images/homepage_1.png)
+![alt text](github_images/homepage_2.png)
