@@ -54,26 +54,26 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 <pre>
 <strong>Trang web chính</strong>
-├── <a href="#Trang-đăng-kí--đăng-nhập">Trang đăng kí / đăng nhập</a>
+├── <a href="#Trang-đăng-kí--đăng-nhập">Trang đăng kí / đăng nhập 📎</a>
 │  
-├── <a href="#Trang-chủ">Trang chủ</a>
+├── <a href="#Trang-chủ">Trang chủ 📎</a>
 │   │
-│   └── <a href="#Trang-danh-mục-sản-phẩm">Trang danh mục sản phẩm</a>
+│   └── <a href="#Trang-danh-mục-sản-phẩm">Trang danh mục sản phẩm 📎</a>
 │       │
-│       └── <a href="#Trang-chi-tiết-sản-phẩm">Trang chi tiết sản phẩm</a>
+│       └── <a href="#Trang-chi-tiết-sản-phẩm">Trang chi tiết sản phẩm 📎</a>
 │  
-├── <a href="#Trang-giỏ-hàng">Trang giỏ hàng</a>
+├── <a href="#Trang-giỏ-hàng">Trang giỏ hàng 📎</a>
 │   │
-│   └── <a href="#Trang-thanh-toán">Trang thanh toán</a>
+│   └── <a href="#Trang-thanh-toán">Trang thanh toán 📎</a>
 │   
-└── <a href="#Trang-hồ-sơ">Trang hồ sơ</a>
+└── <a href="#Trang-hồ-sơ">Trang hồ sơ 📎</a>
     │
-    └── <a href="#Trang-hồ-sơ--đổi-mật-khẩu">Trang thông tin / đổi mật khẩu</a>
+    └── <a href="#Trang-hồ-sơ--đổi-mật-khẩu">Trang thông tin / đổi mật khẩu 📎</a>
     │    
     └── <a href="#Trang-">Trang .....</a>
 
 <strong>Trang dành cho Admin</strong>
-├── <a href="#Trang-đăng-nhập">Đăng kí / đăng nhập</a>
+├── <a href="#Trang-đăng-nhập">Đăng kí / đăng nhập 📎</a>
 │    
 ├── <a href="#Trang-Dashboard">Dashboard</a>
 │    
@@ -205,7 +205,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 >
  ![image](https://github.com/user-attachments/assets/8894052e-2552-468f-92fa-5d3b56f4421f)
 
-## 🌱 Admin-Only
+## 🌱 Admin - Only
 ### Trang đăng nhập
 
 
