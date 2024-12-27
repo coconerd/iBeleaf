@@ -179,7 +179,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
  ![image](https://github.com/user-attachments/assets/cf59dc21-8c6b-43cd-b60e-041cdef3438b)
 
-### Tranh thanh toán
+### Trang thanh toán
 
 > ✨ Điền đẩy đủ thông tin mua hàng > nhận thông tin về phí ship 
 >
