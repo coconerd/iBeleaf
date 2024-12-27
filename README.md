@@ -40,15 +40,17 @@ Trang dành cho Admin
 ```
 
 ### 4.1 Đăng kí / đăng nhập
-- Đăng kí với Email
+Đăng kí với Email
 
-    ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
-- Đăng nhập:
-  - Đăng nhập với Email
-  - Đăng nhập với Google
-  - Đăng nhập với Facebook
-  
-  ![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
+![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
+
+Đăng nhập:
+- Đăng nhập với Email
+- Đăng nhập với Google
+- Đăng nhập với Facebook
+
+![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
+
 ### 4.2 Trang chủ
 ![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
     
