@@ -11,10 +11,10 @@ Tên nhóm: Coconerd 🥥
 
 | Họ và tên          | MSSV     | Vai trò     | Liên hệ                     |
 |--------------------|----------|-------------|-----------------------------|
-|🌱 Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead   | example1@gmail.com          |
-|🌱 Phan Thị Thủy Hiền | 2252xxxx | Team member | thuyhienphanthi2004@gmail.com |
-|🌱 Phan Thành Công   | 2252xxxx | Team member | example3@gmail.com          |
-|🌱 Trần Vũ Bão       | 2252xxxx | Team member | example4@gmail.com          |
+|🌱  Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead   | example1@gmail.com          |
+|🌱  Phan Thị Thủy Hiền | 2252xxxx | Team member | thuyhienphanthi2004@gmail.com |
+|🌱  Phan Thành Công   | 2252xxxx | Team member | example3@gmail.com          |
+|🌱  Trần Vũ Bão       | 2252xxxx | Team member | example4@gmail.com          |
 
 ## 3. Thiết kế Cơ sở Dữ Liệu 
 
@@ -98,6 +98,32 @@ Trang dành cho Admin
 > 👍 Để lại Feedback
 >
  ![image](https://github.com/user-attachments/assets/7b79565a-a50c-4146-8743-a36bf1922b6e)
+ 
+> 👍 Thêm sản phẩm vào giỏ hàng
+>
+ ![image](https://github.com/user-attachments/assets/9753d53b-382c-492c-90e5-b8f0ee94ab18)
+
+> 👍 Thêm sản phẩm vào danh sách yêu thích
+>
+ ![image](https://github.com/user-attachments/assets/de4c15b6-be70-4e3d-a318-a625aaf3ead0)
+
+### 4.2 Trang giỏ hàng 
+![image](https://github.com/user-attachments/assets/8db48eb3-0252-4ebc-bf6e-edc66fce5c14)
+
+> 👍 Xóa sản phẩm ra khởi giỏ hàng
+>
+ ![image](https://github.com/user-attachments/assets/0a35efbd-f26a-416c-9350-bf041c8911ae)
+ 
+ 
+
+> 👍 Áp dụng Voucher/Coupon
+>
+ ![image](https://github.com/user-attachments/assets/b806d407-c702-4d27-bfe6-d9e8910c1b2f)
+
+ 
+
+
+
 
 
 
