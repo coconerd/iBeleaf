@@ -17,7 +17,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 - **Tên đồ án**: Website thương mại điện tử cho cửa hàng bán cây cảnh **Plant Paradise**
 
 ## 2. Nhóm thực hiện
-Tên nhóm: Coconerd 🥥
+<span style="color: #43723A; font-style:bold;">Tên nhóm Coconerd** 🥥</span>
 
 | Họ và tên          | MSSV     | Vai trò     | Liên hệ                     |
 |--------------------|----------|-------------|-----------------------------|
@@ -33,12 +33,20 @@ Tên nhóm: Coconerd 🥥
 
 ## 4. Qui trình nghiệp vụ
 
-### 4.1 Nghiệp vụ mua hàng
-- 
+### 4.1 Chính sách bán hàng
+- Về việc áp dụng Voucher / Coupon: Mỗi đơn mua hàng chỉ được áp dụng 1 loại Voucher / Coupon
+- Về chính sách giao hàng:
+    - Các sản phẩm cây gồm chậu: Chỉ nhận giao nội thành TP.HCM
+    - Các sản phẩm chậu: Giao hàng toàn quốc  
+- Về qui định phí giao hàng:
+    - Giao hàng nội thành TP.HCM: Đồng giá 30.000đ
+    - Giao hàng ngoại thành: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng
+### 4.2 Chính sách trả hàng / hoàn tiền 
 
 ## 5. Cài đặt
-
-
+### 5.1 Yêu cầu hệ thống 
+### 5.2 Các bước cài đặt 
+### 5.3 Cài đặt Database
 
 ## 6. Giao diện 
 
@@ -57,11 +65,14 @@ Tên nhóm: Coconerd 🥥
 │   │── <a href="#631-Trang-thanh-toán">Trang thanh toán</a>
 │   
 └── <a href="#64-Trang-hồ-sơ">Trang hồ sơ</a>
-    └── ...
-        └── ...
+    │
+    └── <a href="#641-Trang-hồ-sơ--đổi-mật-khẩu">Trang thông tin / đổi mật khẩu</a>
+    │    
+    └── <a href="#642-Trang-">Trang .....</a>
 
-**Trang dành cho Admin</strong>
+<strong>Trang dành cho Admin</strong>
 ├── <a href="#dashboard">Dashboard</a>
+│    
 └── <a href="#branch-b">Branch B</a>
     └── <a href="#sub-branch-b1">Sub-branch B.1</a>
         └── <a href="#leaf-b11">Leaf B.1.1</a>
@@ -80,6 +91,7 @@ Tên nhóm: Coconerd 🥥
 ![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
 
 ### 6.2 Trang chủ
+
 ![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
     
 ![image](https://github.com/user-attachments/assets/57e8d5bd-4b61-4674-a5b6-7d1e6559429c)
@@ -96,7 +108,10 @@ Tên nhóm: Coconerd 🥥
 
 
 #### 6.2.1 Trang danh mục sản phẩm
+
 ![image](https://github.com/user-attachments/assets/d878a5b7-a929-45f9-baff-7c47f17351d2)
+
+![image](https://github.com/user-attachments/assets/b5b35c83-4b16-48a9-ade7-0cf5262d4619)
 
 > ✨ Chọn danh mục sản phẩm
 > 
@@ -110,6 +125,7 @@ Tên nhóm: Coconerd 🥥
 > 
 
 ##### 6.2.1.1 Trang chi tiết sản phẩm
+
 ![image](https://github.com/user-attachments/assets/d7204d91-a51d-410c-8465-1eb6d6991cf0)
 > ✨ Danh sách các sản phẩm tương tự
 >
@@ -135,7 +151,8 @@ Tên nhóm: Coconerd 🥥
 >
  ![image](https://github.com/user-attachments/assets/de4c15b6-be70-4e3d-a318-a625aaf3ead0)
 
-### 6.2 Trang giỏ hàng 
+### 6.3 Trang giỏ hàng 
+
 ![image](https://github.com/user-attachments/assets/0b98057c-f810-4ccc-8632-ef42bdfb83a8)
 
 > ✨ Xóa sản phẩm ra khỏi giỏ hàng
@@ -143,6 +160,9 @@ Tên nhóm: Coconerd 🥥
  ![image](https://github.com/user-attachments/assets/30fd3d6a-26b8-4d00-b552-67c516ed5071)
 
  ![image](https://github.com/user-attachments/assets/08a72c0c-46b1-481e-9290-6d981fb8ef7c)
+
+ ![image](https://github.com/user-attachments/assets/8949796b-17f7-4ebb-8ca8-268692f6d25e)
+
 
 > ✨ Áp dụng Voucher / Coupon
 >
@@ -152,7 +172,7 @@ Tên nhóm: Coconerd 🥥
 
  ![image](https://github.com/user-attachments/assets/cf59dc21-8c6b-43cd-b60e-041cdef3438b)
 
-#### 6.2.1 Tranh thanh toán
+#### 6.3.1 Tranh thanh toán
 
 > ✨ Điền thông tin mua hàng > nhận thông tin về phí Ship 
 >
@@ -165,7 +185,9 @@ Tên nhóm: Coconerd 🥥
 
  ![image](https://github.com/user-attachments/assets/35f541f9-b54f-4389-9e6c-3fdc59445e23)
 
-### 6.3 Trang hồ sơ
+### 6.4 Trang hồ sơ
+#### 6.4.1 Trang thông tin / đổi mật khẩu
+
 > ✨ Thông tin khách hàng 
 >
  ![image](https://github.com/user-attachments/assets/ff4268ed-63df-49fe-96f4-4ee02d4be387)
