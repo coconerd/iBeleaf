@@ -4,10 +4,10 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 ## 2. Thành viên
 Họ và tên | MSSV | Vai trò | Liên hệ |
 |-----------|-----------|---------|---------|
-🌱 Nguyễn Đỗ Đức Minh | 22520872 | Team lead | example1@gmail.com |
-🌱 Phan Thị Thủy Hiền | 22520423 | Team member | thuyhienphanthi2004@gmail.com |
-🌱 Phan Thành Công | 2252 | Team member | example3@gmail.com |
-🌱 Trần Vũ Bão | 2252 | Team member | example4@gmail.com |
+🌱 Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead | example1@gmail.com |
+🌱 Phan Thị Thủy Hiền | 2252xxxx | Team member | thuyhienphanthi2004@gmail.com |
+🌱 Phan Thành Công | 2252xxxx | Team member | example3@gmail.com |
+🌱 Trần Vũ Bão | 2252xxxx | Team member | example4@gmail.com |
 ## 3. Thiết kế Cơ sở Dữ Liệu 
 
 ## 4. Giao diện 
@@ -30,12 +30,14 @@ Trang dành cho Admin
 		└── Leaf B.1.1
 ```
 ### 4.1 Đăng kí / đăng nhập
-- Đăng kí:
+- Đăng kí với Email
+
 ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
 - Đăng nhập:
   - Đăng nhập với Email
   - Đăng nhập với Google
   - Đăng nhập với Facebook
+  
 ![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
 ### 4.2 Trang chủ
 ![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
