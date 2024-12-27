@@ -119,25 +119,38 @@
 											</div>
 										</div>
 										<div class="d-flex justify-content-between align-items-center">
-											<span class="item-price">Tổng tiền: <span id="discounted-price">{{ $item->discounted_price }}</span> ₫</span>
+											<span class="item-price">
+												Tổng tiền:
+												<span id="discounted-price">{{ number_format($item->discounted_price, 0, ',', '.') }}</span>
+												<span class="currency-label" style="font-weight: bold;">đ</span>
+											</span>
 										</div>
 									</div>
 								</div>
 							@endforeach
 						</div>
 						<div class="order-summary-details">
-							<div class="summary-row">
+							<div class="summary-row d-flex justify-content-between align-items-center">
 								<span class="fs-6">Tạm tính (Đã bao gồm các giảm giá)</span>
-								<span class="price fs-7" id="provisional-price"></span>
+								<div class="price-container">
+									<span class="price fs-6" id="provisional-price"></span>
+									<span class="currency-label fs-6">₫</span>
+								</div>
 							</div>
-							<div class="summary-row">
-								<span class="fs-6">Phí vận chuyển</span>
-								<span class="price fs-7" id="shipping-fee">Chưa Tính Toán</span>
+							<div class="summary-row d-flex justify-content-between align-items-center">
+								<span>Phí vận chuyển</span>
+								<div class="price-container">
+									<span class="price" id="shipping-fee">---</span>
+									<span class="currency-label fs-6">đ</span>
+								</div>
 							</div>
 							<input type="hidden" id="total-discounted-price" value="{{ $totalDiscountedPrice }}">
-							<div class="summary-row total">
+							<div class="summary-row total d-flex justify-content-between align-items-center">
 								<span>Tổng tiền (Đã bao gồm VAT)</span>
-								<span class="price total-amount fs-5">{{ $totalDiscountedPrice }} đ</span>
+								<div class="price-container">
+									<span class="price total-amount fs-5">{{ number_format($totalDiscountedPrice, 0, ',', '.') }}</span>
+									<span class="currency-label fs-5" style="font-weight: bold; color: #C78B5E">đ</span>
+								</div>
 							</div>
 						</div>
 

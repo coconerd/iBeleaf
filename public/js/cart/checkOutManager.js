@@ -19,7 +19,6 @@ $.fn.formatPrice = function () {
             .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
         $element.text(formattedPrice);
-        $(".currency-label").html(" ₫");
     });
 };
 
@@ -244,12 +243,7 @@ function showAlertMessage() {
 }
 
 function innerCityShippingFee() { 
-    $("#shipping-fee").text(
-        new Intl.NumberFormat("vi-VN", {
-            style: "currency",
-            currency: "VND",
-        }).format(30000)
-    );
+    $("#shipping-fee").text(30000).formatPrice();
     updateTotal();
 }
 
@@ -478,12 +472,7 @@ function calculateShippingFee(district_id, ward_code) {
         contentType: "application/json",
         success: function (response) {
             if (response.success) {
-                $("#shipping-fee").text(
-                    new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                    }).format(response.shipping_fee)
-                );
+                $("#shipping-fee").text(response.shipping_fee).formatPrice();
                 updateTotal();
             } else {
                 console.error(
@@ -510,12 +499,7 @@ function updateProvisionalPrice() {
     
     const provisionalPrice = totalDiscountedPrice - voucherDiscount;
 
-    $("#provisional-price").text(
-        new Intl.NumberFormat("vi-VN", {
-            style: "currency",
-            currency: "VND",
-        }).format(provisionalPrice)
-    );
+    $("#provisional-price").text(provisionalPrice).formatPrice();
 
     return provisionalPrice;
 
@@ -527,12 +511,7 @@ function updateTotal() {
 
     const finalTotal = totalDiscountedPrice + shippingFee;
 
-    $(".total-amount").text(
-        new Intl.NumberFormat("vi-VN", {
-            style: "currency",
-            currency: "VND",
-        }).format(finalTotal)
-    );
+    $(".total-amount").text(finalTotal).formatPrice();
 }
 
 

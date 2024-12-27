@@ -24,8 +24,10 @@
     width: 100%;
 }
 
-.currency-label{
+.currency-label,
+.price-container {
     color: #1E4733;
+    font-weight: 600;
 }
 
 .title-icon .section-title {
