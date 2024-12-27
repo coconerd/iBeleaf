@@ -52,7 +52,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 <pre>
 <strong>Trang web chính</strong>
-├── <a href="#61-Đăng-kí--đăng-nhập">Đăng kí / đăng nhập</a>
+├── <a href="#61-Trang-đăng-kí--đăng-nhập">Đăng kí / đăng nhập</a>
 │  
 ├── <a href="#62-Trang-chủ">Trang chủ</a>
 │   │
@@ -78,12 +78,12 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
         └── <a href="#leaf-b11">Leaf B.1.1</a>
 </pre>
 
-### 6.1 Đăng kí / đăng nhập
+### 6.1 Trang đăng kí / đăng nhập
 Đăng kí với Email
 
 ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
 
-Đăng nhập:
+Đăng nhập
 - Đăng nhập với Email
 - Đăng nhập với Google
 - Đăng nhập với Facebook
@@ -117,7 +117,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 > 
  ![image](https://github.com/user-attachments/assets/73d25573-7f7a-4855-ad0f-b6ed39749de7)
 
-> ✨ Chọn giá thành mong muốn
+> ✨ Chọn khoảng giá thành mong muốn
 > 
  ![image](https://github.com/user-attachments/assets/8919dd8f-7ad2-4e31-905c-0e56aa1ce6e0)
  
@@ -135,11 +135,11 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 >
  ![image](https://github.com/user-attachments/assets/3a45ae80-b8fb-44e3-bf07-2aec29f22b3e)
 
-> ✨ Danh sách Feedback của khách hàng
+> ✨ Danh sách Feedback của các khách hàng đã sản phẩm 
 >
  ![image](https://github.com/user-attachments/assets/71c3d46b-f92a-40a8-b530-6e8bce563538)
 
-> ✨ Để lại Feedback
+> ✨ Để lại Feedback cho sản phẩm 
 >
  ![image](https://github.com/user-attachments/assets/7b79565a-a50c-4146-8743-a36bf1922b6e)
  
@@ -164,7 +164,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
  ![image](https://github.com/user-attachments/assets/8949796b-17f7-4ebb-8ca8-268692f6d25e)
 
 
-> ✨ Áp dụng Voucher / Coupon
+> ✨ Áp dụng Voucher
 >
  ![image](https://github.com/user-attachments/assets/5fa2fab4-6626-4628-8003-a7c90819e0ac)
 
@@ -174,7 +174,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 #### 6.3.1 Tranh thanh toán
 
-> ✨ Điền thông tin mua hàng > nhận thông tin về phí Ship 
+> ✨ Điền thông tin mua hàng > nhận thông tin về phí Ship
 >
  ![image](https://github.com/user-attachments/assets/1e73ab6a-40d3-494a-ab19-16a57c7aa2ab)
 
