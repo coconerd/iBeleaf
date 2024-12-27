@@ -29,7 +29,7 @@ Tên nhóm: Coconerd 🥥
 
 <pre>
 Trang web chính
-├── <a href="#6-1-đăng-kí--đăng-nhập">Đăng kí / đăng nhập</a>
+├── <a href="#6-1-đăng-kí-đăng-nhập">Đăng kí / đăng nhập</a>
     
 ├── <a href="#6-2-trang-chủ">Trang chủ</a>
     
@@ -55,7 +55,7 @@ Trang dành cho Admin
         └── <a href="#leaf-b11">Leaf B.1.1</a>
 </pre>
 
-### 6.1 Đăng kí / đăng nhập
+<h3 id="6-1-dang-ki-dang-nhap"> 6.1 Đăng kí / đăng nhập </h3>
 Đăng kí với Email
 
 ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
