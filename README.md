@@ -29,8 +29,10 @@ Tên nhóm: Coconerd 🥥
 
 <pre>
 Trang web chính
-├── <a href="#đăng-kí--đăng-nhập">Đăng kí / đăng nhập</a>
+├── <a href="###đăng-kí--đăng-nhập">Đăng kí / đăng nhập</a>
+    
 ├── <a href="#trang-chủ">Trang chủ</a>
+    
 │   ├── <a href="#trang-danh-mục-sản-phẩm">Trang danh mục sản phẩm</a>
 │   │   └── <a href="#trang-chi-tiết-sản-phẩm">Trang chi tiết sản phẩm</a>
 ├── <a href="#trang-giỏ-hàng">Trang giỏ hàng</a>
