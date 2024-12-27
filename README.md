@@ -108,17 +108,31 @@ Trang dành cho Admin
  ![image](https://github.com/user-attachments/assets/de4c15b6-be70-4e3d-a318-a625aaf3ead0)
 
 ### 4.2 Trang giỏ hàng 
-![image](https://github.com/user-attachments/assets/8db48eb3-0252-4ebc-bf6e-edc66fce5c14)
+![image](https://github.com/user-attachments/assets/0b98057c-f810-4ccc-8632-ef42bdfb83a8)
 
 > 👍 Xóa sản phẩm ra khởi giỏ hàng
 >
- ![image](https://github.com/user-attachments/assets/0a35efbd-f26a-416c-9350-bf041c8911ae)
- 
- 
+ ![image](https://github.com/user-attachments/assets/30fd3d6a-26b8-4d00-b552-67c516ed5071)
+
+ ![image](https://github.com/user-attachments/assets/08a72c0c-46b1-481e-9290-6d981fb8ef7c)
 
 > 👍 Áp dụng Voucher/Coupon
 >
- ![image](https://github.com/user-attachments/assets/b806d407-c702-4d27-bfe6-d9e8910c1b2f)
+ ![image](https://github.com/user-attachments/assets/5fa2fab4-6626-4628-8003-a7c90819e0ac)
+
+ ![image](https://github.com/user-attachments/assets/4c2cdbb0-0d72-48e9-8d40-2c824bce2165)
+
+ ![image](https://github.com/user-attachments/assets/cf59dc21-8c6b-43cd-b60e-041cdef3438b)
+
+ ![image](https://github.com/user-attachments/assets/fefd7e4f-ab36-4ec5-b656-86eb4e5a83fd)
+
+
+
+ 
+
+
+
+
 
  
 
