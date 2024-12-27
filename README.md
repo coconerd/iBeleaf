@@ -11,10 +11,10 @@ Tên nhóm: Coconerd 🥥
 
 | Họ và tên          | MSSV     | Vai trò     | Liên hệ                     |
 |--------------------|----------|-------------|-----------------------------|
-| 🌱 Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead   | example1@gmail.com          |
-| 🌱 Phan Thị Thủy Hiền | 2252xxxx | Team member | thuyhienphanthi2004@gmail.com |
-| 🌱 Phan Thành Công   | 2252xxxx | Team member | example3@gmail.com          |
-| 🌱 Trần Vũ Bão       | 2252xxxx | Team member | example4@gmail.com          |
+|🌱 Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead   | example1@gmail.com          |
+|🌱 Phan Thị Thủy Hiền | 2252xxxx | Team member | thuyhienphanthi2004@gmail.com |
+|🌱 Phan Thành Công   | 2252xxxx | Team member | example3@gmail.com          |
+|🌱 Trần Vũ Bão       | 2252xxxx | Team member | example4@gmail.com          |
 
 ## 3. Thiết kế Cơ sở Dữ Liệu 
 
@@ -68,26 +68,34 @@ Trang dành cho Admin
 #### 4.2.1 Trang danh mục sản phẩm
 ![image](https://github.com/user-attachments/assets/d878a5b7-a929-45f9-baff-7c47f17351d2)
 
-> 👍 Lọc sản phầm
+> 👍 Chọn danh mục sản phẩm
 > 
-Chọn danh mục sản phẩm
-![image](https://github.com/user-attachments/assets/73d25573-7f7a-4855-ad0f-b6ed39749de7)
-Chọn giá thành mong muốn
-![image](https://github.com/user-attachments/assets/8919dd8f-7ad2-4e31-905c-0e56aa1ce6e0)
-Filter 
+ ![image](https://github.com/user-attachments/assets/73d25573-7f7a-4855-ad0f-b6ed39749de7)
+
+> 👍 Chọn giá thành mong muốn
+> 
+ ![image](https://github.com/user-attachments/assets/8919dd8f-7ad2-4e31-905c-0e56aa1ce6e0)
+ 
+> 👍 Filter sản phẩm
+> 
 
 ##### 4.2.1.1 Trang chi tiết sản phẩm
 ![image](https://github.com/user-attachments/assets/d7204d91-a51d-410c-8465-1eb6d6991cf0)
-> 👍 Lọc sản phầm
+> 👍 Danh sách các sản phẩm tương tự
 >
-Các sản phẩm tương tự
-![image](https://github.com/user-attachments/assets/b5bb1442-ed9b-4d6d-bfee-ae82e73693db)
-Các sản phẩm đang có khuyến mãi
-![image](https://github.com/user-attachments/assets/3a45ae80-b8fb-44e3-bf07-2aec29f22b3e)
-Feedback sản phẩm
-![image](https://github.com/user-attachments/assets/71c3d46b-f92a-40a8-b530-6e8bce563538)
-Để lại Feedback
-![image](https://github.com/user-attachments/assets/7b79565a-a50c-4146-8743-a36bf1922b6e)
+ ![image](https://github.com/user-attachments/assets/b5bb1442-ed9b-4d6d-bfee-ae82e73693db)
+
+> 👍 Danh sách các sản phẩm đang khuyến mãi
+>
+ ![image](https://github.com/user-attachments/assets/3a45ae80-b8fb-44e3-bf07-2aec29f22b3e)
+
+> 👍 Danh sách Feedback của khách hàng
+>
+ ![image](https://github.com/user-attachments/assets/71c3d46b-f92a-40a8-b530-6e8bce563538)
+
+> 👍 Để lại Feedback
+>
+ ![image](https://github.com/user-attachments/assets/7b79565a-a50c-4146-8743-a36bf1922b6e)
 
 
 
