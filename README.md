@@ -1,3 +1,13 @@
+<div align="center">
+	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/192158954-f88b5814-d510-4564-b285-dff7d6400dad.png" alt="HTML" title="HTML"/></code>
+	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/183898674-75a4a1b1-f960-4ea9-abcb-637170a00a75.png" alt="CSS" title="CSS"/></code>
+	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/183898054-b3d693d4-dafb-4808-a509-bab54cf5de34.png" alt="Bootstrap" title="Bootstrap"/></code>
+	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/117447155-6a868a00-af3d-11eb-9cfe-245df15c9f3f.png" alt="JavaScript" title="JavaScript"/></code>
+	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/183570228-6a040b9f-3ddf-47a2-a201-743121dac664.png" alt="php" title="php"/></code>
+	<code><img width="30" src="https://github.com/marwin1991/profile-technology-icons/assets/25181517/afcf1c98-544e-41fb-bf44-edba5e62809a" alt="Laravel" title="Laravel"/></code>
+	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/183896128-ec99105a-ec1a-4d85-b08b-1aa1620b2046.png" alt="MySQL" title="MySQL"/></code>
+</div>
+
 # PLANT PARADISE
 Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưởng cuộc sống? **Plant Paradise** chính là thiên đường mà bạn đang tìm kiếm! Với vô vàn giống cây xanh độc đáo, từ những chậu cây nhỏ xinh đến những cây cảnh   lớn, chúng tôi cam kết mang đến cho bạn một không gian sống xanh mát và tràn đầy sức sống. Hãy để **Plant Paradise** giúp bạn tạo nên một thiên đường xanh ngay tại ngôi nhà của mình!
 
@@ -23,12 +33,17 @@ Tên nhóm: Coconerd 🥥
 
 ## 4. Qui trình nghiệp vụ
 
+### 4.1 Nghiệp vụ mua hàng
+- 
+
 ## 5. Cài đặt
+
+
 
 ## 6. Giao diện 
 
 <pre>
-**Trang web chính**
+<strong>Trang web chính</strong>
 ├── <a href="#61-Đăng-kí--đăng-nhập">Đăng kí / đăng nhập</a>
 │  
 ├── <a href="#62-Trang-chủ">Trang chủ</a>
@@ -45,7 +60,7 @@ Tên nhóm: Coconerd 🥥
     └── ...
         └── ...
 
-**Trang dành cho Admin**
+**Trang dành cho Admin</strong>
 ├── <a href="#dashboard">Dashboard</a>
 └── <a href="#branch-b">Branch B</a>
     └── <a href="#sub-branch-b1">Sub-branch B.1</a>
@@ -129,7 +144,7 @@ Tên nhóm: Coconerd 🥥
 
  ![image](https://github.com/user-attachments/assets/08a72c0c-46b1-481e-9290-6d981fb8ef7c)
 
-> ✨ Áp dụng Voucher/Coupon
+> ✨ Áp dụng Voucher / Coupon
 >
  ![image](https://github.com/user-attachments/assets/5fa2fab4-6626-4628-8003-a7c90819e0ac)
 
@@ -141,12 +156,14 @@ Tên nhóm: Coconerd 🥥
 
 > ✨ Điền thông tin mua hàng > nhận thông tin về phí Ship 
 >
- ![image](https://github.com/user-attachments/assets/91f3a1eb-9714-4398-8549-36530342fc83)
+ ![image](https://github.com/user-attachments/assets/1e73ab6a-40d3-494a-ab19-16a57c7aa2ab)
 
- ![image](https://github.com/user-attachments/assets/9bca47f1-776e-4113-b4be-4451aae81386)
+ ![image](https://github.com/user-attachments/assets/6c7bf8ae-8772-468e-841b-f5751ae553b8)
 
- ![image](https://github.com/user-attachments/assets/9e4eacb3-eb6e-4764-995c-0ee4221fbe25)
 
+ ![image](https://github.com/user-attachments/assets/377af9c4-1d77-4dd7-8464-be58fd9dd2f2)
+
+ ![image](https://github.com/user-attachments/assets/35f541f9-b54f-4389-9e6c-3fdc59445e23)
 
 ### 6.3 Trang hồ sơ
 > ✨ Thông tin khách hàng 
