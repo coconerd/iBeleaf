@@ -82,8 +82,8 @@
 					@if($user->province_city != 'Hồ Chí Minh')
 						<div class="alert-icon-container">
 							<i class="fa-solid fa-bell alert-icon"></i>
-							<div class="popup-message">
-								Shop không nhận giao ngoại thành đối với các sản phẩm Cây bạn nhé!
+							<div class="popup-message fs-6">
+								<i>Plant Paradise chỉ nhận giao <b>CÂY</b> trong nội thành TP.HCM bạn nhé!</i>
 							</div>
 						</div>
 					@endif
