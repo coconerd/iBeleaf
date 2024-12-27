@@ -17,7 +17,7 @@ Tên nhóm: Coconerd 🥥
 |🌱  Trần Vũ Bão       | 2252xxxx | Team member | example4@gmail.com          |
 
 ## 3. Thiết kế Cơ sở Dữ Liệu 
-[Link Text](https://dbdiagram.io/d/Plant-Paradise-Database-672671edb1b39dd85843f893)
+[dbdiagram.io](https://dbdiagram.io/d/Plant-Paradise-Database-672671edb1b39dd85843f893)
 
 ![image](https://github.com/user-attachments/assets/635edd76-679f-49d3-9084-0468eb105189)
 
