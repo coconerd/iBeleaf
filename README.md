@@ -5,14 +5,26 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 Họ và tên | MSSV | Vai trò | Liên hệ |
 |-----------|-----------|---------|---------|
 🌱 Nguyễn Đỗ Đức Minh | 22520872 | Team lead | example1@gmail.com |
-🌱 Phan Thị Thủy Hiền | 22520423 | Member | thuyhienphanthi2004@gmail.com |
-🌱 Phan Thành Công | 2252 | Member | example3@gmail.com |
-🌱 Trần Vũ Bão | 2252 | Member | example4@gmail.com |
+🌱 Phan Thị Thủy Hiền | 22520423 | Team member | thuyhienphanthi2004@gmail.com |
+🌱 Phan Thành Công | 2252 | Team member | example3@gmail.com |
+🌱 Trần Vũ Bão | 2252 | Team member | example4@gmail.com |
 ## 3. Thiết kế Cơ sở Dữ Liệu 
 
 ## 4. Giao diện 
-- `Trang chủ/` 
-	- `Homepage/`
-- `Trang chi tiết sản phẩm/` 
-	- `Trang thanh toán/`
-|-- Trang profile
+Trang web chính
+├── Trang chủ 
+│   ├── Trang danh mục sản phẩm
+│   │   ├── Trang chi tiết sản phẩm
+│   └── Trang giỏ hàng 
+│		├── Trang thanh toán 
+└── Trang hồ sơ
+    └── ...
+        └── ...
+
+Trang dành cho Admin
+├── Dashboard
+└── Branch B
+    └── Sub-branch B.1
+        └── Leaf B.1.1
+
+### 4.1 Trang chủ
