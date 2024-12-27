@@ -29,12 +29,18 @@ Tên nhóm: Coconerd 🥥
 
 <pre>
 Trang web chính
-├── <a href="#6.1-dang-ki-dang-nhap">Đăng kí / đăng nhập</a>
+├── <a href="#61-dang-ki-dang-nhap">Đăng kí / đăng nhập</a>
+│
 ├── <a href="#62-trang-chu">Trang chủ</a>
+│
 │   ├── <a href="#621-trang-danh-muc-san-pham">Trang danh mục sản phẩm</a>
-│   │   └── <a href="#6211-trang-chi-tiet-san-pham">Trang chi tiết sản phẩm</a>
+│   │   │
+│   │   │── <a href="#6211-trang-chi-tiet-san-pham">Trang chi tiết sản phẩm</a>
+│   │   │
 ├── <a href="#63-trang-gio-hang">Trang giỏ hàng</a>
-│   └── <a href="#631-trang-thanh-toan">Trang thanh toán</a>
+│   │
+│   │── <a href="#631-trang-thanh-toan">Trang thanh toán</a>
+│   │
 └── <a href="#64-trang-ho-so">Trang hồ sơ</a>
     └── ...
         └── ...
@@ -46,7 +52,7 @@ Trang dành cho Admin
         └── <a href="#leaf-b11">Leaf B.1.1</a>
 </pre>
 
-### 6.1 Dang ki dang nhap {#6.1-dang-ki-dang-nhap}
+### 6.1 Dang ki dang nhap
 Đăng kí với Email
 
 ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
