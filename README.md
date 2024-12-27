@@ -5,7 +5,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 - **Tên môn học**: Phát triển ứng dụng WEB
 - **Mã lớp**: IS207.P11
 - **Tên đồ án**: Website thương mại điện tử cho cửa hàng bán cây cảnh **Plant Paradise**
-- 
+
 ## 2. Nhóm thực hiện
 Tên nhóm: Coconerd 🥥
 
@@ -28,24 +28,24 @@ Tên nhóm: Coconerd 🥥
 ## 6. Giao diện 
 
 <pre>
-Trang web chính
+**Trang web chính**
 ├── <a href="#61-Đăng-kí--đăng-nhập">Đăng kí / đăng nhập</a>
 │  
-├── <a href="#62-trang-chu">Trang chủ</a>
+├── <a href="#62-Trang-chủ">Trang chủ</a>
 │   │
-│   ├── <a href="#621-trang-danh-muc-san-pham">Trang danh mục sản phẩm</a>
+│   ├── <a href="#621-Trang-danh-mục-sản-phẩm">Trang danh mục sản phẩm</a>
 │       │
-│       │── <a href="#6211-trang-chi-tiet-san-pham">Trang chi tiết sản phẩm</a>
+│       │── <a href="#6211-Trang-chi-tiết-sản-phẩm">Trang chi tiết sản phẩm</a>
 │  
-├── <a href="#63-trang-gio-hang">Trang giỏ hàng</a>
+├── <a href="#63-Trang-giỏ-hàng">Trang giỏ hàng</a>
 │   │
-│   │── <a href="#631-trang-thanh-toan">Trang thanh toán</a>
+│   │── <a href="#631-Trang-thanh-toán">Trang thanh toán</a>
 │   
-└── <a href="#64-trang-ho-so">Trang hồ sơ</a>
+└── <a href="#64-Trang-hồ-sơ">Trang hồ sơ</a>
     └── ...
         └── ...
 
-Trang dành cho Admin
+**Trang dành cho Admin**
 ├── <a href="#dashboard">Dashboard</a>
 └── <a href="#branch-b">Branch B</a>
     └── <a href="#sub-branch-b1">Sub-branch B.1</a>
@@ -64,7 +64,7 @@ Trang dành cho Admin
 
 ![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
 
-### 6.2 Trang chu
+### 6.2 Trang chủ
 ![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
     
 ![image](https://github.com/user-attachments/assets/57e8d5bd-4b61-4674-a5b6-7d1e6559429c)
@@ -80,7 +80,7 @@ Trang dành cho Admin
  ![image](https://github.com/user-attachments/assets/9c989814-03b8-41f2-b279-bb025018e00a)
 
 
-#### 6.2.1 Trang danh muc san pham
+#### 6.2.1 Trang danh mục sản phẩm
 ![image](https://github.com/user-attachments/assets/d878a5b7-a929-45f9-baff-7c47f17351d2)
 
 > ✨ Chọn danh mục sản phẩm
@@ -94,7 +94,7 @@ Trang dành cho Admin
 > ✨ Filter sản phẩm
 > 
 
-##### 6.2.1.1 Trang chi tiet san pham
+##### 6.2.1.1 Trang chi tiết sản phẩm
 ![image](https://github.com/user-attachments/assets/d7204d91-a51d-410c-8465-1eb6d6991cf0)
 > ✨ Danh sách các sản phẩm tương tự
 >
@@ -120,7 +120,7 @@ Trang dành cho Admin
 >
  ![image](https://github.com/user-attachments/assets/de4c15b6-be70-4e3d-a318-a625aaf3ead0)
 
-### 6.2 Trang gio hang 
+### 6.2 Trang giỏ hàng 
 ![image](https://github.com/user-attachments/assets/0b98057c-f810-4ccc-8632-ef42bdfb83a8)
 
 > ✨ Xóa sản phẩm ra khỏi giỏ hàng
@@ -137,12 +137,18 @@ Trang dành cho Admin
 
  ![image](https://github.com/user-attachments/assets/cf59dc21-8c6b-43cd-b60e-041cdef3438b)
 
-#### 6.2.1 Tranh thanh toan
-> ✨ Điền thông tin mua hàng -> nhận thông tin về phí Ship 
->
- 
+#### 6.2.1 Tranh thanh toán
 
-### 6.3 Trang ho so
+> ✨ Điền thông tin mua hàng > nhận thông tin về phí Ship 
+>
+ ![image](https://github.com/user-attachments/assets/91f3a1eb-9714-4398-8549-36530342fc83)
+
+ ![image](https://github.com/user-attachments/assets/9bca47f1-776e-4113-b4be-4451aae81386)
+
+ ![image](https://github.com/user-attachments/assets/9e4eacb3-eb6e-4764-995c-0ee4221fbe25)
+
+
+### 6.3 Trang hồ sơ
 > ✨ Thông tin khách hàng 
 >
  ![image](https://github.com/user-attachments/assets/ff4268ed-63df-49fe-96f4-4ee02d4be387)
