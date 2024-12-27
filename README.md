@@ -57,9 +57,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 ├── <a href="#Trang-đăng-kí--đăng-nhập">Trang đăng kí / đăng nhập</a>
 │  
 ├── <a href="#Trang-chủ">Trang chủ</a>
-│   │
 │   └── <a href="#Trang-danh-mục-sản-phẩm">Trang danh mục sản phẩm</a>
-│       │
 │       └── <a href="#Trang-chi-tiết-sản-phẩm">Trang chi tiết sản phẩm</a>
 │  
 ├── <a href="#Trang-giỏ-hàng">Trang giỏ hàng</a>
