@@ -13,6 +13,7 @@ Họ và tên | MSSV | Vai trò | Liên hệ |
 ## 4. Giao diện 
 ```
 Trang web chính
+├── Đăng kí / đăng nhập
 ├── Trang chủ 
 │   ├── Trang danh mục sản phẩm
 │   │   ├── Trang chi tiết sản phẩm
@@ -28,7 +29,19 @@ Trang dành cho Admin
 	└── Sub-branch B.1
 		└── Leaf B.1.1
 ```
+### 4.1 Đăng kí / đăng nhập
+- Đăng kí:
+![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
+- Đăng nhập:
+  - Đăng nhập với Email
+  - Đăng nhập với Google
+  - Đăng nhập với Facebook
+![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
+### 4.2 Trang chủ
+![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
+![image](https://github.com/user-attachments/assets/57e8d5bd-4b61-4674-a5b6-7d1e6559429c)
+![image](https://github.com/user-attachments/assets/e629a937-1847-4ae7-87f2-02b2d8b32879)
+![image](https://github.com/user-attachments/assets/b4780b9f-4e82-4ce0-9855-1e6833468e4b)
+![image](https://github.com/user-attachments/assets/81fa7d78-162a-4d5d-8439-62060cb2e0a1)
 
-### 4.1 Trang chủ
-![alt text](github_images/homepage_1.png)
-![alt text](github_images/homepage_2.png)
+
