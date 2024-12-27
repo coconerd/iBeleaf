@@ -1,7 +1,13 @@
 # PLANT PARADISE
-## 1. Giới thiệu 
-Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưởng cuộc sống? **Plant Paradise** chính là thiên đường mà bạn đang tìm kiếm! Với vô vàn giống cây xanh độc đáo, từ những chậu cây nhỏ xinh đến những cây cảnh lớn, chúng tôi cam kết mang đến cho bạn một không gian sống xanh mát và tràn đầy sức sống. Hãy để **Plant Paradise** giúp bạn tạo nên một thiên đường xanh ngay tại ngôi nhà của mình!
-## 2. Thành viên
+## 1. Giới thiệu đồ án môn học 
+- Tên môn học: Phát triển ứng dụng WEB
+- Mã lớp: IS207.P11
+- Tên đồ án: Website thương mại điện tử cho cửa hàng bán cây cảnh **Plant Paradise**
+- Giới thiệu:
+  Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưởng cuộc sống? **Plant Paradise** chính là thiên đường mà bạn đang tìm kiếm! Với vô vàn giống cây xanh độc đáo, từ những chậu cây nhỏ xinh đến những cây cảnh    lớn, chúng tôi cam kết mang đến cho bạn một không gian sống xanh mát và tràn đầy sức sống. Hãy để **Plant Paradise** giúp bạn tạo nên một thiên đường xanh ngay tại ngôi nhà của mình!
+## 2. Nhóm thực hiện
+- Tên nhóm: Coconerd 🥥
+- Danh sách thành viên: 
 Họ và tên | MSSV | Vai trò | Liên hệ |
 |-----------|-----------|---------|---------|
 🌱 Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead | example1@gmail.com |
@@ -29,7 +35,7 @@ Trang dành cho Admin
 	└── Sub-branch B.1
 		└── Leaf B.1.1
 ```
-### 4.1 Đăng kí / đăng nhập
+### 5.1 Đăng kí / đăng nhập
 - Đăng kí với Email
 
     ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
@@ -39,7 +45,7 @@ Trang dành cho Admin
   - Đăng nhập với Facebook
   
   ![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
-### 4.2 Trang chủ
+### 5.2 Trang chủ
 ![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
     
 ![image](https://github.com/user-attachments/assets/57e8d5bd-4b61-4674-a5b6-7d1e6559429c)
