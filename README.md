@@ -1,9 +1,9 @@
 # PLANT PARADISE
 ## 1. Giới thiệu đồ án môn học 
-- Tên môn học: Phát triển ứng dụng WEB
-- Mã lớp: IS207.P11
-- Tên đồ án: Website thương mại điện tử cho cửa hàng bán cây cảnh **Plant Paradise**
-- Giới thiệu:
+- **Tên môn học**: Phát triển ứng dụng WEB
+- **Mã lớp**: IS207.P11
+- **Tên đồ án**: Website thương mại điện tử cho cửa hàng bán cây cảnh **Plant Paradise**
+- **Giới thiệu**:
   Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưởng cuộc sống? **Plant Paradise** chính là thiên đường mà bạn đang tìm kiếm! Với vô vàn giống cây xanh độc đáo, từ những chậu cây nhỏ xinh đến những cây cảnh    lớn, chúng tôi cam kết mang đến cho bạn một không gian sống xanh mát và tràn đầy sức sống. Hãy để **Plant Paradise** giúp bạn tạo nên một thiên đường xanh ngay tại ngôi nhà của mình!
 
 ## 2. Nhóm thực hiện
@@ -17,10 +17,15 @@ Tên nhóm: Coconerd 🥥
 |🌱  Trần Vũ Bão       | 2252xxxx | Team member | example4@gmail.com          |
 
 ## 3. Thiết kế Cơ sở Dữ Liệu 
+[Link Text](https://dbdiagram.io/d/Plant-Paradise-Database-672671edb1b39dd85843f893)
+
+![image](https://github.com/user-attachments/assets/635edd76-679f-49d3-9084-0468eb105189)
 
 ## 4. Qui trình nghiệp vụ
 
-## 5. Giao diện 
+## 5. Cài đặt
+
+## 6. Giao diện 
 
 ```
 Trang web chính
@@ -41,7 +46,7 @@ Trang dành cho Admin
 		└── Leaf B.1.1
 ```
 
-### 5.1 Đăng kí / đăng nhập
+### 6.1 Đăng kí / đăng nhập
 Đăng kí với Email
 
 ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
@@ -53,7 +58,7 @@ Trang dành cho Admin
 
 ![image](https://github.com/user-attachments/assets/617cf64f-b6a5-4a7f-8605-5630128bdfc4)
 
-### 5.2 Trang chủ
+### 6.2 Trang chủ
 ![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
     
 ![image](https://github.com/user-attachments/assets/57e8d5bd-4b61-4674-a5b6-7d1e6559429c)
@@ -69,7 +74,7 @@ Trang dành cho Admin
  ![image](https://github.com/user-attachments/assets/9c989814-03b8-41f2-b279-bb025018e00a)
 
 
-#### 5.2.1 Trang danh mục sản phẩm
+#### 6.2.1 Trang danh mục sản phẩm
 ![image](https://github.com/user-attachments/assets/d878a5b7-a929-45f9-baff-7c47f17351d2)
 
 > 👍 Chọn danh mục sản phẩm
@@ -83,7 +88,7 @@ Trang dành cho Admin
 > 👍 Filter sản phẩm
 > 
 
-##### 5.2.1.1 Trang chi tiết sản phẩm
+##### 6.2.1.1 Trang chi tiết sản phẩm
 ![image](https://github.com/user-attachments/assets/d7204d91-a51d-410c-8465-1eb6d6991cf0)
 > 👍 Danh sách các sản phẩm tương tự
 >
@@ -109,10 +114,10 @@ Trang dành cho Admin
 >
  ![image](https://github.com/user-attachments/assets/de4c15b6-be70-4e3d-a318-a625aaf3ead0)
 
-### 5.2 Trang giỏ hàng 
+### 6.2 Trang giỏ hàng 
 ![image](https://github.com/user-attachments/assets/0b98057c-f810-4ccc-8632-ef42bdfb83a8)
 
-> 👍 Xóa sản phẩm ra khởi giỏ hàng
+> 👍 Xóa sản phẩm ra khỏi giỏ hàng
 >
  ![image](https://github.com/user-attachments/assets/30fd3d6a-26b8-4d00-b552-67c516ed5071)
 
@@ -126,12 +131,12 @@ Trang dành cho Admin
 
  ![image](https://github.com/user-attachments/assets/cf59dc21-8c6b-43cd-b60e-041cdef3438b)
 
-#### 5.2.1 Tranh thanh toán
+#### 6.2.1 Tranh thanh toán
 > 👍 Điền thông tin mua hàng -> nhận thông tin về phí Ship 
 >
  
 
-### 5.3 Trang hồ sơ
+### 6.3 Trang hồ sơ
 > 👍 Thông tin khách hàng 
 >
  ![image](https://github.com/user-attachments/assets/ff4268ed-63df-49fe-96f4-4ee02d4be387)
