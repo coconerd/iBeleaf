@@ -44,15 +44,24 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
     - Giao hàng ngoại thành TP.HCM: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng (sử dụng API của GHN - Giao hàng nhanh)
 ### 4.2 Chính sách trả hàng / hoàn tiền 
 
+## 5. Unique selling point
+- Phân tích, xây dựng các quy trình nghiệp vụ mua hàng, giao hàng, đổi/trả hàng sát với thực tế.
+- Tích hợp API của các bên giao hàng trung gian như GHN hay GHTK để đưa ra phí ship chính xác cho các đơn hàng giao ngoài TP.HCM.
+- Tích hợp xác thực OAuth2 cho phép đăng nhập thông qua Google, Facebook.
+- (Coming soon) Tích hợp Webhook của các bên giao hàng trung gian như GHN, GHTK để tạo đơn giao hàng, theo dõi tiến độ giao hàng.
+- Xây dựng hệ thống thông báo:
+    - User admin được thông báo về các đon hàng và các yêu cầu đổi/trả hàng thông qua Websocket (real-time)
+    - User khách hàng nhận được các email về trạng thái đơn hàng, yêu cầu đổi/trả hàng.
+- (Coming soon) Tích hợp thanh toán online qua Momo, VNPay, Online Banking.
 
-## 5. Cài đặt
-### 5.1 Yêu cầu hệ thống 
-### 5.2 Các bước cài đặt 
-### 5.3 Cài đặt Database
+## 6. Cài đặt
+### 6.1 Yêu cầu hệ thống 
+### 6.2 Các bước cài đặt 
+### 6.3 Cài đặt Database
 - Schema database (MySQL): `plant_paradise_final.sql`
 - Tạo mock data (Testing): `php artisan db:seed`
 
-## 6. Giao diện & chức năng
+## 6. Phân trang
 
 <pre>
 <strong>Trang chính</strong>
@@ -86,7 +95,7 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
 
 <hr>
 
-## 🌱 Trang chính
+## 🌱 Giao diện & chức năng
 ### Trang đăng ký / đăng nhập
 > ✨ Đăng ký với Email
 > 
