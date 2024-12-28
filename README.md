@@ -10,7 +10,7 @@
 
 <div align="center"> <h1>Plant Paradise</h1> </div>
 
-Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưởng cuộc sống? **Plant Paradise** chính là thiên đường mà bạn đang tìm kiếm! Với vô vàn giống cây xanh độc đáo, từ những chậu cây nhỏ xinh đến những cây cảnh   lớn, chúng tôi cam kết mang đến cho bạn một không gian sống xanh mát và tràn đầy sức sống. Hãy để **Plant Paradise** giúp bạn tạo nên một thiên đường xanh ngay tại ngôi nhà của mình!
+Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưởng cuộc sống? **Plant Paradise** chính là thiên đường mà bạn đang tìm kiếm! Với vô vàn giống cây xanh độc đáo, từ những chậu cây nhỏ xinh đến những cây cảnh lớn, chúng tôi cam kết mang đến cho bạn một không gian sống xanh mát và tràn đầy sức sống. Hãy để **Plant Paradise** giúp bạn tạo nên một thiên đường xanh ngay tại ngôi nhà của mình!
 
 ## 1. Giới thiệu đồ án môn học 
 - **Tên môn học**: Phát triển ứng dụng Web
