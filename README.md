@@ -55,14 +55,6 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
 - Xây dựng hệ thống thông báo:
     - User admin được thông báo về các đon hàng và các yêu cầu đổi/trả hàng thông qua Websocket (real-time)
     - User khách hàng nhận được các email về trạng thái đơn hàng, yêu cầu đổi/trả hàng.
-- (Coming soon) Tích hợp thanh toán online qua Momo, VNPay, Online Banking.
-
-## 6. Cài đặt
-### 6.1 Yêu cầu hệ thống 
-### 6.2 Các bước cài đặt 
-### 6.3 Cài đặt Database
-- Schema database (MySQL): `plant_paradise_final.sql`
-- Tạo mock data (Testing): `php artisan db:seed`
 
 ## 6. Phân trang
 
@@ -294,25 +286,25 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
 > 
 ![image](https://github.com/user-attachments/assets/4f38675c-5da3-4f97-9143-2396057ca22c)
 
-> Admin nhận được thông báo khi có yêu cầu đổi trả/hàng mới từ phía khách hàng
+> ✨ Admin nhận được thông báo khi có yêu cầu đổi trả/hàng mới từ phía khách hàng
 > 
 ![image](https://github.com/user-attachments/assets/30032061-9f53-4323-bb29-e99b96729a3b)
 
-> Xem chi tiết yêu cầu đổi/trả hàng
+> ✨ Xem chi tiết yêu cầu đổi/trả hàng
 >
 ![image](https://github.com/user-attachments/assets/648b564d-2e94-4075-8f69-c2219023c439)
 
-> Chấp nhận/từ chối yêu cầu đổi/trả hàng
+> ✨ Chấp nhận/từ chối yêu cầu đổi/trả hàng
 > 
 ![image](https://github.com/user-attachments/assets/8ee54602-5ad5-4222-ae3d-0d9d61c8df53)
 ![image](https://github.com/user-attachments/assets/57a6e0f4-7e7b-4fbc-b510-1a2cf2b56443)
 
-> Khách hàng sẽ nhận được email thông báo nếu yêu cầu đổi/trả hàng được chấp nhận/từ chối
+> ✨ Khách hàng sẽ nhận được email thông báo nếu yêu cầu đổi/trả hàng được chấp nhận/từ chối
 > 
 ![image](https://github.com/user-attachments/assets/c0eb2993-3e47-44c2-849d-f5acb762e082)
 ![image](https://github.com/user-attachments/assets/f703444c-f2f6-49b0-9cd3-365b3c304d28)
 
-> Quản lý trạng thái của các yêu cầu đổi/trả hàng
+> ✨ Quản lý trạng thái của các yêu cầu đổi/trả hàng
 > 
 ![image](https://github.com/user-attachments/assets/181620be-10bf-4bcb-9efb-bd21f2daab89)
 
@@ -323,22 +315,6 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
 - Gợi ý Voucher: Gợi ý các voucher phù hợp cho người dùng dựa trên các sản phẩm trong giỏ hàng của họ
 - Tích hợp các phương thức thanh toán online (Banking): Hỗ trợ nhiều phương thức thanh toán trực tuyến như chuyển khoản ngân hàng, ví điện tử và các cổng thanh toán khác
  
-
-
-
- 
-
-
-
-
-
- 
-
-
-
-
-
-
 
 
 
