@@ -43,9 +43,12 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
     - Giao hàng nội thành TP.HCM: Đồng giá 30.000đ
     - Giao hàng ngoại thành TP.HCM: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng (sử dụng API của GHN - Giao hàng nhanh)
 ### 4.2 Chính sách trả hàng / hoàn tiền 
+- Đối với các sản phẩm không phải là cây, khách hàng được phép đổi/trả hàng trong vòng 30 ngày tính từ ngày nhận hàng
+- Đối với các sản phẩm cây bao gồm chậu, khách hàng được phép đổi/trả trong vòng 7 ngày tính từ ngày nhận hàng
 
 ## 5. Unique selling point
 - Phân tích, xây dựng các quy trình nghiệp vụ mua hàng, giao hàng, đổi/trả hàng sát với thực tế.
+- Xây dựng hệ thống mã giảm giá với đa dạng thể loại như voucher, coupon, free ship, buy 1 get 1,... Các mã giảm sẽ đi kèm theo điều kiện sử dụng như giá trị đơn hàng tối thiếu, số lần được sử dụng tối đa, thời hạn khả dụng của mã giảm. 
 - Tích hợp API của các bên giao hàng trung gian như GHN hay GHTK để đưa ra phí ship chính xác cho các đơn hàng giao ngoài TP.HCM.
 - Tích hợp xác thực OAuth2 cho phép đăng nhập thông qua Google, Facebook.
 - (Coming soon) Tích hợp Webhook của các bên giao hàng trung gian như GHN, GHTK để tạo đơn giao hàng, theo dõi tiến độ giao hàng.
