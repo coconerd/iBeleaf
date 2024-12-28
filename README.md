@@ -44,6 +44,7 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
     - Giao hàng ngoại thành TP.HCM: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng (sử dụng API của GHN - Giao hàng nhanh)
 ### 4.2 Chính sách trả hàng / hoàn tiền 
 
+
 ## 5. Cài đặt
 ### 5.1 Yêu cầu hệ thống 
 ### 5.2 Các bước cài đặt 
@@ -51,7 +52,7 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
 - Schema database (MySQL): `plant_paradise_final.sql`
 - Tạo mock data (Testing): `php artisan db:seed`
 
-## 6. Giao diện 
+## 6. Giao diện & chức năng
 
 <pre>
 <strong>Trang chính</strong>
@@ -100,8 +101,7 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
 ![image](https://github.com/user-attachments/assets/0776478c-51e1-49bb-ad14-b22a0e380f83)
 
 ### Trang chủ
-
-![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
+![image](https://github.com/user-attachments/assets/bdf69083-5622-4974-8ac8-d58cb805e3e4)
     
 ![image](https://github.com/user-attachments/assets/57e8d5bd-4b61-4674-a5b6-7d1e6559429c)
     
@@ -115,6 +115,9 @@ Mệt mỏi với cuộc sống xô bồ? Bạn đang tìm kiếm một góc xan
 > 
  ![image](https://github.com/user-attachments/assets/9c989814-03b8-41f2-b279-bb025018e00a)
 
+> ✨ Các danh mục sản phẩm
+>
+![image](https://github.com/user-attachments/assets/f8d86e84-1f5c-444e-903f-fe853cfdacc4)
 
 ### Trang danh mục sản phẩm
 
