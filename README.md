@@ -8,11 +8,12 @@
 	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/183896128-ec99105a-ec1a-4d85-b08b-1aa1620b2046.png" alt="MySQL" title="MySQL"/></code>
 </div>
 
-# PLANT PARADISE
+<div align="center"> <h1>Plant Paradise</h1> </div>
+
 Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưởng cuộc sống? **Plant Paradise** chính là thiên đường mà bạn đang tìm kiếm! Với vô vàn giống cây xanh độc đáo, từ những chậu cây nhỏ xinh đến những cây cảnh   lớn, chúng tôi cam kết mang đến cho bạn một không gian sống xanh mát và tràn đầy sức sống. Hãy để **Plant Paradise** giúp bạn tạo nên một thiên đường xanh ngay tại ngôi nhà của mình!
 
 ## 1. Giới thiệu đồ án môn học 
-- **Tên môn học**: Phát triển ứng dụng WEB
+- **Tên môn học**: Phát triển ứng dụng Web
 - **Mã lớp**: IS207.P11
 - **Tên đồ án**: Website thương mại điện tử cho cửa hàng bán cây cảnh **Plant Paradise**
 
@@ -21,24 +22,24 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 | Họ và tên          | MSSV     | Vai trò     | Liên hệ                     |
 |--------------------|----------|-------------|-----------------------------|
-|🌱  Nguyễn Đỗ Đức Minh | 2252xxxx | Team lead   | example1@gmail.com          |
-|🌱  Phan Thị Thủy Hiền | 2252xxxx | Team member | thuyhienphanthi2004@gmail.com |
-|🌱  Phan Thành Công   | 2252xxxx | Team member | example3@gmail.com          |
-|🌱  Trần Vũ Bão       | 2252xxxx | Team member | example4@gmail.com          |
+|🌱  Nguyễn Đỗ Đức Minh | 22520872 | Team leader   | nddminh2021@gmail.com          |
+|🌱  Phan Thị Thủy Hiền | 22520423 | Team member | thuyhienphanthi2004@gmail.com |
+|🌱  Trần Vũ Bão   | 22520124 | Team member | tranvubao2004@gmail.com          |
+|🌱  Phan Thành Công       | 22520170 | Team member | phanthanhcong982004@gmail.com          |
 
-## 3. Thiết kế Cơ sở Dữ Liệu 
+## 3. Thiết kế Cơ sở dữ liệu 
 [dbdiagram.io](https://dbdiagram.io/d/Plant-Paradise-Database-672671edb1b39dd85843f893)
 
 ![image](https://github.com/user-attachments/assets/635edd76-679f-49d3-9084-0468eb105189)
 
-## 4. Qui trình nghiệp vụ
+## 4. Quy trình nghiệp vụ
 
 ### 4.1 Chính sách bán hàng
 - Về việc áp dụng Voucher: Mỗi đơn mua hàng chỉ được áp dụng 1 loại Voucher
 - Về chính sách giao hàng:
-    - Các sản phẩm cây đi kèm chậu: Chỉ nhận giao nội thành TP.HCM
+    - Các sản phẩm cây có kèm chậu: Chỉ nhận giao nội thành TP.HCM
     - Các sản phẩm chậu: Giao hàng toàn quốc  
-- Về qui định phí giao hàng:
+- Về quy định phí giao hàng:
     - Giao hàng nội thành TP.HCM: Đồng giá 30.000đ
     - Giao hàng ngoại thành TP.HCM: Được tính dựa trên tổng cân nặng của đơn hàng và địa điểm nhận hàng (sử dụng API của GHN - Giao hàng nhanh)
 ### 4.2 Chính sách trả hàng / hoàn tiền 
@@ -54,7 +55,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 <pre>
 <strong>Trang chính</strong>
-├── <a href="#Trang-đăng-kí--đăng-nhập">Trang đăng kí / đăng nhập</a>
+├── <a href="#Trang-đăng-kí--đăng-nhập">Trang đăng ký / đăng nhập</a>
 │  
 ├── <a href="#Trang-chủ">Trang chủ</a>
 │   │
@@ -68,12 +69,12 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 │   
 └── <a href="#Trang-hồ-sơ">Trang hồ sơ</a>
     │
-    └── <a href="#Trang-hồ-sơ--đổi-mật-khẩu">Trang thông tin / đổi mật khẩu</a>
+    └── <a href="#Trang-hồ-sơ--đổi-mật-khẩu">Trang thông tin / Đổi mật khẩu</a>
     │    
     └── <a href="#Trang-">Trang .....</a>
 
 <strong>Trang dành cho Admin</strong>
-├── <a href="#Trang-đăng-nhập">Đăng kí / đăng nhập</a>
+├── <a href="#Trang-đăng-nhập">Đăng ký / đăng nhập</a>
 │    
 ├── <a href="#Trang-Dashboard">Dashboard</a>
 │    
@@ -85,8 +86,8 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 <hr>
 
 ## 🌱 Trang chính
-### Trang đăng kí / đăng nhập
-> ✨ Đăng kí với Email
+### Trang đăng ký / đăng nhập
+> ✨ Đăng ký với Email
 > 
 ![image](https://github.com/user-attachments/assets/5571fb0d-0420-4ea8-a325-b2b90e6b6436)
 
@@ -125,7 +126,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 > 
  ![image](https://github.com/user-attachments/assets/73d25573-7f7a-4855-ad0f-b6ed39749de7)
 
-> ✨ Chọn khoảng giá thành mong muốn
+> ✨ Chọn khoảng giá mong muốn
 > 
  ![image](https://github.com/user-attachments/assets/8919dd8f-7ad2-4e31-905c-0e56aa1ce6e0)
  
@@ -139,11 +140,11 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 >
  ![image](https://github.com/user-attachments/assets/b5bb1442-ed9b-4d6d-bfee-ae82e73693db)
 
-> ✨ Danh sách các sản phẩm đang khuyến mãi
+> ✨ Danh sách các sản phẩm đang được khuyến mãi
 >
  ![image](https://github.com/user-attachments/assets/3a45ae80-b8fb-44e3-bf07-2aec29f22b3e)
 
-> ✨ Danh sách Feedback của các khách hàng đã sản phẩm 
+> ✨ Danh sách Feedback của các khách hàng đã mua sản phẩm 
 >
  ![image](https://github.com/user-attachments/assets/71c3d46b-f92a-40a8-b530-6e8bce563538)
 
@@ -182,7 +183,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 ### Trang thanh toán
 
-> ✨ Điền đẩy đủ thông tin mua hàng > nhận thông tin về phí ship 
+> ✨ Điền đầy đủ thông tin mua hàng --> Nhận thông tin về phí vận chuyển 
 >
  ![image](https://github.com/user-attachments/assets/1e73ab6a-40d3-494a-ab19-16a57c7aa2ab)
 
@@ -195,7 +196,7 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 ### Trang hồ sơ
 
-### Trang thông tin / đổi mật khẩu
+### Trang thông tin / Đổi mật khẩu
 
 ![image](https://github.com/user-attachments/assets/28e88b1d-d0b8-4ceb-a913-b02017d89cbb)
 
@@ -214,9 +215,9 @@ Bạn đang tìm kiếm một góc xanh tươi để thư giãn và tận hưở
 
 ## 7. Định hướng phát triển
 ### 7.1 Chức năng giỏ hàng, thanh toán 
-- Hiển thị danh sách Voucher hiện có của Shop: Tạo một trang riêng biệt để hiển thị tất cả các voucher hiện có của cửa hàng, giúp người dùng dễ dàng tìm kiếm và sử dụng các ưu đãi phù hợp
+- Hiển thị danh sách các Voucher hiện có của cửa hàng: Tạo một trang riêng biệt để hiển thị tất cả các voucher hiện có của cửa hàng, giúp người dùng dễ dàng tìm kiếm và sử dụng các ưu đãi phù hợp
 - Gợi ý Voucher: Gợi ý các voucher phù hợp cho người dùng dựa trên các sản phẩm trong giỏ hàng của họ
-- Tích hợp các phương thức thanh toán online (Banking): Hỗ trợ nhiều phương thức thanh toán trực tuyến như chuyển khoản ngân hàng, ví điện tử, và các cổng thanh toán khác
+- Tích hợp các phương thức thanh toán online (Banking): Hỗ trợ nhiều phương thức thanh toán trực tuyến như chuyển khoản ngân hàng, ví điện tử và các cổng thanh toán khác
  
 
 
