@@ -9,7 +9,6 @@ class VoucherSeeder extends Seeder
 {
     public function run()
     {
-        // ...existing code...
         Voucher::create([
             'voucher_name' => 'WELCOME10',
             'voucher_type' => 'percentage',
